@@ -12,7 +12,7 @@ categories:
 坑位：使用`toHaveBeenCalledWith`测试函数被调用时的参数。
 
 当参数列表太长（如：`func(p1, p2, p3){...}`）的时候，往往只需要验证某一部分参数正确性，这个时候使用`any()`。
-
+<!-- more -->
 坑点示例：
 
 ```javascript

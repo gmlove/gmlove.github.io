@@ -20,6 +20,7 @@ categories:
 ## 生命周期
 
 ### 三套独立生命周期
+<!-- more -->
 
 - clean: pre-clean -> clean -> post-clean
 - default: 
