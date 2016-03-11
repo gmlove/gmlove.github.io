@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+
+.content { max-width: 800px; margin: 0 auto; background-color: #eee; }
+.right-panel { float: right; width: 180px; height: 500px; margin: 0 10px; background-color: #5bc0de; }
+.main-panel { max-width: 700px; margin-right: 200px; background-color: #5cb85c; }
+.bottom-panel { height: 200px; background-color: #f0ad4e; }
+.floated-child { float: left; background-color: #d9534f; }
+.clearfix:before, .clearfix:after { display: table; content: " "; }
+.clearfix:after { clear: both; }
+
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <div class="right-panel"></div>
+    <div class="main-panel">
+        <h2>Main content title! title title title title title title</h2>
+        <div class="clearfix">
+            <div class="floated-child">some text here, some text here, some text here</div>
+        </div>
+    </div>
+    <div class="bottom-panel">
+        <p>This is bottom panel</p>
+    </div>
+</div>
+
+</body>
+</html>

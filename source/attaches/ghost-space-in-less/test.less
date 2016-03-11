@@ -1,0 +1,11 @@
+.a {
+    &.a-b {
+        &:hover {
+            background-color: #5cb85c;
+        }
+    }
+}
+
+.a-c {
+    &:extend(.a.a-b:hover);
+}
