@@ -24,5 +24,5 @@ categories:
 2. 需要所有的服务引入新的jar包依赖
 3. 需要所有服务配置该服务可访问的地址和admin服务器的地址，如果没有服务自动发现的机制，这个也是比较麻烦的事情
 
-如果我们只需要一个简单的UI界面的话，可以参考我们自己实现的一个[简化版本](https://github.com/gmlove/spring-boot-admin/tree/only-ui)。这个版本移除了所有的服务器提供的功能直接由客户端来处理所有的数据，服务器提供代理的功能以解决跨域问题。服务只需要引入Spring Boot Actuator。
+如果我们只需要一个简单的UI界面的话，可以参考我们自己修改过的一个[简化版本](https://github.com/gmlove/spring-boot-admin/tree/only-ui)。这个版本移除了所有的服务器提供的功能直接由客户端来处理所有的数据，服务器提供代理的功能以解决跨域问题。服务只需要引入Spring Boot Actuator。
 
