@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A Pick into Tensorflow"
+title: "Tensorflow一瞥"
 date: 2016-11-27 15:19:15 +0800
 comments: true
 categories:
