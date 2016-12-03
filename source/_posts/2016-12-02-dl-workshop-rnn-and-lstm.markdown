@@ -513,5 +513,6 @@ with graph.as_default(), tf.device('/cpu:0'):
 
 在修改完成之后，我们就可以看到最后的结果。我们生成的词向量图与SkipGram模型生成的类似。
 
+后续会继续RNN和LSTM的部分。敬请期待！
 
 本文基于google在udacity上面关于深度学习的[课程](https://classroom.udacity.com/courses/ud730)而来。主要参考资料来自于斯坦福大学的自然语言处理课程[cs224d](http://cs224d.stanford.edu/syllabus.html)。
