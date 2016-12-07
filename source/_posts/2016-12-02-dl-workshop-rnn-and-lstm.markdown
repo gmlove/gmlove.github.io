@@ -135,7 +135,7 @@ softmax将需要在(batch_size, vocabulary_size)矩阵上面进行计算，vocab
 
 回顾一下我们的训练过程。如果两个单词相似，即出现了两个句子"The cat purrs"和"The kitty purrs"，那么cat的词向量经过计算之后可以得到purrs词向量，kitty词向量经过计算之后也可以得到purrs词向量。再结合softmax的比例计算过程，可以得出的结论是，最终的词向量里面，相似的单词，他们的词向量值在比例上也是相似的。
 
-相似性就是：给定单词w1 w2 w3的词向量Vw1 Vw2 Vw3，如果Vw1 * Vw2.T > Vw1 * Vw3.T，那么我们就认为w2比w3更接近w1。事实上我们通常会用余弦距离去衡量词向量的相似性，即词向量间的夹角。
+事实上我们通常会用余弦距离去衡量词向量的相似性，即词向量间的夹角。相似性就是：给定单词w1 w2 w3的词向量Vw1 Vw2 Vw3，如果Vw1 * Vw2.T / (|Vw1||Vw2|) > Vw1 * Vw3.T / (|Vw1||Vw3|)，那么我们就认为w2比w3更接近w1。
 
 ### Coding时间
 
@@ -311,7 +311,7 @@ with graph.as_default(), tf.device('/cpu:0'):
   optimizer = tf.train.AdagradOptimizer(1.0).minimize(loss)
 ```
 
-有了模型之后，我们该如何计算相似度呢？使用之前的相似度计算公式，我们可以先归一化embedding，使用valid_dataset的词向量与所有其他单词的词向量相乘，然后从大到小排序就可以得到按相似度排序的其他相似词。
+有了模型之后，我们该如何计算相似度呢？使用之前的相似度计算公式，我们可以计算先embedding的每一个词向量的1/|Vw1|，使用valid_dataset的词向量与所有其他单词的词向量相乘，然后从大到小排序就可以得到按相似度排序的其他相似词。
 
 ```
   # Compute the similarity between minibatch examples and all embeddings.
