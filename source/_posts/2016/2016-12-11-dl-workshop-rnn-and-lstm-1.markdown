@@ -24,7 +24,7 @@ categories:
 
 <!-- more -->
 
-![N-gram Equation](/attaches/dl-workshop-rnn-and-lstm-1/n-gram-equation.png)
+![N-gram Equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/n-gram-equation.png)
 
 如果我们要计算单词w1出现的条件下单词w2出现的概率，我们可以先统计单词w1在我们的训练数据集中一共出现了多少次，即count(w1)，然后再统计w1和w2连续出现，即"w1 w2"出现的次数count(w1, w2)，相除即为w1出现的条件下单词w2出现的概率。同理，我们想要求在w1和w2同时连续出现的情况下，w3出现的概率也可以类似地使用频率统计来求得。
 
@@ -38,27 +38,27 @@ n-gram看起来很容易实现，但是它能为我们生成一个好的句子�
 
 RNN的模型如下：
 
-![RNN Model](/attaches/dl-workshop-rnn-and-lstm-1/rnn-model.png)
+![RNN Model](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-model.png)
 
 在这个模型图中，x表示输入的单词向量，y表示预测的单词向量，在此基础上，我们增加了h矩阵来表示输出特征。t表示时间。观察t时刻的输入单词x和预测单词y的计算过程，我们可以发现y不仅仅是跟输入x相关，还跟t-1时刻的h相关。而t时刻的h，又会贡献到t+1时刻的y预测过程中去。
 
 具体的算法公式如下：
 
-![Ht & Yt equation](/attaches/dl-workshop-rnn-and-lstm-1/ht-and-yt-equation.png)
+![Ht & Yt equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/ht-and-yt-equation.png)
 
 我们可以看到我们定义了3个权值矩阵，这些权值矩阵在每次进行计算的时候，都是复用的，内存开销不随训练文本的增加而增加。h的计算使用了sigmoind激活函数，y的计算使用softmax激活函数。这里为了简单，我们省略了偏置向量。
 
 好了，我们已经有了模型，那么我们的损失函数是什么呢？其实还是跟之前一致，在时刻t，我们使用交叉熵损失函数：
 
-![Loss function of RNN](/attaches/dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png)
+![Loss function of RNN](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png)
 
 那么总的损失函数就是（T表示我们训练时只考虑T个单词形成的RNN）：
 
-![Overall loss function of RNN](/attaches/dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png)
+![Overall loss function of RNN](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png)
 
 我们还常常用perplexity来衡量模型的损失，perplexity的定义就是：
 
-![Perplexity equation](/attaches/dl-workshop-rnn-and-lstm-1/perplexity-equation.png)
+![Perplexity equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/perplexity-equation.png)
 
 由指数函数的曲线可知，J越小时，perplexity也越小，而且perplexity始终为正。
 
@@ -86,51 +86,51 @@ RNN更可能能将第一个句子预测正确，由于梯度下降的梯度消�
 
 通常在RNN上面还可以继续扩展，比如扩展为双向递归神经网络：
 
-![Bidirectional RNN](/attaches/dl-workshop-rnn-and-lstm-1/bidirectional-rnn.png)
+![Bidirectional RNN](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn.png)
 
 相关的公式就变为：
 
-![Bidirectional RNN equation](/attaches/dl-workshop-rnn-and-lstm-1/bidirectional-rnn-equation.png)
+![Bidirectional RNN equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn-equation.png)
 
 我们还可以加深这个网络，让每一个时刻t从一个线性层变为多个线性层，如图：
 
-![Deep Bidirectional RNN](/attaches/dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn.png)
+![Deep Bidirectional RNN](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn.png)
 
 相关的公式为：
 
-![Deep Bidirectional RNN Equation](/attaches/dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn-equation.png)
+![Deep Bidirectional RNN Equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn-equation.png)
 
 ## LSTM
 
 前面我们分析了RNN的问题，并提到了LSTM。那么LSTM是什么东西呢？它是Long Short Term Memory的缩写。从这个全称来看，它可以给RNN引入记忆的功能。事实上他就是以这个为目标来进行设计的。LSTM的思想就是将RNN的网络单元替换为带记忆功能的网络单元。
 
-![RNN to LSTM](/attaches/dl-workshop-rnn-and-lstm-1/rnn-to-lstm.png)
+![RNN to LSTM](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-to-lstm.png)
 
 记忆到底是个什么玩意儿呢？听起来似乎很抽象。我们分析一下记忆单元应该有的功能。与人的记忆能力作为对比，一个单元能有记忆，那么它应该可以被写入，即可以被更新，然后应该可以被读取，同时应该可以选择性的忘记，也就是删除数据。
 
-![LSTM functionality](/attaches/dl-workshop-rnn-and-lstm-1/lstm-functionality.png)
+![LSTM functionality](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-functionality.png)
 
 ### Gated Recurrent Units
 
 分析了LSTM的原理，我们先看看GRU，即Gated Recurrent Units，它是基于这个思想的一个比LSTM更简单的模型。它的网络图如下：
 
-![Gated Recurrent Units](/attaches/dl-workshop-rnn-and-lstm-1/gru.png)
+![Gated Recurrent Units](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru.png)
 
 Reset其实用于实现忘记功能的，它可以控制是否将上一时刻的输出特征h即此时刻的输入包含到此时刻的预测过程，或者包含多少，其公式如下：
 
-![GRU Reset Equation](/attaches/dl-workshop-rnn-and-lstm-1/gru-reset-equation.png)
+![GRU Reset Equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-reset-equation.png)
 
 New Memory可以实现写入控制的功能，即决定现在的输入和上一时刻的h到底有多少会影响到当前的预测过程，其公式如下：
 
-![GRU New Memory Equation](/attaches/dl-workshop-rnn-and-lstm-1/gru-new-memory-equation.png)
+![GRU New Memory Equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-new-memory-equation.png)
 
 Update可以实现控制读取的功能，即决定当前的状态有多少可以被下一时刻读取，其公式如下：
 
-![GRU Update Equation](/attaches/dl-workshop-rnn-and-lstm-1/gru-update-equation.png)
+![GRU Update Equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-update-equation.png)
 
 最后将以上几个控制单元结合起来就得到当前的特征输出，它也将会被用于预测输出，其公式如下：
 
-![GRU feature equation](/attaches/dl-workshop-rnn-and-lstm-1/gru-feature-equation.png)
+![GRU feature equation](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-feature-equation.png)
 
 可以看到这些单个功能的控制器几乎都是一样的，他们的功能是在构造输出特征时体现出来的。
 
@@ -138,11 +138,11 @@ Update可以实现控制读取的功能，即决定当前的状态有多少可�
 
 我们再看看更复杂一些的LSTM模型，其模型图如下：
 
-![LSTM](/attaches/dl-workshop-rnn-and-lstm-1/lstm.png)
+![LSTM](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm.png)
 
 公式如下：
 
-![LSTM equations](/attaches/dl-workshop-rnn-and-lstm-1/lstm-equations.png)
+![LSTM equations](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-equations.png)
 
 其中h用于预测，c和h一起传播到下一时刻。
 
@@ -150,11 +150,11 @@ Update可以实现控制读取的功能，即决定当前的状态有多少可�
 
 通过分析RNN和LSTM的特性，可以发现它们可以用于预测一个序列。当训练好了LSTM网络时，得到一个输入之后，就预测下一个输出，然后结合输入和预测到的输出，可以继续预测下下个输出，连续的预测之后，我们就可以得到一个序列了。在我们后面要训练的模型中我们就是采取这样的方式来生成一个序列的。就如同下面这样：
 
-![LSTM Application](/attaches/dl-workshop-rnn-and-lstm-1/lstm-application.png)
+![LSTM Application](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-application.png)
 
 当然我们还可以在每次预测时选择top k个可能的结果，每次都这样选择，然后在预测过一定次数n之后，统计生成的n个词的短序列的概率，并选择概率最大的短序列作为最终的结果。这样可以防止在某一步预测失败之后，导致后面的预测都跟着失败。这个想法就是Beam Search算法的思想。
 
-![LSTM Beam Search](/attaches/dl-workshop-rnn-and-lstm-1/lstm-beam-search.png)
+![LSTM Beam Search](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-beam-search.png)
 
 RNN和LSTM还有很多其他方面的应用，由于RNN和LSTM可以生成一个连续的序列，我们可以将其应用于机器翻译、语音识别、以及根据图片生成标题等等。
 
@@ -196,7 +196,7 @@ def id2char(dictid):
 
 我们现在来考虑如何进行batch迭代。按照我们前面的分析，由递归的特性可知，字符需要首尾相连，训练集中的后一个字符是依赖前一个字符进行计算的，我们无法打乱这个顺序。我们这里的想法就是把训练文本分为n份，然后n份一起开始训练。如下图所示：
 
-![Batch update](/attaches/dl-workshop-rnn-and-lstm-1/batch-update.png)
+![Batch update](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/batch-update.png)
 
 理解了这个之后，代码中的`BatchGenerator`就比较容易理解了。需要注意的是batch中的字符组长度为11，并且一个batch和下一个batch之间是有一个字符重叠的，这是由于我们会使用每一个字符的后一个字符作为标签字符，所以在生成batch的时候，就故意多生成了一个字符。在编写BatchGenerator的同时，我们编写了两个辅助函数`characters`和`batches2string`，分别实现将一个概率分布（即softmax的输出）映射到一个字符，和将一组batch映射为字符串。
 
