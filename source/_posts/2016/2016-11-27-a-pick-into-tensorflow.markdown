@@ -4,6 +4,8 @@ title: "Tensorflow一瞥"
 date: 2016-11-27 15:19:15 +0800
 comments: true
 categories:
+- Machine Learning
+tags:
 - tensorflow
 - AI
 - Machine Learning
@@ -60,7 +62,7 @@ TensorFlow还提供了用于可视化参数的TensorBoard，大大方便了模�
 
 从Google趋势来看，TensorFlow也已成为当前非常流行的机器学习框架了。
 
-![TensorFlow in Google Trend](/attaches/a-pick-into-tensorflow/tf-googletrend.png)
+![TensorFlow in Google Trend](/attaches/2016/2016-11-27-a-pick-into-tensorflow/tf-googletrend.png)
 
 
 ## 一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类
@@ -69,15 +71,15 @@ TensorFlow还提供了用于可视化参数的TensorBoard，大大方便了模�
 
 MNIST数据集的是一个非常基础而简单的用于机器学习的数据集。下载好这个数据集之后，可以看到其包含的图片如下（一个数字对应一张图片）：
 
-![MNIST Overview](/attaches/a-pick-into-tensorflow/mnist-overview.png)
+![MNIST Overview](/attaches/2016/2016-11-27-a-pick-into-tensorflow/mnist-overview.png)
 
 我们将要使用的分类模型也是基础的Logistic Regression模型。
 
-![Model Overview](/attaches/a-pick-into-tensorflow/model-overview.png)
+![Model Overview](/attaches/2016/2016-11-27-a-pick-into-tensorflow/model-overview.png)
 
 这个模型用数学公司来描述就是如下这样：
 
-![Math](/attaches/a-pick-into-tensorflow/math.png)
+![Math](/attaches/2016/2016-11-27-a-pick-into-tensorflow/math.png)
 
 模型对应的核心代码TensorFlow代码就是：
 
