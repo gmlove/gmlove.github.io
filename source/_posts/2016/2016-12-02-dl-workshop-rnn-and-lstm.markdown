@@ -3,7 +3,9 @@ layout: post
 title: "RNN和LSTM从理论到实践一：词向量"
 date: 2016-12-02 23:22:40 +0800
 comments: true
-categories: 
+categories:
+- Machine Learning
+tags:
 - tensorflow
 - AI
 - Machine Learning
@@ -43,7 +45,7 @@ RNN，全称为Recurrent Neural Network，常译为循环神经网络，也可�
 
 我们最容易想到的方法就是，跟之前的课程中对类别的处理一样，直接做one-hot编码。将所有单词排序，排序之后每个单词就会有一个位置，然后用一个与单词数量等长的数组表示某单词，该单词所在的位置数组值就为1，而其他所有位置值都为0.
 
-![One-hot encoding for words](/attaches/dl-workshop-rnn-and-lstm/one-hot-encoding-for-words.png)
+![One-hot encoding for words](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/one-hot-encoding-for-words.png)
 
 但是这样做有什么问题呢？第一个问题就是这样编码太稀疏了，会导致维度非常高，因为单词的数量级通常在10^6级别，维度高就导致计算困难。第二个问题是我们无法简单的从这样的编码中得知单词之间的关系。
 
@@ -51,7 +53,7 @@ RNN，全称为Recurrent Neural Network，常译为循环神经网络，也可�
 
 下面的习题答案是什么呢？
 
-![Word analogies question](/attaches/dl-workshop-rnn-and-lstm/word-analogies-question.png)
+![Word analogies question](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/word-analogies-question.png)
 
 "puppy"对"dog"增加了宠物的属性，那么"cat"加上宠物属性就变成了"kitten"。
 
@@ -59,7 +61,7 @@ RNN，全称为Recurrent Neural Network，常译为循环神经网络，也可�
 
 那么问题来了，如何进行机器学习训练才能得到这样的关系属性呢？先看两个句子。
 
-![Way to find relationship between words](/attaches/dl-workshop-rnn-and-lstm/way-to-find-relationship-between-words.png)
+![Way to find relationship between words](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/way-to-find-relationship-between-words.png)
 
 如果说在我们的训练数据中出现了四个句子：
 
@@ -87,15 +89,15 @@ RNN，全称为Recurrent Neural Network，常译为循环神经网络，也可�
 
 Unigram Model是指，我们可以将每个单词视为独立无关的，于是可以得到下面的等式：
 
-![Unigram model](/attaches/dl-workshop-rnn-and-lstm/unigram-model-e1.png)
+![Unigram model](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/unigram-model-e1.png)
 
 Bigram Model是指，如果当前单词只依赖其前面一个单词，在『狗啃骨头』中就表示可以用『狗』来预测『啃』。这样的话，我们的模型就可以用下式计算（P(w2|w1）表示在出现单词w1时，出现w2的概率)：
 
-![Bigram model](/attaches/dl-workshop-rnn-and-lstm/bigram-model-e1.png) 
+![Bigram model](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/bigram-model-e1.png) 
 
 Trigram和N-gram Model可以得到的等式如下：
 
-![Trigram and N-gram Model](/attaches/dl-workshop-rnn-and-lstm/trigram-ngram-model-e1.png)
+![Trigram and N-gram Model](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/trigram-ngram-model-e1.png)
 
 事实上直接使用N-gram模型来计算句子概率是有问题的。因为它太简单了，最多能表示单词和前n个单词的关系，前n+1个单词就无法表示。而且n不能太大，太大会导致计算问题，并且n太大通常性能不会有明显的提升。
 
@@ -109,7 +111,7 @@ word2vec算法，在不断发展沉淀之后，得到两个机器学习模型：
 
 Skip Gram Model属于非监督学习领域，这跟之前的图片识别不同。图片识别时，对于每一张图片我们是有标签的，比如某一张内容为"A"的图片，那么它的标签就是"a"。对于文本而言，原始数据只有一堆文本，一长串的单词序列。我们是没有显示的给定任何标签的。但是机器学习算法又是需要标签的，要不然我们无法计算我们的损失函数。对于这个问题，我们的想法是通过文本内容构造标签。借鉴N-gram模型的想法，如果单词只跟周边的单词相关，那么我们是不是就可以说在使用单词进行预测时，周边的单词就是该单词的正确预测结果呢？Skip Gram Model就是基于这个想法。
 
-![Skip gram model](/attaches/dl-workshop-rnn-and-lstm/skip-gram-model.png)
+![Skip gram model](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/skip-gram-model.png)
 
 这个算法的步骤如下：
 
@@ -381,7 +383,7 @@ words = [reverse_dictionary[i] for i in range(1, num_points+1)]
 plot(two_d_embeddings, words)
 ```
 
-![Similar words in a graph](/attaches/dl-workshop-rnn-and-lstm/similar-words-in-graph.png)
+![Similar words in a graph](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/similar-words-in-graph.png)
 
 ### CBOW模型
 
@@ -389,7 +391,7 @@ plot(two_d_embeddings, words)
 
 CBOW模型跟Skip Gram模型正好相反，在这个模型中，我们使用单词周边的单词去预测该单词。其模型如下：
 
-![CBOW model](/attaches/dl-workshop-rnn-and-lstm/cbow-model.png)
+![CBOW model](/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/cbow-model.png)
 
 这个算法的步骤如下：
 
