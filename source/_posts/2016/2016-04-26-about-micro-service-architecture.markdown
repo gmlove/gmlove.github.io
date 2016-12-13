@@ -3,7 +3,9 @@ layout: post
 title: "微服务架构总结"
 date: 2016-04-26 18:53:02 +0800
 comments: true
-categories: 
+categories:
+- micro service
+tags:
 - micro service
 ---
 
@@ -37,10 +39,10 @@ From Sam Newman [Building Microservices]:
 * 前提：复杂度低于零界点，可能导致部署工作量上升
 * 拆分：业务能力
 * 协作：契约文档
-* 测试：[测试四象限](/attaches/about-micro-service-architecture/test-dimension.png) [测试金字塔](/attaches/about-micro-service-architecture/test-triangle.png)
+* 测试：[测试四象限](/attaches/2016/2016-04-26-about-micro-service-architecture/test-dimension.png) [测试金字塔](/attaches/2016/2016-04-26-about-micro-service-architecture/test-triangle.png)
 * 部署：虚拟化或容器等隔离技术，每一个service一个主机
 * 监控：基础监控（网络，磁盘，os） 服务监控（响应时间，TPS） 业务监控（多维度，长时间）
-* 原则：[战略目标 架构原则 设计与交付实践](/attaches/about-micro-service-architecture/principles.png)
+* 原则：[战略目标 架构原则 设计与交付实践](/attaches/2016/2016-04-26-about-micro-service-architecture/principles.png)
 
 ## 角色变化
 

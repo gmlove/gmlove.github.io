@@ -3,7 +3,12 @@ layout: post
 title: "在网页显示透明视频"
 date: 2016-03-26 21:13:16 +0800
 comments: true
-categories: html5 game opengl
+categories:
+- frontend
+tags:
+- html5
+- game
+- opengl
 ---
 
 最近在一个网站上，看到了很炫的网页特效：视频背景透明。该网址是：[http://videostir.com/](http://videostir.com/)。他们还为用户提供了制作透明视频的服务。用户只需要上传他们要求的格式的视频，就可以生成一个透明的视频。
@@ -97,7 +102,7 @@ void main(void)
 
 简单分析了一下videostir的实现，他们实现了一个专用的播放器，播放器实现看起来是相当复杂的，会根据浏览器的类型及版本分别采用flash或者opengl来实现。由于没有深入研究他的实现，就不做介绍了。
 
-最后，[这里](/attaches/transparent-video/index.html)是一个完整的示例，有兴趣的同学们可以研究研究。
+最后，[这里](/attaches/2016/2016-03-26-transparent-video/index.html)是一个完整的示例，有兴趣的同学们可以研究研究。
 
 
 
