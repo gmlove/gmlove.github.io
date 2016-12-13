@@ -3,7 +3,9 @@ layout: post
 title: "RNN和LSTM从理论到实践二：RNN和LSTM模型"
 date: 2016-12-11 10:12:51 +0800
 comments: true
-categories: 
+categories:
+- Machine Learning
+tags:
 - tensorflow
 - AI
 - Machine Learning
