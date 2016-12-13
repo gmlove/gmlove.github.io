@@ -24,6 +24,8 @@ From Sam Newman [Building Microservices]:
 
 微服务即SOA的一种实现方式。企业服务总线（ESB）设计的失败给SOA带上了负面的标签。
 
+<!-- more -->
+
 ## 特征
 
 * 组件服务化

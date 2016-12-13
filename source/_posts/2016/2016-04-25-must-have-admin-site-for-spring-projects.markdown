@@ -13,6 +13,8 @@ categories:
 
 对于经典java框架spring，我们是否有一个通用的Admin框架呢，答案是肯定的。
 
+<!-- more -->
+
 实际上spring的Spring Boot Actuator框架为这些常用的功能进行了规范化和实现。目前的功能列表可以在[这里](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready)看到。
 很多有用的功能类似环境变量、健康状态、API接口信息、beans状态、各个维度的性能统计数据等等都有覆盖。
 

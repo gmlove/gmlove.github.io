@@ -13,6 +13,7 @@ categories:
 * 类型：vec2 vec3 vec4 mat2 mat3 mat4 int float
 * 结构体：
 
+<!-- more -->
 
 预编译：#ifdef #ifudef #if #endif #define
 
