@@ -3,7 +3,9 @@ layout: post
 title: "让机器自己玩游戏"
 date: 2016-12-05 13:12:47 +0800
 comments: true
-categories: 
+categories:
+- Machine Learning
+tags:
 - tensorflow
 - AI
 - Machine Learning
@@ -19,7 +21,7 @@ categories:
 
 Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球的玩法的一个游戏，与乒乓球不同的是，这个游戏可以由单人控制。相信只要是80后，肯定都玩过这个游戏。
 
-![Break out game](/attaches/let-machine-play-games/breakout-game.png)
+![Break out game](/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png)
 
 <!-- more -->
 
@@ -47,7 +49,7 @@ for i_episode in range(20):
       break
 ```
 
-![Breakout in OpenAI](/attaches/let-machine-play-games/breakout-in-openai.png)
+![Breakout in OpenAI](/attaches/2016/2016-12-05-let-machine-play-games/breakout-in-openai.png)
 
 从上面的代码中，我们可以看到gym给我们提供的东西有：
 
@@ -74,7 +76,7 @@ for i_episode in range(20):
 
 请看这个图：
 
-![Markov Decision Process](/attaches/let-machine-play-games/mdp.png)
+![Markov Decision Process](/attaches/2016/2016-12-05-let-machine-play-games/mdp.png)
 
 这张图里面的过程我们就将其称为马尔可夫决策过程。
 
@@ -91,7 +93,7 @@ for i_episode in range(20):
 
 这里比较重要的是状态和动作的转换关系。从一个状态开始，可以选择多种动作，一旦选择了某一个动作，这个动作可能导致的多种下一刻的状态。所以动作-状态-动作会形成一种树形的关系，如下图所示：
 
-![State action tree](/attaches/let-machine-play-games/state-action-tree.png)
+![State action tree](/attaches/2016/2016-12-05-let-machine-play-games/state-action-tree.png)
 
 这棵树的某一个分支就形成一局游戏。
 
@@ -99,7 +101,7 @@ for i_episode in range(20):
 
 对某一局游戏，假设我们有一系列状态、动作和奖励，事实上我们可以定义状态和动作的价值如下：
 
-![state action value formula](/attaches/let-machine-play-games/state-action-value-formula.png)
+![state action value formula](/attaches/2016/2016-12-05-let-machine-play-games/state-action-value-formula.png)
 
 从这个公式中，我们可以看出，当前状态和动作的价值不仅跟当前的价值R0相关，还跟将来的价值相关。比如买股票，你今天的投资价值，不仅仅取决于今天股票的涨幅，之后每一天的增长都是今天的投资所决定的。所以我们可以知道，当前的状态和动作的价值是当前得到的奖励和将来的潜在奖励的和。
 
@@ -107,11 +109,11 @@ for i_episode in range(20):
 
 如果我们只对状态价值进行建模，我们可以得到这样的公式：
 
-![state value formula](/attaches/let-machine-play-games/state-value-formula.png)
+![state value formula](/attaches/2016/2016-12-05-let-machine-play-games/state-value-formula.png)
 
 如何衡量一个状态的overall的价值呢？我们可以对每一种可能的游戏局求平均，也就是上面的公式的期望值。
 
-![state value formula](/attaches/let-machine-play-games/expected-state-value-formula.png)
+![state value formula](/attaches/2016/2016-12-05-let-machine-play-games/expected-state-value-formula.png)
 
 思考一下我们的问题，现在我们可以定义一个状态的价值了，一个状态的价值大，说明这个状态是一个好状态，我们就要让我们的策略向好的状态方面靠。似乎有了一些解决问题的思路了。
 
@@ -121,29 +123,29 @@ for i_episode in range(20):
 
 一个策略的价值函数就是：
 
-![Value function for pi formula](/attaches/let-machine-play-games/value-function-for-pi-formula.png)
+![Value function for pi formula](/attaches/2016/2016-12-05-let-machine-play-games/value-function-for-pi-formula.png)
 
 观察这个函数，我们可以发现这个函数其实可以写成迭代的形式。写成迭代的形式之后，我们就得到了著名的Bellman等式：
 
-![Bellman Equation](/attaches/let-machine-play-games/bellman-equation.png)
+![Bellman Equation](/attaches/2016/2016-12-05-let-machine-play-games/bellman-equation.png)
 
 有了这些之后，我们就可以定义最佳策略的价值为：
 
-![Optimal Value function](/attaches/let-machine-play-games/optimal-value-function.png)
+![Optimal Value function](/attaches/2016/2016-12-05-let-machine-play-games/optimal-value-function.png)
 
 这个就是最佳策略的价值函数，它是所有可能的策略的一个最大值。写成迭代形式就是：
 
-![Iterable Optimal Value function](/attaches/let-machine-play-games/iterable-optimal-value-function.png)
+![Iterable Optimal Value function](/attaches/2016/2016-12-05-let-machine-play-games/iterable-optimal-value-function.png)
 
 到这里我们似乎离问题更进一步了。但是，我们来考虑一下我们可以获取到什么。我们可以不断的用各种策略重复玩游戏，当我们的游戏局有相当的数量时，我们就可以近似得到状态转移函数，进而可以直接计算这个值。理论上这是可行的。但是实际上很难操作，特别是在状态太多的时候。而且就是可以得到最佳策略的状态价值，也不能直接得到最佳策略，需要经过计算才行。
 
 我们再进一步考虑。能不能计算一个动作的价值呢？如果说可以计算在某一个状态下，某一个动作的价值，是不是就可以直接获取到最佳策略了？最佳策略就是选择动作价值最大的那个动作。事实上状态动作价值（或简称动作价值），我们一般称之为Q值，我们可以定义动作价值Q如下：
 
-![Q value formula](/attaches/let-machine-play-games/q-value-formula.png)
+![Q value formula](/attaches/2016/2016-12-05-let-machine-play-games/q-value-formula.png)
 
 写成迭代形式，也就是Q值的Bellman就是：
 
-![Q value bellman formula](/attaches/let-machine-play-games/q-value-bellman-formula.png)
+![Q value bellman formula](/attaches/2016/2016-12-05-let-machine-play-games/q-value-bellman-formula.png)
 
 ### 迭代算法
 
@@ -151,7 +153,7 @@ for i_episode in range(20):
 
 事实上我们只需要首先初始化每一个状态对应的价值为0，然后不停的玩游戏，进行迭代更新直到收敛就可以了。迭代算法如下：
 
-![Q Value Iteration algorithm](/attaches/let-machine-play-games/q-value-iteration-algorithm.png)
+![Q Value Iteration algorithm](/attaches/2016/2016-12-05-let-machine-play-games/q-value-iteration-algorithm.png)
 
 对于一个状态空间比较小的MDP问题而言，我们直接用一个表来保存q值，然后迭代更新这个值就可以得到我们的最佳策略。这一算法是非常有效的。我这里不打算仔细分析这个算法。因为这个算法无法解决我们今天的问题。我们今天的问题状态空间太大了。所有可能的状态有`255^(260*160*3)`这么多种。
 
@@ -165,7 +167,7 @@ for i_episode in range(20):
 
 核心算法如下：
 
-![DQN Algorithm by DeepMind](/attaches/let-machine-play-games/dqn-algorithm-by-deepmind.png)
+![DQN Algorithm by DeepMind](/attaches/2016/2016-12-05-let-machine-play-games/dqn-algorithm-by-deepmind.png)
 
 这个算法有这样一些关键步骤：
 
@@ -175,17 +177,17 @@ for i_episode in range(20):
 
 这个算法用到的神经网络模型如下：
 
-![DQN Network Structure](/attaches/let-machine-play-games/dqn-network-structure.png)
+![DQN Network Structure](/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-structure.png)
 
 这个卷积神经网络的参数如下：
 
-![DQN Network Parameters](/attaches/let-machine-play-games/dqn-network-parameter.png)
+![DQN Network Parameters](/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-parameter.png)
 
 关于卷积神经网络的资料，请大家参考斯坦福大学的cs231n课程。
 
 我们只看一下这里的损失函数。回想一下我们之前的Q值迭代公式。从公式中我们可以看出，我们的最佳Q值就是最大的下一步的最佳Q值加上执行动作之后立即得到的奖励的均值。事实上当模型最终收敛时，平均起来看，当前时刻的Q值就等于下一步的Q值加上执行动作之后立即得到的奖励。于是我们只需要让当前时刻的Q值去逼近下一时刻的Q值和立即奖励之和。于是就有了我们的损失函数：
 
-![DQN Network Loss Function](/attaches/let-machine-play-games/dqn-network-loss-function.png)
+![DQN Network Loss Function](/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-loss-function.png)
 
 ### 探索
 
