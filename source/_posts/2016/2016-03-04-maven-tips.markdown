@@ -4,6 +4,11 @@ title: "Maven Tips"
 date: 2016-03-04 12:21:46 +0800
 comments: true
 categories: 
+- build tools
+tags:
+- maven
+- java
+- pom
 ---
 
 ## 配置文件

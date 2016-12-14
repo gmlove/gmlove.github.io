@@ -3,7 +3,7 @@ layout: post
 title: "Spring项目必备的admin site工具"
 date: 2016-04-25 18:05:33 +0800
 comments: true
-categories: 
+tags: 
 - spring
 - java
 - admin site

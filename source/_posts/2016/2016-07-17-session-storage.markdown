@@ -4,7 +4,7 @@ title: Session Storage
 date: 2016-07-17 19:16:15 +0800
 comments: true
 categories:
-- web
+- frontend
 ---
 
 保存客户端状态，Session Storage是用于

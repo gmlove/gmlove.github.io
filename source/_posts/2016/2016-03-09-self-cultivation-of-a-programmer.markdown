@@ -3,7 +3,8 @@ layout: post
 title: "程序员的自我修养"
 date: 2016-03-09 09:19:32 +0800
 comments: true
-categories:
+tags: 
+- personal
 ---
 
 ## [像她一样，你也可以30岁成为外企高管](https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&mid=403753929&idx=1&sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&srcid=0308IQMxPuvTg7yLZXe89MJO)

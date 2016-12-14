@@ -3,7 +3,9 @@ layout: post
 title: "敏捷方法-用户故事"
 date: 2016-08-31 08:51:59 +0800
 comments: true
-categories: 
+categories:
+- development
+tags: 
 - agile
 - user story
 - 用户故事

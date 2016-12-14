@@ -4,6 +4,9 @@ title: "在clearfix中使用`display:table`"
 date: 2016-03-08 17:22:40 +0800
 comments: true
 categories:
+- frontend
+tags:
+- css
 ---
 
 当子元素是浮动布局时，父元素无法获取到正确的宽高，这种情况常常使用clearfix方案来解决。

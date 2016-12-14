@@ -3,7 +3,12 @@ layout: post
 title: "opengl知识学习"
 date: 2016-03-17 21:04:39 +0800
 comments: true
-categories: 
+categories:
+- frontend
+tags: 
+- opengl
+- html5
+- game
 ---
 
 ## opengl es shading language

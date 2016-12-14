@@ -3,7 +3,10 @@ layout: post
 title: "spring boot 迁移"
 date: 2016-03-30 19:07:57 +0800
 comments: true
-categories: 
+tags: 
+- spring
+- spring-boot
+- java
 ---
 
 

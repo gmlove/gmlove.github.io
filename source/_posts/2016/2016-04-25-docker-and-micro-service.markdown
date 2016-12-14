@@ -3,7 +3,9 @@ layout: post
 title: "Docker和微服务"
 date: 2016-04-25 18:04:14 +0800
 comments: true
-categories: 
+categories:
+- DevOps
+tags: 
 - docker
 - micro service
 ---

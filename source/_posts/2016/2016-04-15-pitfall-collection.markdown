@@ -4,6 +4,8 @@ title: "各种坑"
 date: 2016-04-15 20:45:41 +0800
 comments: true
 categories:
+- frontend
+tags:
 - 那些年我们踩过的坑
 ---
 

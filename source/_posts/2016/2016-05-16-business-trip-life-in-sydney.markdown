@@ -3,7 +3,8 @@ layout: post
 title: "Business Trip Life in Sydney"
 date: 2016-05-16 21:59:00 +1000
 comments: true
-categories: 
+tags: 
+- personal
 ---
 
 应客户邀请到Sydney来出差，有幸可以来一次这个第一级世界都市。
