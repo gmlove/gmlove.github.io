@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gmlove.github.io/"/>
-  <updated>2016-12-14T00:58:50.000Z</updated>
+  <updated>2016-12-14T05:34:33.000Z</updated>
   <id>http://gmlove.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/"/>
     <id>http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/</id>
     <published>2016-12-11T02:12:51.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:34:33.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。</p>
 <p>上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。</p>
@@ -559,7 +559,7 @@
     <link href="http://gmlove.github.io/2016/08/31/agile-user-story/"/>
     <id>http://gmlove.github.io/2016/08/31/agile-user-story/</id>
     <published>2016-08-31T00:51:59.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:34:26.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="常见误解"><a href="#常见误解" class="headerlink" title="常见误解"></a>常见误解</h3><ol>
 <li>需求是被引出或者捕捉出来的（用户也不知道需求，需求只能被拖网捕捞，有大有小，有死有活，还有漏网的）</li>
@@ -577,14 +577,16 @@
     
     </summary>
     
-      <category term="agile" scheme="http://gmlove.github.io/categories/agile/"/>
+      <category term="development" scheme="http://gmlove.github.io/categories/development/"/>
     
-      <category term="user story" scheme="http://gmlove.github.io/categories/agile/user-story/"/>
     
-      <category term="用户故事" scheme="http://gmlove.github.io/categories/agile/user-story/%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B/"/>
+      <category term="agile" scheme="http://gmlove.github.io/tags/agile/"/>
     
-      <category term="敏捷" scheme="http://gmlove.github.io/categories/agile/user-story/%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B/%E6%95%8F%E6%8D%B7/"/>
+      <category term="user story" scheme="http://gmlove.github.io/tags/user-story/"/>
     
+      <category term="用户故事" scheme="http://gmlove.github.io/tags/%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B/"/>
+    
+      <category term="敏捷" scheme="http://gmlove.github.io/tags/%E6%95%8F%E6%8D%B7/"/>
     
   </entry>
   
@@ -593,7 +595,7 @@
     <link href="http://gmlove.github.io/2016/08/25/tdd-practise/"/>
     <id>http://gmlove.github.io/2016/08/25/tdd-practise/</id>
     <published>2016-08-25T09:43:27.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:34:09.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="总纲"><a href="#总纲" class="headerlink" title="总纲"></a>总纲</h2><p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。<br>测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
 <a id="more"></a>
@@ -675,6 +677,8 @@
     
     </summary>
     
+      <category term="development" scheme="http://gmlove.github.io/categories/development/"/>
+    
     
   </entry>
   
@@ -683,7 +687,7 @@
     <link href="http://gmlove.github.io/2016/07/17/session-storage/"/>
     <id>http://gmlove.github.io/2016/07/17/session-storage/</id>
     <published>2016-07-17T11:16:15.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:33:42.000Z</updated>
     
     <content type="html"><![CDATA[<p>保存客户端状态，Session Storage是用于</p>
 <blockquote>
@@ -699,7 +703,7 @@
     
     </summary>
     
-      <category term="web" scheme="http://gmlove.github.io/categories/web/"/>
+      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
     
     
   </entry>
@@ -745,7 +749,7 @@
     <link href="http://gmlove.github.io/2016/05/16/business-trip-life-in-sydney/"/>
     <id>http://gmlove.github.io/2016/05/16/business-trip-life-in-sydney/</id>
     <published>2016-05-16T11:59:00.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:33:20.000Z</updated>
     
     <content type="html"><![CDATA[<p>应客户邀请到Sydney来出差，有幸可以来一次这个第一级世界都市。</p>
 <p>从成都到香港转机再到悉尼，总共16个小时的时间，终于到达这个城市。很多印象很深的景象。</p>
@@ -763,6 +767,8 @@
     
     </summary>
     
+    
+      <category term="personal" scheme="http://gmlove.github.io/tags/personal/"/>
     
   </entry>
   
@@ -836,7 +842,7 @@
     <link href="http://gmlove.github.io/2016/04/25/must-have-admin-site-for-spring-projects/"/>
     <id>http://gmlove.github.io/2016/04/25/must-have-admin-site-for-spring-projects/</id>
     <published>2016-04-25T10:05:33.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:32:59.000Z</updated>
     
     <content type="html"><![CDATA[<p>保持应用状态的可见性对应用的维护和线上问题调试无疑是很重要的；线上进行各种功能开关，日志查询通常也是线上应用运行时必备的功能。这些功能基本上可以放在Admin工具呈现。</p>
 <p>对于经典java框架spring，我们是否有一个通用的Admin框架呢，答案是肯定的。</p>
@@ -859,12 +865,12 @@
     
     </summary>
     
-      <category term="spring" scheme="http://gmlove.github.io/categories/spring/"/>
     
-      <category term="java" scheme="http://gmlove.github.io/categories/spring/java/"/>
+      <category term="java" scheme="http://gmlove.github.io/tags/java/"/>
     
-      <category term="admin site" scheme="http://gmlove.github.io/categories/spring/java/admin-site/"/>
+      <category term="spring" scheme="http://gmlove.github.io/tags/spring/"/>
     
+      <category term="admin site" scheme="http://gmlove.github.io/tags/admin-site/"/>
     
   </entry>
   
@@ -873,7 +879,7 @@
     <link href="http://gmlove.github.io/2016/04/25/docker-and-micro-service/"/>
     <id>http://gmlove.github.io/2016/04/25/docker-and-micro-service/</id>
     <published>2016-04-25T10:04:14.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:32:49.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="微服务的优势和带来的挑战"><a href="#微服务的优势和带来的挑战" class="headerlink" title="微服务的优势和带来的挑战"></a>微服务的优势和带来的挑战</h2><h2 id="Docker给微服务部署带来的便利"><a href="#Docker给微服务部署带来的便利" class="headerlink" title="Docker给微服务部署带来的便利"></a>Docker给微服务部署带来的便利</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="external">https://segmentfault.com/a/1190000004998167</a></p>
 ]]></content>
@@ -884,10 +890,12 @@
     
     </summary>
     
-      <category term="docker" scheme="http://gmlove.github.io/categories/docker/"/>
+      <category term="DevOps" scheme="http://gmlove.github.io/categories/devops/"/>
     
-      <category term="micro service" scheme="http://gmlove.github.io/categories/docker/micro-service/"/>
     
+      <category term="micro service" scheme="http://gmlove.github.io/tags/micro-service/"/>
+    
+      <category term="docker" scheme="http://gmlove.github.io/tags/docker/"/>
     
   </entry>
   
@@ -896,7 +904,7 @@
     <link href="http://gmlove.github.io/2016/04/15/pitfall-collection/"/>
     <id>http://gmlove.github.io/2016/04/15/pitfall-collection/</id>
     <published>2016-04-15T12:45:41.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:32:29.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
 <p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
@@ -909,8 +917,10 @@
     
     </summary>
     
-      <category term="那些年我们踩过的坑" scheme="http://gmlove.github.io/categories/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
+      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
     
+    
+      <category term="那些年我们踩过的坑" scheme="http://gmlove.github.io/tags/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
     
   </entry>
   
@@ -919,7 +929,7 @@
     <link href="http://gmlove.github.io/2016/03/30/migrate-to-spring-boot/"/>
     <id>http://gmlove.github.io/2016/03/30/migrate-to-spring-boot/</id>
     <published>2016-03-30T11:07:57.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:32:05.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><h3 id="error-page"><a href="#error-page" class="headerlink" title="error page"></a>error page</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">error-page</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">location</span>&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> ServerProperties <span class="title">serverProperties</span> <span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ServerProperties() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customize</span><span class="params">(ConfigurableEmbeddedServletContainer container)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>.customize(container);</div><div class="line">            container.addErrorPages(<span class="keyword">new</span> ErrorPage(HttpStatus.NOT_FOUND, <span class="string">"/error/404"</span>));</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -933,6 +943,12 @@
     
     </summary>
     
+    
+      <category term="java" scheme="http://gmlove.github.io/tags/java/"/>
+    
+      <category term="spring" scheme="http://gmlove.github.io/tags/spring/"/>
+    
+      <category term="spring-boot" scheme="http://gmlove.github.io/tags/spring-boot/"/>
     
   </entry>
   
@@ -985,7 +1001,7 @@
     <link href="http://gmlove.github.io/2016/03/17/opengl-summary/"/>
     <id>http://gmlove.github.io/2016/03/17/opengl-summary/</id>
     <published>2016-03-17T13:04:39.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:31:38.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="opengl-es-shading-language"><a href="#opengl-es-shading-language" class="headerlink" title="opengl es shading language"></a>opengl es shading language</h2><p>种类</p>
 <ul>
@@ -1023,6 +1039,14 @@
     
     </summary>
     
+      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
+    
+    
+      <category term="html5" scheme="http://gmlove.github.io/tags/html5/"/>
+    
+      <category term="game" scheme="http://gmlove.github.io/tags/game/"/>
+    
+      <category term="opengl" scheme="http://gmlove.github.io/tags/opengl/"/>
     
   </entry>
   
@@ -1031,7 +1055,7 @@
     <link href="http://gmlove.github.io/2016/03/14/bluetooth-summary/"/>
     <id>http://gmlove.github.io/2016/03/14/bluetooth-summary/</id>
     <published>2016-03-14T08:53:40.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:31:06.000Z</updated>
     
     <content type="html"><![CDATA[<ul>
 <li>工作过程：</li>
@@ -1058,6 +1082,8 @@
     
     </summary>
     
+      <category term="IoT" scheme="http://gmlove.github.io/categories/iot/"/>
+    
     
   </entry>
   
@@ -1066,7 +1092,7 @@
     <link href="http://gmlove.github.io/2016/03/09/self-cultivation-of-a-programmer/"/>
     <id>http://gmlove.github.io/2016/03/09/self-cultivation-of-a-programmer/</id>
     <published>2016-03-09T01:19:32.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:33:30.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="像她一样，你也可以30岁成为外企高管"><a href="#像她一样，你也可以30岁成为外企高管" class="headerlink" title="像她一样，你也可以30岁成为外企高管"></a><a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&amp;mid=403753929&amp;idx=1&amp;sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&amp;srcid=0308IQMxPuvTg7yLZXe89MJO" target="_blank" rel="external">像她一样，你也可以30岁成为外企高管</a></h2><ul>
 <li>跳出舒适区 - 找比你厉害的人聊天</li>
@@ -1087,6 +1113,8 @@
     </summary>
     
     
+      <category term="personal" scheme="http://gmlove.github.io/tags/personal/"/>
+    
   </entry>
   
   <entry>
@@ -1094,7 +1122,7 @@
     <link href="http://gmlove.github.io/2016/03/08/pitfall-clearfix-with-table-display/"/>
     <id>http://gmlove.github.io/2016/03/08/pitfall-clearfix-with-table-display/</id>
     <published>2016-03-08T09:22:40.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:30:42.000Z</updated>
     
     <content type="html"><![CDATA[<p>当子元素是浮动布局时，父元素无法获取到正确的宽高，这种情况常常使用clearfix方案来解决。</p>
 <p><strong> 示例如下：</strong></p>
@@ -1117,6 +1145,10 @@
     
     </summary>
     
+      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
+    
+    
+      <category term="css" scheme="http://gmlove.github.io/tags/css/"/>
     
   </entry>
   
@@ -1125,7 +1157,7 @@
     <link href="http://gmlove.github.io/2016/03/08/ghost-space-in-less/"/>
     <id>http://gmlove.github.io/2016/03/08/ghost-space-in-less/</id>
     <published>2016-03-08T09:19:49.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-14T05:30:31.000Z</updated>
     
     <content type="html"><![CDATA[<p>Original:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.a &#123;</div><div class="line">    &amp;.a-b &#123;</div><div class="line">        &amp;:hover &#123;</div><div class="line">            background-color: #5cb85c;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.a-c &#123;</div><div class="line">    &amp;:extend(.a .a-b:hover);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -1151,8 +1183,12 @@
     
     </summary>
     
-      <category term="less css" scheme="http://gmlove.github.io/categories/less-css/"/>
+      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
     
+    
+      <category term="less" scheme="http://gmlove.github.io/tags/less/"/>
+    
+      <category term="css" scheme="http://gmlove.github.io/tags/css/"/>
     
   </entry>
   

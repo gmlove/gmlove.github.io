@@ -29,7 +29,7 @@
 
   
   
-  <link href="lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -63,9 +63,9 @@
 
 
 
-<link href="lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="Hexo, NexT" />
@@ -74,7 +74,7 @@
 
 
 
-  <link rel="alternate" href="atom.xml" title="Bright LGM's Blog" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml" />
 
 
 
@@ -200,7 +200,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="" rel="section">
+          <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -209,8 +209,18 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
-          <a href="" rel="section">
+          <a href="/archives" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -220,7 +230,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="" rel="section">
+          <a href="/tags" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -230,9 +240,32 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
   
 </nav>
 
@@ -257,12 +290,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/12/11/dl-workshop-rnn-and-lstm-1/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -282,7 +315,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/12/11/dl-workshop-rnn-and-lstm-1/" itemprop="url">
+                <a class="post-title-link" href="/2016/12/11/dl-workshop-rnn-and-lstm-1/" itemprop="url">
                   RNN和LSTM从理论到实践二：RNN和LSTM模型
                 </a>
               
@@ -316,7 +349,7 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/machine-learning/" itemprop="url" rel="index">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
                     <span itemprop="name">Machine Learning</span>
                   </a>
                 </span>
@@ -331,7 +364,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/12/11/dl-workshop-rnn-and-lstm-1/#comments" itemprop="discussionUrl">
+                <a href="/2016/12/11/dl-workshop-rnn-and-lstm-1/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/11/dl-workshop-rnn-and-lstm-1/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -365,7 +398,7 @@
 <p>我们之前介绍过n-gram，那么我们能不能使用n-gram去预测单词，进而生成一个句子呢？我们可以使用频率统计来计算n-gram的语言模型：</p>
           <!--noindex-->
           <div class="post-more-link text-center">
-            <a class="btn" href="2016/12/11/dl-workshop-rnn-and-lstm-1/#more" rel="contents">
+            <a class="btn" href="/2016/12/11/dl-workshop-rnn-and-lstm-1/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -406,12 +439,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/12/05/let-machine-play-games/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/12/05/let-machine-play-games/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -431,7 +464,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/12/05/let-machine-play-games/" itemprop="url">
+                <a class="post-title-link" href="/2016/12/05/let-machine-play-games/" itemprop="url">
                   让机器自己玩游戏
                 </a>
               
@@ -465,7 +498,7 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/machine-learning/" itemprop="url" rel="index">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
                     <span itemprop="name">Machine Learning</span>
                   </a>
                 </span>
@@ -480,7 +513,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/12/05/let-machine-play-games/#comments" itemprop="discussionUrl">
+                <a href="/2016/12/05/let-machine-play-games/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/05/let-machine-play-games/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -513,7 +546,7 @@
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png" alt="Break out game"></p>
           <!--noindex-->
           <div class="post-more-link text-center">
-            <a class="btn" href="2016/12/05/let-machine-play-games/#more" rel="contents">
+            <a class="btn" href="/2016/12/05/let-machine-play-games/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -554,12 +587,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/12/02/dl-workshop-rnn-and-lstm/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -579,7 +612,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/12/02/dl-workshop-rnn-and-lstm/" itemprop="url">
+                <a class="post-title-link" href="/2016/12/02/dl-workshop-rnn-and-lstm/" itemprop="url">
                   RNN和LSTM从理论到实践一：词向量
                 </a>
               
@@ -613,7 +646,7 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/machine-learning/" itemprop="url" rel="index">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
                     <span itemprop="name">Machine Learning</span>
                   </a>
                 </span>
@@ -628,7 +661,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/12/02/dl-workshop-rnn-and-lstm/#comments" itemprop="discussionUrl">
+                <a href="/2016/12/02/dl-workshop-rnn-and-lstm/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/dl-workshop-rnn-and-lstm/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -668,7 +701,7 @@
 </ul>
           <!--noindex-->
           <div class="post-more-link text-center">
-            <a class="btn" href="2016/12/02/dl-workshop-rnn-and-lstm/#more" rel="contents">
+            <a class="btn" href="/2016/12/02/dl-workshop-rnn-and-lstm/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -709,12 +742,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/11/27/a-pick-into-tensorflow/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/11/27/a-pick-into-tensorflow/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -734,7 +767,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/11/27/a-pick-into-tensorflow/" itemprop="url">
+                <a class="post-title-link" href="/2016/11/27/a-pick-into-tensorflow/" itemprop="url">
                   Tensorflow一瞥
                 </a>
               
@@ -768,7 +801,7 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/machine-learning/" itemprop="url" rel="index">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
                     <span itemprop="name">Machine Learning</span>
                   </a>
                 </span>
@@ -783,7 +816,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/11/27/a-pick-into-tensorflow/#comments" itemprop="discussionUrl">
+                <a href="/2016/11/27/a-pick-into-tensorflow/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/27/a-pick-into-tensorflow/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -820,7 +853,7 @@
 <p>TensorFlow为了便于高效率的开发，同时也是顺应社区的技术潮流，提供的是Python的API。同时，也可以直接使用C++进行开发。目前还有Rust，Haskell的方言支持。</p>
           <!--noindex-->
           <div class="post-more-link text-center">
-            <a class="btn" href="2016/11/27/a-pick-into-tensorflow/#more" rel="contents">
+            <a class="btn" href="/2016/11/27/a-pick-into-tensorflow/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -861,12 +894,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/08/31/agile-user-story/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/08/31/agile-user-story/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -886,7 +919,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/08/31/agile-user-story/" itemprop="url">
+                <a class="post-title-link" href="/2016/08/31/agile-user-story/" itemprop="url">
                   敏捷方法-用户故事
                 </a>
               
@@ -920,41 +953,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/agile/" itemprop="url" rel="index">
-                    <span itemprop="name">agile</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/agile/user-story/" itemprop="url" rel="index">
-                    <span itemprop="name">user story</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/agile/user-story/用户故事/" itemprop="url" rel="index">
-                    <span itemprop="name">用户故事</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/agile/user-story/用户故事/敏捷/" itemprop="url" rel="index">
-                    <span itemprop="name">敏捷</span>
+                  <a href="/categories/development/" itemprop="url" rel="index">
+                    <span itemprop="name">development</span>
                   </a>
                 </span>
 
@@ -968,7 +968,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/08/31/agile-user-story/#comments" itemprop="discussionUrl">
+                <a href="/2016/08/31/agile-user-story/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/31/agile-user-story/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -1041,12 +1041,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/08/25/tdd-practise/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/08/25/tdd-practise/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1066,7 +1066,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/08/25/tdd-practise/" itemprop="url">
+                <a class="post-title-link" href="/2016/08/25/tdd-practise/" itemprop="url">
                   TDD Practise
                 </a>
               
@@ -1092,12 +1092,30 @@
           </span>
 
           
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/development/" itemprop="url" rel="index">
+                    <span itemprop="name">development</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/08/25/tdd-practise/#comments" itemprop="discussionUrl">
+                <a href="/2016/08/25/tdd-practise/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/25/tdd-practise/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -1128,7 +1146,7 @@
           <h2 id="总纲"><a href="#总纲" class="headerlink" title="总纲"></a>总纲</h2><p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。<br>测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
           <!--noindex-->
           <div class="post-more-link text-center">
-            <a class="btn" href="2016/08/25/tdd-practise/#more" rel="contents">
+            <a class="btn" href="/2016/08/25/tdd-practise/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1169,12 +1187,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/07/17/session-storage/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/07/17/session-storage/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1194,7 +1212,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/07/17/session-storage/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/17/session-storage/" itemprop="url">
                   Session Storage
                 </a>
               
@@ -1228,8 +1246,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/frontend/" itemprop="url" rel="index">
+                    <span itemprop="name">frontend</span>
                   </a>
                 </span>
 
@@ -1243,7 +1261,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/07/17/session-storage/#comments" itemprop="discussionUrl">
+                <a href="/2016/07/17/session-storage/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/17/session-storage/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -1314,12 +1332,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/07/09/backtracking-search-for-a-game/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/07/09/backtracking-search-for-a-game/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1339,7 +1357,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/07/09/backtracking-search-for-a-game/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/09/backtracking-search-for-a-game/" itemprop="url">
                   回溯搜索找到游戏解法
                 </a>
               
@@ -1373,7 +1391,7 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/算法/" itemprop="url" rel="index">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
                     <span itemprop="name">算法</span>
                   </a>
                 </span>
@@ -1388,7 +1406,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/07/09/backtracking-search-for-a-game/#comments" itemprop="discussionUrl">
+                <a href="/2016/07/09/backtracking-search-for-a-game/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/backtracking-search-for-a-game/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -1424,7 +1442,7 @@
 </ul>
           <!--noindex-->
           <div class="post-more-link text-center">
-            <a class="btn" href="2016/07/09/backtracking-search-for-a-game/#more" rel="contents">
+            <a class="btn" href="/2016/07/09/backtracking-search-for-a-game/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1465,12 +1483,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/05/16/business-trip-life-in-sydney/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/05/16/business-trip-life-in-sydney/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1490,7 +1508,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/05/16/business-trip-life-in-sydney/" itemprop="url">
+                <a class="post-title-link" href="/2016/05/16/business-trip-life-in-sydney/" itemprop="url">
                   Business Trip Life in Sydney
                 </a>
               
@@ -1521,7 +1539,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/05/16/business-trip-life-in-sydney/#comments" itemprop="discussionUrl">
+                <a href="/2016/05/16/business-trip-life-in-sydney/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/16/business-trip-life-in-sydney/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -1594,12 +1612,12 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io2016/04/26/about-micro-service-architecture/">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2016/04/26/about-micro-service-architecture/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
     <meta itemprop="description" content="">
-    <meta itemprop="image" content="images/avatar.gif">
+    <meta itemprop="image" content="/images/avatar.gif">
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1619,7 +1637,7 @@
             
               
                 
-                <a class="post-title-link" href="2016/04/26/about-micro-service-architecture/" itemprop="url">
+                <a class="post-title-link" href="/2016/04/26/about-micro-service-architecture/" itemprop="url">
                   微服务架构总结
                 </a>
               
@@ -1653,7 +1671,7 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="categories/micro-service/" itemprop="url" rel="index">
+                  <a href="/categories/micro-service/" itemprop="url" rel="index">
                     <span itemprop="name">micro service</span>
                   </a>
                 </span>
@@ -1668,7 +1686,7 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="2016/04/26/about-micro-service-architecture/#comments" itemprop="discussionUrl">
+                <a href="/2016/04/26/about-micro-service-architecture/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/26/about-micro-service-architecture/" itemprop="commentCount"></span>
                 </a>
               </span>
@@ -1707,7 +1725,7 @@
 <p>微服务即SOA的一种实现方式。企业服务总线（ESB）设计的失败给SOA带上了负面的标签。</p>
           <!--noindex-->
           <div class="post-more-link text-center">
-            <a class="btn" href="2016/04/26/about-micro-service-architecture/#more" rel="contents">
+            <a class="btn" href="/2016/04/26/about-micro-service-architecture/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1743,7 +1761,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><a class="extend next" rel="next" href="page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1776,7 +1794,7 @@
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="images/avatar.gif"
+               src="/images/avatar.gif"
                alt="Bright LGM" />
           <p class="site-author-name" itemprop="name">Bright LGM</p>
           <p class="site-description motion-element" itemprop="description"></p>
@@ -1791,17 +1809,17 @@
 
           
             <div class="site-state-item site-state-categories">
-              
-                <span class="site-state-item-count">18</span>
+              <a href="/categories">
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">分类</span>
-              
+              </a>
             </div>
           
 
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1811,7 +1829,7 @@
 
         
           <div class="feed-link motion-element">
-            <a href="atom.xml" rel="alternate">
+            <a href="/atom.xml" rel="alternate">
               <i class="fa fa-rss"></i>
               RSS
             </a>
@@ -1837,7 +1855,7 @@
         
           <div class="cc-license motion-element" itemprop="license">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-              <img src="images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
             </a>
           </div>
         
@@ -1917,42 +1935,42 @@
 
 
   
-  <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
 
   
-  <script type="text/javascript" src="lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
-  <script type="text/javascript" src="lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
-  <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
-  <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
-  <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
-
-  
-
-
-  <script type="text/javascript" src="js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="js/src/motion.js?v=5.1.0"></script>
-
-
-
-  
-  
-
-  
 
   
 
 
-  <script type="text/javascript" src="js/src/bootstrap.js?v=5.1.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
 
 
 
@@ -1978,8 +1996,8 @@
   
     
     
-    <script src="lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="js/src/hook-duoshuo.js"></script>
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
@@ -1991,6 +2009,130 @@
 
   
   
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
 
   
 
