@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Micro Service | Bright LGM's Blog]]></title>
+  <link href="http://gmlove.github.io/blog/categories/micro-service/atom.xml" rel="self"/>
+  <link href="http://gmlove.github.io/"/>
+  <updated>2016-12-13T18:32:16+08:00</updated>
+  <id>http://gmlove.github.io/</id>
+  <author>
+    <name><![CDATA[Bright LGM]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[微服务架构总结]]></title>
+    <link href="http://gmlove.github.io/blog/2016/04/26/about-micro-service-architecture/"/>
+    <updated>2016-04-26T18:53:02+08:00</updated>
+    <id>http://gmlove.github.io/blog/2016/04/26/about-micro-service-architecture</id>
+    <content type="html"><![CDATA[<h2>概述</h2>
+
+<p>From Martin Fowler <a href="http://martinfowler.com/articles/microservices.html">microservices</a>:</p>
+
+<blockquote><p>微服务架构即是采用一组小服务来构建应用的方法。
+每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。
+服务围绕业务能力来构建，并依赖自动部署机制来独立部署。</p></blockquote>
+
+<p>From Sam Newman [Building Microservices]:</p>
+
+<blockquote><p>You should instead think of Microservices as a specific approach for SOA in  the same way that XP or Scrum are specific approaches for Agile software development.</p></blockquote>
+
+<p>微服务即SOA的一种实现方式。企业服务总线（ESB）设计的失败给SOA带上了负面的标签。</p>
+
+<h2>特征</h2>
+
+<ul>
+<li>组件服务化</li>
+<li>按业务能力组织服务</li>
+<li>服务即产品: You built it, you run it</li>
+<li>技术栈和数据去中心化</li>
+<li>基础设施自动化</li>
+<li>容错设计</li>
+<li>兼容设计</li>
+</ul>
+
+
+<h2>实施</h2>
+
+<ul>
+<li>前提：复杂度低于零界点，可能导致部署工作量上升</li>
+<li>拆分：业务能力</li>
+<li>协作：契约文档</li>
+<li>测试：<a href="/attaches/about-micro-service-architecture/test-dimension.png">测试四象限</a> <a href="/attaches/about-micro-service-architecture/test-triangle.png">测试金字塔</a></li>
+<li>部署：虚拟化或容器等隔离技术，每一个service一个主机</li>
+<li>监控：基础监控（网络，磁盘，os） 服务监控（响应时间，TPS） 业务监控（多维度，长时间）</li>
+<li>原则：<a href="/attaches/about-micro-service-architecture/principles.png">战略目标 架构原则 设计与交付实践</a></li>
+</ul>
+
+
+<h2>角色变化</h2>
+
+<ul>
+<li>普通工程师：仅仅开发功能 -> 开发、运营服务</li>
+<li>每个服务至少有一个工程师作为负责人，能力更强的人可能会负责更多的服务</li>
+<li>开发人员交集减少，大规模的团队并行开发好处明显</li>
+<li>对个人能力要求更高，个人成长路线的发展也打开了空间</li>
+</ul>
+
+
+<h2>参考</h2>
+
+<p><a href="https://segmentfault.com/a/1190000004998167">https://segmentfault.com/a/1190000004998167</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Docker和微服务]]></title>
+    <link href="http://gmlove.github.io/blog/2016/04/25/docker-and-micro-service/"/>
+    <updated>2016-04-25T18:04:14+08:00</updated>
+    <id>http://gmlove.github.io/blog/2016/04/25/docker-and-micro-service</id>
+    <content type="html"><![CDATA[<h2>微服务的优势和带来的挑战</h2>
+
+<h2>Docker给微服务部署带来的便利</h2>
+
+<h2>参考</h2>
+
+<p><a href="https://segmentfault.com/a/1190000004998167">https://segmentfault.com/a/1190000004998167</a></p>
+]]></content>
+  </entry>
+  
+</feed>

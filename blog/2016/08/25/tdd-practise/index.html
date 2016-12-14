@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>TDD Practise - Bright LGM's Blog</title>
+  <meta name="author" content="Bright LGM">
+
+  
+  <meta name="description" content="总纲 差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。
+测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。 测试 测试的粒度：单元测试 -> 集成测试 -> 验收测试（用户场景测试） 单元测试使我们优化内部品质：模块能独立于系统运行，说明其边界是清晰的，高内聚 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gmlove.github.io/blog/2016/08/25/tdd-practise/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Bright LGM's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Bright LGM's Blog</a></h1>
+  
+    <h2>Code speaks.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="gmlove.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">TDD Practise</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-08-25T17:43:27+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:43 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>总纲</h2>
+
+<p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。
+测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
+
+<h2>测试</h2>
+
+<p>测试的粒度：单元测试 -> 集成测试 -> 验收测试（用户场景测试）</p>
+
+<p>单元测试使我们优化内部品质：模块能独立于系统运行，说明其边界是清晰的，高内聚，低耦合的，更可能在其他地方复用。验收测试保证外部品质。</p>
+
+<p>TDD四步循环：失败 - 报告 - 通过 - 重构</p>
+
+<p>测试的好处：</p>
+
+<ul>
+<li>确定要实现的目标</li>
+<li>通过测试可以发现设计缺陷</li>
+<li>有助于促进上下文无关性</li>
+<li>促进通过分解、萌芽、打包来发现值类型和对象</li>
+</ul>
+
+
+<h2>起步</h2>
+
+<ul>
+<li>新项目：做最少的决定，实现可行走的骨架，尽早暴露不确定性，启动TDD循环 -> 从反馈中学习。</li>
+<li>现有代码：回归测试 -> 单元测试 -> 改动。</li>
+</ul>
+
+
+<h2>设计</h2>
+
+<ul>
+<li>对象间的关系：依赖、通知、调整</li>
+<li>封装：确保通过API影响对象的行为；隐藏：实现方式不可见</li>
+<li>组合比部分之和更简单</li>
+<li>上下文无关性</li>
+</ul>
+
+
+<p>CRC卡进行辅助设计。</p>
+
+<p>好的设计：</p>
+
+<ul>
+<li>根据角色进行命名，而不是根据实现</li>
+<li>使用小的方法来去掉语法噪声，更好的表达意图，最后达到跟读文章一样的效果</li>
+<li>分离并发策略与功能</li>
+<li>事件源外部化，不使用内部的定时器</li>
+</ul>
+
+
+<h2>编写好的测试</h2>
+
+<p>好的单元测试：</p>
+
+<ul>
+<li>针对行为进行测试而不是方法</li>
+<li>更愿意读测试而不是代码</li>
+<li>单个测试规模小，容易理解</li>
+<li>依赖在对象构造时传入</li>
+<li>模拟接口而不是模拟具体的类</li>
+<li>少量的预期</li>
+<li>准确指定应该发生什么，没有多余的指定</li>
+</ul>
+
+
+<p>坏味道：</p>
+
+<ul>
+<li>get查询方法暴露内部状态，破坏了封装</li>
+<li>对象名字出现连词（与、或、但是），通常可以重构以抽取对象</li>
+<li>接口以I打头，或者出现xxImpl：意味着实现不能很好的命名，实现包含领域信息，接口定义角色，总是有可能将其分开</li>
+<li>模拟值类型</li>
+<li>模拟一个无法替换的对象：单例是依赖关系、隐式依赖也是依赖</li>
+<li>构造方法太大，测试很难编写：可能可以萌芽或者打包新的类型；关注点不集中，可能需要分解为新的类型；对通知关系和调整关系使用默认值，提供方法修改它们</li>
+<li>测试中预期太多：测试的重点难以发现</li>
+<li>测试中存在很多与重点无关的代码，如用try catch块捕捉异常</li>
+<li>测试中存在具体值如null，应该为其命名以明确其含义</li>
+<li>测试出错难以定位问题：测试描述不清楚</li>
+</ul>
+
+
+<p>编写测试：</p>
+
+<ul>
+<li>编写辅助对象进行测试，如FakeAuctionServer和测试数据建造者</li>
+<li>使用自描述的值（覆盖toString），或者明显的预装值（Integer.MAX_VALUE）</li>
+<li>忽略不相关的对象</li>
+<li>明确事务边界、使用压力测试来测试线程问题</li>
+<li>使用捕获通知来探测变化以测试异步功能，使用waitUntil assertEventually来检测状态变化</li>
+<li>提取测试结构是注意不要让测试代码太抽象，无需像对待产品代码那样重构测试，测试代码的最高目标是让测试描述目标代码做了什么</li>
+<li>如果类需要创建内部支持对象，在测试中该对象应该是不可见的，而不是mock它</li>
+</ul>
+
+
+<h2>其他：</h2>
+
+<p>重构：</p>
+
+<ul>
+<li>为潜在的对象命名，因为某个东西有名字了，就可以控制它了</li>
+</ul>
+
+
+<p>日志：</p>
+
+<ul>
+<li>支持性日志是一项功能，是应用程序用户接口的一部分，可以用测试驱动</li>
+<li>诊断性日志用于开发者发现问题，可以不用测试驱动，可以使用通知而不是记日志实现</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Bright LGM</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-08-25T17:43:27+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:43 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://gmlove.github.io/blog/2016/08/25/tdd-practise/" data-via="" data-counturl="http://gmlove.github.io/blog/2016/08/25/tdd-practise/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/07/17/session-storage/" title="Previous Post: Session Storage">&laquo; Session Storage</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/08/31/agile-user-story/" title="Next Post: 敏捷方法-用户故事">敏捷方法-用户故事 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/11/dl-workshop-rnn-and-lstm-1/">RNN和LSTM从理论到实践二：RNN和LSTM模型</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/05/let-machine-play-games/">让机器自己玩游戏</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/02/dl-workshop-rnn-and-lstm/">RNN和LSTM从理论到实践一：词向量</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/11/27/a-pick-into-tensorflow/">Tensorflow一瞥</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/08/31/agile-user-story/">敏捷方法-用户故事</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Bright LGM -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

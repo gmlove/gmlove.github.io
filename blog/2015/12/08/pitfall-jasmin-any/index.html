@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>jasmine.any之坑 - Bright LGM's Blog</title>
+  <meta name="author" content="Bright LGM">
+
+  
+  <meta name="description" content="坑说：Jasmine的any(Object)不能替代any({premitive type})，可以考虑使用anything() 坑位：使用toHaveBeenCalledWith测试函数被调用时的参数。 当参数列表太长（如：func(p1, p2, p3){...}）的时候， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gmlove.github.io/blog/2015/12/08/pitfall-jasmin-any/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Bright LGM's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Bright LGM's Blog</a></h1>
+  
+    <h2>Code speaks.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="gmlove.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">jasmine.any之坑</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-08T23:29:47+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:29 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any({premitive type})</code>，可以考虑使用<code>anything()</code></p>
+
+<p>坑位：使用<code>toHaveBeenCalledWith</code>测试函数被调用时的参数。</p>
+
+<p>当参数列表太长（如：<code>func(p1, p2, p3){...}</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。</p>
+
+<!-- more -->
+
+
+<p>坑点示例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;why any(Number) can not be replaced by any(Object)?&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="nx">jasmine</span><span class="p">.</span><span class="nx">createSpy</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">foo</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{});</span>
+</span><span class='line'>  <span class="nx">expect</span><span class="p">(</span><span class="nx">foo</span><span class="p">).</span><span class="nx">toHaveBeenCalledWith</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="nb">Number</span><span class="p">),</span> <span class="nx">jasmine</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="nb">Function</span><span class="p">));</span>
+</span><span class='line'>  <span class="nx">expect</span><span class="p">(</span><span class="nx">foo</span><span class="p">).</span><span class="nx">toHaveBeenCalledWith</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="nb">Object</span><span class="p">),</span> <span class="nx">jasmine</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="nb">Function</span><span class="p">));</span> <span class="c1">// will fail</span>
+</span><span class='line'>  <span class="nx">expect</span><span class="p">(</span><span class="nx">foo</span><span class="p">).</span><span class="nx">toHaveBeenCalledWith</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nx">jasmine</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="nb">Object</span><span class="p">));</span> <span class="c1">// will fail</span>
+</span><span class='line'>  <span class="nx">expect</span><span class="p">(</span><span class="nx">foo</span><span class="p">).</span><span class="nx">toHaveBeenCalledWith</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">anything</span><span class="p">(),</span> <span class="nx">jasmine</span><span class="p">.</span><span class="nx">anything</span><span class="p">());</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){};</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">A</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">expect</span><span class="p">(</span><span class="nx">a</span><span class="p">).</span><span class="nx">toEqual</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="nb">Object</span><span class="p">));</span>
+</span><span class='line'>  <span class="nx">expect</span><span class="p">(</span><span class="nx">a</span><span class="p">).</span><span class="nx">toEqual</span><span class="p">(</span><span class="nx">jasmine</span><span class="p">.</span><span class="nx">any</span><span class="p">(</span><span class="nx">A</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>原因：<code>jasmine</code>使用强类型进行验证匹配。对应的验证关系</p>
+
+<ul>
+<li>String -> any(String) / anything()</li>
+<li>Number -> any(Number) / anything()</li>
+<li>Boolean -> any(Boolean) / anything()</li>
+<li>null -> any(Object)</li>
+<li>Function -> any(Function) / anything()</li>
+<li>Object -> any(Object) / anything()</li>
+</ul>
+
+
+<p>关于Javascript的类型，参考<code>w3schol</code>的官方解释：</p>
+
+<blockquote><p>ECMAScript 有 5 种原始类型（primitive type），即 Undefined、Null、Boolean、Number 和 String。</p>
+
+<p>对变量或值调用 typeof 运算符将返回下列值之一：</p>
+
+<blockquote><ul>
+<li>undefined - 如果变量是 Undefined 类型的</li>
+<li>boolean - 如果变量是 Boolean 类型的</li>
+<li>number - 如果变量是 Number 类型的</li>
+<li>string - 如果变量是 String 类型的</li>
+<li>object - 如果变量是一种引用类型或 Null 类型的</li>
+</ul>
+</blockquote></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Bright LGM</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-08T23:29:47+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:29 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/na-xie-nian-wo-men-cai-guo-de-keng/'>那些年我们踩过的坑</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://gmlove.github.io/blog/2015/12/08/pitfall-jasmin-any/" data-via="" data-counturl="http://gmlove.github.io/blog/2015/12/08/pitfall-jasmin-any/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/08/first-blog/" title="Previous Post: 开篇">&laquo; 开篇</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/01/15/css-best-practise/" title="Next Post: CSS最佳实践">CSS最佳实践 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/11/dl-workshop-rnn-and-lstm-1/">RNN和LSTM从理论到实践二：RNN和LSTM模型</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/05/let-machine-play-games/">让机器自己玩游戏</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/02/dl-workshop-rnn-and-lstm/">RNN和LSTM从理论到实践一：词向量</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/11/27/a-pick-into-tensorflow/">Tensorflow一瞥</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/08/31/agile-user-story/">敏捷方法-用户故事</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Bright LGM -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<script src="jquery-1.10.2.js"></script>
+<script src="pixi-3.0.10.js"></script>
+<style type="text/css">
+.clearfix:before, .clearfix:after { display: table; content: " "; }
+.clearfix:after { clear: both; }
+</style>
+</head>
+
+<body style="background-color: #ececec;">
+
+    <div>
+        <p style="font-weight: bold;">html5控制视频播放：</p>
+        <video id="tv-video" style="width:496px;height:272px;" controls="controls" src="./v.mp4"></video>
+    </div>
+    <div>
+        <p style="font-weight: bold;">Canvas显示视频：</p>
+        <div style="margin-left:10px;">
+            <div class="clearfix">
+                <span style="display: block; float: left;">原视频：</span>
+                <video id="tv-video-origin" style="width:496px;height:272px;display:block;float:left;" src="./v.mp4"></video>
+            </div>
+            <div class="clearfix">
+                <span style="display: block; float: left;">Canvas绘制的视频：</span>
+                <canvas id="tv-canvas" style="width:496px;height:272px;display:block;float:left;"></canvas>
+            </div>
+            <div class="clearfix">
+                <span style="display: block; float: left;">透明处理的视频：</span>
+                <canvas id="tv-canvas-t" style="width:496px;height:272px;display:block;float:left;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div id="pixi-video-panel">
+        <p style="font-weight: bold;">pixi自定义的filter处理视频：</p>
+    </div>
+</body>
+
+
+<script src="script.js"></script>
+
+</html>

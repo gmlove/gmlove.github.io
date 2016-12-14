@@ -1,0 +1,1159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Bright LGM&#39;s Blog</title>
+  <subtitle>Code speaks.</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://gmlove.github.io/"/>
+  <updated>2016-12-14T00:58:50.000Z</updated>
+  <id>http://gmlove.github.io/</id>
+  
+  <author>
+    <name>Bright LGM</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RNN和LSTM从理论到实践二：RNN和LSTM模型</title>
+    <link href="http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/"/>
+    <id>http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/</id>
+    <published>2016-12-11T02:12:51.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。</p>
+<p>上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。</p>
+<h2 id="我们的问题"><a href="#我们的问题" class="headerlink" title="我们的问题"></a>我们的问题</h2><p>先来看我们的问题，然后让我们带着问题，来学习RNN和LSTM。这次我们要解决的问题是：如何生成一个看起来还不错的句子。</p>
+<p>我们之前介绍过n-gram，那么我们能不能使用n-gram去预测单词，进而生成一个句子呢？我们可以使用频率统计来计算n-gram的语言模型：</p>
+<a id="more"></a>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/n-gram-equation.png" alt="N-gram Equation"></p>
+<p>如果我们要计算单词w1出现的条件下单词w2出现的概率，我们可以先统计单词w1在我们的训练数据集中一共出现了多少次，即count(w1)，然后再统计w1和w2连续出现，即”w1 w2”出现的次数count(w1, w2)，相除即为w1出现的条件下单词w2出现的概率。同理，我们想要求在w1和w2同时连续出现的情况下，w3出现的概率也可以类似地使用频率统计来求得。</p>
+<p>n-gram看起来很容易实现，但是它能为我们生成一个好的句子吗？</p>
+<p>试想，如果我们有一篇关于西班牙和法国的文章，里面有一句话『这两个国家开始进入战争时代』。那么这两个国家指的是哪两个国家呢？用n-gram模型其实很难回答这个问题，因为西班牙和法国可能是文章刚开始的时候指明的，而n-gram中的N不可能太大，太大通常导致内存不足以及计算太慢，所以n-gram无法获知文章中离得很远的句子的信息。</p>
+<h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>现在我们知道n-gram的缺点了，那么如何能解决远距离信息问题呢？这就是我们要介绍的模型RNN的发挥价值的地方。</p>
+<p>RNN的模型如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-model.png" alt="RNN Model"></p>
+<p>在这个模型图中，x表示输入的单词向量，y表示预测的单词向量，在此基础上，我们增加了h矩阵来表示输出特征。t表示时间。观察t时刻的输入单词x和预测单词y的计算过程，我们可以发现y不仅仅是跟输入x相关，还跟t-1时刻的h相关。而t时刻的h，又会贡献到t+1时刻的y预测过程中去。</p>
+<p>具体的算法公式如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/ht-and-yt-equation.png" alt="Ht &amp; Yt equation"></p>
+<p>我们可以看到我们定义了3个权值矩阵，这些权值矩阵在每次进行计算的时候，都是复用的，内存开销不随训练文本的增加而增加。h的计算使用了sigmoind激活函数，y的计算使用softmax激活函数。这里为了简单，我们省略了偏置向量。</p>
+<p>好了，我们已经有了模型，那么我们的损失函数是什么呢？其实还是跟之前一致，在时刻t，我们使用交叉熵损失函数：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png" alt="Loss function of RNN"></p>
+<p>那么总的损失函数就是（T表示我们训练时只考虑T个单词形成的RNN）：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png" alt="Overall loss function of RNN"></p>
+<p>我们还常常用perplexity来衡量模型的损失，perplexity的定义就是：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/perplexity-equation.png" alt="Perplexity equation"></p>
+<p>由指数函数的曲线可知，J越小时，perplexity也越小，而且perplexity始终为正。</p>
+<h3 id="反向传播的问题"><a href="#反向传播的问题" class="headerlink" title="反向传播的问题"></a>反向传播的问题</h3><p>直接使用RNN模型有没有什么问题呢？由于权值矩阵是共享的，在反向传播的时候，每一步都会更新一个相同的权值矩阵。梯度下降方法在这种情况下的表现是会有问题的，因为这里的更新会变得不稳定，很容易的就会导致更新太多或太少，从而产生梯度消失或者梯度爆炸的问题。</p>
+<p>例如，假设有两个句子：</p>
+<ul>
+<li>“Jane walked into the room. John walked in too. Jane said hi to ___”</li>
+<li>“Jane walked into the room. John walked in too. It was late in the day, and everyone was walking home after a long day at work. Jane said hi to ___”</li>
+</ul>
+<p>RNN更可能能将第一个句子预测正确，由于梯度下降的梯度消失问题，离得远的信息难以传播到当下，第二个句子将会更难预测准确。</p>
+<p>事实上，可以计算得到，早于当前时刻的某时刻k的单词给当前时刻t的贡献将为β^(t-k)，可以看到它的梯度传播是指数递减的。这就很容易产生梯度爆炸和梯度消失问题。</p>
+<p>针对这个问题，我们的解决方案就是：</p>
+<ul>
+<li>在梯度将要爆炸的时候，将其裁剪为一个较小的值，这可以应对梯度爆炸问题</li>
+<li>使用ReLU激活函数，更仔细的初始化权值矩阵，这可以解决梯度消失的问题</li>
+</ul>
+<p>这些手段可以在一定程度上优化梯度爆炸和梯度消失的问题。但是其实我们有更好的模型来解决这个问题，那就是LSTM。我们后面会一起学习LSTM。</p>
+<h3 id="RNN的扩展"><a href="#RNN的扩展" class="headerlink" title="RNN的扩展"></a>RNN的扩展</h3><p>通常在RNN上面还可以继续扩展，比如扩展为双向递归神经网络：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn.png" alt="Bidirectional RNN"></p>
+<p>相关的公式就变为：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn-equation.png" alt="Bidirectional RNN equation"></p>
+<p>我们还可以加深这个网络，让每一个时刻t从一个线性层变为多个线性层，如图：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn.png" alt="Deep Bidirectional RNN"></p>
+<p>相关的公式为：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn-equation.png" alt="Deep Bidirectional RNN Equation"></p>
+<h2 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h2><p>前面我们分析了RNN的问题，并提到了LSTM。那么LSTM是什么东西呢？它是Long Short Term Memory的缩写。从这个全称来看，它可以给RNN引入记忆的功能。事实上他就是以这个为目标来进行设计的。LSTM的思想就是将RNN的网络单元替换为带记忆功能的网络单元。</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-to-lstm.png" alt="RNN to LSTM"></p>
+<p>记忆到底是个什么玩意儿呢？听起来似乎很抽象。我们分析一下记忆单元应该有的功能。与人的记忆能力作为对比，一个单元能有记忆，那么它应该可以被写入，即可以被更新，然后应该可以被读取，同时应该可以选择性的忘记，也就是删除数据。</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-functionality.png" alt="LSTM functionality"></p>
+<h3 id="Gated-Recurrent-Units"><a href="#Gated-Recurrent-Units" class="headerlink" title="Gated Recurrent Units"></a>Gated Recurrent Units</h3><p>分析了LSTM的原理，我们先看看GRU，即Gated Recurrent Units，它是基于这个思想的一个比LSTM更简单的模型。它的网络图如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru.png" alt="Gated Recurrent Units"></p>
+<p>Reset其实用于实现忘记功能的，它可以控制是否将上一时刻的输出特征h即此时刻的输入包含到此时刻的预测过程，或者包含多少，其公式如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-reset-equation.png" alt="GRU Reset Equation"></p>
+<p>New Memory可以实现写入控制的功能，即决定现在的输入和上一时刻的h到底有多少会影响到当前的预测过程，其公式如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-new-memory-equation.png" alt="GRU New Memory Equation"></p>
+<p>Update可以实现控制读取的功能，即决定当前的状态有多少可以被下一时刻读取，其公式如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-update-equation.png" alt="GRU Update Equation"></p>
+<p>最后将以上几个控制单元结合起来就得到当前的特征输出，它也将会被用于预测输出，其公式如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-feature-equation.png" alt="GRU feature equation"></p>
+<p>可以看到这些单个功能的控制器几乎都是一样的，他们的功能是在构造输出特征时体现出来的。</p>
+<h3 id="LSTM-Units"><a href="#LSTM-Units" class="headerlink" title="LSTM Units"></a>LSTM Units</h3><p>我们再看看更复杂一些的LSTM模型，其模型图如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm.png" alt="LSTM"></p>
+<p>公式如下：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-equations.png" alt="LSTM equations"></p>
+<p>其中h用于预测，c和h一起传播到下一时刻。</p>
+<h3 id="LSTM的应用"><a href="#LSTM的应用" class="headerlink" title="LSTM的应用"></a>LSTM的应用</h3><p>通过分析RNN和LSTM的特性，可以发现它们可以用于预测一个序列。当训练好了LSTM网络时，得到一个输入之后，就预测下一个输出，然后结合输入和预测到的输出，可以继续预测下下个输出，连续的预测之后，我们就可以得到一个序列了。在我们后面要训练的模型中我们就是采取这样的方式来生成一个序列的。就如同下面这样：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-application.png" alt="LSTM Application"></p>
+<p>当然我们还可以在每次预测时选择top k个可能的结果，每次都这样选择，然后在预测过一定次数n之后，统计生成的n个词的短序列的概率，并选择概率最大的短序列作为最终的结果。这样可以防止在某一步预测失败之后，导致后面的预测都跟着失败。这个想法就是Beam Search算法的思想。</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-beam-search.png" alt="LSTM Beam Search"></p>
+<p>RNN和LSTM还有很多其他方面的应用，由于RNN和LSTM可以生成一个连续的序列，我们可以将其应用于机器翻译、语音识别、以及根据图片生成标题等等。</p>
+<h2 id="训练一个RNN和LSTM的模型"><a href="#训练一个RNN和LSTM的模型" class="headerlink" title="训练一个RNN和LSTM的模型"></a>训练一个RNN和LSTM的模型</h2><p>下面我们将跟随udacity上面的习题，一起来实践这个算法。</p>
+<p>下面的内容，请结合<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm.ipynb" target="_blank" rel="external">这里的代码</a>来阅读。</p>
+<h3 id="示例代码中的模型"><a href="#示例代码中的模型" class="headerlink" title="示例代码中的模型"></a>示例代码中的模型</h3><p>在示例中，为了简化模型，我们这里对字符进行建模。于是我们的字符就可以用大小为27（a-z和空格）的一个one-hot的向量来表示。我们的RNN模型中，将按照10个字符进行分组递归处理，并使用变量num_unrollings来表示10这个数值。于是训练数据将被分为每10个字符一组，这一组字符进入RNN之后，不仅相互连接起来，而且和前一组的输出连接，同时提供输出作为后一组的输入。这样分组更新权值的过程中，每次迭代就会将梯度传播10次。</p>
+<p>下面我们看看具体实现过程。</p>
+<p>首先还是通过函数<code>maybe_download</code>和<code>read_data</code>来下载和读取数据，然后选择1000个字符的数据作为验证集。</p>
+<p>然后，我们准备两个工具函数，将字符映射到索引，和将索引映射到字符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">vocabulary_size = len(string.ascii_lowercase) + <span class="number">1</span> <span class="comment"># [a-z] + ' '</span></div><div class="line">first_letter = ord(string.ascii_lowercase[<span class="number">0</span>])</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">char2id</span><span class="params">(char)</span>:</span></div><div class="line">  <span class="keyword">if</span> char <span class="keyword">in</span> string.ascii_lowercase:</div><div class="line">    <span class="keyword">return</span> ord(char) - first_letter + <span class="number">1</span></div><div class="line">  <span class="keyword">elif</span> char == <span class="string">' '</span>:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    print(<span class="string">'Unexpected character: %s'</span> % char)</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">id2char</span><span class="params">(dictid)</span>:</span></div><div class="line">  <span class="keyword">if</span> dictid &gt; <span class="number">0</span>:</div><div class="line">    <span class="keyword">return</span> chr(dictid + first_letter - <span class="number">1</span>)</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    <span class="keyword">return</span> <span class="string">' '</span></div></pre></td></tr></table></figure>
+<p>我们现在来考虑如何进行batch迭代。按照我们前面的分析，由递归的特性可知，字符需要首尾相连，训练集中的后一个字符是依赖前一个字符进行计算的，我们无法打乱这个顺序。我们这里的想法就是把训练文本分为n份，然后n份一起开始训练。如下图所示：</p>
+<p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/batch-update.png" alt="Batch update"></p>
+<p>理解了这个之后，代码中的<code>BatchGenerator</code>就比较容易理解了。需要注意的是batch中的字符组长度为11，并且一个batch和下一个batch之间是有一个字符重叠的，这是由于我们会使用每一个字符的后一个字符作为标签字符，所以在生成batch的时候，就故意多生成了一个字符。在编写BatchGenerator的同时，我们编写了两个辅助函数<code>characters</code>和<code>batches2string</code>，分别实现将一个概率分布（即softmax的输出）映射到一个字符，和将一组batch映射为字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">batch_size=<span class="number">64</span></div><div class="line">num_unrollings=<span class="number">10</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BatchGenerator</span><span class="params">(object)</span>:</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, text, batch_size, num_unrollings)</span>:</span></div><div class="line">    self._text = text</div><div class="line">    self._text_size = len(text)</div><div class="line">    self._batch_size = batch_size</div><div class="line">    self._num_unrollings = num_unrollings</div><div class="line">    segment = self._text_size // batch_size</div><div class="line">    self._cursor = [ offset * segment <span class="keyword">for</span> offset <span class="keyword">in</span> range(batch_size)]</div><div class="line">    self._last_batch = self._next_batch()</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">_next_batch</span><span class="params">(self)</span>:</span></div><div class="line">    <span class="string">"""Generate a single batch from the current cursor position in the data."""</span></div><div class="line">    batch = np.zeros(shape=(self._batch_size, vocabulary_size), dtype=np.float)</div><div class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> range(self._batch_size):</div><div class="line">      batch[b, char2id(self._text[self._cursor[b]])] = <span class="number">1.0</span></div><div class="line">      self._cursor[b] = (self._cursor[b] + <span class="number">1</span>) % self._text_size</div><div class="line">    <span class="keyword">return</span> batch</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self)</span>:</span></div><div class="line">    <span class="string">"""Generate the next array of batches from the data. The array consists of</span></div><div class="line">    the last batch of the previous array, followed by num_unrollings new ones.</div><div class="line">    """</div><div class="line">    batches = [self._last_batch]</div><div class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> range(self._num_unrollings):</div><div class="line">      batches.append(self._next_batch())</div><div class="line">    self._last_batch = batches[<span class="number">-1</span>]</div><div class="line">    <span class="keyword">return</span> batches</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">characters</span><span class="params">(probabilities)</span>:</span></div><div class="line">  <span class="string">"""Turn a 1-hot encoding or a probability distribution over the possible</span></div><div class="line">  characters back into its (most likely) character representation."""</div><div class="line">  <span class="keyword">return</span> [id2char(c) <span class="keyword">for</span> c <span class="keyword">in</span> np.argmax(probabilities, <span class="number">1</span>)]</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batches2string</span><span class="params">(batches)</span>:</span></div><div class="line">  <span class="string">"""Convert a sequence of batches back into their (most likely) string</span></div><div class="line">  representation."""</div><div class="line">  s = [<span class="string">''</span>] * batches[<span class="number">0</span>].shape[<span class="number">0</span>]</div><div class="line">  <span class="keyword">for</span> b <span class="keyword">in</span> batches:</div><div class="line">    s = [<span class="string">''</span>.join(x) <span class="keyword">for</span> x <span class="keyword">in</span> zip(s, characters(b))]</div><div class="line">  <span class="keyword">return</span> s</div><div class="line"></div><div class="line">train_batches = BatchGenerator(train_text, batch_size, num_unrollings)</div><div class="line">valid_batches = BatchGenerator(valid_text, <span class="number">1</span>, <span class="number">1</span>)</div><div class="line"></div><div class="line">print(batches2string(train_batches.next()))</div><div class="line">print(batches2string(train_batches.next()))</div><div class="line">print(batches2string(valid_batches.next()))</div><div class="line">print(batches2string(valid_batches.next()))</div></pre></td></tr></table></figure>
+<p>然后为了程序需要我们再准备几个工具函数如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logprob</span><span class="params">(predictions, labels)</span>:</span></div><div class="line">  <span class="string">"""Log-probability of the true labels in a predicted batch."""</span></div><div class="line">  predictions[predictions &lt; <span class="number">1e-10</span>] = <span class="number">1e-10</span></div><div class="line">  <span class="keyword">return</span> np.sum(np.multiply(labels, -np.log(predictions))) / labels.shape[<span class="number">0</span>]</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_distribution</span><span class="params">(distribution)</span>:</span></div><div class="line">  <span class="string">"""Sample one element from a distribution assumed to be an array of normalized</span></div><div class="line">  probabilities.</div><div class="line">  """</div><div class="line">  r = random.uniform(<span class="number">0</span>, <span class="number">1</span>)</div><div class="line">  s = <span class="number">0</span></div><div class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(len(distribution)):</div><div class="line">    s += distribution[i]</div><div class="line">    <span class="keyword">if</span> s &gt;= r:</div><div class="line">      <span class="keyword">return</span> i</div><div class="line">  <span class="keyword">return</span> len(distribution) - <span class="number">1</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample</span><span class="params">(prediction)</span>:</span></div><div class="line">  <span class="string">"""Turn a (column) prediction into 1-hot encoded samples."""</span></div><div class="line">  p = np.zeros(shape=[<span class="number">1</span>, vocabulary_size], dtype=np.float)</div><div class="line">  p[<span class="number">0</span>, sample_distribution(prediction[<span class="number">0</span>])] = <span class="number">1.0</span></div><div class="line">  <span class="keyword">return</span> p</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_distribution</span><span class="params">()</span>:</span></div><div class="line">  <span class="string">"""Generate a random column of probabilities."""</span></div><div class="line">  b = np.random.uniform(<span class="number">0.0</span>, <span class="number">1.0</span>, size=[<span class="number">1</span>, vocabulary_size])</div><div class="line">  <span class="keyword">return</span> b/np.sum(b, <span class="number">1</span>)[:,<span class="keyword">None</span>]</div></pre></td></tr></table></figure>
+<p>其中<code>logprob</code>用于计算交叉熵，<code>sample_distribution</code>用于从一个概率分别里面随机选择一个元素，<code>sample</code>在一个概率分布中随机选择一个元素，并将其转换为one-hot编码的向量。<code>random_distribution</code>可以随机生成一个概率分布。</p>
+<p>现在到了我们构建计算图的时候了，参考lstm的模型图，我们依序初始化参数并构造计算图如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line">num_nodes = <span class="number">64</span></div><div class="line"></div><div class="line">graph = tf.Graph()</div><div class="line"><span class="keyword">with</span> graph.as_default():</div><div class="line">  </div><div class="line">  <span class="comment"># Parameters:</span></div><div class="line">  <span class="comment"># Input gate: input, previous output, and bias.</span></div><div class="line">  ix = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  im = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  ib = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</div><div class="line">  <span class="comment"># Forget gate: input, previous output, and bias.</span></div><div class="line">  fx = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  fm = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  fb = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</div><div class="line">  <span class="comment"># Memory cell: input, state and bias.                             </span></div><div class="line">  cx = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  cm = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  cb = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</div><div class="line">  <span class="comment"># Output gate: input, previous output, and bias.</span></div><div class="line">  ox = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  om = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  ob = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</div><div class="line">  <span class="comment"># Variables saving state across unrollings.</span></div><div class="line">  saved_output = tf.Variable(tf.zeros([batch_size, num_nodes]), trainable=<span class="keyword">False</span>)</div><div class="line">  saved_state = tf.Variable(tf.zeros([batch_size, num_nodes]), trainable=<span class="keyword">False</span>)</div><div class="line">  <span class="comment"># Classifier weights and biases.</span></div><div class="line">  w = tf.Variable(tf.truncated_normal([num_nodes, vocabulary_size], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">  b = tf.Variable(tf.zeros([vocabulary_size]))</div><div class="line">  </div><div class="line">  <span class="comment"># Definition of the cell computation.</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">lstm_cell</span><span class="params">(i, o, state)</span>:</span></div><div class="line">    <span class="string">"""Create a LSTM cell. See e.g.: http://arxiv.org/pdf/1402.1128v1.pdf</span></div><div class="line">    Note that in this formulation, we omit the various connections between the</div><div class="line">    previous state and the gates."""</div><div class="line">    input_gate = tf.sigmoid(tf.matmul(i, ix) + tf.matmul(o, im) + ib)</div><div class="line">    forget_gate = tf.sigmoid(tf.matmul(i, fx) + tf.matmul(o, fm) + fb)</div><div class="line">    update = tf.matmul(i, cx) + tf.matmul(o, cm) + cb</div><div class="line">    state = forget_gate * state + input_gate * tf.tanh(update)</div><div class="line">    output_gate = tf.sigmoid(tf.matmul(i, ox) + tf.matmul(o, om) + ob)</div><div class="line">    <span class="keyword">return</span> output_gate * tf.tanh(state), state</div><div class="line"></div><div class="line">  <span class="comment"># Input data.</span></div><div class="line">  train_data = list()</div><div class="line">  <span class="keyword">for</span> _ <span class="keyword">in</span> range(num_unrollings + <span class="number">1</span>):</div><div class="line">    train_data.append(</div><div class="line">      tf.placeholder(tf.float32, shape=[batch_size,vocabulary_size]))</div><div class="line">  train_inputs = train_data[:num_unrollings]</div><div class="line">  train_labels = train_data[<span class="number">1</span>:]  <span class="comment"># labels are inputs shifted by one time step.</span></div><div class="line"></div><div class="line">  <span class="comment"># Unrolled LSTM loop.</span></div><div class="line">  outputs = list()</div><div class="line">  output = saved_output</div><div class="line">  state = saved_state</div><div class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> train_inputs:</div><div class="line">    output, state = lstm_cell(i, output, state)</div><div class="line">    outputs.append(output)</div><div class="line"></div><div class="line">  <span class="comment"># State saving across unrollings.</span></div><div class="line">  <span class="keyword">with</span> tf.control_dependencies([saved_output.assign(output),</div><div class="line">                                saved_state.assign(state)]):</div><div class="line">    <span class="comment"># Classifier.</span></div><div class="line">    logits = tf.nn.xw_plus_b(tf.concat(<span class="number">0</span>, outputs), w, b)</div><div class="line">    loss = tf.reduce_mean(</div><div class="line">      tf.nn.softmax_cross_entropy_with_logits(</div><div class="line">        logits, tf.concat(<span class="number">0</span>, train_labels)))</div><div class="line"></div><div class="line">  <span class="comment"># Optimizer.</span></div><div class="line">  global_step = tf.Variable(<span class="number">0</span>)</div><div class="line">  learning_rate = tf.train.exponential_decay(</div><div class="line">    <span class="number">10.0</span>, global_step, <span class="number">5000</span>, <span class="number">0.1</span>, staircase=<span class="keyword">True</span>)</div><div class="line">  optimizer = tf.train.GradientDescentOptimizer(learning_rate)</div><div class="line">  gradients, v = zip(*optimizer.compute_gradients(loss))</div><div class="line">  gradients, _ = tf.clip_by_global_norm(gradients, <span class="number">1.25</span>)</div><div class="line">  optimizer = optimizer.apply_gradients(</div><div class="line">    zip(gradients, v), global_step=global_step)</div><div class="line"></div><div class="line">  <span class="comment"># Predictions.</span></div><div class="line">  train_prediction = tf.nn.softmax(logits)</div><div class="line">  </div><div class="line">  <span class="comment"># Sampling and validation eval: batch 1, no unrolling.</span></div><div class="line">  sample_input = tf.placeholder(tf.float32, shape=[<span class="number">1</span>, vocabulary_size])</div><div class="line">  saved_sample_output = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</div><div class="line">  saved_sample_state = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</div><div class="line">  reset_sample_state = tf.group(</div><div class="line">    saved_sample_output.assign(tf.zeros([<span class="number">1</span>, num_nodes])),</div><div class="line">    saved_sample_state.assign(tf.zeros([<span class="number">1</span>, num_nodes])))</div><div class="line">  sample_output, sample_state = lstm_cell(</div><div class="line">    sample_input, saved_sample_output, saved_sample_state)</div><div class="line">  <span class="keyword">with</span> tf.control_dependencies([saved_sample_output.assign(sample_output),</div><div class="line">                                saved_sample_state.assign(sample_state)]):</div><div class="line">    sample_prediction = tf.nn.softmax(tf.nn.xw_plus_b(sample_output, w, b))</div></pre></td></tr></table></figure>
+<p><code>tf.control_dependencies</code>这个是用于控制执行顺序的，我们想要完成一组字符的首尾连接的计算图之后，再进行loss函数的构建。<code>saved_output.assign(output)</code>和<code>saved_state.assign(state)</code>可以将10个递归的lstm串起来，<code>tf.control_dependencies</code>保证了loss肯定在assign之后构建。这样就可以保证我们的计算图是全部递归的结构构建的。</p>
+<p>接下来是训练的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">num_steps = <span class="number">7001</span></div><div class="line">summary_frequency = <span class="number">100</span></div><div class="line"></div><div class="line"><span class="keyword">with</span> tf.Session(graph=graph) <span class="keyword">as</span> session:</div><div class="line">  tf.initialize_all_variables().run()</div><div class="line">  print(<span class="string">'Initialized'</span>)</div><div class="line">  mean_loss = <span class="number">0</span></div><div class="line">  <span class="keyword">for</span> step <span class="keyword">in</span> range(num_steps):</div><div class="line">    batches = train_batches.next()</div><div class="line">    feed_dict = dict()</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num_unrollings + <span class="number">1</span>):</div><div class="line">      feed_dict[train_data[i]] = batches[i]</div><div class="line">    _, l, predictions, lr = session.run(</div><div class="line">      [optimizer, loss, train_prediction, learning_rate], feed_dict=feed_dict)</div><div class="line">    mean_loss += l</div><div class="line">    <span class="keyword">if</span> step % summary_frequency == <span class="number">0</span>:</div><div class="line">      <span class="keyword">if</span> step &gt; <span class="number">0</span>:</div><div class="line">        mean_loss = mean_loss / summary_frequency</div><div class="line">      <span class="comment"># The mean loss is an estimate of the loss over the last few batches.</span></div><div class="line">      print(</div><div class="line">        <span class="string">'Average loss at step %d: %f learning rate: %f'</span> % (step, mean_loss, lr))</div><div class="line">      mean_loss = <span class="number">0</span></div><div class="line">      labels = np.concatenate(list(batches)[<span class="number">1</span>:])</div><div class="line">      print(<span class="string">'Minibatch perplexity: %.2f'</span> % float(</div><div class="line">        np.exp(logprob(predictions, labels))))</div><div class="line">      <span class="keyword">if</span> step % (summary_frequency * <span class="number">10</span>) == <span class="number">0</span>:</div><div class="line">        <span class="comment"># Generate some samples.</span></div><div class="line">        print(<span class="string">'='</span> * <span class="number">80</span>)</div><div class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">5</span>):</div><div class="line">          feed = sample(random_distribution())</div><div class="line">          sentence = characters(feed)[<span class="number">0</span>]</div><div class="line">          reset_sample_state.run()</div><div class="line">          <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">79</span>):</div><div class="line">            prediction = sample_prediction.eval(&#123;sample_input: feed&#125;)</div><div class="line">            feed = sample(prediction)</div><div class="line">            sentence += characters(feed)[<span class="number">0</span>]</div><div class="line">          print(sentence)</div><div class="line">        print(<span class="string">'='</span> * <span class="number">80</span>)</div><div class="line">      <span class="comment"># Measure validation set perplexity.</span></div><div class="line">      reset_sample_state.run()</div><div class="line">      valid_logprob = <span class="number">0</span></div><div class="line">      <span class="keyword">for</span> _ <span class="keyword">in</span> range(valid_size):</div><div class="line">        b = valid_batches.next()</div><div class="line">        predictions = sample_prediction.eval(&#123;sample_input: b[<span class="number">0</span>]&#125;)</div><div class="line">        valid_logprob = valid_logprob + logprob(predictions, b[<span class="number">1</span>])</div><div class="line">      print(<span class="string">'Validation set perplexity: %.2f'</span> % float(np.exp(</div><div class="line">        valid_logprob / valid_size)))</div></pre></td></tr></table></figure>
+<p>迭代训练过程中，将会每100个迭代计算一次训练数据的perplexity，然后打印出来。并且在1000个迭代的时候，尝试随机选择验证集中的数据进行预测，并与真实的数据进行对比计算perplexity。</p>
+<h3 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h3><p>现在来看我们的问题1。观察计算图构建过程，看起来是可以优化的，因为各个控制器的代码看起来很类似。试想，如果我们将所有的<code>tf.matmul(o, im) + ib</code>都抽取出来组合为一个大的矩阵之后再做乘积，然后利用矩阵乘法的规则，将乘积之后的结果分配到各个控制器的结果中是不是可以呢？下面我们就用这个思想来优化我们的模型。</p>
+<p>下面的内容，请结合<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem1.ipynb" target="_blank" rel="external">这里的代码</a>来阅读。</p>
+<p>我们只需要将权值定义代码替换为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Parameters:</span></div><div class="line"><span class="comment"># Input gate: input, previous output, and bias.</span></div><div class="line">ifcox = tf.Variable(tf.truncated_normal([vocabulary_size, <span class="number">4</span> * num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">ifcom = tf.Variable(tf.truncated_normal([num_nodes, <span class="number">4</span> * num_nodes], <span class="number">-0.1</span>, <span class="number">0.1</span>))</div><div class="line">ifcob = tf.Variable(tf.zeros([<span class="number">1</span>, <span class="number">4</span> * num_nodes]))</div></pre></td></tr></table></figure>
+<p>并将<code>lstm_cell</code>函数替换为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">lstm_cell</span><span class="params">(i, o, state)</span>:</span></div><div class="line">    <span class="string">"""Create a LSTM cell. See e.g.: http://arxiv.org/pdf/1402.1128v1.pdf</span></div><div class="line">    Note that in this formulation, we omit the various connections between the</div><div class="line">    previous state and the gates."""</div><div class="line">    all_gates = tf.matmul(i, ifcox) + tf.matmul(o, ifcom) + ifcob</div><div class="line">    input_gate = tf.sigmoid(all_gates[:, <span class="number">0</span>:num_nodes])</div><div class="line">    forget_gate = tf.sigmoid(all_gates[:, num_nodes:<span class="number">2</span>*num_nodes])</div><div class="line">    update = all_gates[:, <span class="number">2</span>*num_nodes:<span class="number">3</span>*num_nodes]</div><div class="line">    state = forget_gate * state + input_gate * tf.tanh(update)</div><div class="line">    output_gate = tf.sigmoid(all_gates[:, <span class="number">3</span>*num_nodes:])</div><div class="line"></div><div class="line">    <span class="keyword">return</span> output_gate * tf.tanh(state), state</div></pre></td></tr></table></figure>
+<h3 id="问题2-1"><a href="#问题2-1" class="headerlink" title="问题2-1"></a>问题2-1</h3><p>我们在这里会尝试编写一个bi-gram的实现。我们之前是对字符进行建模的，转到bi-gram上，也就是说我们需要在一对一对的字符上进行建模。</p>
+<p>下面的内容，请结合<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-1.ipynb" target="_blank" rel="external">这里的代码</a>来阅读。</p>
+<p>首先是改写我们的工具函数（此时我们的词库大小为27*27）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">vocabulary_size_base = len(string.ascii_lowercase) + <span class="number">1</span> <span class="comment"># [a-z] + ' '</span></div><div class="line">vocabulary_size = vocabulary_size_base ** <span class="number">2</span></div><div class="line"></div><div class="line">first_letter = ord(string.ascii_lowercase[<span class="number">0</span>])</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">char2id0</span><span class="params">(char)</span>:</span></div><div class="line">  <span class="keyword">if</span> char <span class="keyword">in</span> string.ascii_lowercase:</div><div class="line">    <span class="keyword">return</span> ord(char) - first_letter + <span class="number">1</span></div><div class="line">  <span class="keyword">elif</span> char == <span class="string">' '</span>:</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    print(<span class="string">'Unexpected character: %s'</span> % char)</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">char2id</span><span class="params">(char)</span>:</span></div><div class="line">  <span class="keyword">return</span> char2id0(char[<span class="number">0</span>]) * vocabulary_size_base + char2id0(char[<span class="number">1</span>])</div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">id2char0</span><span class="params">(dictid)</span>:</span></div><div class="line">  <span class="keyword">if</span> dictid &gt; <span class="number">0</span>:</div><div class="line">    <span class="keyword">return</span> chr(dictid + first_letter - <span class="number">1</span>)</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    <span class="keyword">return</span> <span class="string">' '</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">id2char</span><span class="params">(dictid)</span>:</span></div><div class="line">  <span class="keyword">return</span> id2char0(dictid//vocabulary_size_base) + id2char0(dictid%vocabulary_size_base)</div></pre></td></tr></table></figure>
+<p>然后我们还需要修改<code>BatchGenerator</code>来生成batch的训练数据。我们还增加了一个<code>bigramstringtonormal</code>函数来将bi-gram编码的字符串转换为一个可读的字符串。</p>
+<p>之后在训练过程中，我们需要打印预测出来的字符串，这时需要调用我们的工具函数将其转换为可读的字符串再打印出来。</p>
+<p>需要修改的代码请参考<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-1.ipynb" target="_blank" rel="external">这里的代码</a>。</p>
+<h3 id="问题2-2"><a href="#问题2-2" class="headerlink" title="问题2-2"></a>问题2-2</h3><p>我们将会引入embedding来节省内存。</p>
+<p>需要修改的代码请参考<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-2.ipynb" target="_blank" rel="external">这里的代码</a>。</p>
+<p>主要的思路是，生成batch训练数据时，无须进行one-hot编码了，直接生成一个二维表即可。<code>ifcox</code>权值矩阵在这里充当了embedding的角色。然后在构造lstm单元的时候从embedding查询得出乘积后的值，而无须再进行乘积处理。在最后计算loss的时候，将<code>softmax_cross_entropy_with_logits</code>转换为调用它的稀疏矩阵版本<code>sparse_softmax_cross_entropy_with_logits</code>。</p>
+<h3 id="问题2-3"><a href="#问题2-3" class="headerlink" title="问题2-3"></a>问题2-3</h3><p>我们将会引入dropout来提升性能。</p>
+<p>需要修改的代码请参考<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-3.ipynb" target="_blank" rel="external">这里的代码</a>。</p>
+<p>需要注意的是向lstm单元添加dropout的时候，只能加到input数据的处理上面，而不能加到递归连接的处理单元上面。</p>
+<h3 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h3><p>暂无</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里我们就完成了RNN和LSTM的学习了。结合NN CNN可以看到，深度学习的基础其实很简单，就是线性模型加激活函数，常用的深度学习模型其实就是在这样的基础模型上面进行结构的设计和优化。这跟玩乐高类似，由简单的基础的模块进行组合，就可以得到非常复杂的模型，最后的效果是惊人的。</p>
+<p>我们接触过的基础的模型有：</p>
+<p>线性单元： y=WX+b<br>激活函数： sigoid tanh relu softmax(一般用作输出层)<br>优化手段：normalization, randomization, l2 regularization, dropout, embedding, gradient clipping</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。&lt;/p&gt;
+&lt;p&gt;上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。&lt;/p&gt;
+&lt;h2 id=&quot;我们的问题&quot;&gt;&lt;a href=&quot;#我们的问题&quot; class=&quot;headerlink&quot; title=&quot;我们的问题&quot;&gt;&lt;/a&gt;我们的问题&lt;/h2&gt;&lt;p&gt;先来看我们的问题，然后让我们带着问题，来学习RNN和LSTM。这次我们要解决的问题是：如何生成一个看起来还不错的句子。&lt;/p&gt;
+&lt;p&gt;我们之前介绍过n-gram，那么我们能不能使用n-gram去预测单词，进而生成一个句子呢？我们可以使用频率统计来计算n-gram的语言模型：&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+    
+    
+      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+    
+      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+    
+      <category term="RNN" scheme="http://gmlove.github.io/tags/rnn/"/>
+    
+      <category term="LSTM" scheme="http://gmlove.github.io/tags/lstm/"/>
+    
+      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>让机器自己玩游戏</title>
+    <link href="http://gmlove.github.io/2016/12/05/let-machine-play-games/"/>
+    <id>http://gmlove.github.io/2016/12/05/let-machine-play-games/</id>
+    <published>2016-12-05T05:12:47.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。</p>
+<h2 id="我们的目标"><a href="#我们的目标" class="headerlink" title="我们的目标"></a>我们的目标</h2><p>Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球的玩法的一个游戏，与乒乓球不同的是，这个游戏可以由单人控制。相信只要是80后，肯定都玩过这个游戏。</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png" alt="Break out game"></p>
+<a id="more"></a>
+<h2 id="OpenAI-Environment"><a href="#OpenAI-Environment" class="headerlink" title="OpenAI Environment"></a>OpenAI Environment</h2><p>为了实现我们的机器学习算法，我们是否要自己实现一个这样的游戏呢？当然不必。</p>
+<p>在去年11月的时候，由特斯拉汽车的创始人也是spaceX的创始人Elon Musk带头发起了一个叫OpenAI的项目，这个项目主要的目的是降低机器学习的门槛，让人工智能更容易上手和实现。于是他们做了一个开发库，可以方便开发者开发强化学习算法和比较、分享算法的结果。而这个项目在今年（2016）4月份就发布了第一个beta版本。</p>
+<p>使用这个项目提供的开发库，我们可以方便的运行breakout这个游戏，并采集到相关的游戏数据。</p>
+<p>通过下面的代码我们就可以运行一个breakout的环境，并随机进行操作来玩游戏。这里的breakout游戏每一局有5条命，分数累加。当球碰到顶上的墙壁砖块之后，砖块被击碎而消失，分数加一。虽然这样玩出来的得分是很低的，但是我们已经有了一个基础。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> gym</div><div class="line">env = gym.make(<span class="string">'Breakout-v0'</span>)</div><div class="line"></div><div class="line"><span class="keyword">for</span> i_episode <span class="keyword">in</span> range(<span class="number">20</span>):</div><div class="line">  observation = env.reset()</div><div class="line">  <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">100</span>):</div><div class="line">    env.render()</div><div class="line">    action = env.action_space.sample()</div><div class="line">    observation, reward, done, info = env.step(action)</div><div class="line">    <span class="keyword">if</span> done:</div><div class="line">      print(<span class="string">'Episode finished after &#123;&#125; timesteps'</span>.format(t + <span class="number">1</span>))</div><div class="line">      <span class="keyword">break</span></div></pre></td></tr></table></figure></p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/breakout-in-openai.png" alt="Breakout in OpenAI"></p>
+<p>从上面的代码中，我们可以看到gym给我们提供的东西有：</p>
+<ul>
+<li>observation：这个返回的值就是屏幕的观察数据，是一个大小为(210, 160, 3)的三维矩阵，里面是每一个像素的rgb颜色值</li>
+<li>reward：得分，当球撞击到墙壁砖块之后，返回1，否则返回0</li>
+<li>env.action_space：我们可以进行的所有操作，这里将会返回一个Discrete(6)，即离散的6个操作，大家可以认为这6个操作想象为，左加速移动，右加速移动，不动等</li>
+<li>env.step：执行一个操作，这个操作的值为0-5，即action_space中的某一个值</li>
+</ul>
+<p>当我们有了这些数据的时候，我们事实上是有了什么呢？</p>
+<ul>
+<li>当前游戏世界的状态</li>
+<li>我们可以做的操作</li>
+<li>一系列操作之后，我们可能会得到奖励，也就是得分</li>
+</ul>
+<p>我们要解决的问题是什么呢？</p>
+<p>问题就是，为了获取最大得分，我们如何在每一步选择正确的操作，即如何生成一系列的操作。关于操作的选择，就是策略。前面代码里面其实也是有策略的，我们的策略就是随机策略。我们的问题其实就是求最佳策略。</p>
+<p>下面将向大家介绍强化学习的相关理论知识。</p>
+<h2 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h2><h3 id="马尔可夫决策过程"><a href="#马尔可夫决策过程" class="headerlink" title="马尔可夫决策过程"></a>马尔可夫决策过程</h3><p>请看这个图：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/mdp.png" alt="Markov Decision Process"></p>
+<p>这张图里面的过程我们就将其称为马尔可夫决策过程。</p>
+<p>在马尔可夫决策过程中，有一个agent，它可以观察environment，并操作environment，environment在接受操作之后，会按照一定概率产生一个状态改变，并可能会有给agent奖励。当然environment可能自己有自己的运作规则，自己也会不停的产生状态改变。</p>
+<h3 id="数学模型"><a href="#数学模型" class="headerlink" title="数学模型"></a>数学模型</h3><p>我们可以定义马尔可夫决策过程中的一些概念如下：</p>
+<ul>
+<li>S: 一个所有可能的状态集合，在breakout这个游戏中，状态就是屏幕的像素值集合</li>
+<li>A: 一个所有可能的操作的集合，在breakout这个游戏中，就是action_space中指明的6种操作</li>
+<li>P: 状态转移的可能性，即关于状态空间的一个概率分布，给定一个状态，P可以表示该状态可能会转到哪一个状态，以及以什么样的概率转移到那个状态。结合breakout游戏进行理解就是，当我们捕捉到一个游戏画面的时候，下一个画面（即下一个状态）可能有多种可能，这多种可能性会形成一个概率分布</li>
+<li>R: 一个状态对应的奖励，有可能会跟随一个动作。需要说明的是，当有一个关键动作时，通常不会立即有奖励，大家可以想象一下breakout这个游戏，在球撞击顶部的墙砖时，就有正向奖励产生，而得分的前一时刻可能是不需要有动作的，或者说动作就是不做任何事</li>
+</ul>
+<p>这里比较重要的是状态和动作的转换关系。从一个状态开始，可以选择多种动作，一旦选择了某一个动作，这个动作可能导致的多种下一刻的状态。所以动作-状态-动作会形成一种树形的关系，如下图所示：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/state-action-tree.png" alt="State action tree"></p>
+<p>这棵树的某一个分支就形成一局游戏。</p>
+<p>有了这些定义之后，我们如何衡量某一个状态的价值，或者如何定义某一个动作的价值呢？</p>
+<p>对某一局游戏，假设我们有一系列状态、动作和奖励，事实上我们可以定义状态和动作的价值如下：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/state-action-value-formula.png" alt="state action value formula"></p>
+<p>从这个公式中，我们可以看出，当前状态和动作的价值不仅跟当前的价值R0相关，还跟将来的价值相关。比如买股票，你今天的投资价值，不仅仅取决于今天股票的涨幅，之后每一天的增长都是今天的投资所决定的。所以我们可以知道，当前的状态和动作的价值是当前得到的奖励和将来的潜在奖励的和。</p>
+<p>公式中还有一个参数γ，表示折扣因子。为什么要这个折扣因子呢？经济学里面有一句话”A dollar today is worth more than a dollar tomorrow!”，就是说今天的一美金比明天的一美金更值钱。我们可以这样理解，明天的价值是一个估计值，既然是估计值，那么就是不准确的，很有可能根本没这么多。对于钱而言，明天的钱还会贬值呢。所以在这个公式中，我们加上这个折扣因子，时间往后的价值需要乘以一个折扣因子的乘方，也就是说时间越久的价值对当前的价值贡献越小。</p>
+<p>如果我们只对状态价值进行建模，我们可以得到这样的公式：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/state-value-formula.png" alt="state value formula"></p>
+<p>如何衡量一个状态的overall的价值呢？我们可以对每一种可能的游戏局求平均，也就是上面的公式的期望值。</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/expected-state-value-formula.png" alt="state value formula"></p>
+<p>思考一下我们的问题，现在我们可以定义一个状态的价值了，一个状态的价值大，说明这个状态是一个好状态，我们就要让我们的策略向好的状态方面靠。似乎有了一些解决问题的思路了。</p>
+<p>我们更进一步，从策略着手来分析这个问题。</p>
+<p><strong>策略</strong>就是一个从state到action的函数。也就是说，有了策略，我们就知道每一个状态下应该选择什么样的action了。我们通常用符号π来表示策略。</p>
+<p>一个策略的价值函数就是：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/value-function-for-pi-formula.png" alt="Value function for pi formula"></p>
+<p>观察这个函数，我们可以发现这个函数其实可以写成迭代的形式。写成迭代的形式之后，我们就得到了著名的Bellman等式：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/bellman-equation.png" alt="Bellman Equation"></p>
+<p>有了这些之后，我们就可以定义最佳策略的价值为：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/optimal-value-function.png" alt="Optimal Value function"></p>
+<p>这个就是最佳策略的价值函数，它是所有可能的策略的一个最大值。写成迭代形式就是：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/iterable-optimal-value-function.png" alt="Iterable Optimal Value function"></p>
+<p>到这里我们似乎离问题更进一步了。但是，我们来考虑一下我们可以获取到什么。我们可以不断的用各种策略重复玩游戏，当我们的游戏局有相当的数量时，我们就可以近似得到状态转移函数，进而可以直接计算这个值。理论上这是可行的。但是实际上很难操作，特别是在状态太多的时候。而且就是可以得到最佳策略的状态价值，也不能直接得到最佳策略，需要经过计算才行。</p>
+<p>我们再进一步考虑。能不能计算一个动作的价值呢？如果说可以计算在某一个状态下，某一个动作的价值，是不是就可以直接获取到最佳策略了？最佳策略就是选择动作价值最大的那个动作。事实上状态动作价值（或简称动作价值），我们一般称之为Q值，我们可以定义动作价值Q如下：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/q-value-formula.png" alt="Q value formula"></p>
+<p>写成迭代形式，也就是Q值的Bellman就是：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/q-value-bellman-formula.png" alt="Q value bellman formula"></p>
+<h3 id="迭代算法"><a href="#迭代算法" class="headerlink" title="迭代算法"></a>迭代算法</h3><p>下面我们来看如何计算得到这个最佳Q值。</p>
+<p>事实上我们只需要首先初始化每一个状态对应的价值为0，然后不停的玩游戏，进行迭代更新直到收敛就可以了。迭代算法如下：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/q-value-iteration-algorithm.png" alt="Q Value Iteration algorithm"></p>
+<p>对于一个状态空间比较小的MDP问题而言，我们直接用一个表来保存q值，然后迭代更新这个值就可以得到我们的最佳策略。这一算法是非常有效的。我这里不打算仔细分析这个算法。因为这个算法无法解决我们今天的问题。我们今天的问题状态空间太大了。所有可能的状态有<code>255^(260*160*3)</code>这么多种。</p>
+<p>事实上，q值即是关于当前状态和动作的一个函数。既然这样，我们就可以想了，我们能不能用一个深度学习模型来模拟这个函数呢？当然可以，采用深度学习模型，我们可以将状态映射到一个动作价值上去。这就是深度强化学习啦！</p>
+<h2 id="深度强化学习"><a href="#深度强化学习" class="headerlink" title="深度强化学习"></a>深度强化学习</h2><p>深度强化学习这个模型很早就有人研究，但是最早产生广泛影响力的是DeepMind公司在2013年发表的一篇论文。由于这篇论文的影响力，DeepMind也被google以数十亿美金收购。后来在2015年DeepMind进一步研究了这个模型，发表了一篇更清楚的论文：Human-level control through deep reinforcement learning。这篇论文就是讨论这个模型的。</p>
+<p>这个模型使用的就是Q值迭代和神经网络的组合，所以算法全称为Deep Q Network，简称就是DQN。</p>
+<p>核心算法如下：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/dqn-algorithm-by-deepmind.png" alt="DQN Algorithm by DeepMind"></p>
+<p>这个算法有这样一些关键步骤：</p>
+<ul>
+<li>初始化深度学习模型，并在这个模型生成的策略下进行游戏</li>
+<li>存储游戏产生的数据，包括状态、动作、奖励、下一刻的状态</li>
+<li>从存储的数据中抽样数据进行迭代计算，更新模型</li>
+</ul>
+<p>这个算法用到的神经网络模型如下：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-structure.png" alt="DQN Network Structure"></p>
+<p>这个卷积神经网络的参数如下：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-parameter.png" alt="DQN Network Parameters"></p>
+<p>关于卷积神经网络的资料，请大家参考斯坦福大学的cs231n课程。</p>
+<p>我们只看一下这里的损失函数。回想一下我们之前的Q值迭代公式。从公式中我们可以看出，我们的最佳Q值就是最大的下一步的最佳Q值加上执行动作之后立即得到的奖励的均值。事实上当模型最终收敛时，平均起来看，当前时刻的Q值就等于下一步的Q值加上执行动作之后立即得到的奖励。于是我们只需要让当前时刻的Q值去逼近下一时刻的Q值和立即奖励之和。于是就有了我们的损失函数：</p>
+<p><img src="/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-loss-function.png" alt="DQN Network Loss Function"></p>
+<h3 id="探索"><a href="#探索" class="headerlink" title="探索"></a>探索</h3><p>在上面的伪代码中还可以看到，在玩游戏时，我们会以一定概率随机选择action进行执行。为什么需要这样呢？</p>
+<p>大家可以想象一下，如果没有这个随机，会出现什么情况？在我们的算法迭代一段时间之后，算法发现了一个不错的策略，之后，可能就一直按照这个策略来生成动作了。这是有问题的，因为可能有很多潜在的表现更好的策略我们可能根本没有尝试过。加上这个随机过程，就使得我们有了探索策略空间的能力。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>接下来我们来分析代码。</p>
+<p>这里我们使用tensorflow框架来实现这个算法，创建网络的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_dqn_network</span><span class="params">(self)</span>:</span></div><div class="line">  self.w = &#123;&#125;</div><div class="line">  self.t_w = &#123;&#125;</div><div class="line"></div><div class="line">  initializer = tf.truncated_normal_initializer(<span class="number">0</span>, <span class="number">0.02</span>)</div><div class="line">  activation_fn = tf.nn.relu</div><div class="line"></div><div class="line">  self.l1, self.w[<span class="string">'l1_w'</span>], self.w[<span class="string">'l1_b'</span>] = conv2d(self.s_t,</div><div class="line">    <span class="number">32</span>, [<span class="number">8</span>, <span class="number">8</span>], [<span class="number">4</span>, <span class="number">4</span>], initializer, activation_fn, self.cnn_format, name=<span class="string">'l1'</span>)</div><div class="line">  self.l2, self.w[<span class="string">'l2_w'</span>], self.w[<span class="string">'l2_b'</span>] = conv2d(self.l1,</div><div class="line">    <span class="number">64</span>, [<span class="number">4</span>, <span class="number">4</span>], [<span class="number">2</span>, <span class="number">2</span>], initializer, activation_fn, self.cnn_format, name=<span class="string">'l2'</span>)</div><div class="line">  self.l3, self.w[<span class="string">'l3_w'</span>], self.w[<span class="string">'l3_b'</span>] = conv2d(self.l2,</div><div class="line">    <span class="number">64</span>, [<span class="number">3</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">1</span>], initializer, activation_fn, self.cnn_format, name=<span class="string">'l3'</span>)</div><div class="line"></div><div class="line">  shape = self.l3.get_shape().as_list()</div><div class="line">  self.l3_flat = tf.reshape(self.l3, [<span class="number">-1</span>, reduce(<span class="keyword">lambda</span> x, y: x * y, shape[<span class="number">1</span>:])])</div><div class="line"></div><div class="line">  self.l4, self.w[<span class="string">'l4_w'</span>], self.w[<span class="string">'l4_b'</span>] = linear(self.l3_flat, <span class="number">512</span>,</div><div class="line">    activation_fn=activation_fn, name=<span class="string">'l4'</span>)</div><div class="line">  self.q, self.w[<span class="string">'q_w'</span>], self.w[<span class="string">'q_b'</span>] = linear(self.l4, self.env.action_size, name=<span class="string">'q'</span>)</div></pre></td></tr></table></figure>
+<p>网络一共四层，和前面的图里面的一一对应。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_optimizer</span><span class="params">(self)</span>:</span></div><div class="line">  self.target_q_t = tf.placeholder(<span class="string">'float32'</span>, [<span class="keyword">None</span>], name=<span class="string">'target_q_t'</span>)</div><div class="line">  self.action = tf.placeholder(<span class="string">'int64'</span>, [<span class="keyword">None</span>], name=<span class="string">'action'</span>)</div><div class="line"></div><div class="line">  action_one_hot = tf.one_hot(self.action, self.env.action_size, <span class="number">1.0</span>, <span class="number">0.0</span>,</div><div class="line">    name=<span class="string">'action_one_hot'</span>)</div><div class="line">  q_acted = tf.reduce_sum(self.q * action_one_hot, reduction_indices=<span class="number">1</span>,</div><div class="line">    name=<span class="string">'q_acted'</span>)</div><div class="line"></div><div class="line">  self.delta = self.target_q_t - q_acted</div><div class="line">  self.loss = tf.reduce_mean(tf.square(self.delta), name=<span class="string">'loss'</span>)</div><div class="line"></div><div class="line">  self.optim = tf.train.RMSPropOptimizer(</div><div class="line">    self.learning_rate_op, momentum=<span class="number">0.95</span>, epsilon=<span class="number">0.01</span>).minimize(self.loss)</div></pre></td></tr></table></figure>
+<p>以上代码是关于loss函数的计算。可以看到，我们首先通过<code>self.q * action_one_hot</code>相乘得到当前action对应的q值，然后通过reduce_sum将其转化为一个数值。loss函数就是它和真实值的平方差。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">observe</span><span class="params">(self, screen, reward, action, terminal)</span>:</span></div><div class="line">  reward = max(self.min_reward, min(self.max_reward, reward))</div><div class="line"></div><div class="line">  self.history.add(screen)</div><div class="line">  self.memory.add(screen, reward, action, terminal)</div><div class="line"></div><div class="line">  <span class="keyword">if</span> self.step &gt; self.learn_start:</div><div class="line">    <span class="keyword">if</span> self.step % self.train_frequency == <span class="number">0</span>:</div><div class="line">      self.q_learning_mini_batch()</div></pre></td></tr></table></figure>
+<p>以上代码是自动玩游戏时的操作。可以看到，当游戏状态迁移之后，我们会保存当前的游戏数据。并在玩的局数到一定大小之后，就开始迭代更新网络。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">q_learning_mini_batch</span><span class="params">(self)</span>:</span></div><div class="line">  s_t, action, reward, s_t_plus_1, terminal = self.memory.sample()</div><div class="line">  q_t_plus_1 = self.target_q.eval(&#123;self.target_s_t: s_t_plus_1&#125;)</div><div class="line"></div><div class="line">  terminal = np.array(terminal) + <span class="number">0.</span></div><div class="line">  max_q_t_plus_1 = np.max(q_t_plus_1, axis=<span class="number">1</span>)</div><div class="line">  target_q_t = (<span class="number">1.</span> - terminal) * self.discount * max_q_t_plus_1 + reward</div><div class="line"></div><div class="line">  _, q_t, loss, summary_str = self.sess.run(</div><div class="line">    [self.optim, self.q, self.loss, self.q_summary], &#123;</div><div class="line">    self.target_q_t: target_q_t,</div><div class="line">    self.action: action,</div><div class="line">    self.s_t: s_t</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<p>以上代码显示了网络更新过程。我们先根据当前模型计算出下一时刻的q值，然后在discount之后计算和当前的奖励之和，作为目标q值，这个值将被传入optimizer计算图进行计算。</p>
+<p>完整的详细的代码请参考这里：<a href="https://github.com/devsisters/DQN-tensorflow" target="_blank" rel="external">https://github.com/devsisters/DQN-tensorflow</a></p>
+<p>需要说明的是，这里的模型收敛是很慢的，通常需要10-30个小时才能收敛到一个好的状态。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们看到了深度神经网络和强化学习结合起来的例子。这个例子的实现，可以给我们很大的启示。看起来DL+RL让机器拥有了某种智能。这就是AI。可以说深度学习和和强化学习就实现了AI。</p>
+<p>当前有很多对这个模型的优化措施，包括加快泛化速度，以及让一个游戏的学习结果泛化到其他游戏中去等。是当前的一大热门模型。</p>
+<p>关于强化学习还有很多理论知识未涉及，如果想要完全理解文章里面的公式及算法，请参考伯克利大学的强化学习课程。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>本文参考资料都来自于互联网，主要的资料如下：</p>
+<ol>
+<li>知乎专栏系列文章–DQN从入门到放弃：<a href="https://zhuanlan.zhihu.com/p/21421729" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/21421729</a></li>
+<li>知乎专栏系列文章–150行代码实现DQN算法玩CartPole：<a href="https://zhuanlan.zhihu.com/p/21477488?refer=intelligentunit" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/21477488?refer=intelligentunit</a></li>
+<li>伯克利大学强化学习课程：<a href="https://www.youtube.com/channel/UCTmAYxRV7H9NTdgC9bNixvw" target="_blank" rel="external">CS188 from Youtube</a></li>
+<li>devsisters的代码实现：<a href="https://github.com/devsisters/DQN-tensorflow" target="_blank" rel="external">https://github.com/devsisters/DQN-tensorflow</a></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。&lt;/p&gt;
+&lt;h2 id=&quot;我们的目标&quot;&gt;&lt;a href=&quot;#我们的目标&quot; class=&quot;headerlink&quot; title=&quot;我们的目标&quot;&gt;&lt;/a&gt;我们的目标&lt;/h2&gt;&lt;p&gt;Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球的玩法的一个游戏，与乒乓球不同的是，这个游戏可以由单人控制。相信只要是80后，肯定都玩过这个游戏。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png&quot; alt=&quot;Break out game&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+    
+    
+      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+    
+      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+    
+      <category term="Reinforcement Learning" scheme="http://gmlove.github.io/tags/reinforcement-learning/"/>
+    
+      <category term="DQN" scheme="http://gmlove.github.io/tags/dqn/"/>
+    
+      <category term="Deep Reinforcement Learning" scheme="http://gmlove.github.io/tags/deep-reinforcement-learning/"/>
+    
+      <category term="DeepQ Network" scheme="http://gmlove.github.io/tags/deepq-network/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RNN和LSTM从理论到实践一：词向量</title>
+    <link href="http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/"/>
+    <id>http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/</id>
+    <published>2016-12-02T15:22:40.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。</p>
+<p>近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学习任务。</p>
+<p>RNN，全称为Recurrent Neural Network，常译为循环神经网络，也可译为时序递归神经网络，很多人直接简称为递归神经网络。另一个模型Recursive Neural Network，缩写也同样是RNN，译为递归神经网络。递归神经网络是时序递归神经网络的超集，它还可以包括在结构上有递归的神经网络，但是结构递归神经网络使用远没有时序递归神经网络使用得广泛。</p>
+<p>本文包括四个部分：</p>
+<ul>
+<li>NLP</li>
+<li>单词的向量表示</li>
+<li>RNN和LSTM理论介绍</li>
+<li>训练一个LSTM模型</li>
+</ul>
+<a id="more"></a>
+<h2 id="NLP"><a href="#NLP" class="headerlink" title="NLP"></a>NLP</h2><p>我们首先来看看自然语言处理。自然语言处理可以说是信息时代最重要的技术之一，实际上自然语言处理无处不在，因为人们几乎所有交流沟通都通过语言进行，如搜索，广告语，邮件，翻译等等。</p>
+<p>我们可以列举自然语言处理中的部分任务如下：</p>
+<ul>
+<li>简单的任务：拼写检查、关键词搜索、同义词查找</li>
+<li>比较复杂的任务：从网站或者文档中提取信息</li>
+<li>很困难的任务：机器翻译、语义分析（在用户使用搜索引擎时，他输入的查询是什么意思？）、指代分析（如：文档里面的『他』或『她』具体指谁？）</li>
+</ul>
+<h2 id="单词的向量表示"><a href="#单词的向量表示" class="headerlink" title="单词的向量表示"></a>单词的向量表示</h2><p>要解决自然语言处理中的问题，我们首先要解决的问题是，如何表示这些问题。回顾之前的课程，我们可以发现，通常我们都会将输入数据表示成向量，在向量上进行数学建模。对于自然语言处理，也是一样的，我们要想办法将输入数据转化为向量。这里我们只讨论英文语言处理。那么究竟应该怎样用向量表示英文中的单词呢？</p>
+<p>我们最容易想到的方法就是，跟之前的课程中对类别的处理一样，直接做one-hot编码。将所有单词排序，排序之后每个单词就会有一个位置，然后用一个与单词数量等长的数组表示某单词，该单词所在的位置数组值就为1，而其他所有位置值都为0.</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/one-hot-encoding-for-words.png" alt="One-hot encoding for words"></p>
+<p>但是这样做有什么问题呢？第一个问题就是这样编码太稀疏了，会导致维度非常高，因为单词的数量级通常在10^6级别，维度高就导致计算困难。第二个问题是我们无法简单的从这样的编码中得知单词之间的关系。</p>
+<p>为什么单词之间的关系重要呢？因为在我们使用语言时，单词之间并非完全相互独立的。比如短语”at work”，”at”和”work”之间存在一种可搭配使用的关系。而我们要进行语言分析时，单词之间的关系使用就更频繁了。我们来看看一个单词间关系的例子。</p>
+<p>下面的习题答案是什么呢？</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/word-analogies-question.png" alt="Word analogies question"></p>
+<p>“puppy”对”dog”增加了宠物的属性，那么”cat”加上宠物属性就变成了”kitten”。</p>
+<p>“taller”对”tall”增加了比较级属性，那么”short”加上比较级属性就变成了”shorter”。</p>
+<p>那么问题来了，如何进行机器学习训练才能得到这样的关系属性呢？先看两个句子。</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/way-to-find-relationship-between-words.png" alt="Way to find relationship between words"></p>
+<p>如果说在我们的训练数据中出现了四个句子：</p>
+<ul>
+<li>The cat purrs.</li>
+<li>This cat hunts mice.</li>
+<li>The kitty purrs.</li>
+<li>This kitty hunts mice.</li>
+</ul>
+<p>那么我们就有了一个很强的推断：<em>cat和kitty是相似的</em>。</p>
+<p><strong>我们用于提取这种关系的方式就是：</strong></p>
+<ul>
+<li>使用低维向量来表示单词</li>
+<li>用邻近的单词来进行相互预测</li>
+</ul>
+<h3 id="语言模型"><a href="#语言模型" class="headerlink" title="语言模型"></a>语言模型</h3><p>在进行实践之前，我们先来看看一个重要的背景知识：语言模型。</p>
+<p>早期的自然语言处理采用硬编码的规则来实现。在上世纪80年代，机器学习被应用于自然语言处理中，统计语言模型被提出来，并广泛应用于机器学习模型中。我们这里的语言模型就是指统计语言模型。</p>
+<p>我们认识一下什么是一个好的模型？对某个我们认为正确的句子，比如『狗啃骨头』，一个好的模型将能给出很高的概率。而对于不合理的句子，比如『骨头啃狗』它将给出很低的概率。这里面的一个重要的概念就是句子的概率。统计语言模型，简单而言，就是计算某一个句子的概率：P(w1, w2, w3, …)。其中w表示句子中的单词。</p>
+<p>如何计算这样的概率呢？为了简便处理，我们可以根据前n个词来预测下一个词。这样我们就得到了Unigram Model，Bigram Model, Trigram Model或者N-gram Model。</p>
+<p>Unigram Model是指，我们可以将每个单词视为独立无关的，于是可以得到下面的等式：</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/unigram-model-e1.png" alt="Unigram model"></p>
+<p>Bigram Model是指，如果当前单词只依赖其前面一个单词，在『狗啃骨头』中就表示可以用『狗』来预测『啃』。这样的话，我们的模型就可以用下式计算（P(w2|w1）表示在出现单词w1时，出现w2的概率)：</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/bigram-model-e1.png" alt="Bigram model"> </p>
+<p>Trigram和N-gram Model可以得到的等式如下：</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/trigram-ngram-model-e1.png" alt="Trigram and N-gram Model"></p>
+<p>事实上直接使用N-gram模型来计算句子概率是有问题的。因为它太简单了，最多能表示单词和前n个单词的关系，前n+1个单词就无法表示。而且n不能太大，太大会导致计算问题，并且n太大通常性能不会有明显的提升。</p>
+<h3 id="Word2vec"><a href="#Word2vec" class="headerlink" title="Word2vec"></a>Word2vec</h3><p>回到词向量这个主题，对于词向量模型，我们要介绍的是word2vec算法。Word2vec从这个名字简单易懂，但是它似乎概括了所有提取词向量的算法，从这个名字我们大家可以想象一下它在自然语言处理中的地位。该算法是google于2013年提出来的，一经提出便被广泛应用了起来。</p>
+<p>word2vec算法，在不断发展沉淀之后，得到两个机器学习模型：Skip Gram Model和CBOW(Continuous Bag of Words)。Skip Gram Model在实现上相对简单，而且google在udacity上面的题目也是以Skip Gram Model作为引子。我们先看看Skip Gram Model，然后在后面的习题中再一起看看CBOW模型。</p>
+<h3 id="Skip-Gram-Model"><a href="#Skip-Gram-Model" class="headerlink" title="Skip Gram Model"></a>Skip Gram Model</h3><p>Skip Gram Model属于非监督学习领域，这跟之前的图片识别不同。图片识别时，对于每一张图片我们是有标签的，比如某一张内容为”A”的图片，那么它的标签就是”a”。对于文本而言，原始数据只有一堆文本，一长串的单词序列。我们是没有显示的给定任何标签的。但是机器学习算法又是需要标签的，要不然我们无法计算我们的损失函数。对于这个问题，我们的想法是通过文本内容构造标签。借鉴N-gram模型的想法，如果单词只跟周边的单词相关，那么我们是不是就可以说在使用单词进行预测时，周边的单词就是该单词的正确预测结果呢？Skip Gram Model就是基于这个想法。</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/skip-gram-model.png" alt="Skip gram model"></p>
+<p>这个算法的步骤如下：</p>
+<ul>
+<li>随机生成一个大小为(vocabulary_size, embedding_size)的embedding矩阵（即所有单词的词向量矩阵，每一个行对应一个单词的向量）</li>
+<li>对于某一个单词，从embedding矩阵中提取单词向量</li>
+<li>在该单词向量上使用logistic regression进行训练，softmax作为激活函数</li>
+<li>期望logistic regression得到的概率向量可以与真实的概率向量（即周边词的one-hot编码向量）相匹配</li>
+</ul>
+<h3 id="Skip-Gram-Model中的问题及Negative-Sampling"><a href="#Skip-Gram-Model中的问题及Negative-Sampling" class="headerlink" title="Skip Gram Model中的问题及Negative Sampling"></a>Skip Gram Model中的问题及Negative Sampling</h3><p>上面的算法最后一步在计算上是有问题的。根据公式 y = softmax(XW+b)，其中</p>
+<ul>
+<li>X的维度是：(batch_size, embedding_size)</li>
+<li>W的维度是：(embedding_size, vocabulary_size)</li>
+</ul>
+<p>softmax将需要在(batch_size, vocabulary_size)矩阵上面进行计算，vocabulary_size通常是很大的，softmax在进行e^x运算时就会遇到计算问题。</p>
+<p>我们应对这个问题的方法是Negative sampling。Negative sampling是指，我们在计算最终的softmax时，可以只选取部分错误的label和正确的label进行组合，而无须选择所有的错误label进行计算。当训练的迭代次数足够大时，这对于整个结果是没有影响的。在后面的作业中，num_sampled就是指选择的错误的label的数量。</p>
+<h3 id="使用word2vec之后如何衡量单词间的相似性？"><a href="#使用word2vec之后如何衡量单词间的相似性？" class="headerlink" title="使用word2vec之后如何衡量单词间的相似性？"></a>使用word2vec之后如何衡量单词间的相似性？</h3><p>在得到词向量之后，如何衡量单词间的相似性呢？</p>
+<p>回顾一下我们的训练过程。如果两个单词相似，即出现了两个句子”The cat purrs”和”The kitty purrs”，那么cat的词向量经过计算之后可以得到purrs词向量，kitty词向量经过计算之后也可以得到purrs词向量。再结合softmax的比例计算过程，可以得出的结论是，最终的词向量里面，相似的单词，他们的词向量值在比例上也是相似的。</p>
+<p>事实上我们通常会用余弦距离去衡量词向量的相似性，即词向量间的夹角。相似性就是：给定单词w1 w2 w3的词向量Vw1 Vw2 Vw3，如果Vw1 <em> Vw2.T / (|Vw1||Vw2|) &gt; Vw1 </em> Vw3.T / (|Vw1||Vw3|)，那么我们就认为w2比w3更接近w1。</p>
+<h3 id="Coding时间"><a href="#Coding时间" class="headerlink" title="Coding时间"></a>Coding时间</h3><p><a href="git@github.com:gmlove/dl-workshop-rnn-lstm.git">这个工程</a>里面包含了所有用到的数据及代码。下载工程之后，按照之前的办法，将整个目录映射到docker镜像中。</p>
+<p>下面的内容，请结合<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/5_word2vec.ipynb" target="_blank" rel="external">代码</a>来进行阅读。</p>
+<p>首先是下载、验证和读取文本。在代码中对应<code>maybe_download</code>和<code>read_data</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">url = <span class="string">'http://mattmahoney.net/dc/'</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">maybe_download</span><span class="params">(filename, expected_bytes)</span>:</span></div><div class="line">  <span class="string">"""Download a file if not present, and make sure it's the right size."""</span></div><div class="line">  <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(filename):</div><div class="line">    filename, _ = urlretrieve(url + filename, filename)</div><div class="line">  statinfo = os.stat(filename)</div><div class="line">  <span class="keyword">if</span> statinfo.st_size == expected_bytes:</div><div class="line">    print(<span class="string">'Found and verified %s'</span> % filename)</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    print(statinfo.st_size)</div><div class="line">    <span class="keyword">raise</span> Exception(</div><div class="line">      <span class="string">'Failed to verify '</span> + filename + <span class="string">'. Can you get to it with a browser?'</span>)</div><div class="line">  <span class="keyword">return</span> filename</div><div class="line"></div><div class="line">filename = maybe_download(<span class="string">'text8.zip'</span>, <span class="number">31344016</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_data</span><span class="params">(filename)</span>:</span></div><div class="line">  <span class="string">"""Extract the first file enclosed in a zip file as a list of words"""</span></div><div class="line">  <span class="keyword">with</span> zipfile.ZipFile(filename) <span class="keyword">as</span> f:</div><div class="line">    data = tf.compat.as_str(f.read(f.namelist()[<span class="number">0</span>])).split()</div><div class="line">  <span class="keyword">return</span> data</div><div class="line">  </div><div class="line">words = read_data(filename)</div><div class="line">print(<span class="string">'Data size %d'</span> % len(words))</div></pre></td></tr></table></figure>
+<p>接下来是根据文本构造我们要用的数据结构。我们先定义我们的单词库大小，这里设置为50000。在调用<code>build_dataset</code>之后，得到的数据为：</p>
+<ul>
+<li><code>count</code>：一个单词和它出现的次数的list，按照单词出现次数排序。如果单词出现次数太低，排序在50000之后，那么我们就将它映射到”UNK”单词，即unknown。这里的单词索引将用于把文本映射为整数值。</li>
+<li><code>data</code>：原始文本映射到索引之后的序列。如原始文本为”anarchism originated as a term of abuse first”，映射之后为<code>[5243, 3083, 12, 6, 195, 2, 3136, 46, 59, 156]</code></li>
+<li><code>dictionary</code>：用于查询词对应的索引的字典</li>
+<li><code>reverse_dictionary</code>：用于查询索引对应的单词的字典</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">vocabulary_size = <span class="number">50000</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_dataset</span><span class="params">(words)</span>:</span></div><div class="line">  count = [[<span class="string">'UNK'</span>, <span class="number">-1</span>]]</div><div class="line">  count.extend(collections.Counter(words).most_common(vocabulary_size - <span class="number">1</span>))</div><div class="line">  dictionary = dict()</div><div class="line">  <span class="keyword">for</span> word, _ <span class="keyword">in</span> count:</div><div class="line">    dictionary[word] = len(dictionary)</div><div class="line">  data = list()</div><div class="line">  unk_count = <span class="number">0</span></div><div class="line">  <span class="keyword">for</span> word <span class="keyword">in</span> words:</div><div class="line">    <span class="keyword">if</span> word <span class="keyword">in</span> dictionary:</div><div class="line">      index = dictionary[word]</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">      index = <span class="number">0</span>  <span class="comment"># dictionary['UNK']</span></div><div class="line">      unk_count = unk_count + <span class="number">1</span></div><div class="line">    data.append(index)</div><div class="line">  count[<span class="number">0</span>][<span class="number">1</span>] = unk_count</div><div class="line">  reverse_dictionary = dict(zip(dictionary.values(), dictionary.keys())) </div><div class="line">  <span class="keyword">return</span> data, count, dictionary, reverse_dictionary</div><div class="line"></div><div class="line">data, count, dictionary, reverse_dictionary = build_dataset(words)</div><div class="line">print(<span class="string">'Most common words (+UNK)'</span>, count[:<span class="number">5</span>])</div><div class="line">print(<span class="string">'Sample data'</span>, data[:<span class="number">10</span>])</div><div class="line"><span class="keyword">del</span> words  <span class="comment"># Hint to reduce memory.</span></div></pre></td></tr></table></figure>
+<p>然后我们需要有一个过程来生成batch，每次都批量处理数据，我们才能发挥计算机的并行计算的实力。</p>
+<p>在生成batch时，我们期望在输入参数为<code>batch_size</code> <code>num_skips</code> <code>skip_window</code>时，可以对一小段文本，即skip_window长的文本，使用中心词来预测周边的词，生成num_skips个类似(words[2] -&gt; words[0])这样的预测组。</p>
+<p>当原始数据为<code>[&#39;anarchism&#39;, &#39;originated&#39;, &#39;as&#39;, &#39;a&#39;, &#39;term&#39;, &#39;of&#39;, &#39;abuse&#39;, &#39;first&#39;]</code>时，以num_skips=2和skip_window=1来调用generate_batch之后，得到的batch为<code>[&#39;originated&#39;, &#39;originated&#39;, &#39;as&#39;, &#39;as&#39;, &#39;a&#39;, &#39;a&#39;, &#39;term&#39;, &#39;term&#39;]</code>，对应的label为<code>[&#39;as&#39;, &#39;anarchism&#39;, &#39;a&#39;, &#39;originated&#39;, &#39;term&#39;, &#39;as&#39;, &#39;a&#39;, &#39;of&#39;]</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">data_index = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_batch</span><span class="params">(batch_size, num_skips, skip_window)</span>:</span></div><div class="line">  <span class="keyword">global</span> data_index</div><div class="line">  <span class="keyword">assert</span> batch_size % num_skips == <span class="number">0</span></div><div class="line">  <span class="keyword">assert</span> num_skips &lt;= <span class="number">2</span> * skip_window</div><div class="line">  batch = np.ndarray(shape=(batch_size), dtype=np.int32)</div><div class="line">  labels = np.ndarray(shape=(batch_size, <span class="number">1</span>), dtype=np.int32)</div><div class="line">  span = <span class="number">2</span> * skip_window + <span class="number">1</span> <span class="comment"># [ skip_window target skip_window ]</span></div><div class="line">  buffer = collections.deque(maxlen=span)</div><div class="line">  <span class="keyword">for</span> _ <span class="keyword">in</span> range(span):</div><div class="line">    buffer.append(data[data_index])</div><div class="line">    data_index = (data_index + <span class="number">1</span>) % len(data)</div><div class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(batch_size // num_skips):</div><div class="line">    target = skip_window  <span class="comment"># target label at the center of the buffer</span></div><div class="line">    targets_to_avoid = [ skip_window ]</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(num_skips):</div><div class="line">      <span class="keyword">while</span> target <span class="keyword">in</span> targets_to_avoid:</div><div class="line">        target = random.randint(<span class="number">0</span>, span - <span class="number">1</span>)</div><div class="line">      targets_to_avoid.append(target)</div><div class="line">      batch[i * num_skips + j] = buffer[skip_window]</div><div class="line">      labels[i * num_skips + j, <span class="number">0</span>] = buffer[target]</div><div class="line">    buffer.append(data[data_index])</div><div class="line">    data_index = (data_index + <span class="number">1</span>) % len(data)</div><div class="line">  <span class="keyword">return</span> batch, labels</div><div class="line"></div><div class="line">print(<span class="string">'data:'</span>, [reverse_dictionary[di] <span class="keyword">for</span> di <span class="keyword">in</span> data[:<span class="number">8</span>]])</div><div class="line"></div><div class="line"><span class="keyword">for</span> num_skips, skip_window <span class="keyword">in</span> [(<span class="number">2</span>, <span class="number">1</span>), (<span class="number">4</span>, <span class="number">2</span>)]:</div><div class="line">    data_index = <span class="number">0</span></div><div class="line">    batch, labels = generate_batch(batch_size=<span class="number">8</span>, num_skips=num_skips, skip_window=skip_window)</div><div class="line">    print(<span class="string">'\nwith num_skips = %d and skip_window = %d:'</span> % (num_skips, skip_window))</div><div class="line">    print(<span class="string">'    batch:'</span>, [reverse_dictionary[bi] <span class="keyword">for</span> bi <span class="keyword">in</span> batch])</div><div class="line">    print(<span class="string">'    labels:'</span>, [reverse_dictionary[li] <span class="keyword">for</span> li <span class="keyword">in</span> labels.reshape(<span class="number">8</span>)])</div></pre></td></tr></table></figure>
+<p>有了这些数据结构和工具函数之后，我们就可以构造我们的模型如代码中所示。</p>
+<ul>
+<li><code>embedding_size</code>：我们期望编码之后的词向量长度</li>
+<li><code>train_dataset</code>：大小为batch_size的int数组，我们将单词索引在embedding矩阵中查找词向量</li>
+<li><code>train_labels</code>：大小为[batch_size, 1]的矩阵，因为我们最终进行损失计算时，是使用one-hot编码的cross entropy</li>
+<li><code>valid_examples</code>：从前100个词的单词集中随机选取16个单词用于计算相似度</li>
+<li><code>valid_dataset</code>：对应于valid_examples，大小为16的int数组</li>
+<li><code>embeddings</code>：大小为[vocabulary_size, embedding_size]的浮点型矩阵</li>
+<li><code>softmax_weights</code>：大小为[vocabulary_size, embedding_size]的浮点型权值矩阵</li>
+<li><code>softmax_biases</code>：大小为[vocabulary_size]的浮点型偏置向量</li>
+</ul>
+<p>我们的模型就是先调用<code>tf.nn.embedding_lookup</code>去查找词向量。然后调用<code>tf.reduce_mean</code>和<code>tf.nn.sampled_softmax_loss</code>计算损失值。之后使用<code>tf.train.AdagradOptimizer</code>进行梯度下降，期望最小化损失值。梯度下降会同时优化我们的embeddings矩阵、softmax_weights矩阵及softmax_biases向量。最后在这个模型上面迭代计算就可以得到优化后的模型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">batch_size = <span class="number">128</span></div><div class="line">embedding_size = <span class="number">128</span> <span class="comment"># Dimension of the embedding vector.</span></div><div class="line">skip_window = <span class="number">1</span> <span class="comment"># How many words to consider left and right.</span></div><div class="line">num_skips = <span class="number">2</span> <span class="comment"># How many times to reuse an input to generate a label.</span></div><div class="line"><span class="comment"># We pick a random validation set to sample nearest neighbors. here we limit the</span></div><div class="line"><span class="comment"># validation samples to the words that have a low numeric ID, which by</span></div><div class="line"><span class="comment"># construction are also the most frequent. </span></div><div class="line">valid_size = <span class="number">16</span> <span class="comment"># Random set of words to evaluate similarity on.</span></div><div class="line">valid_window = <span class="number">100</span> <span class="comment"># Only pick dev samples in the head of the distribution.</span></div><div class="line">valid_examples = np.array(random.sample(range(valid_window), valid_size))</div><div class="line">num_sampled = <span class="number">64</span> <span class="comment"># Number of negative examples to sample.</span></div><div class="line"></div><div class="line">graph = tf.Graph()</div><div class="line"></div><div class="line"><span class="keyword">with</span> graph.as_default(), tf.device(<span class="string">'/cpu:0'</span>):</div><div class="line"></div><div class="line">  <span class="comment"># Input data.</span></div><div class="line">  train_dataset = tf.placeholder(tf.int32, shape=[batch_size])</div><div class="line">  train_labels = tf.placeholder(tf.int32, shape=[batch_size, <span class="number">1</span>])</div><div class="line">  valid_dataset = tf.constant(valid_examples, dtype=tf.int32)</div><div class="line">  </div><div class="line">  <span class="comment"># Variables.</span></div><div class="line">  embeddings = tf.Variable(</div><div class="line">    tf.random_uniform([vocabulary_size, embedding_size], <span class="number">-1.0</span>, <span class="number">1.0</span>))</div><div class="line">  softmax_weights = tf.Variable(</div><div class="line">    tf.truncated_normal([vocabulary_size, embedding_size],</div><div class="line">                         stddev=<span class="number">1.0</span> / math.sqrt(embedding_size)))</div><div class="line">  softmax_biases = tf.Variable(tf.zeros([vocabulary_size]))</div><div class="line">  </div><div class="line">  <span class="comment"># Model.</span></div><div class="line">  <span class="comment"># Look up embeddings for inputs.</span></div><div class="line">  embed = tf.nn.embedding_lookup(embeddings, train_dataset) <span class="comment"># embed.shape: (batch_size, embedding_size)</span></div><div class="line">  <span class="comment"># Compute the softmax loss, using a sample of the negative labels each time.</span></div><div class="line">  loss = tf.reduce_mean(</div><div class="line">    tf.nn.sampled_softmax_loss(softmax_weights, softmax_biases, embed,</div><div class="line">                               train_labels, num_sampled, vocabulary_size))</div><div class="line"></div><div class="line">  <span class="comment"># Optimizer.</span></div><div class="line">  <span class="comment"># Note: The optimizer will optimize the softmax_weights AND the embeddings.</span></div><div class="line">  <span class="comment"># This is because the embeddings are defined as a variable quantity and the</span></div><div class="line">  <span class="comment"># optimizer's `minimize` method will by default modify all variable quantities </span></div><div class="line">  <span class="comment"># that contribute to the tensor it is passed.</span></div><div class="line">  <span class="comment"># See docs on `tf.train.Optimizer.minimize()` for more details.</span></div><div class="line">  optimizer = tf.train.AdagradOptimizer(<span class="number">1.0</span>).minimize(loss)</div></pre></td></tr></table></figure>
+<p>有了模型之后，我们该如何计算相似度呢？使用之前的相似度计算公式，我们可以计算先embedding的每一个词向量的1/|Vw1|，使用valid_dataset的词向量与所有其他单词的词向量相乘，然后从大到小排序就可以得到按相似度排序的其他相似词。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># Compute the similarity between minibatch examples and all embeddings.</div><div class="line"># We use the cosine distance:</div><div class="line">norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), 1, keep_dims=True))</div><div class="line">normalized_embeddings = embeddings / norm</div><div class="line">valid_embeddings = tf.nn.embedding_lookup(</div><div class="line">  normalized_embeddings, valid_dataset)</div><div class="line">similarity = tf.matmul(valid_embeddings, tf.transpose(normalized_embeddings)) # similarity.shape: (valid_size, vocabulary_size)</div></pre></td></tr></table></figure>
+<p>有了这个模型之后，我们就可以在模型上面进行迭代计算了。迭代的同时，我们每2000步输出一下平均损失值，每10000步的时候，输出一下和验证集相似的词。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">num_steps = <span class="number">100001</span></div><div class="line"></div><div class="line"><span class="keyword">with</span> tf.Session(graph=graph) <span class="keyword">as</span> session:</div><div class="line">  tf.global_variables_initializer().run()</div><div class="line">  print(<span class="string">'Initialized'</span>)</div><div class="line">  average_loss = <span class="number">0</span></div><div class="line">  <span class="keyword">for</span> step <span class="keyword">in</span> range(num_steps):</div><div class="line">    batch_data, batch_labels = generate_batch(</div><div class="line">      batch_size, num_skips, skip_window)</div><div class="line">    feed_dict = &#123;train_dataset : batch_data, train_labels : batch_labels&#125;</div><div class="line">    _, l = session.run([optimizer, loss], feed_dict=feed_dict)</div><div class="line">    average_loss += l</div><div class="line">    <span class="keyword">if</span> step % <span class="number">2000</span> == <span class="number">0</span>:</div><div class="line">      <span class="keyword">if</span> step &gt; <span class="number">0</span>:</div><div class="line">        average_loss = average_loss / <span class="number">2000</span></div><div class="line">      <span class="comment"># The average loss is an estimate of the loss over the last 2000 batches.</span></div><div class="line">      print(<span class="string">'Average loss at step %d: %f'</span> % (step, average_loss))</div><div class="line">      average_loss = <span class="number">0</span></div><div class="line">    <span class="comment"># note that this is expensive (~20% slowdown if computed every 500 steps)</span></div><div class="line">    <span class="keyword">if</span> step % <span class="number">10000</span> == <span class="number">0</span>:</div><div class="line">      sim = similarity.eval()</div><div class="line">      <span class="keyword">for</span> i <span class="keyword">in</span> range(valid_size):</div><div class="line">        valid_word = reverse_dictionary[valid_examples[i]]</div><div class="line">        top_k = <span class="number">8</span> <span class="comment"># number of nearest neighbors</span></div><div class="line">        nearest = (-sim[i, :]).argsort()[<span class="number">1</span>:top_k+<span class="number">1</span>] <span class="comment"># argsort will sort elements as ascended, so we need a minus symbol</span></div><div class="line">        log = <span class="string">'Nearest to %s:'</span> % valid_word</div><div class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> range(top_k):</div><div class="line">          close_word = reverse_dictionary[nearest[k]]</div><div class="line">          log = <span class="string">'%s %s,'</span> % (log, close_word)</div><div class="line">        print(log)</div><div class="line">  final_embeddings = normalized_embeddings.eval()</div></pre></td></tr></table></figure>
+<p>在模型计算好之后，我们可以使用TSNE降维方法，用二维表来表示我们的词向量，再绘制出来就可以得到最终的效果图片。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">num_points = <span class="number">400</span></div><div class="line"></div><div class="line">tsne = TSNE(perplexity=<span class="number">30</span>, n_components=<span class="number">2</span>, init=<span class="string">'pca'</span>, n_iter=<span class="number">5000</span>)</div><div class="line">two_d_embeddings = tsne.fit_transform(final_embeddings[<span class="number">1</span>:num_points+<span class="number">1</span>, :]) <span class="comment"># ignore UNK</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot</span><span class="params">(embeddings, labels)</span>:</span></div><div class="line">  <span class="keyword">assert</span> embeddings.shape[<span class="number">0</span>] &gt;= len(labels), <span class="string">'More labels than embeddings'</span></div><div class="line">  pylab.figure(figsize=(<span class="number">15</span>,<span class="number">15</span>))  <span class="comment"># in inches</span></div><div class="line">  <span class="keyword">for</span> i, label <span class="keyword">in</span> enumerate(labels):</div><div class="line">    x, y = embeddings[i,:]</div><div class="line">    pylab.scatter(x, y)</div><div class="line">    pylab.annotate(label, xy=(x, y), xytext=(<span class="number">5</span>, <span class="number">2</span>), textcoords=<span class="string">'offset points'</span>,</div><div class="line">                   ha=<span class="string">'right'</span>, va=<span class="string">'bottom'</span>)</div><div class="line">  pylab.show()</div><div class="line"></div><div class="line">words = [reverse_dictionary[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, num_points+<span class="number">1</span>)]</div><div class="line">plot(two_d_embeddings, words)</div></pre></td></tr></table></figure>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/similar-words-in-graph.png" alt="Similar words in a graph"></p>
+<h3 id="CBOW模型"><a href="#CBOW模型" class="headerlink" title="CBOW模型"></a>CBOW模型</h3><p>现在到我们的动手时间了。我们将在上面的代码的基础上实现一个CBOW模型。</p>
+<p>CBOW模型跟Skip Gram模型正好相反，在这个模型中，我们使用单词周边的单词去预测该单词。其模型如下：</p>
+<p><img src="/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/cbow-model.png" alt="CBOW model"></p>
+<p>这个算法的步骤如下：</p>
+<ul>
+<li>随机生成一个大小为(vocabulary_size, embedding_size)的embedding矩阵（即所有单词的词向量矩阵，每一个行对应一个单词的向量）</li>
+<li>对于某一个单词（中心词），从embedding矩阵中提取其周边单词的词向量</li>
+<li>求周边单词的词向量的均值向量</li>
+<li>在该均值向量上使用logistic regression进行训练，softmax作为激活函数</li>
+<li>期望logistic regression得到的概率向量可以与真实的概率向量（即中心词的one-hot编码向量）相匹配</li>
+</ul>
+<p>对比CBOW的计算步骤和SkipGram的计算步骤，我们可以来一步步的修改代码。</p>
+<p>下面的内容，请结合<a href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/5_word2vec-problem.ipynb" target="_blank" rel="external">代码</a>来进行阅读。</p>
+<p>我们要修改的第一个地方是<code>generate_batch</code>函数。</p>
+<ul>
+<li>labels的定义，其大小不再是(batch_size, 1)而应该为(batch_size // num_skips, 1)</li>
+<li>batch的赋值，batch现在应该为中心词周边的单词</li>
+<li>labels的赋值，labels现在应该为中心词</li>
+<li>print输出，label时，label的长度应该为batch_size // num_skips</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">data_index = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_batch</span><span class="params">(batch_size, num_skips, skip_window)</span>:</span></div><div class="line">  <span class="keyword">global</span> data_index</div><div class="line">  <span class="keyword">assert</span> batch_size % num_skips == <span class="number">0</span></div><div class="line">  <span class="keyword">assert</span> num_skips &lt;= <span class="number">2</span> * skip_window</div><div class="line">  batch = np.ndarray(shape=(batch_size), dtype=np.int32)</div><div class="line">  labels = np.ndarray(shape=(batch_size // num_skips, <span class="number">1</span>), dtype=np.int32)</div><div class="line">  span = <span class="number">2</span> * skip_window + <span class="number">1</span> <span class="comment"># [ skip_window target skip_window ]</span></div><div class="line">  buffer = collections.deque(maxlen=span)</div><div class="line">  <span class="keyword">for</span> _ <span class="keyword">in</span> range(span):</div><div class="line">    buffer.append(data[data_index])</div><div class="line">    data_index = (data_index + <span class="number">1</span>) % len(data)</div><div class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(batch_size // num_skips):</div><div class="line">    target = skip_window  <span class="comment"># target label at the center of the buffer</span></div><div class="line">    targets_to_avoid = [ skip_window ]</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(num_skips):</div><div class="line">      <span class="keyword">while</span> target <span class="keyword">in</span> targets_to_avoid:</div><div class="line">        target = random.randint(<span class="number">0</span>, span - <span class="number">1</span>)</div><div class="line">      targets_to_avoid.append(target)</div><div class="line">      batch[i * num_skips + j] = buffer[target]</div><div class="line">    labels[i, <span class="number">0</span>] = buffer[skip_window]</div><div class="line">    buffer.append(data[data_index])</div><div class="line">    data_index = (data_index + <span class="number">1</span>) % len(data)</div><div class="line">  <span class="keyword">return</span> batch, labels</div><div class="line"></div><div class="line">print(<span class="string">'data:'</span>, [reverse_dictionary[di] <span class="keyword">for</span> di <span class="keyword">in</span> data[:<span class="number">8</span>]])</div><div class="line"></div><div class="line"><span class="keyword">for</span> num_skips, skip_window <span class="keyword">in</span> [(<span class="number">2</span>, <span class="number">1</span>), (<span class="number">4</span>, <span class="number">2</span>)]:</div><div class="line">    data_index = <span class="number">0</span></div><div class="line">    batch, labels = generate_batch(batch_size=<span class="number">8</span>, num_skips=num_skips, skip_window=skip_window)</div><div class="line">    print(<span class="string">'\nwith num_skips = %d and skip_window = %d:'</span> % (num_skips, skip_window))</div><div class="line">    print(<span class="string">'    batch:'</span>, [reverse_dictionary[bi] <span class="keyword">for</span> bi <span class="keyword">in</span> batch])</div><div class="line">    print(<span class="string">'    labels:'</span>, [reverse_dictionary[li] <span class="keyword">for</span> li <span class="keyword">in</span> labels.reshape(<span class="number">8</span>//num_skips)])</div></pre></td></tr></table></figure>
+<p>修改之后，可以通过这样的测试来验证程序逻辑。当原始数据为<code>[&#39;anarchism&#39;, &#39;originated&#39;, &#39;as&#39;, &#39;a&#39;, &#39;term&#39;, &#39;of&#39;, &#39;abuse&#39;, &#39;first&#39;]</code>时，以num_skips=2和skip_window=1来调用generate_batch之后，得到的batch为<code>[&#39;as&#39;, &#39;anarchism&#39;, &#39;a&#39;, &#39;originated&#39;, &#39;as&#39;, &#39;term&#39;, &#39;of&#39;, &#39;a&#39;]</code>，对应的label为<code>[&#39;originated&#39;, &#39;as&#39;, &#39;a&#39;, &#39;term&#39;]</code></p>
+<p>第二个要修改的地方就是模型构建过程。</p>
+<ul>
+<li>train_labels的定义，train_labels的大小现在应该为(batch_size // num_skips, 1)</li>
+<li>在进行loss计算之前，我们需要计算同一个label的train_data的均值向量。可以参考tensorflow的API <code>tf.segment_mean</code>来实现。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">batch_size = <span class="number">128</span></div><div class="line">embedding_size = <span class="number">128</span> <span class="comment"># Dimension of the embedding vector.</span></div><div class="line">skip_window = <span class="number">1</span> <span class="comment"># How many words to consider left and right.</span></div><div class="line">num_skips = <span class="number">2</span> <span class="comment"># How many times to reuse an input to generate a label.</span></div><div class="line"><span class="comment"># We pick a random validation set to sample nearest neighbors. here we limit the</span></div><div class="line"><span class="comment"># validation samples to the words that have a low numeric ID, which by</span></div><div class="line"><span class="comment"># construction are also the most frequent. </span></div><div class="line">valid_size = <span class="number">16</span> <span class="comment"># Random set of words to evaluate similarity on.</span></div><div class="line">valid_window = <span class="number">100</span> <span class="comment"># Only pick dev samples in the head of the distribution.</span></div><div class="line">valid_examples = np.array(random.sample(range(valid_window), valid_size))</div><div class="line">num_sampled = <span class="number">64</span> <span class="comment"># Number of negative examples to sample.</span></div><div class="line"></div><div class="line">graph = tf.Graph()</div><div class="line"></div><div class="line"><span class="keyword">with</span> graph.as_default(), tf.device(<span class="string">'/cpu:0'</span>):</div><div class="line"></div><div class="line">  <span class="comment"># Input data.</span></div><div class="line">  train_dataset = tf.placeholder(tf.int32, shape=[batch_size])</div><div class="line">  train_labels = tf.placeholder(tf.int32, shape=[batch_size//num_skips, <span class="number">1</span>])</div><div class="line">  valid_dataset = tf.constant(valid_examples, dtype=tf.int32)</div><div class="line">  </div><div class="line">  <span class="comment"># Variables.</span></div><div class="line">  embeddings = tf.Variable(</div><div class="line">    tf.random_uniform([vocabulary_size, embedding_size], <span class="number">-1.0</span>, <span class="number">1.0</span>))</div><div class="line">  softmax_weights = tf.Variable(</div><div class="line">    tf.truncated_normal([vocabulary_size, embedding_size],</div><div class="line">                         stddev=<span class="number">1.0</span> / math.sqrt(embedding_size)))</div><div class="line">  softmax_biases = tf.Variable(tf.zeros([vocabulary_size]))</div><div class="line">  </div><div class="line">  <span class="comment"># Model.</span></div><div class="line">  <span class="comment"># Look up embeddings for inputs.</span></div><div class="line">  embed = tf.nn.embedding_lookup(embeddings, train_dataset) <span class="comment"># embed.shape: (batch_size, embedding_size)</span></div><div class="line">  segment_ids = tf.constant([i//num_skips <span class="keyword">for</span> i <span class="keyword">in</span> range(batch_size)], dtype=tf.int32)</div><div class="line">  embed = tf.segment_mean(embed, segment_ids)</div><div class="line">  <span class="comment"># Compute the softmax loss, using a sample of the negative labels each time.</span></div><div class="line">  loss = tf.reduce_mean(</div><div class="line">    tf.nn.sampled_softmax_loss(softmax_weights, softmax_biases, embed,</div><div class="line">                               train_labels, num_sampled, vocabulary_size))</div><div class="line"></div><div class="line">  <span class="comment"># Optimizer.</span></div><div class="line">  <span class="comment"># Note: The optimizer will optimize the softmax_weights AND the embeddings.</span></div><div class="line">  <span class="comment"># This is because the embeddings are defined as a variable quantity and the</span></div><div class="line">  <span class="comment"># optimizer's `minimize` method will by default modify all variable quantities </span></div><div class="line">  <span class="comment"># that contribute to the tensor it is passed.</span></div><div class="line">  <span class="comment"># See docs on `tf.train.Optimizer.minimize()` for more details.</span></div><div class="line">  optimizer = tf.train.AdagradOptimizer(<span class="number">1.0</span>).minimize(loss)</div><div class="line">  </div><div class="line">  <span class="comment"># Compute the similarity between minibatch examples and all embeddings.</span></div><div class="line">  <span class="comment"># We use the cosine distance:</span></div><div class="line">  norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), <span class="number">1</span>, keep_dims=<span class="keyword">True</span>))</div><div class="line">  normalized_embeddings = embeddings / norm</div><div class="line">  valid_embeddings = tf.nn.embedding_lookup(</div><div class="line">    normalized_embeddings, valid_dataset)</div><div class="line">  similarity = tf.matmul(valid_embeddings, tf.transpose(normalized_embeddings)) <span class="comment"># similarity.shape: (valid_size, vocabulary_size)</span></div></pre></td></tr></table></figure>
+<p>在修改完成之后，我们就可以看到最后的结果。我们生成的词向量图与SkipGram模型生成的类似。</p>
+<p>后续会继续RNN和LSTM的部分。敬请期待！</p>
+<p>本文基于google在udacity上面关于深度学习的<a href="https://classroom.udacity.com/courses/ud730" target="_blank" rel="external">课程</a>而来。主要参考资料来自于斯坦福大学的自然语言处理课程<a href="http://cs224d.stanford.edu/syllabus.html" target="_blank" rel="external">cs224d</a>。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。&lt;/p&gt;
+&lt;p&gt;近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学习任务。&lt;/p&gt;
+&lt;p&gt;RNN，全称为Recurrent Neural Network，常译为循环神经网络，也可译为时序递归神经网络，很多人直接简称为递归神经网络。另一个模型Recursive Neural Network，缩写也同样是RNN，译为递归神经网络。递归神经网络是时序递归神经网络的超集，它还可以包括在结构上有递归的神经网络，但是结构递归神经网络使用远没有时序递归神经网络使用得广泛。&lt;/p&gt;
+&lt;p&gt;本文包括四个部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NLP&lt;/li&gt;
+&lt;li&gt;单词的向量表示&lt;/li&gt;
+&lt;li&gt;RNN和LSTM理论介绍&lt;/li&gt;
+&lt;li&gt;训练一个LSTM模型&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+    
+    
+      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+    
+      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+    
+      <category term="RNN" scheme="http://gmlove.github.io/tags/rnn/"/>
+    
+      <category term="LSTM" scheme="http://gmlove.github.io/tags/lstm/"/>
+    
+      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Tensorflow一瞥</title>
+    <link href="http://gmlove.github.io/2016/11/27/a-pick-into-tensorflow/"/>
+    <id>http://gmlove.github.io/2016/11/27/a-pick-into-tensorflow/</id>
+    <published>2016-11-27T07:19:15.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。</p>
+<p>TensorFlow目前在我司的技术雷达上面处于assess阶段。</p>
+<h2 id="TensorFlow是什么"><a href="#TensorFlow是什么" class="headerlink" title="TensorFlow是什么"></a>TensorFlow是什么</h2><p>TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器学习系统。TensorFlow作为github上面的一个很火的开源项目，它的第一个提交是在2015年11月。到现在也不过刚好一年时间。</p>
+<p>TensorFlow提供的API库可以用于编写富有表现力的程序。同时TensorFlow底层使用c++实现，其性能也是不错的。</p>
+<p>TensorFlow在系统设计上使用一个有状态的数据流图来描述计算。使用TensorFlow时，需要先定义好计算图，以便TensorFlow可以在内部进行分布式的调度，然后一般会使用向计算图填充数据的形式进行迭代计算。</p>
+<p>TensorFlow支持的系统非常广泛，从移动设备到桌面电脑再到大型分布式系统，从CPU到GPU，TensorFlow都提供了支持。</p>
+<p>TensorFlow为了便于高效率的开发，同时也是顺应社区的技术潮流，提供的是Python的API。同时，也可以直接使用C++进行开发。目前还有Rust，Haskell的方言支持。</p>
+<a id="more"></a>
+<h2 id="为什么要用TensorFlow"><a href="#为什么要用TensorFlow" class="headerlink" title="为什么要用TensorFlow"></a>为什么要用TensorFlow</h2><h3 id="良好而活跃的社区"><a href="#良好而活跃的社区" class="headerlink" title="良好而活跃的社区"></a>良好而活跃的社区</h3><h4 id="丰富的入门教程"><a href="#丰富的入门教程" class="headerlink" title="丰富的入门教程"></a>丰富的入门教程</h4><p>TensorFlow有很多Tutorial入门教程，大大降低了入门的门槛。官方的教程已经不错了，社区技术爱好者们还贡献了很多相关的教程。我个人用过的教程，可以列举如下：</p>
+<ul>
+<li><a href="https://www.tensorflow.org/versions/r0.11/tutorials/index.html" target="_blank" rel="external">官方教程</a></li>
+<li>更有深度的<a href="https://github.com/pkmital/tensorflow_tutorials" target="_blank" rel="external">MOOC教程</a></li>
+<li><a href="https://classroom.udacity.com/courses/ud730/" target="_blank" rel="external">Google在Udacity上面做的教程</a></li>
+<li><a href="https://docs.google.com/presentation/d/1TVixw6ItiZ8igjp6U17tcgoFrLSaHWQmMOwjlgQY9co/pub?slide=id.g140797b42d_0_60" target="_blank" rel="external">Tensorflow and deep learning, without a PhD</a></li>
+</ul>
+<h4 id="大量现成的机器学习模型"><a href="#大量现成的机器学习模型" class="headerlink" title="大量现成的机器学习模型"></a>大量现成的机器学习模型</h4><p>Google内部使用TensorFlow实现了很多性能很好的机器学习模型（这里的性能指模型表现好，如分类错误率低），这些模型也都在<a href="https://github.com/tensorflow/models" target="_blank" rel="external">github</a>上面开源了出来。如为图片生成标题的模型，识别街道名称的模型等等。我们可以方便的阅读学习这些模型，同时也可以作为一个很好的起点，用于研究设计自己的模型。</p>
+<h4 id="提供了更简单的机器学习的接口"><a href="#提供了更简单的机器学习的接口" class="headerlink" title="提供了更简单的机器学习的接口"></a>提供了更简单的机器学习的接口</h4><p>TensorFlow同时提供了一个<a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn" target="_blank" rel="external">简单的机器学习接口</a>。几行代码即可完成模型训练和使用。</p>
+<h4 id="丰富的周边工具"><a href="#丰富的周边工具" class="headerlink" title="丰富的周边工具"></a>丰富的周边工具</h4><p>TensorFlow还提供了用于可视化参数的TensorBoard，大大方便了模型的调优工作。同时还提供了Caffe到TensorFlow模型转换的工具。</p>
+<h3 id="TensorFlow已经在业界广泛使用。"><a href="#TensorFlow已经在业界广泛使用。" class="headerlink" title="TensorFlow已经在业界广泛使用。"></a>TensorFlow已经在业界广泛使用。</h3><p>众所周知的如Google自己，京东，Uber，DeepMind，SnapChat，Twitter等等，都在公司内部使用这个框架进行机器学习的研究。</p>
+<h3 id="Google趋势表现抢眼"><a href="#Google趋势表现抢眼" class="headerlink" title="Google趋势表现抢眼"></a>Google趋势表现抢眼</h3><p>从Google趋势来看，TensorFlow也已成为当前非常流行的机器学习框架了。</p>
+<p><img src="/attaches/2016/2016-11-27-a-pick-into-tensorflow/tf-googletrend.png" alt="TensorFlow in Google Trend"></p>
+<h2 id="一个简单的例子：在TensorFlow中使用Logistic-Regression来进行图片分类"><a href="#一个简单的例子：在TensorFlow中使用Logistic-Regression来进行图片分类" class="headerlink" title="一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类"></a>一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类</h2><p>下面用一个简单的例子演示一下TensorFlow的使用。这个例子中我们会对MNIST手写数字图片库进行分类。</p>
+<p>MNIST数据集的是一个非常基础而简单的用于机器学习的数据集。下载好这个数据集之后，可以看到其包含的图片如下（一个数字对应一张图片）：</p>
+<p><img src="/attaches/2016/2016-11-27-a-pick-into-tensorflow/mnist-overview.png" alt="MNIST Overview"></p>
+<p>我们将要使用的分类模型也是基础的Logistic Regression模型。</p>
+<p><img src="/attaches/2016/2016-11-27-a-pick-into-tensorflow/model-overview.png" alt="Model Overview"></p>
+<p>这个模型用数学公司来描述就是如下这样：</p>
+<p><img src="/attaches/2016/2016-11-27-a-pick-into-tensorflow/math.png" alt="Math"></p>
+<p>模型对应的核心代码TensorFlow代码就是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment"># Describe Graph</span></div><div class="line"></div><div class="line">Y = tf.nn.softmax(tf.matmul(XX, W) + b)</div><div class="line">cross_entropy = -tf.reduce_mean(Y_ * tf.log(Y)) * <span class="number">1000.0</span>  <span class="comment"># normalized for batches of 100 images</span></div><div class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.005</span>).minimize(cross_entropy)</div><div class="line"></div><div class="line">predict = tf.argmax(tf.nn.softmax(tf.matmul(X, W) + b), <span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="comment"># Train the model</span></div><div class="line">sess = tf.Session()</div><div class="line">sess.run(tf.initialize_all_variables())</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>):</div><div class="line">    batch_X, batch_Y = mnist.train.next_batch(<span class="number">100</span>)</div><div class="line">    c = sess.run([cross_entropy], feed_dict=&#123;X: batch_X, Y_: batch_Y&#125;)</div><div class="line"></div><div class="line"><span class="comment"># Predict</span></div><div class="line">labels = sess.run([predict], feed_dict=&#123;...&#125;)</div></pre></td></tr></table></figure>
+<p>完整的代码可以参考这里的<a href="https://github.com/martin-gorner/tensorflow-mnist-tutorial.git" target="_blank" rel="external">tutorial</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。&lt;/p&gt;
+&lt;p&gt;TensorFlow目前在我司的技术雷达上面处于assess阶段。&lt;/p&gt;
+&lt;h2 id=&quot;TensorFlow是什么&quot;&gt;&lt;a href=&quot;#TensorFlow是什么&quot; class=&quot;headerlink&quot; title=&quot;TensorFlow是什么&quot;&gt;&lt;/a&gt;TensorFlow是什么&lt;/h2&gt;&lt;p&gt;TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器学习系统。TensorFlow作为github上面的一个很火的开源项目，它的第一个提交是在2015年11月。到现在也不过刚好一年时间。&lt;/p&gt;
+&lt;p&gt;TensorFlow提供的API库可以用于编写富有表现力的程序。同时TensorFlow底层使用c++实现，其性能也是不错的。&lt;/p&gt;
+&lt;p&gt;TensorFlow在系统设计上使用一个有状态的数据流图来描述计算。使用TensorFlow时，需要先定义好计算图，以便TensorFlow可以在内部进行分布式的调度，然后一般会使用向计算图填充数据的形式进行迭代计算。&lt;/p&gt;
+&lt;p&gt;TensorFlow支持的系统非常广泛，从移动设备到桌面电脑再到大型分布式系统，从CPU到GPU，TensorFlow都提供了支持。&lt;/p&gt;
+&lt;p&gt;TensorFlow为了便于高效率的开发，同时也是顺应社区的技术潮流，提供的是Python的API。同时，也可以直接使用C++进行开发。目前还有Rust，Haskell的方言支持。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+    
+    
+      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+    
+      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+    
+      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>敏捷方法-用户故事</title>
+    <link href="http://gmlove.github.io/2016/08/31/agile-user-story/"/>
+    <id>http://gmlove.github.io/2016/08/31/agile-user-story/</id>
+    <published>2016-08-31T00:51:59.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="常见误解"><a href="#常见误解" class="headerlink" title="常见误解"></a>常见误解</h3><ol>
+<li>需求是被引出或者捕捉出来的（用户也不知道需求，需求只能被拖网捕捞，有大有小，有死有活，还有漏网的）</li>
+<li>用户知道所有需求</li>
+<li>原型要在开发阶段一直保留</li>
+</ol>
+<h3 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h3><p><a href="https://therealba.com/2016/10/26/working-effectively-in-a-distributed-team-across-australia-china-and-new-zealand/comment-page-1/#comment-31" target="_blank" rel="external">https://therealba.com/2016/10/26/working-effectively-in-a-distributed-team-across-australia-china-and-new-zealand/comment-page-1/#comment-31</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;常见误解&quot;&gt;&lt;a href=&quot;#常见误解&quot; class=&quot;headerlink&quot; title=&quot;常见误解&quot;&gt;&lt;/a&gt;常见误解&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;需求是被引出或者捕捉出来的（用户也不知道需求，需求只能被拖网捕捞，有大有小，有死有活，还有漏网的）&lt;/li&gt;
+&lt;
+    
+    </summary>
+    
+      <category term="agile" scheme="http://gmlove.github.io/categories/agile/"/>
+    
+      <category term="user story" scheme="http://gmlove.github.io/categories/agile/user-story/"/>
+    
+      <category term="用户故事" scheme="http://gmlove.github.io/categories/agile/user-story/%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B/"/>
+    
+      <category term="敏捷" scheme="http://gmlove.github.io/categories/agile/user-story/%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B/%E6%95%8F%E6%8D%B7/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>TDD Practise</title>
+    <link href="http://gmlove.github.io/2016/08/25/tdd-practise/"/>
+    <id>http://gmlove.github.io/2016/08/25/tdd-practise/</id>
+    <published>2016-08-25T09:43:27.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="总纲"><a href="#总纲" class="headerlink" title="总纲"></a>总纲</h2><p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。<br>测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
+<a id="more"></a>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试的粒度：单元测试 -&gt; 集成测试 -&gt; 验收测试（用户场景测试）</p>
+<p>单元测试使我们优化内部品质：模块能独立于系统运行，说明其边界是清晰的，高内聚，低耦合的，更可能在其他地方复用。验收测试保证外部品质。</p>
+<p>TDD四步循环：失败 - 报告 - 通过 - 重构</p>
+<p>测试的好处：</p>
+<ul>
+<li>确定要实现的目标</li>
+<li>通过测试可以发现设计缺陷</li>
+<li>有助于促进上下文无关性</li>
+<li>促进通过分解、萌芽、打包来发现值类型和对象</li>
+</ul>
+<h2 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h2><ul>
+<li>新项目：做最少的决定，实现可行走的骨架，尽早暴露不确定性，启动TDD循环 -&gt; 从反馈中学习。</li>
+<li>现有代码：回归测试 -&gt; 单元测试 -&gt; 改动。</li>
+</ul>
+<h2 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h2><ul>
+<li>对象间的关系：依赖、通知、调整</li>
+<li>封装：确保通过API影响对象的行为；隐藏：实现方式不可见</li>
+<li>组合比部分之和更简单</li>
+<li>上下文无关性</li>
+</ul>
+<p>CRC卡进行辅助设计。</p>
+<p>好的设计：</p>
+<ul>
+<li>根据角色进行命名，而不是根据实现</li>
+<li>使用小的方法来去掉语法噪声，更好的表达意图，最后达到跟读文章一样的效果</li>
+<li>分离并发策略与功能</li>
+<li>事件源外部化，不使用内部的定时器</li>
+</ul>
+<h2 id="编写好的测试"><a href="#编写好的测试" class="headerlink" title="编写好的测试"></a>编写好的测试</h2><p>好的单元测试：</p>
+<ul>
+<li>针对行为进行测试而不是方法</li>
+<li>更愿意读测试而不是代码</li>
+<li>单个测试规模小，容易理解</li>
+<li>依赖在对象构造时传入</li>
+<li>模拟接口而不是模拟具体的类</li>
+<li>少量的预期</li>
+<li>准确指定应该发生什么，没有多余的指定</li>
+</ul>
+<p>坏味道：</p>
+<ul>
+<li>get查询方法暴露内部状态，破坏了封装</li>
+<li>对象名字出现连词（与、或、但是），通常可以重构以抽取对象</li>
+<li>接口以I打头，或者出现xxImpl：意味着实现不能很好的命名，实现包含领域信息，接口定义角色，总是有可能将其分开</li>
+<li>模拟值类型</li>
+<li>模拟一个无法替换的对象：单例是依赖关系、隐式依赖也是依赖</li>
+<li>构造方法太大，测试很难编写：可能可以萌芽或者打包新的类型；关注点不集中，可能需要分解为新的类型；对通知关系和调整关系使用默认值，提供方法修改它们</li>
+<li>测试中预期太多：测试的重点难以发现</li>
+<li>测试中存在很多与重点无关的代码，如用try catch块捕捉异常</li>
+<li>测试中存在具体值如null，应该为其命名以明确其含义</li>
+<li>测试出错难以定位问题：测试描述不清楚</li>
+</ul>
+<p>编写测试：</p>
+<ul>
+<li>编写辅助对象进行测试，如FakeAuctionServer和测试数据建造者</li>
+<li>使用自描述的值（覆盖toString），或者明显的预装值（Integer.MAX_VALUE）</li>
+<li>忽略不相关的对象</li>
+<li>明确事务边界、使用压力测试来测试线程问题</li>
+<li>使用捕获通知来探测变化以测试异步功能，使用waitUntil assertEventually来检测状态变化</li>
+<li>提取测试结构是注意不要让测试代码太抽象，无需像对待产品代码那样重构测试，测试代码的最高目标是让测试描述目标代码做了什么</li>
+<li>如果类需要创建内部支持对象，在测试中该对象应该是不可见的，而不是mock它</li>
+</ul>
+<h2 id="其他："><a href="#其他：" class="headerlink" title="其他："></a>其他：</h2><p>重构：</p>
+<ul>
+<li>为潜在的对象命名，因为某个东西有名字了，就可以控制它了</li>
+</ul>
+<p>日志：</p>
+<ul>
+<li>支持性日志是一项功能，是应用程序用户接口的一部分，可以用测试驱动</li>
+<li>诊断性日志用于开发者发现问题，可以不用测试驱动，可以使用通知而不是记日志实现</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;总纲&quot;&gt;&lt;a href=&quot;#总纲&quot; class=&quot;headerlink&quot; title=&quot;总纲&quot;&gt;&lt;/a&gt;总纲&lt;/h2&gt;&lt;p&gt;差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。&lt;br&gt;测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Session Storage</title>
+    <link href="http://gmlove.github.io/2016/07/17/session-storage/"/>
+    <id>http://gmlove.github.io/2016/07/17/session-storage/</id>
+    <published>2016-07-17T11:16:15.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>保存客户端状态，Session Storage是用于</p>
+<blockquote>
+<p>The sessionStorage property allows you to access a session Storage object. sessionStorage is similar to Window.localStorage, the only difference is while data stored in localStorage has no expiration set, data stored in sessionStorage gets cleared when the page session ends. A page session lasts for as long as the browser is open and survives over page reloads and restores. Opening a page in a new tab or window will cause a new session to be initiated, which differs from how session cookies work.</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;保存客户端状态，Session Storage是用于&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The sessionStorage property allows you to access a session Storage object. sessionStorage 
+    
+    </summary>
+    
+      <category term="web" scheme="http://gmlove.github.io/categories/web/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>回溯搜索找到游戏解法</title>
+    <link href="http://gmlove.github.io/2016/07/09/backtracking-search-for-a-game/"/>
+    <id>http://gmlove.github.io/2016/07/09/backtracking-search-for-a-game/</id>
+    <published>2016-07-09T00:06:04.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>昨晚老婆在家玩游戏，遇到一个关卡，挺有意思，找不到图了，姑且文字描述一下。</p>
+<ul>
+<li>游戏模型：[1, 1, 1, 0, -1, -1, -1]</li>
+<li>规则：1或-1可以移动到其旁边0的位置，或者移动到间隔一个障碍的下一个0的位置；1只能向右移动，-1只能向左移动</li>
+<li>目标：所有-1移动到左边，1移动到右边，即最后状态为[-1, -1, -1, 0, 1, 1, 1]</li>
+</ul>
+<a id="more"></a>
+<p>老婆尝试了好几次无果，给我试试。一看这个游戏，就想到可以用回溯搜索算法来找答案。于是打开电脑开始尝试，得到如下js代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> _ = <span class="built_in">require</span>(<span class="string">'lodash'</span>)</div><div class="line"><span class="keyword">var</span> cards = [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>]</div><div class="line"></div><div class="line"><span class="keyword">var</span> search = <span class="function"><span class="keyword">function</span> (<span class="params">cards, path</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (_.isEqual(cards, [<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>])) &#123;</div><div class="line">    replay(path)</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> idx = <span class="number">0</span>; idx &lt; cards.length; idx++) &#123;</div><div class="line">    <span class="keyword">let</span> moved = move(cards, idx)</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`moved: <span class="subst">$&#123;moved&#125;</span>, path: <span class="subst">$&#123;path&#125;</span>`</span>)</div><div class="line">    <span class="keyword">if</span> (moved &amp;&amp; search(moved, _.concat(path, [idx]))) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> move = <span class="function"><span class="keyword">function</span> (<span class="params">cards, idx</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> moved = _.clone(cards)</div><div class="line">  <span class="keyword">if</span> (cards[idx] === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (cards[idx + <span class="number">1</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx + <span class="number">1</span>] = <span class="number">1</span></div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx + <span class="number">2</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx + <span class="number">2</span>] = <span class="number">1</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx] === <span class="number">-1</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (cards[idx - <span class="number">1</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx - <span class="number">1</span>] = <span class="number">-1</span></div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx - <span class="number">2</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx - <span class="number">2</span>] = <span class="number">-1</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> moved</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> replay = <span class="function"><span class="keyword">function</span> (<span class="params">path</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'path found: '</span>, path.join(<span class="string">','</span>))</div><div class="line">  <span class="keyword">var</span> _cards = cards</div><div class="line">  <span class="built_in">console</span>.log(_cards.join(<span class="string">','</span>))</div><div class="line">  path.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">idx</span>) </span>&#123;</div><div class="line">    _cards = move(_cards, idx)</div><div class="line">    <span class="built_in">console</span>.log(_cards.join(<span class="string">','</span>))</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">search(cards, [])</div></pre></td></tr></table></figure>
+<p>最终找到的步骤如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">path found:  2,4,5,3,1,0,2,4,6,5,3,1,2,4,3</div><div class="line">1,1,1,0,-1,-1,-1</div><div class="line">1,1,0,1,-1,-1,-1</div><div class="line">1,1,-1,1,0,-1,-1</div><div class="line">1,1,-1,1,-1,0,-1</div><div class="line">1,1,-1,0,-1,1,-1</div><div class="line">1,0,-1,1,-1,1,-1</div><div class="line">0,1,-1,1,-1,1,-1</div><div class="line">-1,1,0,1,-1,1,-1</div><div class="line">-1,1,-1,1,0,1,-1</div><div class="line">-1,1,-1,1,-1,1,0</div><div class="line">-1,1,-1,1,-1,0,1</div><div class="line">-1,1,-1,0,-1,1,1</div><div class="line">-1,0,-1,1,-1,1,1</div><div class="line">-1,-1,0,1,-1,1,1</div><div class="line">-1,-1,-1,1,0,1,1</div><div class="line">-1,-1,-1,0,1,1,1</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;昨晚老婆在家玩游戏，遇到一个关卡，挺有意思，找不到图了，姑且文字描述一下。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;游戏模型：[1, 1, 1, 0, -1, -1, -1]&lt;/li&gt;
+&lt;li&gt;规则：1或-1可以移动到其旁边0的位置，或者移动到间隔一个障碍的下一个0的位置；1只能向右移动，-1只能向左移动&lt;/li&gt;
+&lt;li&gt;目标：所有-1移动到左边，1移动到右边，即最后状态为[-1, -1, -1, 0, 1, 1, 1]&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="算法" scheme="http://gmlove.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Business Trip Life in Sydney</title>
+    <link href="http://gmlove.github.io/2016/05/16/business-trip-life-in-sydney/"/>
+    <id>http://gmlove.github.io/2016/05/16/business-trip-life-in-sydney/</id>
+    <published>2016-05-16T11:59:00.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>应客户邀请到Sydney来出差，有幸可以来一次这个第一级世界都市。</p>
+<p>从成都到香港转机再到悉尼，总共16个小时的时间，终于到达这个城市。很多印象很深的景象。</p>
+<p>这里的空气真干净。即便是阴天，极目望去，也可以看到数十公里之外的景象；公路旁边停的车辆看起来都像洗过一样，反射着阳光，特别耀眼。</p>
+<p>这里的鸟很多，都不怕人。在海湾旁边的步行街一路走过，可以看到一群一群的鸽子飞来飞去，有的就停在你身边，机灵的小脑袋一摆一摆，不时的啄一硺地面。</p>
+<p>客户公司文化很开放。这边大家都没有固定的座位，每天都可以换位置坐，一般都是来上班了，就自己找位置坐下，走的时候，把自己的座位清理干净。这边座位也比较紧张，不少人都是在家办公。早上有时候会有Morning Tea，一般有新人来或者某一天有人离职的时候就会举行一次。</p>
+<p>刚来到这边，吃的东西还真是不习惯。中午的快餐看起来很多样，就是sanwich。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;应客户邀请到Sydney来出差，有幸可以来一次这个第一级世界都市。&lt;/p&gt;
+&lt;p&gt;从成都到香港转机再到悉尼，总共16个小时的时间，终于到达这个城市。很多印象很深的景象。&lt;/p&gt;
+&lt;p&gt;这里的空气真干净。即便是阴天，极目望去，也可以看到数十公里之外的景象；公路旁边停的车辆看起
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>微服务架构总结</title>
+    <link href="http://gmlove.github.io/2016/04/26/about-micro-service-architecture/"/>
+    <id>http://gmlove.github.io/2016/04/26/about-micro-service-architecture/</id>
+    <published>2016-04-26T10:53:02.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>From Martin Fowler <a href="http://martinfowler.com/articles/microservices.html" target="_blank" rel="external">microservices</a>:</p>
+<blockquote>
+<p>微服务架构即是采用一组小服务来构建应用的方法。<br>每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。<br>服务围绕业务能力来构建，并依赖自动部署机制来独立部署。</p>
+</blockquote>
+<p>From Sam Newman [Building Microservices]:</p>
+<blockquote>
+<p>You should instead think of Microservices as a specific approach for SOA in  the same way that XP or Scrum are specific approaches for Agile software development.</p>
+</blockquote>
+<p>微服务即SOA的一种实现方式。企业服务总线（ESB）设计的失败给SOA带上了负面的标签。</p>
+<a id="more"></a>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><ul>
+<li>组件服务化</li>
+<li>按业务能力组织服务</li>
+<li>服务即产品: You built it, you run it</li>
+<li>技术栈和数据去中心化</li>
+<li>基础设施自动化</li>
+<li>容错设计</li>
+<li>兼容设计</li>
+</ul>
+<h2 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h2><ul>
+<li>前提：复杂度低于零界点，可能导致部署工作量上升</li>
+<li>拆分：业务能力</li>
+<li>协作：契约文档</li>
+<li>测试：<a href="/attaches/2016/2016-04-26-about-micro-service-architecture/test-dimension.png">测试四象限</a> <a href="/attaches/2016/2016-04-26-about-micro-service-architecture/test-triangle.png">测试金字塔</a></li>
+<li>部署：虚拟化或容器等隔离技术，每一个service一个主机</li>
+<li>监控：基础监控（网络，磁盘，os） 服务监控（响应时间，TPS） 业务监控（多维度，长时间）</li>
+<li>原则：<a href="/attaches/2016/2016-04-26-about-micro-service-architecture/principles.png">战略目标 架构原则 设计与交付实践</a></li>
+</ul>
+<h2 id="角色变化"><a href="#角色变化" class="headerlink" title="角色变化"></a>角色变化</h2><ul>
+<li>普通工程师：仅仅开发功能 -&gt; 开发、运营服务</li>
+<li>每个服务至少有一个工程师作为负责人，能力更强的人可能会负责更多的服务</li>
+<li>开发人员交集减少，大规模的团队并行开发好处明显</li>
+<li>对个人能力要求更高，个人成长路线的发展也打开了空间</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="external">https://segmentfault.com/a/1190000004998167</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;p&gt;From Martin Fowler &lt;a href=&quot;http://martinfowler.com/articles/microservices.html&quot;&gt;microservices&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;微服务架构即是采用一组小服务来构建应用的方法。&lt;br&gt;每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。&lt;br&gt;服务围绕业务能力来构建，并依赖自动部署机制来独立部署。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;From Sam Newman [Building Microservices]:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You should instead think of Microservices as a specific approach for SOA in  the same way that XP or Scrum are specific approaches for Agile software development.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;微服务即SOA的一种实现方式。企业服务总线（ESB）设计的失败给SOA带上了负面的标签。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="micro service" scheme="http://gmlove.github.io/categories/micro-service/"/>
+    
+    
+      <category term="micro service" scheme="http://gmlove.github.io/tags/micro-service/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spring项目必备的admin Site工具</title>
+    <link href="http://gmlove.github.io/2016/04/25/must-have-admin-site-for-spring-projects/"/>
+    <id>http://gmlove.github.io/2016/04/25/must-have-admin-site-for-spring-projects/</id>
+    <published>2016-04-25T10:05:33.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>保持应用状态的可见性对应用的维护和线上问题调试无疑是很重要的；线上进行各种功能开关，日志查询通常也是线上应用运行时必备的功能。这些功能基本上可以放在Admin工具呈现。</p>
+<p>对于经典java框架spring，我们是否有一个通用的Admin框架呢，答案是肯定的。</p>
+<a id="more"></a>
+<p>实际上spring的Spring Boot Actuator框架为这些常用的功能进行了规范化和实现。目前的功能列表可以在<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready" target="_blank" rel="external">这里</a>看到。<br>很多有用的功能类似环境变量、健康状态、API接口信息、beans状态、各个维度的性能统计数据等等都有覆盖。</p>
+<p>使用这些API就可以实现一个功能强大的Admin工具。目前有一个开源的实现<a href="https://github.com/codecentric/spring-boot-admin" target="_blank" rel="external">Spring Boot Admin</a>。</p>
+<p>但是这个工具也有一些缺陷：</p>
+<ol>
+<li>设计的功能有点过多了，甚至包括监控等</li>
+<li>需要所有的服务引入新的jar包依赖</li>
+<li>需要所有服务配置该服务可访问的地址和admin服务器的地址，如果没有服务自动发现的机制，这个也是比较麻烦的事情</li>
+</ol>
+<p>如果我们只需要一个简单的UI界面的话，可以参考我们自己修改过的一个<a href="https://github.com/gmlove/spring-boot-admin/tree/only-ui" target="_blank" rel="external">简化版本</a>。这个版本移除了所有的服务器提供的功能直接由客户端来处理所有的数据，服务器提供代理的功能以解决跨域问题。服务只需要引入Spring Boot Actuator。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;保持应用状态的可见性对应用的维护和线上问题调试无疑是很重要的；线上进行各种功能开关，日志查询通常也是线上应用运行时必备的功能。这些功能基本上可以放在Admin工具呈现。&lt;/p&gt;
+&lt;p&gt;对于经典java框架spring，我们是否有一个通用的Admin框架呢，答案是肯定的。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="spring" scheme="http://gmlove.github.io/categories/spring/"/>
+    
+      <category term="java" scheme="http://gmlove.github.io/categories/spring/java/"/>
+    
+      <category term="admin site" scheme="http://gmlove.github.io/categories/spring/java/admin-site/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Docker和微服务</title>
+    <link href="http://gmlove.github.io/2016/04/25/docker-and-micro-service/"/>
+    <id>http://gmlove.github.io/2016/04/25/docker-and-micro-service/</id>
+    <published>2016-04-25T10:04:14.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="微服务的优势和带来的挑战"><a href="#微服务的优势和带来的挑战" class="headerlink" title="微服务的优势和带来的挑战"></a>微服务的优势和带来的挑战</h2><h2 id="Docker给微服务部署带来的便利"><a href="#Docker给微服务部署带来的便利" class="headerlink" title="Docker给微服务部署带来的便利"></a>Docker给微服务部署带来的便利</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="external">https://segmentfault.com/a/1190000004998167</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;微服务的优势和带来的挑战&quot;&gt;&lt;a href=&quot;#微服务的优势和带来的挑战&quot; class=&quot;headerlink&quot; title=&quot;微服务的优势和带来的挑战&quot;&gt;&lt;/a&gt;微服务的优势和带来的挑战&lt;/h2&gt;&lt;h2 id=&quot;Docker给微服务部署带来的便利&quot;&gt;&lt;a hre
+    
+    </summary>
+    
+      <category term="docker" scheme="http://gmlove.github.io/categories/docker/"/>
+    
+      <category term="micro service" scheme="http://gmlove.github.io/categories/docker/micro-service/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>各种坑</title>
+    <link href="http://gmlove.github.io/2016/04/15/pitfall-collection/"/>
+    <id>http://gmlove.github.io/2016/04/15/pitfall-collection/</id>
+    <published>2016-04-15T12:45:41.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
+<p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
+<h2 id="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"><a href="#grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了" class="headerlink" title="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"></a>grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2><p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;重复触发Jenkins-build&quot;&gt;&lt;a href=&quot;#重复触发Jenkins-build&quot; class=&quot;headerlink&quot; title=&quot;重复触发Jenkins build&quot;&gt;&lt;/a&gt;重复触发Jenkins build&lt;/h2&gt;&lt;p&gt;当使用Jenkins
+    
+    </summary>
+    
+      <category term="那些年我们踩过的坑" scheme="http://gmlove.github.io/categories/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Spring Boot 迁移</title>
+    <link href="http://gmlove.github.io/2016/03/30/migrate-to-spring-boot/"/>
+    <id>http://gmlove.github.io/2016/03/30/migrate-to-spring-boot/</id>
+    <published>2016-03-30T11:07:57.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><h3 id="error-page"><a href="#error-page" class="headerlink" title="error page"></a>error page</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">error-page</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">location</span>&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> ServerProperties <span class="title">serverProperties</span> <span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ServerProperties() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customize</span><span class="params">(ConfigurableEmbeddedServletContainer container)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>.customize(container);</div><div class="line">            container.addErrorPages(<span class="keyword">new</span> ErrorPage(HttpStatus.NOT_FOUND, <span class="string">"/error/404"</span>));</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="spring-context-xml"><a href="#spring-context-xml" class="headerlink" title="spring-context.xml"></a>spring-context.xml</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ImportResource</span>(<span class="string">"classpath:spring-context.xml"</span>)</div><div class="line"><span class="meta">@EnableAdminServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebApplication</span> <span class="keyword">extends</span> <span class="title">SpringBootServletInitializer</span> </span>&#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="log-back-upgrade"><a href="#log-back-upgrade" class="headerlink" title="log back upgrade"></a>log back upgrade</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- change include to included for file that will be included, like this: --&gt;</span></div><div class="line"><span class="comment">&lt;!-- http://logback.qos.ch/manual/configuration.html --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">included</span>&gt;</span></div><div class="line">...</div><div class="line"><span class="tag">&lt;/<span class="name">included</span>&gt;</span></div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;web-xml&quot;&gt;&lt;a href=&quot;#web-xml&quot; class=&quot;headerlink&quot; title=&quot;web.xml&quot;&gt;&lt;/a&gt;web.xml&lt;/h2&gt;&lt;h3 id=&quot;error-page&quot;&gt;&lt;a href=&quot;#error-page&quot; class=&quot;head
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>在网页显示透明视频</title>
+    <link href="http://gmlove.github.io/2016/03/26/transparent-video/"/>
+    <id>http://gmlove.github.io/2016/03/26/transparent-video/</id>
+    <published>2016-03-26T13:13:16.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在一个网站上，看到了很炫的网页特效：视频背景透明。该网址是：<a href="http://videostir.com/" target="_blank" rel="external">http://videostir.com/</a>。他们还为用户提供了制作透明视频的服务。用户只需要上传他们要求的格式的视频，就可以生成一个透明的视频。</p>
+<p>正如该网站所演示的，这种视频作为网站的引导，效果非常赞，互动的感觉非常强烈。</p>
+<a id="more"></a>
+<p>作为一个技术人员，特别是曾经从事过游戏开发的技术人员，很想一探究竟。下面自己实现的一个简单的背景透明效果，仅仅作为技术研究用。</p>
+<p>首先，网页视频播放有两个方案：html5的视频播放，flash的视频播放。作为研究用，就不用关注已经过时的flash了。直接看html5下面该如何处理。</p>
+<p>html5直接播放视频是没有问题的，可以用来做整个视频背景透明，或者视频缩放，播放控制。很自然的一个想法是，能不能使用html5播放视频，按帧进行截图，然后在canvas上面显示。实际上是可以的。核心代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> width = <span class="number">496</span>, height = <span class="number">272</span>;</div><div class="line"><span class="keyword">var</span> canvas = $(<span class="string">'#tv-canvas'</span>).get(<span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> cxt = canvas.getContext(<span class="string">"2d"</span>);</div><div class="line"><span class="keyword">var</span> video = $(<span class="string">'#tv-video-origin'</span>).get(<span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>, frameCount = <span class="number">12</span>;</div><div class="line">video.addEventListener(<span class="string">'loadeddata'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    video.currentTime = i / frameCount;</div><div class="line">&#125;, <span class="literal">false</span>);</div><div class="line">video.addEventListener(<span class="string">'seeked'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    i += <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (i &lt;= video.duration * frameCount) &#123;</div><div class="line">        <span class="comment">/// this will trigger another seeked event</span></div><div class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            video.currentTime = i / frameCount;</div><div class="line">        &#125;, <span class="number">1000</span>/<span class="number">24</span>);</div><div class="line">        drawCanvas();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'video end'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;, <span class="literal">false</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> drawCanvas = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    cxt.drawImage(video, <span class="number">20</span>, <span class="number">20</span>, width/<span class="number">2</span>, height/<span class="number">2</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面的问题就是canvas上面的图片处理了。这里可以对视频画面做一个要求，对于要透明的视频部分，可以在拍摄视频的时候，找一个纯黑色的背景，这些纯黑色的背景就是需要透明的部分。实际上videostir对视频也是这样要求的。一旦有了黑色透明背景，我们是不是就可以先将提取视频图片，对图片进行预处理，将纯黑色的部分透明化处理，就可以了？添加的代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cxtt = canvast.getContext(<span class="string">"2d"</span>);</div><div class="line"><span class="keyword">var</span> video = $(<span class="string">'#tv-video-origin'</span>).get(<span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> drawCanvas = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    cxt.drawImage(video, <span class="number">20</span>, <span class="number">20</span>, width/<span class="number">2</span>, height/<span class="number">2</span>);</div><div class="line">    <span class="keyword">var</span> img = cxt.getImageData(<span class="number">0</span>, <span class="number">0</span>, width, height);</div><div class="line">    <span class="keyword">var</span> bounce = <span class="number">40</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; img.data.length / <span class="number">4</span>; i++) &#123;</div><div class="line">        <span class="keyword">if</span>( img.data[i * <span class="number">4</span>] &lt; bounce &amp;&amp; img.data[i * <span class="number">4</span> + <span class="number">1</span>] &lt; bounce &amp;&amp; img.data[i * <span class="number">4</span> + <span class="number">2</span>] &lt; bounce ) &#123;</div><div class="line">            img.data[i * <span class="number">4</span> + <span class="number">3</span>] = <span class="number">0</span>; <span class="comment">// if color is black, set alpha to 0</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    cxtt.putImageData(img, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到canvas上面直接处理视频虽然可以实现效果，但是最终的效果并不是很好，看起来图片质量下降比较严重，而且效率问题也比较严重，在配置低的电脑浏览器上面帧率会更低。</p>
+<p>能不能还有其他方法实现这个呢，想到了html5游戏框架。于是在<a href="https://html5gameengine.com/" target="_blank" rel="external">这里</a>找了一个：pixi。pixi在检测到浏览器支持webgl的时候，就可以使用webgl来渲染视频，可以看pixi的<a href="https://pixijs.github.io/examples/index.html?s=basics&amp;f=video.js&amp;title=Video" target="_blank" rel="external">demo</a>。可以看到游戏框架对视频播放的优化已经做得很好。</p>
+<p>pixi是支持webgl的filter的，并且内置了一些常用的filter。但是对于我们这个需求，内置的filter看起来并不够用。于是，我们自己来实现一个filter吧。</p>
+<p>关键的shader代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">precision highp float;</div><div class="line"></div><div class="line">varying vec2 vTextureCoord;</div><div class="line">uniform sampler2D uSampler;</div><div class="line"></div><div class="line">void main(void)</div><div class="line">&#123;</div><div class="line">   vec2 uvs = vTextureCoord.xy;</div><div class="line">   vec4 fg = texture2D(uSampler, vTextureCoord);</div><div class="line"></div><div class="line">   float t = 0.12;</div><div class="line">   if (fg.r &lt; t &amp;&amp; fg.g &lt; t &amp;&amp; fg.b &lt; t) &#123;</div><div class="line">        fg.a = 0.0;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   gl_FragColor = fg;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其原理与js代码里面的类似，直接寻找接近黑色的像素，然后设置其透明度为0。可以明显看到硬件渲染出来的视频已经实现了这个效果，而且视频质量没有下降。</p>
+<p>简单分析了一下videostir的实现，他们实现了一个专用的播放器，播放器实现看起来是相当复杂的，会根据浏览器的类型及版本分别采用flash或者opengl来实现。由于没有深入研究他的实现，就不做介绍了。</p>
+<p>最后，<a href="/attaches/2016/2016-03-26-transparent-video/index.html">这里</a>是一个完整的示例，有兴趣的同学们可以研究研究。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在一个网站上，看到了很炫的网页特效：视频背景透明。该网址是：&lt;a href=&quot;http://videostir.com/&quot;&gt;http://videostir.com/&lt;/a&gt;。他们还为用户提供了制作透明视频的服务。用户只需要上传他们要求的格式的视频，就可以生成一个透明的视频。&lt;/p&gt;
+&lt;p&gt;正如该网站所演示的，这种视频作为网站的引导，效果非常赞，互动的感觉非常强烈。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
+    
+    
+      <category term="html5" scheme="http://gmlove.github.io/tags/html5/"/>
+    
+      <category term="game" scheme="http://gmlove.github.io/tags/game/"/>
+    
+      <category term="opengl" scheme="http://gmlove.github.io/tags/opengl/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Opengl知识学习</title>
+    <link href="http://gmlove.github.io/2016/03/17/opengl-summary/"/>
+    <id>http://gmlove.github.io/2016/03/17/opengl-summary/</id>
+    <published>2016-03-17T13:04:39.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="opengl-es-shading-language"><a href="#opengl-es-shading-language" class="headerlink" title="opengl es shading language"></a>opengl es shading language</h2><p>种类</p>
+<ul>
+<li>类型：vec2 vec3 vec4 mat2 mat3 mat4 int float</li>
+<li>结构体：</li>
+</ul>
+<a id="more"></a>
+<p>预编译：#ifdef #ifudef #if #endif #define</p>
+<p>变量标识：precision midiump lowp in out const attribute(数组常量) varying(从vs传递到fs) uniform(全局变量)</p>
+<p>控制语句：</p>
+<ul>
+<li>if … else …</li>
+<li>for(..;..;..), while(…), break, return</li>
+<li>discard: 终止执行，只能用在fragment shader中</li>
+</ul>
+<p>函数：</p>
+<ul>
+<li>数组限制 - 作为参数需要指定长度，不能作为返回值</li>
+</ul>
+<p>内置函数：</p>
+<ul>
+<li>访问硬件功能：纹理贴图</li>
+<li>常用的细小功能：step(返回0,1) clamp mix(x<em>(1-a)+y</em>a) smoothstep faceforward</li>
+<li>硬件加速的某些功能：sin cos</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;opengl-es-shading-language&quot;&gt;&lt;a href=&quot;#opengl-es-shading-language&quot; class=&quot;headerlink&quot; title=&quot;opengl es shading language&quot;&gt;&lt;/a&gt;opengl es shading language&lt;/h2&gt;&lt;p&gt;种类&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;类型：vec2 vec3 vec4 mat2 mat3 mat4 int float&lt;/li&gt;
+&lt;li&gt;结构体：&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>蓝牙知识学习</title>
+    <link href="http://gmlove.github.io/2016/03/14/bluetooth-summary/"/>
+    <id>http://gmlove.github.io/2016/03/14/bluetooth-summary/</id>
+    <published>2016-03-14T08:53:40.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<ul>
+<li>工作过程：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">    StandBy(待机)</div><div class="line">Inqury(查询)      Page(寻呼)</div><div class="line">    Authentication(配对)</div><div class="line">    Connection(连接)</div></pre></td></tr></table></figure>
+<ul>
+<li><p>连接状态：</p>
+<ul>
+<li>活动状态：正在通信</li>
+<li>监听状态：随时准备通信</li>
+<li>保持状态：仅仅定时器工作，无法通信</li>
+<li>休眠模式：能耗最低，偶尔监听和检查网络信息</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ul&gt;
+&lt;li&gt;工作过程：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/d
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>程序员的自我修养</title>
+    <link href="http://gmlove.github.io/2016/03/09/self-cultivation-of-a-programmer/"/>
+    <id>http://gmlove.github.io/2016/03/09/self-cultivation-of-a-programmer/</id>
+    <published>2016-03-09T01:19:32.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="像她一样，你也可以30岁成为外企高管"><a href="#像她一样，你也可以30岁成为外企高管" class="headerlink" title="像她一样，你也可以30岁成为外企高管"></a><a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&amp;mid=403753929&amp;idx=1&amp;sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&amp;srcid=0308IQMxPuvTg7yLZXe89MJO" target="_blank" rel="external">像她一样，你也可以30岁成为外企高管</a></h2><ul>
+<li>跳出舒适区 - 找比你厉害的人聊天</li>
+<li>假装自信</li>
+</ul>
+<ul>
+<li>Too complicated, can you send out an email about this?</li>
+<li>If you feel it’s your fault, think twice before you raise it.</li>
+<li>Try to spend some time finding every thing in the document before ask.</li>
+<li>Ask yourself after a communication if this is a success one.</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;像她一样，你也可以30岁成为外企高管&quot;&gt;&lt;a href=&quot;#像她一样，你也可以30岁成为外企高管&quot; class=&quot;headerlink&quot; title=&quot;像她一样，你也可以30岁成为外企高管&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://mp.weixin.qq.co
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>在Clearfix中使用`display:table`</title>
+    <link href="http://gmlove.github.io/2016/03/08/pitfall-clearfix-with-table-display/"/>
+    <id>http://gmlove.github.io/2016/03/08/pitfall-clearfix-with-table-display/</id>
+    <published>2016-03-08T09:22:40.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>当子元素是浮动布局时，父元素无法获取到正确的宽高，这种情况常常使用clearfix方案来解决。</p>
+<p><strong> 示例如下：</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span> <span class="comment">&lt;!-- 父元素无法获取到正确的尺寸 --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"float:left; width:100px; height:100px;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><strong> clearfix方案：（参考<a href="https://getbootstrap.com/css/#helper-classes-clearfix" target="_blank" rel="external">bootstrap文档</a>） </strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.clearfix:before, .clearfix:after &#123; display: table; content: " "; &#125;</div><div class="line">.clearfix:after &#123; clear: both; &#125;</div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"clearfix"</span>&gt;</span> <span class="comment">&lt;!-- 父元素可以获取到正确的尺寸 --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"float:left; width:100px; height:100px;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>但是<code>display: table</code>事实上会产生一个额外的问题，因为table的布局会使父元素与旁边浮动的元素的高度对齐。请运行这个示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">.content &#123; max-width: 800px; margin: 0 auto; background-color: #eee; &#125;</div><div class="line">.right-panel &#123; float: right; width: 180px; height: 500px; margin: 0 10px; background-color: #5bc0de; &#125;</div><div class="line">.main-panel &#123; max-width: 700px; margin-right: 200px; background-color: #5cb85c; &#125;</div><div class="line">.bottom-panel &#123; height: 200px; background-color: #f0ad4e; &#125;</div><div class="line">.floated-child &#123; float: left; background-color: #d9534f; &#125;</div><div class="line">.clearfix:before, .clearfix:after &#123; display: table; content: " "; &#125;</div><div class="line">.clearfix:after &#123; clear: both; &#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"right-panel"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"main-panel"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Main content title! title title title title title title<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"clearfix"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"floated-child"</span>&gt;</span>some text here, some text here, some text here<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"bottom-panel"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>This is bottom panel<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>可以看到<code>clearfix</code>的那个div的高度与<code>right-panel</code>对齐了，调整<code>right-panel</code>的高度，<code>clearfix</code>的div的高度会跟着调整。</p>
+<p>此时我们的修复方案是，将<code>clearfix</code>的display属性修改为inline。即<br><code>.clearfix:before, .clearfix:after { display: inline; content: &quot; &quot;; }</code></p>
+<p>参考：[<a href="https://stackoverflow.com/questions/211383/which-method-of-clearfix-is-best" target="_blank" rel="external">https://stackoverflow.com/questions/211383/which-method-of-clearfix-is-best</a>]</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;当子元素是浮动布局时，父元素无法获取到正确的宽高，这种情况常常使用clearfix方案来解决。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; 示例如下：&lt;/strong&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight html&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;comment&quot;&gt;&amp;lt;!-- 父元素无法获取到正确的尺寸 --&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &lt;span class=&quot;tag&quot;&gt;&amp;lt;&lt;span class=&quot;name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;attr&quot;&gt;style&lt;/span&gt;=&lt;span class=&quot;string&quot;&gt;&quot;float:left; width:100px; height:100px;&quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;tag&quot;&gt;&amp;lt;/&lt;span class=&quot;name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Less -- 诡异的空格</title>
+    <link href="http://gmlove.github.io/2016/03/08/ghost-space-in-less/"/>
+    <id>http://gmlove.github.io/2016/03/08/ghost-space-in-less/</id>
+    <published>2016-03-08T09:19:49.000Z</published>
+    <updated>2016-12-14T00:58:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Original:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.a &#123;</div><div class="line">    &amp;.a-b &#123;</div><div class="line">        &amp;:hover &#123;</div><div class="line">            background-color: #5cb85c;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.a-c &#123;</div><div class="line">    &amp;:extend(.a .a-b:hover);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>Compiled:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ lessc test.less</div><div class="line">extend &apos; .a .a-b:hover&apos; has no matches</div><div class="line">.a.a-b:hover &#123;</div><div class="line">  background-color: #5cb85c;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Improved:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.a &#123;</div><div class="line">    &amp;.a-b &#123;</div><div class="line">        &amp;:hover &#123;</div><div class="line">            background-color: #5cb85c;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.a-c &#123;</div><div class="line">    &amp;:extend(.a.a-b:hover);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Compiled:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ lessc test.less</div><div class="line">.a.a-b:hover,</div><div class="line">.a-c &#123;</div><div class="line">  background-color: #5cb85c;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>css选择器：</p>
+<ul>
+<li><code>.a.a-b</code>表示同一个元素同时包含两个类，</li>
+<li><code>.a .a-b</code>表示子元素选择器，表示当前有<code>a-b</code>类并且某一级父元素含有<code>a</code>类</li>
+<li><code>.a, .a-b</code>表示多个独立选择器，表示选择当前有<code>a</code>类或者含有<code>a-b</code>类的的元素</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Original:&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;.a &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;amp;.a-b &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        &amp;amp;:hover &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;            background-color: #5cb85c;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;        &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;.a-c &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;amp;:extend(.a .a-b:hover);&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="less css" scheme="http://gmlove.github.io/categories/less-css/"/>
+    
+    
+  </entry>
+  
+</feed>

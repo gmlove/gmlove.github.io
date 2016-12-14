@@ -1,0 +1,939 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Bright LGM's Blog</title>
+  <meta name="author" content="Bright LGM">
+
+  
+  <meta name="description" content="保持应用状态的可见性对应用的维护和线上问题调试无疑是很重要的；线上进行各种功能开关，日志查询通常也是线上应用运行时必备的功能。这些功能基本上可以放在Admin工具呈现。 对于经典java框架spring，我们是否有一个通用的Admin框架呢，答案是肯定的。 实际上spring的Spring &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://gmlove.github.io/posts/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Bright LGM's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Bright LGM's Blog</a></h1>
+  
+    <h2>Code speaks.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="gmlove.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/25/must-have-admin-site-for-spring-projects/">Spring项目必备的admin Site工具</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-04-25T18:05:33+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>6:05 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>保持应用状态的可见性对应用的维护和线上问题调试无疑是很重要的；线上进行各种功能开关，日志查询通常也是线上应用运行时必备的功能。这些功能基本上可以放在Admin工具呈现。</p>
+
+<p>对于经典java框架spring，我们是否有一个通用的Admin框架呢，答案是肯定的。</p>
+
+<p>实际上spring的Spring Boot Actuator框架为这些常用的功能进行了规范化和实现。目前的功能列表可以在<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">这里</a>看到。
+很多有用的功能类似环境变量、健康状态、API接口信息、beans状态、各个维度的性能统计数据等等都有覆盖。</p>
+
+<p>使用这些API就可以实现一个功能强大的Admin工具。目前有一个开源的实现<a href="https://github.com/codecentric/spring-boot-admin">Spring Boot Admin</a>。</p>
+
+<p>但是这个工具也有一些缺陷：</p>
+
+<ol>
+<li>设计的功能有点过多了，甚至包括监控等</li>
+<li>需要所有的服务引入新的jar包依赖</li>
+<li>需要所有服务配置该服务可访问的地址和admin服务器的地址，如果没有服务自动发现的机制，这个也是比较麻烦的事情</li>
+</ol>
+
+
+<p>如果我们只需要一个简单的UI界面的话，可以参考我们自己修改过的一个<a href="https://github.com/gmlove/spring-boot-admin/tree/only-ui">简化版本</a>。这个版本移除了所有的服务器提供的功能直接由客户端来处理所有的数据，服务器提供代理的功能以解决跨域问题。服务只需要引入Spring Boot Actuator。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/25/docker-and-micro-service/">Docker和微服务</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-04-25T18:04:14+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>6:04 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>微服务的优势和带来的挑战</h2>
+
+<h2>Docker给微服务部署带来的便利</h2>
+
+<h2>参考</h2>
+
+<p><a href="https://segmentfault.com/a/1190000004998167">https://segmentfault.com/a/1190000004998167</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/15/pitfall-collection/">各种坑</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-04-15T20:45:41+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>8:45 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>重复触发Jenkins build</h2>
+
+<p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
+
+<p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
+
+<h2>grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2>
+
+<p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/30/migrate-to-spring-boot/">Spring Boot 迁移</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-30T19:07:57+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>7:07 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>web.xml</h2>
+
+<h3>error page</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;error-page&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;error-code&gt;</span>404<span class="nt">&lt;/error-code&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;location&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="nt">&lt;/location&gt;</span>
+</span><span class='line'><span class="nt">&lt;/error-page&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Bean</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">ServerProperties</span> <span class="nf">serverProperties</span> <span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">new</span> <span class="nf">ServerProperties</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="nd">@Override</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">customize</span><span class="o">(</span><span class="n">ConfigurableEmbeddedServletContainer</span> <span class="n">container</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="kd">super</span><span class="o">.</span><span class="na">customize</span><span class="o">(</span><span class="n">container</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">container</span><span class="o">.</span><span class="na">addErrorPages</span><span class="o">(</span><span class="k">new</span> <span class="nf">ErrorPage</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">NOT_FOUND</span><span class="o">,</span> <span class="s">&quot;/error/404&quot;</span><span class="o">));</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">};</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>spring-context.xml</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@ImportResource</span><span class="o">(</span><span class="s">&quot;classpath:spring-context.xml&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@EnableAdminServer</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebApplication</span> <span class="kd">extends</span> <span class="n">SpringBootServletInitializer</span> <span class="o">{</span>
+</span><span class='line'>    <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>log back upgrade</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- change include to included for file that will be included, like this: --&gt;</span>
+</span><span class='line'><span class="c">&lt;!-- http://logback.qos.ch/manual/configuration.html --&gt;</span>
+</span><span class='line'><span class="nt">&lt;included&gt;</span>
+</span><span class='line'>...
+</span><span class='line'><span class="nt">&lt;/included&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/26/transparent-video/">在网页显示透明视频</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-26T21:13:16+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:13 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在一个网站上，看到了很炫的网页特效：视频背景透明。该网址是：<a href="http://videostir.com/">http://videostir.com/</a>。他们还为用户提供了制作透明视频的服务。用户只需要上传他们要求的格式的视频，就可以生成一个透明的视频。</p>
+
+<p>正如该网站所演示的，这种视频作为网站的引导，效果非常赞，互动的感觉非常强烈。</p>
+
+<p>作为一个技术人员，特别是曾经从事过游戏开发的技术人员，很想一探究竟。下面自己实现的一个简单的背景透明效果，仅仅作为技术研究用。</p>
+
+<p>首先，网页视频播放有两个方案：html5的视频播放，flash的视频播放。作为研究用，就不用关注已经过时的flash了。直接看html5下面该如何处理。</p>
+
+<p>html5直接播放视频是没有问题的，可以用来做整个视频背景透明，或者视频缩放，播放控制。很自然的一个想法是，能不能使用html5播放视频，按帧进行截图，然后在canvas上面显示。实际上是可以的。核心代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="mi">496</span><span class="p">,</span> <span class="nx">height</span> <span class="o">=</span> <span class="mi">272</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#tv-canvas&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">cxt</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#tv-video-origin&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">frameCount</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+</span><span class='line'><span class="nx">video</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;loadeddata&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">video</span><span class="p">.</span><span class="nx">currentTime</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">/</span> <span class="nx">frameCount</span><span class="p">;</span>
+</span><span class='line'><span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'><span class="nx">video</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;seeked&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">duration</span> <span class="o">*</span> <span class="nx">frameCount</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">/// this will trigger another seeked event</span>
+</span><span class='line'>        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">video</span><span class="p">.</span><span class="nx">currentTime</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">/</span> <span class="nx">frameCount</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">},</span> <span class="mi">1000</span><span class="o">/</span><span class="mi">24</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">drawCanvas</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;video end&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">drawCanvas</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">cxt</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nx">height</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面的问题就是canvas上面的图片处理了。这里可以对视频画面做一个要求，对于要透明的视频部分，可以在拍摄视频的时候，找一个纯黑色的背景，这些纯黑色的背景就是需要透明的部分。实际上videostir对视频也是这样要求的。一旦有了黑色透明背景，我们是不是就可以先将提取视频图片，对图片进行预处理，将纯黑色的部分透明化处理，就可以了？添加的代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">cxtt</span> <span class="o">=</span> <span class="nx">canvast</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#tv-video-origin&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">drawCanvas</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">cxt</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="nx">height</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="nx">cxt</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">bounce</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">img</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span> <span class="nx">img</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">bounce</span> <span class="o">&amp;&amp;</span> <span class="nx">img</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">bounce</span> <span class="o">&amp;&amp;</span> <span class="nx">img</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nx">bounce</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">img</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// if color is black, set alpha to 0</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">cxtt</span><span class="p">.</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到canvas上面直接处理视频虽然可以实现效果，但是最终的效果并不是很好，看起来图片质量下降比较严重，而且效率问题也比较严重，在配置低的电脑浏览器上面帧率会更低。</p>
+
+<p>能不能还有其他方法实现这个呢，想到了html5游戏框架。于是在<a href="https://html5gameengine.com/">这里</a>找了一个：pixi。pixi在检测到浏览器支持webgl的时候，就可以使用webgl来渲染视频，可以看pixi的<a href="https://pixijs.github.io/examples/index.html?s=basics&amp;f=video.js&amp;title=Video">demo</a>。可以看到游戏框架对视频播放的优化已经做得很好。</p>
+
+<p>pixi是支持webgl的filter的，并且内置了一些常用的filter。但是对于我们这个需求，内置的filter看起来并不够用。于是，我们自己来实现一个filter吧。</p>
+
+<p>关键的shader代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">precision</span> <span class="nx">highp</span> <span class="kr">float</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">varying</span> <span class="nx">vec2</span> <span class="nx">vTextureCoord</span><span class="p">;</span>
+</span><span class='line'><span class="nx">uniform</span> <span class="nx">sampler2D</span> <span class="nx">uSampler</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">void</span> <span class="nx">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>   <span class="nx">vec2</span> <span class="nx">uvs</span> <span class="o">=</span> <span class="nx">vTextureCoord</span><span class="p">.</span><span class="nx">xy</span><span class="p">;</span>
+</span><span class='line'>   <span class="nx">vec4</span> <span class="nx">fg</span> <span class="o">=</span> <span class="nx">texture2D</span><span class="p">(</span><span class="nx">uSampler</span><span class="p">,</span> <span class="nx">vTextureCoord</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="kr">float</span> <span class="nx">t</span> <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nx">fg</span><span class="p">.</span><span class="nx">r</span> <span class="o">&lt;</span> <span class="nx">t</span> <span class="o">&amp;&amp;</span> <span class="nx">fg</span><span class="p">.</span><span class="nx">g</span> <span class="o">&lt;</span> <span class="nx">t</span> <span class="o">&amp;&amp;</span> <span class="nx">fg</span><span class="p">.</span><span class="nx">b</span> <span class="o">&lt;</span> <span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">fg</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="nx">gl_FragColor</span> <span class="o">=</span> <span class="nx">fg</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其原理与js代码里面的类似，直接寻找接近黑色的像素，然后设置其透明度为0。可以明显看到硬件渲染出来的视频已经实现了这个效果，而且视频质量没有下降。</p>
+
+<p>简单分析了一下videostir的实现，他们实现了一个专用的播放器，播放器实现看起来是相当复杂的，会根据浏览器的类型及版本分别采用flash或者opengl来实现。由于没有深入研究他的实现，就不做介绍了。</p>
+
+<p>最后，<a href="/attaches/transparent-video/index.html">这里</a>是一个完整的示例，有兴趣的同学们可以研究研究。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/17/opengl-summary/">Opengl知识学习</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-17T21:04:39+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:04 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>opengl es shading language</h2>
+
+<p>种类</p>
+
+<ul>
+<li>类型：vec2 vec3 vec4 mat2 mat3 mat4 int float</li>
+<li>结构体：</li>
+</ul>
+
+
+<p>预编译：#ifdef #ifudef #if #endif #define</p>
+
+<p>变量标识：precision midiump lowp in out const attribute(数组常量) varying(从vs传递到fs) uniform(全局变量)</p>
+
+<p>控制语句：</p>
+
+<ul>
+<li>if &hellip; else &hellip;</li>
+<li>for(..;..;..), while(&hellip;), break, return</li>
+<li>discard: 终止执行，只能用在fragment shader中</li>
+</ul>
+
+
+<p>函数：</p>
+
+<ul>
+<li>数组限制 - 作为参数需要指定长度，不能作为返回值</li>
+</ul>
+
+
+<p>内置函数：</p>
+
+<ul>
+<li>访问硬件功能：纹理贴图</li>
+<li>常用的细小功能：step(返回0,1) clamp mix(x<em>(1-a)+y</em>a) smoothstep faceforward</li>
+<li>硬件加速的某些功能：sin cos</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/14/bluetooth-summary/">蓝牙知识学习</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-14T16:53:40+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:53 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><ul>
+<li>工作过程：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>        StandBy(待机)
+</span><span class='line'>    Inqury(查询)      Page(寻呼)
+</span><span class='line'>        Authentication(配对)
+</span><span class='line'>        Connection(连接)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><p>连接状态：</p>
+
+<ul>
+<li>活动状态：正在通信</li>
+<li>监听状态：随时准备通信</li>
+<li>保持状态：仅仅定时器工作，无法通信</li>
+<li>休眠模式：能耗最低，偶尔监听和检查网络信息</li>
+</ul>
+</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/09/self-cultivation-of-a-programmer/">程序员的自我修养</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-09T09:19:32+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:19 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2><a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&amp;mid=403753929&amp;idx=1&amp;sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&amp;scene=1&amp;srcid=0308IQMxPuvTg7yLZXe89MJO&amp;key=710a5d99946419d991e9a86afad06140ed6a360bf541aef614e39b7901b592219de9cf8f765388ebb31e809288dc767b&amp;ascene=0&amp;uin=MjI3NzU1OTU1&amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.11.2+build(15C50)&amp;version=11020201&amp;pass_ticket=hI6qc0CICJoDl%2BAPA%2FK4oi3xvUyMe1WNR87uwF%2Fa24I%3D">像她一样，你也可以30岁成为外企高管</a></h2>
+
+<ul>
+<li>跳出舒适区 - 找比你厉害的人聊天</li>
+<li><p>假装自信</p></li>
+<li><p>Too complicated, can you send out an email about this?</p></li>
+<li>If you feel it&rsquo;s your fault, think twice before you raise it.</li>
+<li>Try to spend some time finding every thing in the document before ask.</li>
+<li>Ask yourself after a communication if this is a success one.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/08/pitfall-clearfix-with-table-display/">在clearfix中使用`display:table`</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-08T17:22:40+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:22 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>当子元素是浮动布局时，父元素无法获取到正确的宽高，这种情况常常使用clearfix方案来解决。</p>
+
+<p><strong> 示例如下：</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div&gt;</span> <span class="c">&lt;!-- 父元素无法获取到正确的尺寸 --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;float:left; width:100px; height:100px;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong> clearfix方案：（参考<a href="https://getbootstrap.com/css/#helper-classes-clearfix">bootstrap文档</a>） </strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>.clearfix:before, .clearfix:after { display: table; content: &quot; &quot;; }
+</span><span class='line'>.clearfix:after { clear: both; }
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;clearfix&quot;</span><span class="nt">&gt;</span> <span class="c">&lt;!-- 父元素可以获取到正确的尺寸 --&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;float:left; width:100px; height:100px;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是<code>display: table</code>事实上会产生一个额外的问题，因为table的布局会使父元素与旁边浮动的元素的高度对齐。请运行这个示例：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'><span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;title&gt;&lt;/title&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nc">.content</span> <span class="p">{</span> <span class="k">max-width</span><span class="o">:</span> <span class="m">800px</span><span class="p">;</span> <span class="k">margin</span><span class="o">:</span> <span class="m">0</span> <span class="k">auto</span><span class="p">;</span> <span class="k">background-color</span><span class="o">:</span> <span class="m">#eee</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.right-panel</span> <span class="p">{</span> <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span> <span class="k">width</span><span class="o">:</span> <span class="m">180px</span><span class="p">;</span> <span class="k">height</span><span class="o">:</span> <span class="m">500px</span><span class="p">;</span> <span class="k">margin</span><span class="o">:</span> <span class="m">0</span> <span class="m">10px</span><span class="p">;</span> <span class="k">background-color</span><span class="o">:</span> <span class="m">#5bc0de</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.main-panel</span> <span class="p">{</span> <span class="k">max-width</span><span class="o">:</span> <span class="m">700px</span><span class="p">;</span> <span class="k">margin-right</span><span class="o">:</span> <span class="m">200px</span><span class="p">;</span> <span class="k">background-color</span><span class="o">:</span> <span class="m">#5cb85c</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.bottom-panel</span> <span class="p">{</span> <span class="k">height</span><span class="o">:</span> <span class="m">200px</span><span class="p">;</span> <span class="k">background-color</span><span class="o">:</span> <span class="m">#f0ad4e</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.floated-child</span> <span class="p">{</span> <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span> <span class="k">background-color</span><span class="o">:</span> <span class="m">#d9534f</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.clearfix</span><span class="nd">:before</span><span class="o">,</span> <span class="nc">.clearfix</span><span class="nd">:after</span> <span class="p">{</span> <span class="k">display</span><span class="o">:</span> <span class="n">table</span><span class="p">;</span> <span class="k">content</span><span class="o">:</span> <span class="s2">&quot; &quot;</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.clearfix</span><span class="nd">:after</span> <span class="p">{</span> <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="nt">&lt;/style&gt;</span>
+</span><span class='line'><span class="nt">&lt;/head&gt;</span>
+</span><span class='line'><span class="nt">&lt;body&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;right-panel&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;main-panel&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;h2&gt;</span>Main content title! title title title title title title<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;clearfix&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;floated-child&quot;</span><span class="nt">&gt;</span>some text here, some text here, some text here<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;bottom-panel&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;p&gt;</span>This is bottom panel<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到<code>clearfix</code>的那个div的高度与<code>right-panel</code>对齐了，调整<code>right-panel</code>的高度，<code>clearfix</code>的div的高度会跟着调整。</p>
+
+<p>此时我们的修复方案是，将<code>clearfix</code>的display属性修改为inline。即
+<code>.clearfix:before, .clearfix:after { display: inline; content: " "; }</code></p>
+
+<p>参考：[<a href="https://stackoverflow.com/questions/211383/which-method-of-clearfix-is-best">https://stackoverflow.com/questions/211383/which-method-of-clearfix-is-best</a>]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/08/ghost-space-in-less/">Less -- 诡异的空格</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-08T17:19:49+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:19 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Original:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>.a {
+</span><span class='line'>    &.a-b {
+</span><span class='line'>        &:hover {
+</span><span class='line'>            background-color: #5cb85c;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>.a-c {
+</span><span class='line'>    &:extend(.a .a-b:hover);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Compiled:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ lessc test.less
+</span><span class='line'>extend ' .a .a-b:hover' has no matches
+</span><span class='line'>.a.a-b:hover {
+</span><span class='line'>  background-color: #5cb85c;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Improved:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>.a {
+</span><span class='line'>    &.a-b {
+</span><span class='line'>        &:hover {
+</span><span class='line'>            background-color: #5cb85c;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>.a-c {
+</span><span class='line'>    &:extend(.a.a-b:hover);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Compiled:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ lessc test.less
+</span><span class='line'>.a.a-b:hover,
+</span><span class='line'>.a-c {
+</span><span class='line'>  background-color: #5cb85c;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>css选择器：</p>
+
+<ul>
+<li><code>.a.a-b</code>表示同一个元素同时包含两个类，</li>
+<li><code>.a .a-b</code>表示子元素选择器，表示当前有<code>a-b</code>类并且某一级父元素含有<code>a</code>类</li>
+<li><code>.a, .a-b</code>表示多个独立选择器，表示选择当前有<code>a</code>类或者含有<code>a-b</code>类的的元素</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/3">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/index.html">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/11/dl-workshop-rnn-and-lstm-1/">RNN和LSTM从理论到实践二：RNN和LSTM模型</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/05/let-machine-play-games/">让机器自己玩游戏</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/02/dl-workshop-rnn-and-lstm/">RNN和LSTM从理论到实践一：词向量</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/11/27/a-pick-into-tensorflow/">Tensorflow一瞥</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/08/31/agile-user-story/">敏捷方法-用户故事</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Bright LGM -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
