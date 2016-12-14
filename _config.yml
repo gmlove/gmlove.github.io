@@ -72,15 +72,6 @@ deploy:
   branch: master
   repo: git@github.com:gmlove/gmlove.github.io.git
 
-
-menu:
-  home: /
-  archives: /archives
-  about: /about
-  categories: /categories
-  tags: /tags
-  commonweal: /404.html
-
 since: 2015
 creative_commons: by-nc-sa
 social:
