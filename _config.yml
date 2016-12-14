@@ -35,7 +35,7 @@ external_link: true # Open external links in new tab
 filename_case: 1
 render_drafts: true
 post_asset_folder: true
-relative_link: true
+relative_link: false
 future: true
 highlight:
   enable: true
@@ -81,19 +81,6 @@ menu:
   tags: /tags
   commonweal: /404.html
 
-menu_icons:
-  enable: true
-  #KeyMapsToMenuItemKey: NameOfTheIconFromFontAwesome
-  home: home
-  about: user
-  categories: th
-  schedule: calendar
-  tags: tags
-  archives: archive
-  sitemap: sitemap
-  commonweal: heartbeat
-
-
 since: 2015
 creative_commons: by-nc-sa
 social:
@@ -118,3 +105,9 @@ leancloud_visitors:
   enable: true
   app_id: 4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz
   app_key: 9jxpPRQJh9dxgB6Ndb1HYuKO
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
