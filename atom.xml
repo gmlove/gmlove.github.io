@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gmlove.github.io/"/>
-  <updated>2016-12-14T05:34:33.000Z</updated>
+  <updated>2016-12-16T05:08:31.000Z</updated>
   <id>http://gmlove.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/"/>
     <id>http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/</id>
     <published>2016-12-11T02:12:51.000Z</published>
-    <updated>2016-12-14T05:34:33.000Z</updated>
+    <updated>2016-12-16T05:08:31.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。</p>
 <p>上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。</p>
@@ -40,7 +40,7 @@
 <p>我们可以看到我们定义了3个权值矩阵，这些权值矩阵在每次进行计算的时候，都是复用的，内存开销不随训练文本的增加而增加。h的计算使用了sigmoind激活函数，y的计算使用softmax激活函数。这里为了简单，我们省略了偏置向量。</p>
 <p>好了，我们已经有了模型，那么我们的损失函数是什么呢？其实还是跟之前一致，在时刻t，我们使用交叉熵损失函数：</p>
 <p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png" alt="Loss function of RNN"></p>
-<p>那么总的损失函数就是（T表示我们训练时只考虑T个单词形成的RNN）：</p>
+<p>那么总的损失函数就是（T表示我们训练时每次迭代只考虑对T个单词进行RNN计算）：</p>
 <p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png" alt="Overall loss function of RNN"></p>
 <p>我们还常常用perplexity来衡量模型的损失，perplexity的定义就是：</p>
 <p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/perplexity-equation.png" alt="Perplexity equation"></p>
@@ -135,6 +135,7 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里我们就完成了RNN和LSTM的学习了。结合NN CNN可以看到，深度学习的基础其实很简单，就是线性模型加激活函数，常用的深度学习模型其实就是在这样的基础模型上面进行结构的设计和优化。这跟玩乐高类似，由简单的基础的模块进行组合，就可以得到非常复杂的模型，最后的效果是惊人的。</p>
 <p>我们接触过的基础的模型有：</p>
 <p>线性单元： y=WX+b<br>激活函数： sigoid tanh relu softmax(一般用作输出层)<br>优化手段：normalization, randomization, l2 regularization, dropout, embedding, gradient clipping</p>
+<p>本文基于google在udacity上面关于深度学习的<a href="https://classroom.udacity.com/courses/ud730" target="_blank" rel="external">课程</a>而来。主要参考资料来自于斯坦福大学的自然语言处理课程<a href="http://cs224d.stanford.edu/syllabus.html" target="_blank" rel="external">cs224d</a>。</p>
 ]]></content>
     
     <summary type="html">
@@ -314,7 +315,7 @@
     <link href="http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/"/>
     <id>http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/</id>
     <published>2016-12-02T15:22:40.000Z</published>
-    <updated>2016-12-14T00:58:50.000Z</updated>
+    <updated>2016-12-16T05:08:53.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。</p>
 <p>近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学习任务。</p>
@@ -893,9 +894,9 @@
       <category term="DevOps" scheme="http://gmlove.github.io/categories/devops/"/>
     
     
-      <category term="micro service" scheme="http://gmlove.github.io/tags/micro-service/"/>
-    
       <category term="docker" scheme="http://gmlove.github.io/tags/docker/"/>
+    
+      <category term="micro service" scheme="http://gmlove.github.io/tags/micro-service/"/>
     
   </entry>
   
@@ -988,11 +989,11 @@
       <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
     
     
+      <category term="opengl" scheme="http://gmlove.github.io/tags/opengl/"/>
+    
       <category term="html5" scheme="http://gmlove.github.io/tags/html5/"/>
     
       <category term="game" scheme="http://gmlove.github.io/tags/game/"/>
-    
-      <category term="opengl" scheme="http://gmlove.github.io/tags/opengl/"/>
     
   </entry>
   
@@ -1042,11 +1043,11 @@
       <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
     
     
+      <category term="opengl" scheme="http://gmlove.github.io/tags/opengl/"/>
+    
       <category term="html5" scheme="http://gmlove.github.io/tags/html5/"/>
     
       <category term="game" scheme="http://gmlove.github.io/tags/game/"/>
-    
-      <category term="opengl" scheme="http://gmlove.github.io/tags/opengl/"/>
     
   </entry>
   
@@ -1186,9 +1187,9 @@
       <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
     
     
-      <category term="less" scheme="http://gmlove.github.io/tags/less/"/>
-    
       <category term="css" scheme="http://gmlove.github.io/tags/css/"/>
+    
+      <category term="less" scheme="http://gmlove.github.io/tags/less/"/>
     
   </entry>
   

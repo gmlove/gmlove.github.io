@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-application.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-beam-search.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/batch-update.png">
-<meta property="og:updated_time" content="2016-12-14T05:34:33.000Z">
+<meta property="og:updated_time" content="2016-12-16T05:08:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RNN和LSTM从理论到实践二：RNN和LSTM模型">
 <meta name="twitter:description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。
@@ -437,7 +437,7 @@
 <p>我们可以看到我们定义了3个权值矩阵，这些权值矩阵在每次进行计算的时候，都是复用的，内存开销不随训练文本的增加而增加。h的计算使用了sigmoind激活函数，y的计算使用softmax激活函数。这里为了简单，我们省略了偏置向量。</p>
 <p>好了，我们已经有了模型，那么我们的损失函数是什么呢？其实还是跟之前一致，在时刻t，我们使用交叉熵损失函数：</p>
 <p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png" alt="Loss function of RNN"></p>
-<p>那么总的损失函数就是（T表示我们训练时只考虑T个单词形成的RNN）：</p>
+<p>那么总的损失函数就是（T表示我们训练时每次迭代只考虑对T个单词进行RNN计算）：</p>
 <p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png" alt="Overall loss function of RNN"></p>
 <p>我们还常常用perplexity来衡量模型的损失，perplexity的定义就是：</p>
 <p><img src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/perplexity-equation.png" alt="Perplexity equation"></p>
@@ -532,6 +532,7 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里我们就完成了RNN和LSTM的学习了。结合NN CNN可以看到，深度学习的基础其实很简单，就是线性模型加激活函数，常用的深度学习模型其实就是在这样的基础模型上面进行结构的设计和优化。这跟玩乐高类似，由简单的基础的模块进行组合，就可以得到非常复杂的模型，最后的效果是惊人的。</p>
 <p>我们接触过的基础的模型有：</p>
 <p>线性单元： y=WX+b<br>激活函数： sigoid tanh relu softmax(一般用作输出层)<br>优化手段：normalization, randomization, l2 regularization, dropout, embedding, gradient clipping</p>
+<p>本文基于google在udacity上面关于深度学习的<a href="https://classroom.udacity.com/courses/ud730" target="_blank" rel="external">课程</a>而来。主要参考资料来自于斯坦福大学的自然语言处理课程<a href="http://cs224d.stanford.edu/syllabus.html" target="_blank" rel="external">cs224d</a>。</p>
 
       
     </div>
@@ -685,7 +686,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
