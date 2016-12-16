@@ -3,13 +3,14 @@ Welcome to my blog!
 ### TODO
 
 - ignore files in attaches folder
-- add analytics
 - add about me page
+- jiathis will use http to load scripts, it conflicts with github https
 
 
-### Fixed:
+### Done:
 
 - header link in the first page is incorrect
+- add analytics
 
 
 ### Notice:

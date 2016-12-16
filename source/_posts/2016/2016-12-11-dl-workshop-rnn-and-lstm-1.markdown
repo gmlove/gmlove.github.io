@@ -54,7 +54,7 @@ RNN的模型如下：
 
 ![Loss function of RNN](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png)
 
-那么总的损失函数就是（T表示我们训练时只考虑T个单词形成的RNN）：
+那么总的损失函数就是（T表示我们训练时每次迭代只考虑对T个单词进行RNN计算）：
 
 ![Overall loss function of RNN](/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png)
 
@@ -547,8 +547,7 @@ def id2char(dictid):
 激活函数： sigoid tanh relu softmax(一般用作输出层)
 优化手段：normalization, randomization, l2 regularization, dropout, embedding, gradient clipping
 
-
-
+本文基于google在udacity上面关于深度学习的[课程](https://classroom.udacity.com/courses/ud730)而来。主要参考资料来自于斯坦福大学的自然语言处理课程[cs224d](http://cs224d.stanford.edu/syllabus.html)。
 
 
 
