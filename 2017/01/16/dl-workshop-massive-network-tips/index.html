@@ -1,0 +1,986 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tensorflow,AI,Machine Learning,Deep Learning," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。
+大规模网络的特征首先我们来看一下用什么来衡量网络规模。
+下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大规模Tensorflow网络的一些技巧">
+<meta property="og:url" content="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/index.html">
+<meta property="og:site_name" content="Bright LGM's Blog">
+<meta property="og:description" content="今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。
+大规模网络的特征首先我们来看一下用什么来衡量网络规模。
+下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/alexnet.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/separated-data-storage.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/IncremeterFifoQueue.gif">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/AnimatedFileQueues.gif">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/training-validating-in-different-process.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/distributed-execution.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/pre-trained-model.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model-pre-trained.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/loss-summary.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/histogram-summary.png">
+<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/graph.png">
+<meta property="og:updated_time" content="2017-01-18T13:02:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大规模Tensorflow网络的一些技巧">
+<meta name="twitter:description" content="今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。
+大规模网络的特征首先我们来看一下用什么来衡量网络规模。
+下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。">
+<meta name="twitter:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/alexnet.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/"/>
+
+
+
+
+
+  <title> 大规模Tensorflow网络的一些技巧 | Bright LGM's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Bright LGM's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Code speaks.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bright LGM">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Bright LGM's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Bright LGM's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                大规模Tensorflow网络的一些技巧
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-16T19:45:53+08:00">
+                2017-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2017/01/16/dl-workshop-massive-network-tips/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/16/dl-workshop-massive-network-tips/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。</p>
+<h2 id="大规模网络的特征"><a href="#大规模网络的特征" class="headerlink" title="大规模网络的特征"></a>大规模网络的特征</h2><p>首先我们来看一下用什么来衡量网络规模。</p>
+<p>下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。</p>
+<a id="more"></a>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/alexnet.png" alt="AlexNet"></p>
+<p>从图中可以看到网络一共分为8层，5个卷积层，3个全连接层。对比lenet的5层网络，可以发现alexnet在网络的深度上面表现为更深，实际上在imagenet挑战中性能更好的Incepiton模型网络层数更是达到了数十层。从这里我们可以看到随着网络规模的扩大，网络的层数在增加。</p>
+<p>另一方面是网络结构的复杂度上，之前的网络从下到上逐层递进，演进为多分支的结构。</p>
+<p>另外，神经元的个数也是网络的重要特征，大规模的网络通常参数个数也越多。AlexNet和Inception模型的网络参数就达到了上千万，VGGNet更是达到了上亿的参数个数。当然这相比人类的800亿级的神经元个数还是差几个数量级。</p>
+<p>为了更到的精确度，我们通常需要规模更大的网络，那么在网络规模逐渐扩大的过程中，我们会遇到的主要挑战是什么呢？其实主要有两个：一是训练数据量越来越大，二是训练时间越来越长。我们下面就来看看如何使用tensorflow来应对这些问题。我们会介绍一些很有用的tips。</p>
+<h2 id="训练大规模网络的技巧"><a href="#训练大规模网络的技巧" class="headerlink" title="训练大规模网络的技巧"></a>训练大规模网络的技巧</h2><h3 id="队列及多线程"><a href="#队列及多线程" class="headerlink" title="队列及多线程"></a>队列及多线程</h3><p>试想一下，如果用于训练的数据量达到了100G，我们应该如何来应对呢？一个基本的想法就是我们可以把元数据读入到内存，真实的数据放磁盘，元数据通常很小，容易处理，而真实的数据，如图片，比较大，放磁盘上等需要的时候再读取。</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/separated-data-storage.png" alt="separated data storage"></p>
+<p>Tensorflow给我们提供了三种方法来输入训练数据。一是我们可以直接把数据全部读入到内存，然后使用这些数据进行训练；二是feeding的机制，就是每次迭代的时候把数据作为输入喂给模型，这种机制是可以解决我们的问题的，但是我们得自己编写代码来处理数据load的过程；第三种我们可以使用的机制就是队列，使用队列我们就可以很容易的实现上面的模型，因为tensorflow已经有实现好的代码可以让我们在需要的时候才读取数据。</p>
+<p>在tensorflow里面，队列也是一个普通的操作，跟其他的操作一样，出队操作会返回一个tensor，然后就可以使用这个tensor进行后续的处理了。</p>
+<p>请看这个gif图来理解tensorflow中的队列是如何工作的(来自tensorflow官网)：</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/IncremeterFifoQueue.gif" alt="Incremeter FIFO Queue"></p>
+<p>在构造图的过程中，我们构造了一个队列，以及4个节点分别处理入队、出队、递增、入队操作。通过gif图，我们可以看到在计算图运行的过程中队列里面的数据是如何变化的。</p>
+<p>下面的图更清晰的演示了之前我们讨论的模型(来自tensorflow官网)：</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/AnimatedFileQueues.gif" alt="Animated File Queues"></p>
+<p>可以看到，我们有一个文件名的队列，里面存储了所有训练数据的文件名，即训练数据的元数据。然后多个reader并行从队列中读取数据并交给后面的decoder进行解码和预处理。之后再将解码后的数据输入到另一个队列中作为我们的训练数据队列。</p>
+<p>创建一个包含队列的图的代码模板如下(来自tensorflow官网)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">example = ...ops to create one example...</div><div class="line"><span class="comment"># Create a queue, and an op that enqueues examples one at a time in the queue.</span></div><div class="line">queue = tf.RandomShuffleQueue(...)</div><div class="line">enqueue_op = queue.enqueue(example)</div><div class="line"><span class="comment"># Create a training graph that starts by dequeuing a batch of examples.</span></div><div class="line">inputs = queue.dequeue_many(batch_size)</div><div class="line">train_op = ...use <span class="string">'inputs'</span> to build the training part of the graph...</div></pre></td></tr></table></figure>
+<p>运行此图的代码如下(来自tensorflow官网)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Create a queue runner that will run 4 threads in parallel to enqueue</span></div><div class="line"><span class="comment"># examples.</span></div><div class="line">qr = tf.train.QueueRunner(queue, [enqueue_op] * <span class="number">4</span>)</div><div class="line"></div><div class="line"><span class="comment"># Launch the graph.</span></div><div class="line">sess = tf.Session()</div><div class="line"><span class="comment"># Create a coordinator, launch the queue runner threads.</span></div><div class="line">coord = tf.train.Coordinator()</div><div class="line">enqueue_threads = qr.create_threads(sess, coord=coord, start=<span class="keyword">True</span>)</div><div class="line"><span class="comment"># Run the training loop, controlling termination with the coordinator.</span></div><div class="line"><span class="keyword">for</span> step <span class="keyword">in</span> xrange(<span class="number">1000000</span>):</div><div class="line">    <span class="keyword">if</span> coord.should_stop():</div><div class="line">        <span class="keyword">break</span></div><div class="line">    sess.run(train_op)</div><div class="line"><span class="comment"># When done, ask the threads to stop.</span></div><div class="line">coord.request_stop()</div><div class="line"><span class="comment"># And wait for them to actually do it.</span></div><div class="line">coord.join(enqueue_threads)</div></pre></td></tr></table></figure>
+<h3 id="分离训练和验证过程"><a href="#分离训练和验证过程" class="headerlink" title="分离训练和验证过程"></a>分离训练和验证过程</h3><p>第二个我们要一起来看的问题的是关于验证过程的。一般而言，在训练的同时，我们会想要同时验证模型的训练效果，以便知道模型的性能变化情况。但如果把验证过程和训练过程放到一张图里面进行运行，通常会导致训练的中断和训练时间延长。</p>
+<p>一个基本的思路就是，我们能不能让验证过程在单独的进程里面运行，这样就不会影响模型的训练过程了。为实现这一想法，我们可以考虑使用tensorflow提供的saver将模型定期保存到磁盘中，然后运行另一个进程来读取最新的模型进行模型验证。如果你只有一台机器来运行机器学习模型，独立进程的模式可以让我们把模型的训练过程放到gpu上运行，将验证过程放到cpu上运行，这样就可以最大化机器使用了。如果你有更多的机器，你甚至可以将验证过程和训练过程运行在不同的机器上面。</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/training-validating-in-different-process.png" alt="training validating in different process"></p>
+<h3 id="分布式执行"><a href="#分布式执行" class="headerlink" title="分布式执行"></a>分布式执行</h3><p>在训练大规模网络的时候，一个有效提高效率的办法就是分布式执行。在tensorflow中是如何支持分布式执行的呢？</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/distributed-execution.png" alt="distributed execution"></p>
+<p>上图可以看出使用tensorflow的分布式模型是按照server进行组织的。tensorflow分布式模型中有几个概念比较重要。</p>
+<ul>
+<li>Server: 一般server会运行在一个独立的服务器上作为一个进程提供服务</li>
+<li>Worker Service: 一个Worker Service用于执行一个图的一部分</li>
+<li>Master Service: 负责协调Worker Service</li>
+<li>Task: 一个Task对应一个Server，属于某一个Job</li>
+<li>Job: 由一组Task构成，用于提供一些公共的服务，如在图中的参数服务PS Job，以及无状态的Worker Job</li>
+</ul>
+<p>在构造一个集群环境时，我们需要先根据配置构造一个ClusterSpec对象，用于提供集群信息。然后新建一个Server对象，并根据当前的job的类型来决定做什么。如果是参数服务，就什么都不用做，如果是工作服务就构造一个图来执行。</p>
+<p>示例代码如下（来自tensorflow官网）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</div><div class="line"></div><div class="line"><span class="comment"># Flags for defining the tf.train.ClusterSpec</span></div><div class="line">tf.app.flags.DEFINE_string(<span class="string">"ps_hosts"</span>, <span class="string">""</span>,</div><div class="line">                           <span class="string">"Comma-separated list of hostname:port pairs"</span>)</div><div class="line">tf.app.flags.DEFINE_string(<span class="string">"worker_hosts"</span>, <span class="string">""</span>,</div><div class="line">                           <span class="string">"Comma-separated list of hostname:port pairs"</span>)</div><div class="line"></div><div class="line"><span class="comment"># Flags for defining the tf.train.Server</span></div><div class="line">tf.app.flags.DEFINE_string(<span class="string">"job_name"</span>, <span class="string">""</span>, <span class="string">"One of 'ps', 'worker'"</span>)</div><div class="line">tf.app.flags.DEFINE_integer(<span class="string">"task_index"</span>, <span class="number">0</span>, <span class="string">"Index of task within the job"</span>)</div><div class="line"></div><div class="line">FLAGS = tf.app.flags.FLAGS</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(_)</span>:</span></div><div class="line">  ps_hosts = FLAGS.ps_hosts.split(<span class="string">","</span>)</div><div class="line">  worker_hosts = FLAGS.worker_hosts.split(<span class="string">","</span>)</div><div class="line"></div><div class="line">  <span class="comment"># Create a cluster from the parameter server and worker hosts.</span></div><div class="line">  cluster = tf.train.ClusterSpec(&#123;<span class="string">"ps"</span>: ps_hosts, <span class="string">"worker"</span>: worker_hosts&#125;)</div><div class="line"></div><div class="line">  <span class="comment"># Create and start a server for the local task.</span></div><div class="line">  server = tf.train.Server(cluster,</div><div class="line">                           job_name=FLAGS.job_name,</div><div class="line">                           task_index=FLAGS.task_index)</div><div class="line"></div><div class="line">  <span class="keyword">if</span> FLAGS.job_name == <span class="string">"ps"</span>:</div><div class="line">    server.join()</div><div class="line">  <span class="keyword">elif</span> FLAGS.job_name == <span class="string">"worker"</span>:</div><div class="line"></div><div class="line">    <span class="comment"># Assigns ops to the local worker by default.</span></div><div class="line">    <span class="keyword">with</span> tf.device(tf.train.replica_device_setter(</div><div class="line">        worker_device=<span class="string">"/job:worker/task:%d"</span> % FLAGS.task_index,</div><div class="line">        cluster=cluster)):</div><div class="line"></div><div class="line">      <span class="comment"># Build model...</span></div><div class="line">      loss = ...</div><div class="line">      global_step = tf.Variable(<span class="number">0</span>)</div><div class="line"></div><div class="line">      train_op = tf.train.AdagradOptimizer(<span class="number">0.01</span>).minimize(</div><div class="line">          loss, global_step=global_step)</div><div class="line"></div><div class="line">      saver = tf.train.Saver()</div><div class="line">      summary_op = tf.summary.merge_all()</div><div class="line">      init_op = tf.global_variables_initializer()</div><div class="line"></div><div class="line">    <span class="comment"># Create a "supervisor", which oversees the training process.</span></div><div class="line">    sv = tf.train.Supervisor(is_chief=(FLAGS.task_index == <span class="number">0</span>),</div><div class="line">                             logdir=<span class="string">"/tmp/train_logs"</span>,</div><div class="line">                             init_op=init_op,</div><div class="line">                             summary_op=summary_op,</div><div class="line">                             saver=saver,</div><div class="line">                             global_step=global_step,</div><div class="line">                             save_model_secs=<span class="number">600</span>)</div><div class="line"></div><div class="line">    <span class="comment"># The supervisor takes care of session initialization, restoring from</span></div><div class="line">    <span class="comment"># a checkpoint, and closing when done or an error occurs.</span></div><div class="line">    <span class="keyword">with</span> sv.managed_session(server.target) <span class="keyword">as</span> sess:</div><div class="line">      <span class="comment"># Loop until the supervisor shuts down or 1000000 steps have completed.</span></div><div class="line">      step = <span class="number">0</span></div><div class="line">      <span class="keyword">while</span> <span class="keyword">not</span> sv.should_stop() <span class="keyword">and</span> step &lt; <span class="number">1000000</span>:</div><div class="line">        <span class="comment"># Run a training step asynchronously.</span></div><div class="line">        <span class="comment"># See `tf.train.SyncReplicasOptimizer` for additional details on how to</span></div><div class="line">        <span class="comment"># perform *synchronous* training.</span></div><div class="line">        _, step = sess.run([train_op, global_step])</div><div class="line"></div><div class="line">    <span class="comment"># Ask for all the services to stop.</span></div><div class="line">    sv.stop()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">  tf.app.run()</div></pre></td></tr></table></figure>
+<h3 id="使用现成的模型"><a href="#使用现成的模型" class="headerlink" title="使用现成的模型"></a>使用现成的模型</h3><p>在开发机器学习的模型时，另一个有意思的问题是，我们能否基于已有的已经表现比较好的模型进行训练呢？如果可以，那么这样的办法将能非常有效的缩短训练时间，并提升模型效果。事实上这也是可以实现的，但是有一些条件。</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/pre-trained-model.png" alt="pre-trained model"></p>
+<p>由于模型存储时，实际上存储的是模型的所有参数，既然如此，想要在已有的模型上面训练，我们就必须把模型的一部分实现为跟原来模型的一部分是一样的，否则将无法使用这些参数。</p>
+<p>下面我们来看一个例子，<a href="https://github.com/tensorflow/models/tree/master/im2txt" target="_blank" rel="external">这个例子</a>来自于tensorflow的models项目，是基于论文【Show and Tell: Lessons learned from the 2015 MSCOCO Image Captioning Challenge】实现的。这个模型可以根据图片来生成标题。这个模型的训练就是使用现成的模型来进行的。它的模型图如下：</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model.png" alt="show and tell model"></p>
+<p>可以看到这个模型是基于Inception模型来实现的，它实际上是将Inception模型的输出层去掉，然后将模型的输出作为一个RNN模型的输入来构造计算图的。这个模型在训练的时候会读取已经训练好的Inception模型进行二次训练：</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model-pre-trained.png" alt="show and tell model with pre-trained inception model"></p>
+<h3 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a>数据可视化</h3><p>在设计和训练机器学习模型的时候，我们会有一个运行时的计算图，还有很多的参数数据，如果只是从代码层面去分析，实在不够直观。Tensorflow提供给了我们一个非常易用而且友好的可视化工具Tensorboard。使用这个工具，我们只需要简单几行代码，便可以将数据做成图表展示出来。</p>
+<p>比如我们想要展示我们的损失值的变化情况，我们只需要如下代码就可以实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">total_loss = ...</div><div class="line">tf.summary.scalar(<span class="string">"loss/total_loss"</span>, total_loss)</div></pre></td></tr></table></figure>
+<p>这个时候，我们运行tensorboard并将logdir指向我们配置的数据输出目录，然后打开浏览器就可以看到tensorflow展示的数据了。上面的例子中，我们统计了loss变化情况，在tensorboard里面我们将能看到如下的图表：</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/loss-summary.png" alt="loss summary"></p>
+<p>上面的例子可以用来展示数值型数据，如果我们想展示多维数据，如weight和bias数据，这个时候，我们可以借助tf.summary.histogram。如果我们需要统计所有的可训练的variable时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> var <span class="keyword">in</span> tf.trainable_variables():</div><div class="line">    tf.summary.histogram(var.op.name, var)</div></pre></td></tr></table></figure>
+<p>在加入这样几行代码之后，我们在tensorboard的histogram项目下看到如下所示的统计图表：</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/histogram-summary.png" alt="histogram summary"></p>
+<p>同时tensorboard会自动绘制我们的运行时的计算图，请看下图中的例子：</p>
+<p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/graph.png" alt="graph"></p>
+<p>在这个例子中，我们可以使用了tf.name_scope()来将一些逻辑内聚的子图封装到一个节点进行显示，如lenet节点，其内部是一个lenet的网络。同时图中各个节点之间的连线粗细即表示节点直接的数据量大小。通过查看这个图可以很直观的看到我们运行时的计算图的结构，这将非常便于我们分析和展示我们设计的网络结构。</p>
+<h3 id="测试和调试"><a href="#测试和调试" class="headerlink" title="测试和调试"></a>测试和调试</h3><p>编写tensorflow的模型其实和写普通的代码没什么区别。那么问题来了，我们该怎么做测试呢，甚至是如何做TDD呢？</p>
+<p>其实tensorflow已经提供给了我们不少方便测试的工具函数。在我们要做单元测试时，我们可以让我们的测试类继承至<code>tf.test.TestCase</code>，就可以使用<code>self.test_session</code>来方便的创建测试环境了。如以下代码所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SquareTest</span><span class="params">(tf.test.TestCase)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">testSquare</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">with</span> self.test_session():</div><div class="line">            x = tf.square([<span class="number">2</span>, <span class="number">3</span>])</div><div class="line">            self.assertAllEqual(x.eval(), [<span class="number">4</span>, <span class="number">9</span>])</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    tf.test.main()</div></pre></td></tr></table></figure>
+<p>tensorflow给我们提供的有用的测试辅助函数有(仅列举部分)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">TestCase.assertAllClose(…)</div><div class="line">TestCase.assertAllEqual(…)</div><div class="line">TestCase.assertAlmostEqual(…)</div><div class="line">TestCase.assertArrayNear(…)</div><div class="line">TestCase.assertNDArrayNear(…)</div><div class="line">TestCase.assertNear(…)</div><div class="line">TestCase.assertShapeEqual(…)</div></pre></td></tr></table></figure>
+<p>有了这些，我们就可以愉快的TDD了。</p>
+<p>tensorflow的代码调试会有什么问题呢？</p>
+<p>tensorflow的代码一般是分为两个过程，一是计算图的构建，二是计算图的运行。</p>
+<p>计算图的构建过程很简单，就是执行普通的python代码，我们可以借住IDE提供给我们的调试工具来进行调试，可以打断点查看各个变量的值。</p>
+<p>那么如何调试一个运行中的计算图呢？其实计算图的构建类似编写计算图的静态代码，而计算图的运行则类似代码真正执行的过程。一般而言，我们是无法中断tensorflow的计算图的执行，或者在某处断点调试的。那么，如果计算图运行时出现错误该怎么样来调试呢？其实也很简单，回想一下，我们没有IDE也没有gdb的时候是如何调试的–打log啊。对，就是log。tensorflow提供给我们一个特殊的函数<code>tf.Print</code>，我们可以传入一个tensor，和一些要打印的其他tensor，该函数会在计算图运行时打印消息，并返回这个tensor，这个tensor可以用于进行后续计算了。</p>
+<p>示例代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">dequeued_img = tf.image.decode_png( dequeued_record_string, channels)</div><div class="line">dequeued_img = tf.Print( dequeued_img, [tf.shape(dequeued_img)], <span class="string">'dequeued image: '</span>)</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上分享了六个tensorflow的技巧：队列及多线程、分离训练和验证过程、分布式执行、使用现成的模型、数据可视化、测试和调试。使用这些技巧可以给我们设计和调优tensorflow模型带来很多方便。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+            <a href="/tags/ai/" rel="tag"># AI</a>
+          
+            <a href="/tags/machine-learning/" rel="tag"># Machine Learning</a>
+          
+            <a href="/tags/deep-learning/" rel="tag"># Deep Learning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/16/dl-workshop-summary/" rel="next" title="DL Workshop Summary">
+                <i class="fa fa-chevron-left"></i> DL Workshop Summary
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/16/dl-workshop-massive-network-tips/"
+           data-title="大规模Tensorflow网络的一些技巧" data-url="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Bright LGM" />
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#大规模网络的特征"><span class="nav-number">1.</span> <span class="nav-text">大规模网络的特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练大规模网络的技巧"><span class="nav-number">2.</span> <span class="nav-text">训练大规模网络的技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#队列及多线程"><span class="nav-number">2.1.</span> <span class="nav-text">队列及多线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分离训练和验证过程"><span class="nav-number">2.2.</span> <span class="nav-text">分离训练和验证过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式执行"><span class="nav-number">2.3.</span> <span class="nav-text">分布式执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用现成的模型"><span class="nav-number">2.4.</span> <span class="nav-text">使用现成的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据可视化"><span class="nav-number">2.5.</span> <span class="nav-text">数据可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试和调试"><span class="nav-number">2.6.</span> <span class="nav-text">测试和调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"gmlove"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
