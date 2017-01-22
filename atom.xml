@@ -121,7 +121,7 @@
     <link href="http://gmlove.github.io/2016/12/16/dl-workshop-summary/"/>
     <id>http://gmlove.github.io/2016/12/16/dl-workshop-summary/</id>
     <published>2016-12-16T07:22:04.000Z</published>
-    <updated>2017-01-22T03:20:23.000Z</updated>
+    <updated>2017-01-22T03:24:10.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="深度学习Workshop总结"><a href="#深度学习Workshop总结" class="headerlink" title="深度学习Workshop总结"></a>深度学习Workshop总结</h2><p>深度学习Workshop是我们AI俱乐部面向全中国区的发起的学习机器学习的系列session。这次Workshop最初由佟达发起，由于他当时在成都，所以我们就从成都开始了。</p>
 <p>这次workshop从11.7开始，直到1.17结束，共七次session，历时10周。我们以Google在Udacity上面的Tensorflow课程为基础，适当扩展，作为本次workshop的内容。</p>
@@ -147,7 +147,7 @@
 <p>通过这一系列的workshop我学习了解了深度学习的基本概念和知识。讲师们深入浅出的讲解，使得深度学习这项前沿技术不再高不可及，变成我们大家都可以来了解和掌握的技术。AI已经开始影响我们的生活，并且在接下来的数年中，它将变得越发重要。我们将看到层出不穷的基于它的新兴应用，而随时间推移它最终将成为各类应用必不可少的一部分，就如同今日互联网功能是应用必不可少的一样。这个过程需要我们大家都参与进来，需要更多像这一系列workshop一样的学习，去掌握技术，我们要去迎接这个未来，我们更要去创造这个未来。 —- 陈成</p>
 </blockquote>
 <p>我们最后的识别连续数字Android小应用：</p>
-<embed src="http://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+<embed src="https://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
 
 <p>做完此次Workshop，我想大多数人都会觉得机器学习也不过如此。实际上在当前，理论和工程实践已经发展得相对成熟，入门还是比较容易的。特别是深度学习，我们无须手动提取特征，直接进行端到端的学习，只需要几行代码就可以实现一个自己的机器学习模型。</p>
 <p>机器学习作为当下极为热门同时也是极有可能改变世界的技术方向，是很值得大家投入时间学习的。当然入门容易，深入还是不易，Workshop只是一个研究机器学习领域的起步，真正要深入此领域，还需要大家在之后更多的投入和努力。同时欢迎大家能密切关注或者加入我们公司AI俱乐部！</p>
