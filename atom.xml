@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gmlove.github.io/"/>
-  <updated>2017-01-18T13:02:37.000Z</updated>
+  <updated>2017-01-22T03:07:40.000Z</updated>
   <id>http://gmlove.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/"/>
     <id>http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/</id>
     <published>2017-01-16T11:45:53.000Z</published>
-    <updated>2017-01-18T13:02:37.000Z</updated>
+    <updated>2017-01-22T03:07:40.000Z</updated>
     
     <content type="html"><![CDATA[<p>今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。</p>
 <h2 id="大规模网络的特征"><a href="#大规模网络的特征" class="headerlink" title="大规模网络的特征"></a>大规模网络的特征</h2><p>首先我们来看一下用什么来衡量网络规模。</p>
@@ -30,7 +30,7 @@
 <p>从图中可以看到网络一共分为8层，5个卷积层，3个全连接层。对比lenet的5层网络，可以发现alexnet在网络的深度上面表现为更深，实际上在imagenet挑战中性能更好的Incepiton模型网络层数更是达到了数十层。从这里我们可以看到随着网络规模的扩大，网络的层数在增加。</p>
 <p>另一方面是网络结构的复杂度上，之前的网络从下到上逐层递进，演进为多分支的结构。</p>
 <p>另外，神经元的个数也是网络的重要特征，大规模的网络通常参数个数也越多。AlexNet和Inception模型的网络参数就达到了上千万，VGGNet更是达到了上亿的参数个数。当然这相比人类的800亿级的神经元个数还是差几个数量级。</p>
-<p>为了更到的精确度，我们通常需要规模更大的网络，那么在网络规模逐渐扩大的过程中，我们会遇到的主要挑战是什么呢？其实主要有两个：一是训练数据量越来越大，二是训练时间越来越长。我们下面就来看看如何使用tensorflow来应对这些问题。我们会介绍一些很有用的tips。</p>
+<p>为了更高的精确度，我们通常需要规模更大的网络，那么在网络规模逐渐扩大的过程中，我们会遇到的主要挑战是什么呢？其实主要有两个：一是训练数据量越来越大，二是训练时间越来越长。我们下面就来看看如何使用tensorflow来应对这些问题。我们会介绍一些很有用的tips。</p>
 <h2 id="训练大规模网络的技巧"><a href="#训练大规模网络的技巧" class="headerlink" title="训练大规模网络的技巧"></a>训练大规模网络的技巧</h2><h3 id="队列及多线程"><a href="#队列及多线程" class="headerlink" title="队列及多线程"></a>队列及多线程</h3><p>试想一下，如果用于训练的数据量达到了100G，我们应该如何来应对呢？一个基本的想法就是我们可以把元数据读入到内存，真实的数据放磁盘，元数据通常很小，容易处理，而真实的数据，如图片，比较大，放磁盘上等需要的时候再读取。</p>
 <p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/separated-data-storage.png" alt="separated data storage"></p>
 <p>Tensorflow给我们提供了三种方法来输入训练数据。一是我们可以直接把数据全部读入到内存，然后使用这些数据进行训练；二是feeding的机制，就是每次迭代的时候把数据作为输入喂给模型，这种机制是可以解决我们的问题的，但是我们得自己编写代码来处理数据load的过程；第三种我们可以使用的机制就是队列，使用队列我们就可以很容易的实现上面的模型，因为tensorflow已经有实现好的代码可以让我们在需要的时候才读取数据。</p>
@@ -117,11 +117,11 @@
   </entry>
   
   <entry>
-    <title>DL Workshop Summary</title>
+    <title>深度学习Workshop总结</title>
     <link href="http://gmlove.github.io/2016/12/16/dl-workshop-summary/"/>
     <id>http://gmlove.github.io/2016/12/16/dl-workshop-summary/</id>
     <published>2016-12-16T07:22:04.000Z</published>
-    <updated>2017-01-18T16:11:07.000Z</updated>
+    <updated>2017-01-22T03:20:23.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="深度学习Workshop总结"><a href="#深度学习Workshop总结" class="headerlink" title="深度学习Workshop总结"></a>深度学习Workshop总结</h2><p>深度学习Workshop是我们AI俱乐部面向全中国区的发起的学习机器学习的系列session。这次Workshop最初由佟达发起，由于他当时在成都，所以我们就从成都开始了。</p>
 <p>这次workshop从11.7开始，直到1.17结束，共七次session，历时10周。我们以Google在Udacity上面的Tensorflow课程为基础，适当扩展，作为本次workshop的内容。</p>
@@ -139,14 +139,16 @@
 <p>对于所有参与过此次Workshop的同学，由于参与Workshop基本上每周四晚上需要花3个小时左右的时间，而大家多数又都在项目上，所以免不了要牺牲自己的休息时间，还可能占用项目上的时间。感谢大家可以依靠对这个领域的兴趣和学习的热情积极来参加此次Workshop，一起来学习。如果漏掉一些课程，也是比较遗憾。后面有此次课程用到的所有资料和相关的keynote，大家可以作为参考。</p>
 <p>以下放送大家在workshop上面的风采：</p>
 <p><img src="/attaches/2016/2016-12-16-dl-workshop-summary/02-1.jpeg" alt="02-1"><br><img src="/attaches/2016/2016-12-16-dl-workshop-summary/02-2.jpeg" alt="02-2"><br><img src="/attaches/2016/2016-12-16-dl-workshop-summary/04-1.jpeg" alt="04-1"><br><img src="/attaches/2016/2016-12-16-dl-workshop-summary/04-2.jpeg" alt="04-2"><br><img src="/attaches/2016/2016-12-16-dl-workshop-summary/05-1.jpeg" alt="05-1"><br><img src="/attaches/2016/2016-12-16-dl-workshop-summary/06-1.jpeg" alt="06-1"><br><img src="/attaches/2016/2016-12-16-dl-workshop-summary/07-1.jpeg" alt="07-1"></p>
-<p>下面是参加workshop的五星级同学：</p>
-<p>（待整理图片）</p>
+<p>下面是我们和参加workshop的五星级同学：</p>
+<p><img src="/attaches/2016/2016-12-16-dl-workshop-summary/all.jpeg" alt="all"></p>
 <p>来自他们的评价：</p>
 <blockquote>
 <p>每次workshop讲师们都准备的非常充分，先有细致的ppt讲解理论，再有通过tensorflow实际代码操作的练习，每节课都很充实。感受到了讲师团队们满满的诚意。这种必将是未来发展趋势的前沿技术型workshop特别有价值！ —- 刘珊</p>
+<p>通过这一系列的workshop我学习了解了深度学习的基本概念和知识。讲师们深入浅出的讲解，使得深度学习这项前沿技术不再高不可及，变成我们大家都可以来了解和掌握的技术。AI已经开始影响我们的生活，并且在接下来的数年中，它将变得越发重要。我们将看到层出不穷的基于它的新兴应用，而随时间推移它最终将成为各类应用必不可少的一部分，就如同今日互联网功能是应用必不可少的一样。这个过程需要我们大家都参与进来，需要更多像这一系列workshop一样的学习，去掌握技术，我们要去迎接这个未来，我们更要去创造这个未来。 —- 陈成</p>
 </blockquote>
 <p>我们最后的识别连续数字Android小应用：</p>
-<p>（待整理视频）</p>
+<embed src="http://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf" allowfullscreen="true" quality="high" width="480" height="400" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash">
+
 <p>做完此次Workshop，我想大多数人都会觉得机器学习也不过如此。实际上在当前，理论和工程实践已经发展得相对成熟，入门还是比较容易的。特别是深度学习，我们无须手动提取特征，直接进行端到端的学习，只需要几行代码就可以实现一个自己的机器学习模型。</p>
 <p>机器学习作为当下极为热门同时也是极有可能改变世界的技术方向，是很值得大家投入时间学习的。当然入门容易，深入还是不易，Workshop只是一个研究机器学习领域的起步，真正要深入此领域，还需要大家在之后更多的投入和努力。同时欢迎大家能密切关注或者加入我们公司AI俱乐部！</p>
 <p>当然这次workshop能顺利的开展离不开来自办公室其他team的支持。特别要感谢VR/AR俱乐部为我们提供性能强悍的显卡，极大了提升了我们训练和优化机器学习模型的效率。同时还要特别感谢办公室能在我们没有code的情况下提供订饭的支持，感谢代领导。感谢感谢！</p>

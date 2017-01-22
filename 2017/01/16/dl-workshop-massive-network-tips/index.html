@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/loss-summary.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/histogram-summary.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/graph.png">
-<meta property="og:updated_time" content="2017-01-18T13:02:37.000Z">
+<meta property="og:updated_time" content="2017-01-22T03:07:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大规模Tensorflow网络的一些技巧">
 <meta name="twitter:description" content="今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。
@@ -417,7 +417,7 @@
 <p>从图中可以看到网络一共分为8层，5个卷积层，3个全连接层。对比lenet的5层网络，可以发现alexnet在网络的深度上面表现为更深，实际上在imagenet挑战中性能更好的Incepiton模型网络层数更是达到了数十层。从这里我们可以看到随着网络规模的扩大，网络的层数在增加。</p>
 <p>另一方面是网络结构的复杂度上，之前的网络从下到上逐层递进，演进为多分支的结构。</p>
 <p>另外，神经元的个数也是网络的重要特征，大规模的网络通常参数个数也越多。AlexNet和Inception模型的网络参数就达到了上千万，VGGNet更是达到了上亿的参数个数。当然这相比人类的800亿级的神经元个数还是差几个数量级。</p>
-<p>为了更到的精确度，我们通常需要规模更大的网络，那么在网络规模逐渐扩大的过程中，我们会遇到的主要挑战是什么呢？其实主要有两个：一是训练数据量越来越大，二是训练时间越来越长。我们下面就来看看如何使用tensorflow来应对这些问题。我们会介绍一些很有用的tips。</p>
+<p>为了更高的精确度，我们通常需要规模更大的网络，那么在网络规模逐渐扩大的过程中，我们会遇到的主要挑战是什么呢？其实主要有两个：一是训练数据量越来越大，二是训练时间越来越长。我们下面就来看看如何使用tensorflow来应对这些问题。我们会介绍一些很有用的tips。</p>
 <h2 id="训练大规模网络的技巧"><a href="#训练大规模网络的技巧" class="headerlink" title="训练大规模网络的技巧"></a>训练大规模网络的技巧</h2><h3 id="队列及多线程"><a href="#队列及多线程" class="headerlink" title="队列及多线程"></a>队列及多线程</h3><p>试想一下，如果用于训练的数据量达到了100G，我们应该如何来应对呢？一个基本的想法就是我们可以把元数据读入到内存，真实的数据放磁盘，元数据通常很小，容易处理，而真实的数据，如图片，比较大，放磁盘上等需要的时候再读取。</p>
 <p><img src="/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/separated-data-storage.png" alt="separated data storage"></p>
 <p>Tensorflow给我们提供了三种方法来输入训练数据。一是我们可以直接把数据全部读入到内存，然后使用这些数据进行训练；二是feeding的机制，就是每次迭代的时候把数据作为输入喂给模型，这种机制是可以解决我们的问题的，但是我们得自己编写代码来处理数据load的过程；第三种我们可以使用的机制就是队列，使用队列我们就可以很容易的实现上面的模型，因为tensorflow已经有实现好的代码可以让我们在需要的时候才读取数据。</p>
@@ -518,8 +518,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/12/16/dl-workshop-summary/" rel="next" title="DL Workshop Summary">
-                <i class="fa fa-chevron-left"></i> DL Workshop Summary
+              <a href="/2016/12/16/dl-workshop-summary/" rel="next" title="深度学习Workshop总结">
+                <i class="fa fa-chevron-left"></i> 深度学习Workshop总结
               </a>
             
           </div>
