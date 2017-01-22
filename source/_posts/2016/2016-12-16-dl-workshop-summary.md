@@ -48,7 +48,7 @@ tags:
 
 我们最后的识别连续数字Android小应用：
 
-<embed src='http://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>
+<embed src='https://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>
 
 做完此次Workshop，我想大多数人都会觉得机器学习也不过如此。实际上在当前，理论和工程实践已经发展得相对成熟，入门还是比较容易的。特别是深度学习，我们无须手动提取特征，直接进行端到端的学习，只需要几行代码就可以实现一个自己的机器学习模型。
 
