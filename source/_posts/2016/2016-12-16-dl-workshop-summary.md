@@ -1,5 +1,5 @@
 ---
-title: DL workshop summary
+title: 深度学习Workshop总结
 date: 2016-12-16 15:22:04
 comments: true
 tags:
@@ -36,18 +36,19 @@ tags:
 ![06-1](/attaches/2016/2016-12-16-dl-workshop-summary/06-1.jpeg)
 ![07-1](/attaches/2016/2016-12-16-dl-workshop-summary/07-1.jpeg)
 
-下面是参加workshop的五星级同学：
+下面是我们和参加workshop的五星级同学：
 
-（待整理图片）
+![all](/attaches/2016/2016-12-16-dl-workshop-summary/all.jpeg)
 
 来自他们的评价：
 
 > 每次workshop讲师们都准备的非常充分，先有细致的ppt讲解理论，再有通过tensorflow实际代码操作的练习，每节课都很充实。感受到了讲师团队们满满的诚意。这种必将是未来发展趋势的前沿技术型workshop特别有价值！ ---- 刘珊
-> 
+
+> 通过这一系列的workshop我学习了解了深度学习的基本概念和知识。讲师们深入浅出的讲解，使得深度学习这项前沿技术不再高不可及，变成我们大家都可以来了解和掌握的技术。AI已经开始影响我们的生活，并且在接下来的数年中，它将变得越发重要。我们将看到层出不穷的基于它的新兴应用，而随时间推移它最终将成为各类应用必不可少的一部分，就如同今日互联网功能是应用必不可少的一样。这个过程需要我们大家都参与进来，需要更多像这一系列workshop一样的学习，去掌握技术，我们要去迎接这个未来，我们更要去创造这个未来。 ---- 陈成
 
 我们最后的识别连续数字Android小应用：
 
-（待整理视频）
+<embed src='http://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>
 
 做完此次Workshop，我想大多数人都会觉得机器学习也不过如此。实际上在当前，理论和工程实践已经发展得相对成熟，入门还是比较容易的。特别是深度学习，我们无须手动提取特征，直接进行端到端的学习，只需要几行代码就可以实现一个自己的机器学习模型。
 
