@@ -135,7 +135,7 @@ tags:
 
 在我们的实验中，在以batch_size大小为32，训练30000次迭代之后，总损失变化如下：
 
-![Total loss](/attaches/2017/2017-03-01-recognize-house-number/run-inference-android.png)
+![Total loss](/attaches/2017/2017-03-01-recognize-house-number/total-loss.png)
 
 在测试集上面的正确率可以达到91%，如果增加训练集和迭代次数，模型还可能表现更好。
 
