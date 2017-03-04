@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gmlove.github.io/"/>
-  <updated>2017-03-02T09:27:29.000Z</updated>
+  <updated>2017-03-04T05:31:28.000Z</updated>
   <id>http://gmlove.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://gmlove.github.io/2017/03/01/recognize-house-number/"/>
     <id>http://gmlove.github.io/2017/03/01/recognize-house-number/</id>
     <published>2017-03-01T13:22:13.000Z</published>
-    <updated>2017-03-02T09:27:29.000Z</updated>
+    <updated>2017-03-04T05:31:28.000Z</updated>
     
     <content type="html"><![CDATA[<p>今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。</p>
 <h2 id="问题导入"><a href="#问题导入" class="headerlink" title="问题导入"></a>问题导入</h2><h3 id="提取门牌号进行地图标注"><a href="#提取门牌号进行地图标注" class="headerlink" title="提取门牌号进行地图标注"></a>提取门牌号进行地图标注</h3><p>先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找到地图中对应的位置了，事实上google地图就是通过训练这样的机器学习模型来进行地图信息标注的。要解决这个问题，可以读取google街景中的照片数据，然后训练一个机器学习模型来提取门牌号信息。如下图所示，当我们可以识别图片中的门牌号”42”了，我们就可以在地图上面进行标注了。</p>
@@ -74,7 +74,7 @@
 <p><img src="/attaches/2017/2017-03-01-recognize-house-number/run-inference-android.png" alt="Run Inference in Android"></p>
 <h2 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h2><p>接下来我们来看看在实践过程中的一些问题。</p>
 <h3 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h3><p>在我们的实验中，在以batch_size大小为32，训练30000次迭代之后，总损失变化如下：</p>
-<p><img src="/attaches/2017/2017-03-01-recognize-house-number/run-inference-android.png" alt="Total loss"></p>
+<p><img src="/attaches/2017/2017-03-01-recognize-house-number/total-loss.png" alt="Total loss"></p>
 <p>在测试集上面的正确率可以达到91%，如果增加训练集和迭代次数，模型还可能表现更好。</p>
 <h3 id="只训练边框（Bounding-box）内的图像"><a href="#只训练边框（Bounding-box）内的图像" class="headerlink" title="只训练边框（Bounding box）内的图像"></a>只训练边框（Bounding box）内的图像</h3><p>另一个在我们的实验中遇到的问题是，如果直接把原图作为输入，模型将很难收敛到一个较好的值，原因是有太多的噪声像素了。</p>
 <p>取而代之，我们的模型实际上是在数字序列的边框内部进行训练的，我们在处理输入数据的时候，会根据边框数据进行图像切割，之后才会输入到模型。在边框内部进行训练，我们可以得到90%以上的正确率。在这里大家也可以看到这个模型的局限性。</p>
