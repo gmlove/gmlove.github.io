@@ -16,6 +16,8 @@ tags:
 
 在卷积神经网络中，卷积计算过程可以通过下面的动图（来自[此处](https://docs.google.com/presentation/d/1TVixw6ItiZ8igjp6U17tcgoFrLSaHWQmMOwjlgQY9co/pub?slide=id.g1245051c73_0_2184)）来理解：
 
+<!-- more -->
+
 ![conv2d](/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/conv2d.gif)
 
 
