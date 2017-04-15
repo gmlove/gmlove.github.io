@@ -86,14 +86,13 @@
 
 
 
-<meta name="description" content="今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。
-问题导入提取门牌号进行地图标注先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找">
+<meta name="description" content="今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。 问题导入提取门牌号进行地图标注先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找">
+<meta name="keywords" content="tensorflow,AI,Machine Learning,Deep Learning,Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="识别门牌号的移动应用">
 <meta property="og:url" content="http://gmlove.github.io/2017/03/01/recognize-house-number/index.html">
 <meta property="og:site_name" content="Bright LGM's Blog">
-<meta property="og:description" content="今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。
-问题导入提取门牌号进行地图标注先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找">
+<meta property="og:description" content="今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。 问题导入提取门牌号进行地图标注先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-03-01-recognize-house-number/image-to-map-data.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-03-01-recognize-house-number/svhn.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-03-01-recognize-house-number/android-numseq-recognizer.png">
@@ -111,8 +110,7 @@
 <meta property="og:updated_time" content="2017-03-04T05:31:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="识别门牌号的移动应用">
-<meta name="twitter:description" content="今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。
-问题导入提取门牌号进行地图标注先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找">
+<meta name="twitter:description" content="今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。 问题导入提取门牌号进行地图标注先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找">
 <meta name="twitter:image" content="http://gmlove.github.io/attaches/2017/2017-03-01-recognize-house-number/image-to-map-data.png">
 
 
@@ -526,8 +524,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/01/16/dl-workshop-massive-network-tips/" rel="next" title="大规模Tensorflow网络的一些技巧">
-                <i class="fa fa-chevron-left"></i> 大规模Tensorflow网络的一些技巧
+              <a href="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/" rel="next" title="理解Conv2d及其梯度的计算过程">
+                <i class="fa fa-chevron-left"></i> 理解Conv2d及其梯度的计算过程
               </a>
             
           </div>
@@ -535,6 +533,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/16/dl-workshop-massive-network-tips/" rel="prev" title="大规模Tensorflow网络的一些技巧">
+                大规模Tensorflow网络的一些技巧 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -629,7 +631,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

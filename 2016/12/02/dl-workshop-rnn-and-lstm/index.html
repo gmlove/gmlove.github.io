@@ -86,14 +86,13 @@
 
 
 
-<meta name="description" content="本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。
-近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学">
+<meta name="description" content="本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。 近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学">
+<meta name="keywords" content="tensorflow,AI,Machine Learning,RNN,LSTM,Deep Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RNN和LSTM从理论到实践一：词向量">
 <meta property="og:url" content="http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/index.html">
 <meta property="og:site_name" content="Bright LGM's Blog">
-<meta property="og:description" content="本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。
-近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学">
+<meta property="og:description" content="本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。 近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/one-hot-encoding-for-words.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/word-analogies-question.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/way-to-find-relationship-between-words.png">
@@ -106,8 +105,7 @@
 <meta property="og:updated_time" content="2016-12-16T05:08:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RNN和LSTM从理论到实践一：词向量">
-<meta name="twitter:description" content="本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。
-近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学">
+<meta name="twitter:description" content="本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。 近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学">
 <meta name="twitter:image" content="http://gmlove.github.io/attaches/2016/2016-12-02-dl-workshop-rnn-and-lstm/one-hot-encoding-for-words.png">
 
 
@@ -586,8 +584,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/27/a-pick-into-tensorflow/" rel="next" title="Tensorflow一瞥">
-                <i class="fa fa-chevron-left"></i> Tensorflow一瞥
+              <a href="/2016/12/05/let-machine-play-games/" rel="next" title="让机器自己玩游戏">
+                <i class="fa fa-chevron-left"></i> 让机器自己玩游戏
               </a>
             
           </div>
@@ -596,8 +594,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/12/05/let-machine-play-games/" rel="prev" title="让机器自己玩游戏">
-                让机器自己玩游戏 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/11/27/a-pick-into-tensorflow/" rel="prev" title="Tensorflow一瞥">
+                Tensorflow一瞥 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -693,7 +691,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

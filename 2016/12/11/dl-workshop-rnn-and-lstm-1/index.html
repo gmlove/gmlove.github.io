@@ -86,16 +86,13 @@
 
 
 
-<meta name="description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。
-上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。
-我们的问题先">
+<meta name="description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。 上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。 我们的问题先">
+<meta name="keywords" content="tensorflow,AI,Machine Learning,RNN,LSTM,Deep Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RNN和LSTM从理论到实践二：RNN和LSTM模型">
 <meta property="og:url" content="http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/index.html">
 <meta property="og:site_name" content="Bright LGM's Blog">
-<meta property="og:description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。
-上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。
-我们的问题先">
+<meta property="og:description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。 上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。 我们的问题先">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/n-gram-equation.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-model.png">
 <meta property="og:image" content="http://gmlove.github.io/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/ht-and-yt-equation.png">
@@ -121,9 +118,7 @@
 <meta property="og:updated_time" content="2016-12-16T05:08:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RNN和LSTM从理论到实践二：RNN和LSTM模型">
-<meta name="twitter:description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。
-上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。
-我们的问题先">
+<meta name="twitter:description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。 上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。 我们的问题先">
 <meta name="twitter:image" content="http://gmlove.github.io/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/n-gram-equation.png">
 
 
@@ -575,8 +570,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/12/05/let-machine-play-games/" rel="next" title="让机器自己玩游戏">
-                <i class="fa fa-chevron-left"></i> 让机器自己玩游戏
+              <a href="/2016/12/16/dl-workshop-summary/" rel="next" title="深度学习Workshop总结">
+                <i class="fa fa-chevron-left"></i> 深度学习Workshop总结
               </a>
             
           </div>
@@ -585,8 +580,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/12/16/dl-workshop-summary/" rel="prev" title="深度学习Workshop总结">
-                深度学习Workshop总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/12/05/let-machine-play-games/" rel="prev" title="让机器自己玩游戏">
+                让机器自己玩游戏 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -682,7 +677,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
