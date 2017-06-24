@@ -22,6 +22,8 @@ tags:
 
 ![fighting game](/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png)
 
+<!-- more -->
+
 生成对抗网络的英文是Generative Adversarial Nets(以下简称GAN)。它是生成模型的一种，生成模型就是用机器学习去生成我们想要的数据，数学化一点来讲，就是获取训练样本并训练一个模型，该模型能按照我们定义的目标数据分布去生成数据。其实我们应该已经接触过不少生成模型了。比如autoencoder自编码器，它的decoding部分其实就是一种生成模型，它是在生成原数据。又比如seq2seq序列到序列模型，其实也是生成另一个我们想要的序列。Neural style transfer的目标其实也是生成图片。
 
 我们这里研究的生成对抗网络包括两个部分，一个是生成器（generator），一个是判别器（discriminator）。他们的目标分别是：
