@@ -90,26 +90,26 @@
 <meta name="keywords" content="tensorflow,AI,Machine Learning,Deep Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大规模Tensorflow网络的一些技巧">
-<meta property="og:url" content="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/index.html">
+<meta property="og:url" content="http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/index.html">
 <meta property="og:site_name" content="Bright LGM's Blog">
 <meta property="og:description" content="今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。 大规模网络的特征首先我们来看一下用什么来衡量网络规模。 下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/alexnet.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/separated-data-storage.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/IncremeterFifoQueue.gif">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/AnimatedFileQueues.gif">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/training-validating-in-different-process.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/distributed-execution.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/pre-trained-model.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model-pre-trained.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/loss-summary.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/histogram-summary.png">
-<meta property="og:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/graph.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/alexnet.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/separated-data-storage.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/IncremeterFifoQueue.gif">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/AnimatedFileQueues.gif">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/training-validating-in-different-process.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/distributed-execution.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/pre-trained-model.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/show-and-tell-model-pre-trained.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/loss-summary.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/histogram-summary.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/graph.png">
 <meta property="og:updated_time" content="2017-01-22T03:07:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大规模Tensorflow网络的一些技巧">
 <meta name="twitter:description" content="今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。 大规模网络的特征首先我们来看一下用什么来衡量网络规模。 下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。">
-<meta name="twitter:image" content="http://gmlove.github.io/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/alexnet.png">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2017/2017-01-16-dl-workshop-massive-network-tips/alexnet.png">
 
 
 
@@ -137,7 +137,7 @@
 
 
 
-  <link rel="canonical" href="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/"/>
+  <link rel="canonical" href="http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/"/>
 
 
 
@@ -306,7 +306,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/">
+  <link itemprop="mainEntityOfPage" href="http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Bright LGM">
@@ -575,7 +575,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2017/01/16/dl-workshop-massive-network-tips/"
-           data-title="大规模Tensorflow网络的一些技巧" data-url="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/">
+           data-title="大规模Tensorflow网络的一些技巧" data-url="http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/">
       </div>
     
   </div>

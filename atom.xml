@@ -4,9 +4,9 @@
   <subtitle>Code speaks.</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://gmlove.github.io/"/>
+  <link href="http://brightliao.me/"/>
   <updated>2017-06-24T08:53:04.000Z</updated>
-  <id>http://gmlove.github.io/</id>
+  <id>http://brightliao.me/</id>
   
   <author>
     <name>Bright LGM</name>
@@ -17,8 +17,8 @@
   
   <entry>
     <title>深入探索生成对抗网络（一）</title>
-    <link href="http://gmlove.github.io/2017/06/21/dive-into-gan/"/>
-    <id>http://gmlove.github.io/2017/06/21/dive-into-gan/</id>
+    <link href="http://brightliao.me/2017/06/21/dive-into-gan/"/>
+    <id>http://brightliao.me/2017/06/21/dive-into-gan/</id>
     <published>2017-06-21T02:55:19.000Z</published>
     <updated>2017-06-24T08:53:04.000Z</updated>
     
@@ -196,27 +196,27 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
-      <category term="GAN" scheme="http://gmlove.github.io/tags/gan/"/>
+      <category term="GAN" scheme="http://brightliao.me/tags/gan/"/>
     
-      <category term="生成对抗网络" scheme="http://gmlove.github.io/tags/%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/"/>
+      <category term="生成对抗网络" scheme="http://brightliao.me/tags/%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/"/>
     
   </entry>
   
   <entry>
     <title>理解Conv2d及其梯度的计算过程</title>
-    <link href="http://gmlove.github.io/2017/04/15/understanding-gradients-of-conv2d-in-experiments/"/>
-    <id>http://gmlove.github.io/2017/04/15/understanding-gradients-of-conv2d-in-experiments/</id>
+    <link href="http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/"/>
+    <id>http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/</id>
     <published>2017-04-15T03:48:56.000Z</published>
     <updated>2017-04-15T10:27:21.000Z</updated>
     
@@ -332,23 +332,23 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
   <entry>
     <title>识别门牌号的移动应用</title>
-    <link href="http://gmlove.github.io/2017/03/01/recognize-house-number/"/>
-    <id>http://gmlove.github.io/2017/03/01/recognize-house-number/</id>
+    <link href="http://brightliao.me/2017/03/01/recognize-house-number/"/>
+    <id>http://brightliao.me/2017/03/01/recognize-house-number/</id>
     <published>2017-03-01T13:22:13.000Z</published>
     <updated>2017-03-04T05:31:28.000Z</updated>
     
@@ -439,25 +439,25 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
-      <category term="Android" scheme="http://gmlove.github.io/tags/android/"/>
+      <category term="Android" scheme="http://brightliao.me/tags/android/"/>
     
   </entry>
   
   <entry>
     <title>大规模Tensorflow网络的一些技巧</title>
-    <link href="http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/"/>
-    <id>http://gmlove.github.io/2017/01/16/dl-workshop-massive-network-tips/</id>
+    <link href="http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/"/>
+    <id>http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/</id>
     <published>2017-01-16T11:45:53.000Z</published>
     <updated>2017-01-22T03:07:40.000Z</updated>
     
@@ -542,23 +542,23 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
   <entry>
     <title>深度学习Workshop总结</title>
-    <link href="http://gmlove.github.io/2016/12/16/dl-workshop-summary/"/>
-    <id>http://gmlove.github.io/2016/12/16/dl-workshop-summary/</id>
+    <link href="http://brightliao.me/2016/12/16/dl-workshop-summary/"/>
+    <id>http://brightliao.me/2016/12/16/dl-workshop-summary/</id>
     <published>2016-12-16T07:22:04.000Z</published>
     <updated>2017-01-22T03:24:10.000Z</updated>
     
@@ -619,14 +619,14 @@
     </summary>
     
     
-      <category term="personal" scheme="http://gmlove.github.io/tags/personal/"/>
+      <category term="personal" scheme="http://brightliao.me/tags/personal/"/>
     
   </entry>
   
   <entry>
     <title>RNN和LSTM从理论到实践二：RNN和LSTM模型</title>
-    <link href="http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/"/>
-    <id>http://gmlove.github.io/2016/12/11/dl-workshop-rnn-and-lstm-1/</id>
+    <link href="http://brightliao.me/2016/12/11/dl-workshop-rnn-and-lstm-1/"/>
+    <id>http://brightliao.me/2016/12/11/dl-workshop-rnn-and-lstm-1/</id>
     <published>2016-12-11T02:12:51.000Z</published>
     <updated>2016-12-16T05:08:31.000Z</updated>
     
@@ -755,27 +755,27 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="RNN" scheme="http://gmlove.github.io/tags/rnn/"/>
+      <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
-      <category term="LSTM" scheme="http://gmlove.github.io/tags/lstm/"/>
+      <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
     
-      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
   <entry>
     <title>让机器自己玩游戏</title>
-    <link href="http://gmlove.github.io/2016/12/05/let-machine-play-games/"/>
-    <id>http://gmlove.github.io/2016/12/05/let-machine-play-games/</id>
+    <link href="http://brightliao.me/2016/12/05/let-machine-play-games/"/>
+    <id>http://brightliao.me/2016/12/05/let-machine-play-games/</id>
     <published>2016-12-05T05:12:47.000Z</published>
     <updated>2016-12-14T00:58:50.000Z</updated>
     
@@ -899,29 +899,29 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="Reinforcement Learning" scheme="http://gmlove.github.io/tags/reinforcement-learning/"/>
+      <category term="Reinforcement Learning" scheme="http://brightliao.me/tags/reinforcement-learning/"/>
     
-      <category term="DQN" scheme="http://gmlove.github.io/tags/dqn/"/>
+      <category term="DQN" scheme="http://brightliao.me/tags/dqn/"/>
     
-      <category term="Deep Reinforcement Learning" scheme="http://gmlove.github.io/tags/deep-reinforcement-learning/"/>
+      <category term="Deep Reinforcement Learning" scheme="http://brightliao.me/tags/deep-reinforcement-learning/"/>
     
-      <category term="DeepQ Network" scheme="http://gmlove.github.io/tags/deepq-network/"/>
+      <category term="DeepQ Network" scheme="http://brightliao.me/tags/deepq-network/"/>
     
   </entry>
   
   <entry>
     <title>RNN和LSTM从理论到实践一：词向量</title>
-    <link href="http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/"/>
-    <id>http://gmlove.github.io/2016/12/02/dl-workshop-rnn-and-lstm/</id>
+    <link href="http://brightliao.me/2016/12/02/dl-workshop-rnn-and-lstm/"/>
+    <id>http://brightliao.me/2016/12/02/dl-workshop-rnn-and-lstm/</id>
     <published>2016-12-02T15:22:40.000Z</published>
     <updated>2016-12-16T05:08:53.000Z</updated>
     
@@ -1083,27 +1083,27 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="RNN" scheme="http://gmlove.github.io/tags/rnn/"/>
+      <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
-      <category term="LSTM" scheme="http://gmlove.github.io/tags/lstm/"/>
+      <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
     
-      <category term="Deep Learning" scheme="http://gmlove.github.io/tags/deep-learning/"/>
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
   <entry>
     <title>Tensorflow一瞥</title>
-    <link href="http://gmlove.github.io/2016/11/27/a-pick-into-tensorflow/"/>
-    <id>http://gmlove.github.io/2016/11/27/a-pick-into-tensorflow/</id>
+    <link href="http://brightliao.me/2016/11/27/a-pick-into-tensorflow/"/>
+    <id>http://brightliao.me/2016/11/27/a-pick-into-tensorflow/</id>
     <published>2016-11-27T07:19:15.000Z</published>
     <updated>2016-12-14T00:58:50.000Z</updated>
     
@@ -1152,21 +1152,21 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/categories/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
     
     
-      <category term="tensorflow" scheme="http://gmlove.github.io/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
     
-      <category term="AI" scheme="http://gmlove.github.io/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
     
-      <category term="Machine Learning" scheme="http://gmlove.github.io/tags/machine-learning/"/>
+      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
   </entry>
   
   <entry>
     <title>敏捷方法-用户故事</title>
-    <link href="http://gmlove.github.io/2016/08/31/agile-user-story/"/>
-    <id>http://gmlove.github.io/2016/08/31/agile-user-story/</id>
+    <link href="http://brightliao.me/2016/08/31/agile-user-story/"/>
+    <id>http://brightliao.me/2016/08/31/agile-user-story/</id>
     <published>2016-08-31T00:51:59.000Z</published>
     <updated>2016-12-14T05:34:26.000Z</updated>
     
@@ -1184,23 +1184,23 @@
     
     </summary>
     
-      <category term="development" scheme="http://gmlove.github.io/categories/development/"/>
+      <category term="development" scheme="http://brightliao.me/categories/development/"/>
     
     
-      <category term="agile" scheme="http://gmlove.github.io/tags/agile/"/>
+      <category term="agile" scheme="http://brightliao.me/tags/agile/"/>
     
-      <category term="user story" scheme="http://gmlove.github.io/tags/user-story/"/>
+      <category term="user story" scheme="http://brightliao.me/tags/user-story/"/>
     
-      <category term="用户故事" scheme="http://gmlove.github.io/tags/%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B/"/>
+      <category term="用户故事" scheme="http://brightliao.me/tags/%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B/"/>
     
-      <category term="敏捷" scheme="http://gmlove.github.io/tags/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.me/tags/%E6%95%8F%E6%8D%B7/"/>
     
   </entry>
   
   <entry>
     <title>TDD Practise</title>
-    <link href="http://gmlove.github.io/2016/08/25/tdd-practise/"/>
-    <id>http://gmlove.github.io/2016/08/25/tdd-practise/</id>
+    <link href="http://brightliao.me/2016/08/25/tdd-practise/"/>
+    <id>http://brightliao.me/2016/08/25/tdd-practise/</id>
     <published>2016-08-25T09:43:27.000Z</published>
     <updated>2016-12-14T05:34:09.000Z</updated>
     
@@ -1284,15 +1284,15 @@
     
     </summary>
     
-      <category term="development" scheme="http://gmlove.github.io/categories/development/"/>
+      <category term="development" scheme="http://brightliao.me/categories/development/"/>
     
     
   </entry>
   
   <entry>
     <title>Session Storage</title>
-    <link href="http://gmlove.github.io/2016/07/17/session-storage/"/>
-    <id>http://gmlove.github.io/2016/07/17/session-storage/</id>
+    <link href="http://brightliao.me/2016/07/17/session-storage/"/>
+    <id>http://brightliao.me/2016/07/17/session-storage/</id>
     <published>2016-07-17T11:16:15.000Z</published>
     <updated>2016-12-14T05:33:42.000Z</updated>
     
@@ -1308,15 +1308,15 @@
     
     </summary>
     
-      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
+      <category term="frontend" scheme="http://brightliao.me/categories/frontend/"/>
     
     
   </entry>
   
   <entry>
     <title>回溯搜索找到游戏解法</title>
-    <link href="http://gmlove.github.io/2016/07/09/backtracking-search-for-a-game/"/>
-    <id>http://gmlove.github.io/2016/07/09/backtracking-search-for-a-game/</id>
+    <link href="http://brightliao.me/2016/07/09/backtracking-search-for-a-game/"/>
+    <id>http://brightliao.me/2016/07/09/backtracking-search-for-a-game/</id>
     <published>2016-07-09T00:06:04.000Z</published>
     <updated>2016-12-14T00:58:50.000Z</updated>
     
@@ -1344,15 +1344,15 @@
     
     </summary>
     
-      <category term="算法" scheme="http://gmlove.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+      <category term="算法" scheme="http://brightliao.me/categories/%E7%AE%97%E6%B3%95/"/>
     
     
   </entry>
   
   <entry>
     <title>Business Trip Life in Sydney</title>
-    <link href="http://gmlove.github.io/2016/05/16/business-trip-life-in-sydney/"/>
-    <id>http://gmlove.github.io/2016/05/16/business-trip-life-in-sydney/</id>
+    <link href="http://brightliao.me/2016/05/16/business-trip-life-in-sydney/"/>
+    <id>http://brightliao.me/2016/05/16/business-trip-life-in-sydney/</id>
     <published>2016-05-16T11:59:00.000Z</published>
     <updated>2016-12-14T05:33:20.000Z</updated>
     
@@ -1371,14 +1371,14 @@
     </summary>
     
     
-      <category term="personal" scheme="http://gmlove.github.io/tags/personal/"/>
+      <category term="personal" scheme="http://brightliao.me/tags/personal/"/>
     
   </entry>
   
   <entry>
     <title>微服务架构总结</title>
-    <link href="http://gmlove.github.io/2016/04/26/about-micro-service-architecture/"/>
-    <id>http://gmlove.github.io/2016/04/26/about-micro-service-architecture/</id>
+    <link href="http://brightliao.me/2016/04/26/about-micro-service-architecture/"/>
+    <id>http://brightliao.me/2016/04/26/about-micro-service-architecture/</id>
     <published>2016-04-26T10:53:02.000Z</published>
     <updated>2016-12-14T00:58:50.000Z</updated>
     
@@ -1433,17 +1433,17 @@
     
     </summary>
     
-      <category term="micro service" scheme="http://gmlove.github.io/categories/micro-service/"/>
+      <category term="micro service" scheme="http://brightliao.me/categories/micro-service/"/>
     
     
-      <category term="micro service" scheme="http://gmlove.github.io/tags/micro-service/"/>
+      <category term="micro service" scheme="http://brightliao.me/tags/micro-service/"/>
     
   </entry>
   
   <entry>
     <title>Spring项目必备的admin Site工具</title>
-    <link href="http://gmlove.github.io/2016/04/25/must-have-admin-site-for-spring-projects/"/>
-    <id>http://gmlove.github.io/2016/04/25/must-have-admin-site-for-spring-projects/</id>
+    <link href="http://brightliao.me/2016/04/25/must-have-admin-site-for-spring-projects/"/>
+    <id>http://brightliao.me/2016/04/25/must-have-admin-site-for-spring-projects/</id>
     <published>2016-04-25T10:05:33.000Z</published>
     <updated>2016-12-14T05:32:59.000Z</updated>
     
@@ -1469,18 +1469,18 @@
     </summary>
     
     
-      <category term="java" scheme="http://gmlove.github.io/tags/java/"/>
+      <category term="java" scheme="http://brightliao.me/tags/java/"/>
     
-      <category term="spring" scheme="http://gmlove.github.io/tags/spring/"/>
+      <category term="spring" scheme="http://brightliao.me/tags/spring/"/>
     
-      <category term="admin site" scheme="http://gmlove.github.io/tags/admin-site/"/>
+      <category term="admin site" scheme="http://brightliao.me/tags/admin-site/"/>
     
   </entry>
   
   <entry>
     <title>Docker和微服务</title>
-    <link href="http://gmlove.github.io/2016/04/25/docker-and-micro-service/"/>
-    <id>http://gmlove.github.io/2016/04/25/docker-and-micro-service/</id>
+    <link href="http://brightliao.me/2016/04/25/docker-and-micro-service/"/>
+    <id>http://brightliao.me/2016/04/25/docker-and-micro-service/</id>
     <published>2016-04-25T10:04:14.000Z</published>
     <updated>2016-12-14T05:32:49.000Z</updated>
     
@@ -1493,19 +1493,19 @@
     
     </summary>
     
-      <category term="DevOps" scheme="http://gmlove.github.io/categories/devops/"/>
+      <category term="DevOps" scheme="http://brightliao.me/categories/devops/"/>
     
     
-      <category term="docker" scheme="http://gmlove.github.io/tags/docker/"/>
+      <category term="docker" scheme="http://brightliao.me/tags/docker/"/>
     
-      <category term="micro service" scheme="http://gmlove.github.io/tags/micro-service/"/>
+      <category term="micro service" scheme="http://brightliao.me/tags/micro-service/"/>
     
   </entry>
   
   <entry>
     <title>各种坑</title>
-    <link href="http://gmlove.github.io/2016/04/15/pitfall-collection/"/>
-    <id>http://gmlove.github.io/2016/04/15/pitfall-collection/</id>
+    <link href="http://brightliao.me/2016/04/15/pitfall-collection/"/>
+    <id>http://brightliao.me/2016/04/15/pitfall-collection/</id>
     <published>2016-04-15T12:45:41.000Z</published>
     <updated>2016-12-14T05:32:29.000Z</updated>
     
@@ -1520,17 +1520,17 @@
     
     </summary>
     
-      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
+      <category term="frontend" scheme="http://brightliao.me/categories/frontend/"/>
     
     
-      <category term="那些年我们踩过的坑" scheme="http://gmlove.github.io/tags/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
+      <category term="那些年我们踩过的坑" scheme="http://brightliao.me/tags/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
     
   </entry>
   
   <entry>
     <title>Spring Boot 迁移</title>
-    <link href="http://gmlove.github.io/2016/03/30/migrate-to-spring-boot/"/>
-    <id>http://gmlove.github.io/2016/03/30/migrate-to-spring-boot/</id>
+    <link href="http://brightliao.me/2016/03/30/migrate-to-spring-boot/"/>
+    <id>http://brightliao.me/2016/03/30/migrate-to-spring-boot/</id>
     <published>2016-03-30T11:07:57.000Z</published>
     <updated>2016-12-14T05:32:05.000Z</updated>
     
@@ -1547,18 +1547,18 @@
     </summary>
     
     
-      <category term="java" scheme="http://gmlove.github.io/tags/java/"/>
+      <category term="java" scheme="http://brightliao.me/tags/java/"/>
     
-      <category term="spring" scheme="http://gmlove.github.io/tags/spring/"/>
+      <category term="spring" scheme="http://brightliao.me/tags/spring/"/>
     
-      <category term="spring-boot" scheme="http://gmlove.github.io/tags/spring-boot/"/>
+      <category term="spring-boot" scheme="http://brightliao.me/tags/spring-boot/"/>
     
   </entry>
   
   <entry>
     <title>在网页显示透明视频</title>
-    <link href="http://gmlove.github.io/2016/03/26/transparent-video/"/>
-    <id>http://gmlove.github.io/2016/03/26/transparent-video/</id>
+    <link href="http://brightliao.me/2016/03/26/transparent-video/"/>
+    <id>http://brightliao.me/2016/03/26/transparent-video/</id>
     <published>2016-03-26T13:13:16.000Z</published>
     <updated>2016-12-14T00:58:50.000Z</updated>
     
@@ -1588,14 +1588,14 @@
     
     </summary>
     
-      <category term="frontend" scheme="http://gmlove.github.io/categories/frontend/"/>
+      <category term="frontend" scheme="http://brightliao.me/categories/frontend/"/>
     
     
-      <category term="opengl" scheme="http://gmlove.github.io/tags/opengl/"/>
+      <category term="opengl" scheme="http://brightliao.me/tags/opengl/"/>
     
-      <category term="html5" scheme="http://gmlove.github.io/tags/html5/"/>
+      <category term="html5" scheme="http://brightliao.me/tags/html5/"/>
     
-      <category term="game" scheme="http://gmlove.github.io/tags/game/"/>
+      <category term="game" scheme="http://brightliao.me/tags/game/"/>
     
   </entry>
   
