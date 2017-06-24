@@ -1591,11 +1591,11 @@
       <category term="frontend" scheme="http://brightliao.me/categories/frontend/"/>
     
     
-      <category term="opengl" scheme="http://brightliao.me/tags/opengl/"/>
-    
       <category term="html5" scheme="http://brightliao.me/tags/html5/"/>
     
       <category term="game" scheme="http://brightliao.me/tags/game/"/>
+    
+      <category term="opengl" scheme="http://brightliao.me/tags/opengl/"/>
     
   </entry>
   
