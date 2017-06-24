@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://gmlove.github.io/"/>
-  <updated>2017-06-24T02:57:52.000Z</updated>
+  <updated>2017-06-24T08:53:04.000Z</updated>
   <id>http://gmlove.github.io/</id>
   
   <author>
@@ -20,11 +20,12 @@
     <link href="http://gmlove.github.io/2017/06/21/dive-into-gan/"/>
     <id>http://gmlove.github.io/2017/06/21/dive-into-gan/</id>
     <published>2017-06-21T02:55:19.000Z</published>
-    <updated>2017-06-24T02:57:52.000Z</updated>
+    <updated>2017-06-24T08:53:04.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第一部分。</p>
 <h2 id="生成对抗网络介绍"><a href="#生成对抗网络介绍" class="headerlink" title="生成对抗网络介绍"></a>生成对抗网络介绍</h2><h3 id="什么是生成对抗网络？"><a href="#什么是生成对抗网络？" class="headerlink" title="什么是生成对抗网络？"></a>什么是生成对抗网络？</h3><p>从这个名称来看，我们可以了解到，这个网络是用一种对抗方法去生成数据的。和其他的机器学习模型相比，生成对抗网络里面最炫酷的理念莫过于给机器学习引入了对抗。纵观地球上的生物们的成长和发展路线就会发现，物竞天择，适者生存，万物都是在不停的和其他事物对抗中成长和发展的。生成对抗网络就像我们玩下面的格斗游戏一样，我们的学习过程就是，不断找其他对手对抗，在对抗中积累经验，提升自己的技能。</p>
 <p><img src="/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png" alt="fighting game"></p>
+<a id="more"></a>
 <p>生成对抗网络的英文是Generative Adversarial Nets(以下简称GAN)。它是生成模型的一种，生成模型就是用机器学习去生成我们想要的数据，数学化一点来讲，就是获取训练样本并训练一个模型，该模型能按照我们定义的目标数据分布去生成数据。其实我们应该已经接触过不少生成模型了。比如autoencoder自编码器，它的decoding部分其实就是一种生成模型，它是在生成原数据。又比如seq2seq序列到序列模型，其实也是生成另一个我们想要的序列。Neural style transfer的目标其实也是生成图片。</p>
 <p>我们这里研究的生成对抗网络包括两个部分，一个是生成器（generator），一个是判别器（discriminator）。他们的目标分别是：</p>
 <ul>
@@ -189,7 +190,9 @@
     
     <summary type="html">
     
-      &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css&quot;&gt;&lt;p&gt;最近在研究生成对抗网络，也对内对外做过一些分享。这里
+      &lt;p&gt;最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第一部分。&lt;/p&gt;
+&lt;h2 id=&quot;生成对抗网络介绍&quot;&gt;&lt;a href=&quot;#生成对抗网络介绍&quot; class=&quot;headerlink&quot; title=&quot;生成对抗网络介绍&quot;&gt;&lt;/a&gt;生成对抗网络介绍&lt;/h2&gt;&lt;h3 id=&quot;什么是生成对抗网络？&quot;&gt;&lt;a href=&quot;#什么是生成对抗网络？&quot; class=&quot;headerlink&quot; title=&quot;什么是生成对抗网络？&quot;&gt;&lt;/a&gt;什么是生成对抗网络？&lt;/h3&gt;&lt;p&gt;从这个名称来看，我们可以了解到，这个网络是用一种对抗方法去生成数据的。和其他的机器学习模型相比，生成对抗网络里面最炫酷的理念莫过于给机器学习引入了对抗。纵观地球上的生物们的成长和发展路线就会发现，物竞天择，适者生存，万物都是在不停的和其他事物对抗中成长和发展的。生成对抗网络就像我们玩下面的格斗游戏一样，我们的学习过程就是，不断找其他对手对抗，在对抗中积累经验，提升自己的技能。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png&quot; alt=&quot;fighting game&quot;&gt;&lt;/p&gt;
     
     </summary>
     
