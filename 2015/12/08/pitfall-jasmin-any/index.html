@@ -391,7 +391,7 @@
       
 
       
-        <p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any({premitive type})</code>，可以考虑使用<code>anything()</code></p>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any({premitive type})</code>，可以考虑使用<code>anything()</code></p>
 <p>坑位：使用<code>toHaveBeenCalledWith</code>测试函数被调用时的参数。</p>
 <p>当参数列表太长（如：<code>func(p1, p2, p3){...}</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。<br><a id="more"></a><br>坑点示例：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">it(<span class="string">"why any(Number) can not be replaced by any(Object)?"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> foo = jasmine.createSpy(<span class="string">'foo'</span>);</div><div class="line">  foo(<span class="number">12</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</div><div class="line">  expect(foo).toHaveBeenCalledWith(jasmine.any(<span class="built_in">Number</span>), jasmine.any(<span class="built_in">Function</span>));</div><div class="line">  expect(foo).toHaveBeenCalledWith(jasmine.any(<span class="built_in">Object</span>), jasmine.any(<span class="built_in">Function</span>)); <span class="comment">// will fail</span></div><div class="line">  expect(foo).toHaveBeenCalledWith(<span class="number">2</span>, jasmine.any(<span class="built_in">Object</span>)); <span class="comment">// will fail</span></div><div class="line">  expect(foo).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything());</div><div class="line"></div><div class="line">  <span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line">  <span class="keyword">var</span> a = <span class="keyword">new</span> A();</div><div class="line">  expect(a).toEqual(jasmine.any(<span class="built_in">Object</span>));</div><div class="line">  expect(a).toEqual(jasmine.any(A));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
@@ -542,7 +542,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -559,7 +559,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
