@@ -1,6 +1,7 @@
 ---
 title: 识别门牌号的移动应用
 date: 2017-03-01 21:22:13
+comments: true
 categories:
 - Machine Learning
 tags:

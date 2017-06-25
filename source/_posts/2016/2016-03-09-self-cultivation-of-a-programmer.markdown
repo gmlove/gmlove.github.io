@@ -2,7 +2,7 @@
 layout: post
 title: "程序员的自我修养"
 date: 2016-03-09 09:19:32 +0800
-comments: true
+comments: false
 tags: 
 - personal
 ---

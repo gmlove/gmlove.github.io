@@ -1,6 +1,7 @@
 ---
 title: 深入探索生成对抗网络（一）
 date: 2017-06-21 10:55:19
+comments: true
 categories:
 - Machine Learning
 tags:

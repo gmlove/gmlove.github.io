@@ -1,6 +1,7 @@
 ---
 title: 理解conv2d及其梯度的计算过程
 date: 2017-04-15 11:48:56
+comments: true
 categories:
 - Machine Learning
 tags:

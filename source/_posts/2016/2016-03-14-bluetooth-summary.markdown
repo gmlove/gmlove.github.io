@@ -2,7 +2,7 @@
 layout: post
 title: "蓝牙知识学习"
 date: 2016-03-14 16:53:40 +0800
-comments: true
+comments: false
 categories: 
 - IoT
 ---

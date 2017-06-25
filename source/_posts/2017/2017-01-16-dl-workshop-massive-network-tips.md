@@ -1,6 +1,7 @@
 ---
 title: 大规模tensorflow网络的一些技巧
 date: 2017-01-16 19:45:53
+comments: true
 categories:
 - Machine Learning
 tags:

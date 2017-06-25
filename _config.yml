@@ -72,19 +72,6 @@ deploy:
   branch: master
   repo: git@github.com:gmlove/gmlove.github.io.git
 
-since: 2015
-creative_commons: by-nc-sa
-social:
-  GitHub: https://github.com/gmlove
-social_icons:
-  enable: true
-  # Icon Mappings
-  GitHub: github
-baidu_analytics: 7438a320b8fb9e84348971d3c0cde17d
-google_analytics: UA-88944761-1
-
-jiathis: true
-
 search:
   path: search.xml
   field: post
