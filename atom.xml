@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://brightliao.me/"/>
-  <updated>2017-06-24T08:53:04.000Z</updated>
+  <updated>2017-06-25T05:51:33.000Z</updated>
   <id>http://brightliao.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://brightliao.me/2017/06/21/dive-into-gan/"/>
     <id>http://brightliao.me/2017/06/21/dive-into-gan/</id>
     <published>2017-06-21T02:55:19.000Z</published>
-    <updated>2017-06-24T08:53:04.000Z</updated>
+    <updated>2017-06-25T05:51:33.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第一部分。</p>
 <h2 id="生成对抗网络介绍"><a href="#生成对抗网络介绍" class="headerlink" title="生成对抗网络介绍"></a>生成对抗网络介绍</h2><h3 id="什么是生成对抗网络？"><a href="#什么是生成对抗网络？" class="headerlink" title="什么是生成对抗网络？"></a>什么是生成对抗网络？</h3><p>从这个名称来看，我们可以了解到，这个网络是用一种对抗方法去生成数据的。和其他的机器学习模型相比，生成对抗网络里面最炫酷的理念莫过于给机器学习引入了对抗。纵观地球上的生物们的成长和发展路线就会发现，物竞天择，适者生存，万物都是在不停的和其他事物对抗中成长和发展的。生成对抗网络就像我们玩下面的格斗游戏一样，我们的学习过程就是，不断找其他对手对抗，在对抗中积累经验，提升自己的技能。</p>
@@ -218,7 +218,7 @@
     <link href="http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/"/>
     <id>http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/</id>
     <published>2017-04-15T03:48:56.000Z</published>
-    <updated>2017-04-15T10:27:21.000Z</updated>
+    <updated>2017-06-25T05:51:57.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。</p>
 <h2 id="卷积计算过程"><a href="#卷积计算过程" class="headerlink" title="卷积计算过程"></a>卷积计算过程</h2><p>在卷积神经网络中，卷积计算过程可以通过下面的动图（来自<a href="https://docs.google.com/presentation/d/1TVixw6ItiZ8igjp6U17tcgoFrLSaHWQmMOwjlgQY9co/pub?slide=id.g1245051c73_0_2184" target="_blank" rel="external">此处</a>）来理解：</p>
@@ -350,7 +350,7 @@
     <link href="http://brightliao.me/2017/03/01/recognize-house-number/"/>
     <id>http://brightliao.me/2017/03/01/recognize-house-number/</id>
     <published>2017-03-01T13:22:13.000Z</published>
-    <updated>2017-03-04T05:31:28.000Z</updated>
+    <updated>2017-06-25T05:51:57.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。</p>
 <h2 id="问题导入"><a href="#问题导入" class="headerlink" title="问题导入"></a>问题导入</h2><h3 id="提取门牌号进行地图标注"><a href="#提取门牌号进行地图标注" class="headerlink" title="提取门牌号进行地图标注"></a>提取门牌号进行地图标注</h3><p>先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找到地图中对应的位置了，事实上google地图就是通过训练这样的机器学习模型来进行地图信息标注的。要解决这个问题，可以读取google街景中的照片数据，然后训练一个机器学习模型来提取门牌号信息。如下图所示，当我们可以识别图片中的门牌号”42”了，我们就可以在地图上面进行标注了。</p>
@@ -459,7 +459,7 @@
     <link href="http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/"/>
     <id>http://brightliao.me/2017/01/16/dl-workshop-massive-network-tips/</id>
     <published>2017-01-16T11:45:53.000Z</published>
-    <updated>2017-01-22T03:07:40.000Z</updated>
+    <updated>2017-06-25T05:51:57.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。</p>
 <h2 id="大规模网络的特征"><a href="#大规模网络的特征" class="headerlink" title="大规模网络的特征"></a>大规模网络的特征</h2><p>首先我们来看一下用什么来衡量网络规模。</p>
@@ -764,11 +764,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
-    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
+    
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
@@ -1092,11 +1092,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
-    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
+    
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
@@ -1482,7 +1482,7 @@
     <link href="http://brightliao.me/2016/04/25/docker-and-micro-service/"/>
     <id>http://brightliao.me/2016/04/25/docker-and-micro-service/</id>
     <published>2016-04-25T10:04:14.000Z</published>
-    <updated>2016-12-14T05:32:49.000Z</updated>
+    <updated>2017-06-25T05:52:58.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="微服务的优势和带来的挑战"><a href="#微服务的优势和带来的挑战" class="headerlink" title="微服务的优势和带来的挑战"></a>微服务的优势和带来的挑战</h2><h2 id="Docker给微服务部署带来的便利"><a href="#Docker给微服务部署带来的便利" class="headerlink" title="Docker给微服务部署带来的便利"></a>Docker给微服务部署带来的便利</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="external">https://segmentfault.com/a/1190000004998167</a></p>
 ]]></content>
