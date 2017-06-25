@@ -80,22 +80,10 @@ social_icons:
   enable: true
   # Icon Mappings
   GitHub: github
-duoshuo_shortname: gmlove
-duoshuo_share: true
-duoshuo_info:
-  ua_enable: true
-  admin_enable: true
-  user_id: 6363615457894729000
-  admin_nickname: 作者Bright
 baidu_analytics: 7438a320b8fb9e84348971d3c0cde17d
 google_analytics: UA-88944761-1
 
 jiathis: true
-
-leancloud_visitors:
-  enable: true
-  app_id: 4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz
-  app_key: 9jxpPRQJh9dxgB6Ndb1HYuKO
 
 search:
   path: search.xml

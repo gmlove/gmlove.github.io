@@ -16,7 +16,7 @@ Welcome to my blog!
 ### Notice:
 
 - Don't run `hexo generate` while `hexo serve` is running
-- Menu can only be enabled/disabled by changing 'themes/next/_config.yml'
+- Change settings separately in `theme/next/_config.yml` 
 
 ### Added plugins
 
