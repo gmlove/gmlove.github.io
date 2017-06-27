@@ -147,8 +147,6 @@ LP GAN除了能用于生成更清晰的图片之外，他还给了我们如下�
 
 从上图中可以看到我们可以从左边的文本描述来生成右边的关于鸟的图像。生成的图像和文本描述里面的鸟的胸，冠还有羽翼颜色等都能较好的匹配起来。
 
-### 文本生成图像模型
-
 我们直接来看一下他们用到的模型吧。
 
 ![Structure of Text to Image model](/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image-structure.png)
