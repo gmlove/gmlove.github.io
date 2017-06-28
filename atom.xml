@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://brightliao.me/"/>
-  <updated>2017-06-28T03:18:19.000Z</updated>
+  <updated>2017-06-28T03:21:11.000Z</updated>
   <id>http://brightliao.me/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Dive Into Gan - Continued</title>
+    <title>深入探索生成对抗网络（二）</title>
     <link href="http://brightliao.me/2017/06/26/dive-into-gan-continued/"/>
     <id>http://brightliao.me/2017/06/26/dive-into-gan-continued/</id>
     <published>2017-06-26T11:19:38.000Z</published>
-    <updated>2017-06-28T03:18:19.000Z</updated>
+    <updated>2017-06-28T03:21:11.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第二部分。第一部分在<a href="../21/dive-into-gan/">这里</a></p>
 <p>上一篇中介绍了GAN的历史及发展，详细研究了GAN的模型和思想，还用tensorflow做了一个简单的实现。这一部分我们将看看GAN模型在近两年取得的进步以及未来可能的发展方向。同时，我们还会在上一次实现过的GAN例子上面，做一些增强，让GAN可以根据我们的需要来生成图像。</p>
@@ -966,11 +966,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
+    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
-    
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
@@ -1294,11 +1294,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
+    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
-    
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
