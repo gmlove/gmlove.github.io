@@ -1,5 +1,5 @@
 ---
-title: dive into gan - continued
+title: 深入探索生成对抗网络（二）
 date: 2017-06-26 19:19:38
 comments: true
 categories:
