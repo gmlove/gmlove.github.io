@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://brightliao.me/"/>
-  <updated>2017-06-28T03:22:13.000Z</updated>
+  <updated>2017-10-25T02:03:03.000Z</updated>
   <id>http://brightliao.me/</id>
   
   <author>
@@ -14,6 +14,136 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>本地搭建OpenShift集群指南</title>
+    <link href="http://brightliao.me/2017/10/24/local-openshift-cluster-installation-guide/"/>
+    <id>http://brightliao.me/2017/10/24/local-openshift-cluster-installation-guide/</id>
+    <published>2017-10-24T06:16:19.000Z</published>
+    <updated>2017-10-25T02:03:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h1 id="Local-Openshift-Cluster-Installation-Guide"><a href="#Local-Openshift-Cluster-Installation-Guide" class="headerlink" title="Local Openshift Cluster Installation Guide"></a>Local Openshift Cluster Installation Guide</h1><h2 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h2><h3 id="Hosts"><a href="#Hosts" class="headerlink" title="Hosts"></a>Hosts</h3><ul>
+<li>1 control host, 1 master and 3 nodes</li>
+<li>centos 7</li>
+</ul>
+<h3 id="Install-packages-on-control-host"><a href="#Install-packages-on-control-host" class="headerlink" title="Install packages on control host"></a>Install packages on control host</h3><ul>
+<li>Run <code>yum install -y python2-passlib httpd-tools</code></li>
+</ul>
+<a id="more"></a>
+<h3 id="Install-and-config-dns-on-control-host"><a href="#Install-and-config-dns-on-control-host" class="headerlink" title="Install and config dns on control host"></a>Install and config dns on control host</h3><ul>
+<li>Run <code>yum install etcd</code></li>
+<li>Download or build skydns and run <code>./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53</code></li>
+<li><p>Create dns items</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.92&quot;&#125;&apos;</div><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.77&quot;&#125;&apos;</div><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.89&quot;&#125;&apos;</div><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.76&quot;&#125;&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Configure node dns file <code>/etc/resolv.conf</code> with contents:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">search oc.tw default.svc cluster.local</div><div class="line">nameserver 127.0.0.1</div><div class="line">nameserver 10.202.129.100</div></pre></td></tr></table></figure>
+</li>
+<li><p>On every node, run <code>hostname node*.oc.tw</code> to correct the hostname (make it the same as it’s dns name)</p>
+</li>
+</ul>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><ul>
+<li>clone openshift repo: <code>git clone https://github.com/openshift/openshift-ansible.git</code></li>
+<li>Prepare hosts file with contents</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"># Create OSEv3 group that contains the masters and nodes groups</div><div class="line">[OSEv3:children]</div><div class="line">masters</div><div class="line">nodes</div><div class="line">etcd</div><div class="line">nfs</div><div class="line"></div><div class="line"># Set variables common for all OSEv3 hosts</div><div class="line">[OSEv3:vars]</div><div class="line"># SSH user, this user should allow ssh based auth without requiring a password</div><div class="line">ansible_ssh_user=root</div><div class="line">openshift_deployment_type=origin</div><div class="line">openshift_release=3.6.0</div><div class="line">openshift_disable_check=disk_availability,docker_storage,memory_availability,docker_image_availability,package_availability,package_version</div><div class="line">openshift_metrics_install_metrics=true</div><div class="line">openshift_master_default_subdomain=apps.oc.tw</div><div class="line">openshift_logging_install_logging=true</div><div class="line">openshift_master_cluster_public_hostname=master.oc.tw</div><div class="line">openshift_hosted_registry_storage_kind=nfs</div><div class="line">openshift_hosted_registry_storage_access_modes=[&apos;ReadWriteMany&apos;]</div><div class="line">openshift_hosted_registry_storage_nfs_directory=/exports</div><div class="line">openshift_hosted_registry_storage_nfs_options=&apos;*(rw,root_squash)&apos;</div><div class="line">openshift_hosted_registry_storage_volume_name=registry</div><div class="line">openshift_hosted_registry_storage_volume_size=10Gi</div><div class="line">openshift_logging_storage_kind=nfs</div><div class="line">openshift_logging_storage_access_modes=[&apos;ReadWriteOnce&apos;]</div><div class="line">openshift_logging_storage_nfs_directory=/exports</div><div class="line">openshift_logging_storage_nfs_options=&apos;*(rw,root_squash)&apos;</div><div class="line">openshift_logging_storage_volume_name=logging</div><div class="line">openshift_logging_storage_volume_size=10Gi</div><div class="line">openshift_metrics_storage_kind=nfs</div><div class="line">openshift_metrics_storage_access_modes=[&apos;ReadWriteOnce&apos;]</div><div class="line">openshift_metrics_storage_nfs_directory=/exports</div><div class="line">openshift_metrics_storage_nfs_options=&apos;*(rw,root_squash)&apos;</div><div class="line">openshift_metrics_storage_volume_name=metrics</div><div class="line">openshift_metrics_storage_volume_size=10Gi</div><div class="line"></div><div class="line">openshift_master_identity_providers=[&#123;&apos;name&apos;:&apos;htpasswd_auth&apos;,&apos;login&apos;:&apos;true&apos;,&apos;challenge&apos;:&apos;true&apos;,&apos;kind&apos;:&apos;HTPasswdPasswordIdentityProvider&apos;,&apos;filename&apos;:&apos;/etc/origin/master/htpasswd&apos;&#125;]</div><div class="line"></div><div class="line"># host group for masters</div><div class="line">[masters]</div><div class="line">master.oc.tw openshift_public_hostname=master.oc.tw</div><div class="line"></div><div class="line"># host group for nodes, includes region info</div><div class="line">[nodes]</div><div class="line">master.oc.tw openshift_public_hostname=master.oc.tw</div><div class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</div><div class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</div><div class="line">node3.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node3.oc.tw</div><div class="line"></div><div class="line">[etcd]</div><div class="line">master.oc.tw openshift_public_hostname=master.oc.tw</div><div class="line"></div><div class="line">[nfs]</div><div class="line">master.oc.tw</div></pre></td></tr></table></figure>
+<ul>
+<li>run <code>ansible-playbook ./hosts ~/openshift-ansible/playbooks/byo/config.yml</code> to install</li>
+<li>run <code>ansible-playbook ./hosts ~/openshift-ansible/playbooks/adhoc/uninstall.yml</code> to uninstall. (ensure configurations are all removed, by checking <code>/etc/origin</code> folder on every node)</li>
+</ul>
+<h3 id="NetworkManager-must-be-installed"><a href="#NetworkManager-must-be-installed" class="headerlink" title="NetworkManager must be installed"></a>NetworkManager must be installed</h3><ul>
+<li>install NetworkManager on each node: run <code>yum install -y NetworkManager &amp;&amp; systemctl enable NetworkManager &amp;&amp; systemctl start NetworkManager</code> and <code>hostname master.oc.tw</code> to correct the hostname</li>
+<li>pay attention to master/node restarting, since it will reconfigure the hostname, quickly run <code>hostname master.oc.tw</code> when you found out that (maybe configure NetworkManager to assign a static hostname will work as well)</li>
+</ul>
+<h3 id="Cannot-find-file-etc-origin-node-resolv-conf"><a href="#Cannot-find-file-etc-origin-node-resolv-conf" class="headerlink" title="Cannot find file /etc/origin/node/resolv.conf"></a>Cannot find file <code>/etc/origin/node/resolv.conf</code></h3><ul>
+<li>Create resolv.conf on each node: <code>cp /etc/resolv.conf /etc/origin/node/resolv.conf</code></li>
+</ul>
+<h3 id="Cannot-resolve-external-dns-eg-github-com-from-container"><a href="#Cannot-resolve-external-dns-eg-github-com-from-container" class="headerlink" title="Cannot resolve external dns (eg. github.com) from container"></a>Cannot resolve external dns (eg. github.com) from container</h3><ul>
+<li>edit file <code>/etc/dnsmasq.d/origin-dns.conf</code> to add <code>server=10.202.129.100</code></li>
+<li>restart dnsmasq: <code>systemctl restart dnsmasq.service</code></li>
+</ul>
+<h3 id="sti-builder-cannot-push-image-to-docker-registry-default-svc-5000-no-route-to-host"><a href="#sti-builder-cannot-push-image-to-docker-registry-default-svc-5000-no-route-to-host" class="headerlink" title="sti builder cannot push image to docker-registry.default.svc:5000 (no route to host)"></a>sti builder cannot push image to <code>docker-registry.default.svc:5000</code> (no route to host)</h3><ul>
+<li>edit file /etc/resolve.conf on node with contents:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">search oc.tw default.svc cluster.local</div><div class="line">nameserver 127.0.0.1</div><div class="line">nameserver 10.202.129.100</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Common-ways-to-debug"><a href="#Common-ways-to-debug" class="headerlink" title="Common ways to debug"></a>Common ways to debug</h3><ul>
+<li><code>systemctl status *.service</code></li>
+<li><code>journalctl -xe</code></li>
+<li><code>journalctl --unit dnsmasq</code></li>
+</ul>
+<h2 id="nfs-pv-configuration"><a href="#nfs-pv-configuration" class="headerlink" title="nfs pv configuration"></a>nfs pv configuration</h2><h3 id="Errors-from-oc-describe-pv-pv0001"><a href="#Errors-from-oc-describe-pv-pv0001" class="headerlink" title="Errors from oc describe pv pv0001"></a>Errors from <code>oc describe pv pv0001</code></h3><blockquote>
+<p>Recycle failed: unexpected error creating recycler pod:  pods “recycler-for-pv0001” is forbidden: service account openshift-infra/pv-recycler-controller was not found, retry after the service account is created</p>
+</blockquote>
+<ul>
+<li>Create sa: <code>oc create sa pv-recycler-controller -n openshift-infra</code></li>
+<li>Config scc:<br>  <code>oadm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:pv-recycler-controller</code></li>
+</ul>
+<h3 id="Create-nfs-pv"><a href="#Create-nfs-pv" class="headerlink" title="Create nfs pv"></a>Create nfs pv</h3><ul>
+<li>Edit <code>/etc/exports.d/openshift-ansible.exports</code>, add lines like <code>/exports/pvs/pv0001 *(rw,root_squash)</code></li>
+<li>Run: <code>mv /exports/pvs/pv0001 &amp;&amp; chown nfsnobody:nfsnobody /exports/pv0001 &amp;&amp; chmod 777 /exports/pv0001</code></li>
+<li>Ensure mount in nodes work well by run <code>mount -t nfs master.oc.tw:/exports/pvs/pv0001 ./t</code></li>
+<li><p>Create <code>pv.yml</code> with below and run <code>oc create -f pv.yml</code> to create pv:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: PersistentVolume</div><div class="line">metadata:</div><div class="line">  name: pv0005</div><div class="line">spec:</div><div class="line">  capacity:</div><div class="line">    storage: 10Gi</div><div class="line">  accessModes:</div><div class="line">  - ReadWriteOnce</div><div class="line">  nfs:</div><div class="line">    path: /exports/pvs/pv0005</div><div class="line">    server: master.oc.tw</div><div class="line">  persistentVolumeReclaimPolicy: Recycle</div></pre></td></tr></table></figure>
+</li>
+<li><p>Debug:</p>
+<ul>
+<li><code>ps aux | grep mount</code> on node to see if it succeeded</li>
+<li><code>oc describe po/xxx</code> on master to see the status of the container</li>
+</ul>
+</li>
+</ul>
+<h2 id="Local-service-dns-resolution"><a href="#Local-service-dns-resolution" class="headerlink" title="Local service dns resolution"></a>Local service dns resolution</h2><ul>
+<li>Find router node: <code>oc project default &amp;&amp; oc get all</code> to find router pod and <code>oc describe po/router-1-gsm7v</code> to find the node and record IP of that node</li>
+<li>Edit local hosts file <code>/etc/hosts</code> and add contents<br>  10.202.128.77 kibana.apps.oc.tw hawkular-metrics.apps.oc.tw nodejs-mongo-persistent-test.apps.oc.tw</li>
+</ul>
+<h2 id="Common-management-tasks"><a href="#Common-management-tasks" class="headerlink" title="Common management tasks"></a>Common management tasks</h2><ul>
+<li>Login as admin: ssh into master and you’ll be admin directly when you run <code>oc</code> commands</li>
+<li>Add user through htpasswd: run <code>htpasswd -b /etc/origin/master/htpasswd admin admin</code> on master</li>
+<li>Add project to user: <code>oadm policy add-role-to-user admin gmliao -n logging</code></li>
+</ul>
+<h2 id="Node-Management"><a href="#Node-Management" class="headerlink" title="Node Management"></a>Node Management</h2><h3 id="Add-node"><a href="#Add-node" class="headerlink" title="Add node"></a>Add node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced" target="_blank" rel="external">https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced</a></p>
+<ul>
+<li>Add <code>new_nodes</code> or <code>new_masters</code> to <code>[OSEv3:vars]</code> section</li>
+<li><p>Add a new section:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[new_nodes]</div><div class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</div><div class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</div></pre></td></tr></table></figure>
+</li>
+<li><p>Run installation: <code>ansible-playbook -i hosts ~/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml</code></p>
+</li>
+<li>Move nodes configured in <code>[new_nodes]</code> section to <code>[nodes]</code> section</li>
+</ul>
+<h3 id="Remove-node"><a href="#Remove-node" class="headerlink" title="Remove node"></a>Remove node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes" target="_blank" rel="external">https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes</a></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://docs.openshift.org/latest/install_config/install/advanced_install.html" target="_blank" rel="external">https://docs.openshift.org/latest/install_config/install/advanced_install.html</a></li>
+<li><a href="https://kubernetes.io/docs/setup/" target="_blank" rel="external">https://kubernetes.io/docs/setup/</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Local-Openshift-Cluster-Installation-Guide&quot;&gt;&lt;a href=&quot;#Local-Openshift-Cluster-Installation-Guide&quot; class=&quot;headerlink&quot; title=&quot;Local Openshift Cluster Installation Guide&quot;&gt;&lt;/a&gt;Local Openshift Cluster Installation Guide&lt;/h1&gt;&lt;h2 id=&quot;Preparation&quot;&gt;&lt;a href=&quot;#Preparation&quot; class=&quot;headerlink&quot; title=&quot;Preparation&quot;&gt;&lt;/a&gt;Preparation&lt;/h2&gt;&lt;h3 id=&quot;Hosts&quot;&gt;&lt;a href=&quot;#Hosts&quot; class=&quot;headerlink&quot; title=&quot;Hosts&quot;&gt;&lt;/a&gt;Hosts&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;1 control host, 1 master and 3 nodes&lt;/li&gt;
+&lt;li&gt;centos 7&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;Install-packages-on-control-host&quot;&gt;&lt;a href=&quot;#Install-packages-on-control-host&quot; class=&quot;headerlink&quot; title=&quot;Install packages on control host&quot;&gt;&lt;/a&gt;Install packages on control host&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Run &lt;code&gt;yum install -y python2-passlib httpd-tools&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="DevOps" scheme="http://brightliao.me/categories/devops/"/>
+    
+    
+      <category term="kubernetes" scheme="http://brightliao.me/tags/kubernetes/"/>
+    
+      <category term="DevOps" scheme="http://brightliao.me/tags/devops/"/>
+    
+      <category term="OpenShift" scheme="http://brightliao.me/tags/openshift/"/>
+    
+      <category term="PAAS" scheme="http://brightliao.me/tags/paas/"/>
+    
+      <category term="Cluster" scheme="http://brightliao.me/tags/cluster/"/>
+    
+  </entry>
   
   <entry>
     <title>深入探索生成对抗网络（二）</title>
@@ -968,11 +1098,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
+    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
-    
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
@@ -1296,11 +1426,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
+    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
-    
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
@@ -1728,34 +1858,6 @@
     
     
       <category term="那些年我们踩过的坑" scheme="http://brightliao.me/tags/%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E4%BB%AC%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Spring Boot 迁移</title>
-    <link href="http://brightliao.me/2016/03/30/migrate-to-spring-boot/"/>
-    <id>http://brightliao.me/2016/03/30/migrate-to-spring-boot/</id>
-    <published>2016-03-30T11:07:57.000Z</published>
-    <updated>2016-12-14T05:32:05.000Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><h3 id="error-page"><a href="#error-page" class="headerlink" title="error page"></a>error page</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">error-page</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">location</span>&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></div></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> ServerProperties <span class="title">serverProperties</span> <span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ServerProperties() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customize</span><span class="params">(ConfigurableEmbeddedServletContainer container)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>.customize(container);</div><div class="line">            container.addErrorPages(<span class="keyword">new</span> ErrorPage(HttpStatus.NOT_FOUND, <span class="string">"/error/404"</span>));</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="spring-context-xml"><a href="#spring-context-xml" class="headerlink" title="spring-context.xml"></a>spring-context.xml</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ImportResource</span>(<span class="string">"classpath:spring-context.xml"</span>)</div><div class="line"><span class="meta">@EnableAdminServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebApplication</span> <span class="keyword">extends</span> <span class="title">SpringBootServletInitializer</span> </span>&#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="log-back-upgrade"><a href="#log-back-upgrade" class="headerlink" title="log back upgrade"></a>log back upgrade</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- change include to included for file that will be included, like this: --&gt;</span></div><div class="line"><span class="comment">&lt;!-- http://logback.qos.ch/manual/configuration.html --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">included</span>&gt;</span></div><div class="line">...</div><div class="line"><span class="tag">&lt;/<span class="name">included</span>&gt;</span></div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css&quot;&gt;&lt;h2 id=&quot;web-xml&quot;&gt;&lt;a href=&quot;#we
-    
-    </summary>
-    
-    
-      <category term="java" scheme="http://brightliao.me/tags/java/"/>
-    
-      <category term="spring" scheme="http://brightliao.me/tags/spring/"/>
-    
-      <category term="spring-boot" scheme="http://brightliao.me/tags/spring-boot/"/>
     
   </entry>
   
