@@ -425,300 +425,170 @@
 
       
         
-          
-            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h2><ul>
+          <h2 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h2><ul>
 <li>A simple nodejs application</li>
 <li>Add mongodb to the application</li>
 <li>CI/CD for the application</li>
 <li>Logging, Monitoring, Debugging</li>
 </ul>
 <h2 id="A-simple-nodejs-application"><a href="#A-simple-nodejs-application" class="headerlink" title="A simple nodejs application"></a>A simple nodejs application</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>In this section, We are going to create a nodejs project with mongodb in OpenShift. We assume that you have done all the preparation work listed in the invitation email of this workshop. And there’re some additional steps to  get yourself ready.</p>
-<h3 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h3><ul>
-<li><p>Install <code>oc</code> in your mac:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">brew update </div><div class="line">brew install openshift-cli</div><div class="line">oc version                     # the version should be oc v1.5.1+7b451fc</div></pre></td></tr></table></figure>
-<p>You can also download it’s here: <a href="https://github.com/openshift/origin/releases/download/v1.5.1/openshift-origin-client-tools-v1.5.1-7b451fc-mac.zip" target="_blank" rel="external">https://github.com/openshift/origin/releases/download/v1.5.1/openshift-origin-client-tools-v1.5.1-7b451fc-mac.zip</a></p>
-</li>
-</ul>
-<ul>
-<li><p>fork <a href="https://github.com/openshift/nodejs-ex" target="_blank" rel="external">the demo project</a> to your own github account and get the repository url:</p>
-<p><code>https://github.com/&lt;your-github-name&gt;/nodejs-ex.git</code></p>
-</li>
-<li><p>clone code  </p>
-<p><code>git clone https://github.com/&lt;your-github-name&gt;/nodejs-ex.git</code></p>
-</li>
-<li><p>clone configuration files</p>
-<p><code>git clone https://github.com/gmlove/openshift-workshop.git</code></p>
-<p>Files in this repo will be used later.</p>
-</li>
-<li><p>log on to OpenShift web console</p>
-<p>In browser, navigate to <code>https://13.228.41.255:8443</code> and login with any username and password you’d like to use. OpenShift will create that account for you.</p>
-</li>
-</ul>
-<h3 id="Login"><a href="#Login" class="headerlink" title="Login"></a>Login</h3><ul>
-<li><p><code>oc login https://13.228.41.255:8443</code>  and input your username and password:</p>
-<blockquote>
-<p>Authentication required for <a href="https://13.228.41.255:8443" target="_blank" rel="external">https://13.228.41.255:8443</a> (openshift) </p>
-<p>Username: <your-username> </your-username></p>
-<p>Password: <your-password></your-password></p>
-</blockquote>
-</li>
-<li><p>check status</p>
-<p><code>oc status</code></p>
-<blockquote>
-<p>You don’t have any projects. You can try to create a new project, by running</p>
-<p>oc new-project <projectname></projectname></p>
-</blockquote>
-</li>
-<li><p>check project</p>
-<p><code>oc project</code></p>
-<blockquote>
-<p>No project has been set. Pass a project name to make that the default.</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="Create-project"><a href="#Create-project" class="headerlink" title="Create project"></a>Create project</h3><p>  <code>oc new-project &lt;your-project-name&gt;</code></p>
-<h3 id="Create-applicatioin"><a href="#Create-applicatioin" class="headerlink" title="Create applicatioin"></a>Create applicatioin</h3><ul>
-<li><p>create a new application with your own git repository url</p>
-<p><code>oc new-app https://github.com/&lt;your-github-name&gt;/nodejs-ex.git</code></p>
-<blockquote>
-<p>you can specify the application name with a parameter <code>--name &lt;application-name&gt;</code></p>
-</blockquote>
-</li>
-</ul>
-<h3 id="Create-route"><a href="#Create-route" class="headerlink" title="Create route"></a>Create route</h3><ul>
-<li><p>expose service</p>
-<p><code>oc expose service/nodejs-ex</code></p>
-</li>
-<li><p>get route url</p>
-<p><code>oc get route</code> </p>
-<blockquote>
-<p>your route url should look like this: </p>
-<p>nodejs-ex-\<your-project-name\>.13.228.41.255.xip.io</your-project-name\></p>
-</blockquote>
-</li>
-<li><p>check out the url in web browser you’ll see the welcome page</p>
-</li>
-</ul>
-<h3 id="Build-amp-deploy"><a href="#Build-amp-deploy" class="headerlink" title="Build &amp; deploy"></a>Build &amp; deploy</h3><ul>
-<li><p>build</p>
-<p><code>oc start-build nodejs-ex</code></p>
-<blockquote>
-<p>A build will be triggered automatically once the application is created successfully.</p>
-</blockquote>
-</li>
-<li><p>deploy  </p>
-<p><code>oc deploy --latest dc/nodejs-ex</code></p>
-<blockquote>
-<p>A deployment will be triggered automatically when a build is finished successfully.</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="Add-Webhook"><a href="#Add-Webhook" class="headerlink" title="Add Webhook"></a>Add Webhook</h3><ul>
-<li><p>Copy webhook url</p>
-<p>In OpenShift web console, go to <code>Builds</code> -&gt; click <code>&lt;your-build-config-name&gt;</code> -&gt; switch to <code>Configuraton</code> tab -&gt;<br>copy the url on the right of <code>GitHub Webhook URL:</code></p>
-</li>
-<li><p>Config Webhook in github</p>
-<ul>
-<li><p>Go to web browser with url: <code>https://github.com/&lt;your-github-name&gt;/nodejs-ex.git</code></p>
-</li>
-<li><p>Switch to <code>Settings</code> tab below the project name</p>
-</li>
-<li><p>Click <code>Webhooks</code> item in left menu panel and then Click <code>Add Webhook</code> button</p>
-</li>
-<li><p>Paste the webhook URL in field <code>Payload URL</code>, select <code>application/json</code> in <code>Content type</code> field, click <code>disable ssl verification</code></p>
-</li>
-<li><p>Click <code>Add webhook</code> at the bottom and you’ll return to previous page</p>
-</li>
-<li><p>Github will test the webhook automatically, if succeed, it will place a green mark before the url.</p>
-</li>
-<li><p>done</p>
-</li>
-</ul>
-</li>
-<li><p>Vefiry Webhook</p>
-<ul>
-<li><p>modify code and commit your changes</p>
-<p>modify \<code-dir\>/nodejs-ex/views/index.html line 219</code-dir\></p>
-<p><code>Welcome to your Node.js</code> to <code>This is my awesome Node.js</code></p>
-<p>push your changes to github</p>
-</li>
-<li><p>check your changes in web browser</p>
-<p>in OpenShift web console you’ll see a build &amp; deployment is triggered automatically</p>
-<p>you’ll see the tilte of the page changed from <code>Welcome to your Node.js</code> to <code>This is my awesome Node.js</code> afterh the app is re-deployed.</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Rollback"><a href="#Rollback" class="headerlink" title="Rollback"></a>Rollback</h3><ul>
-<li><p>rollback to the last successful deployment</p>
-<p><code>oc rollback dc/nodejs-ex</code> or <code>oc rollout undo dc/nodejs-ex</code></p>
-<p>you’ll get the following messages:</p>
-<blockquote>
-<p> Warning: the following images triggers were disabled: nodejs-ex:latest</p>
-<p> You can re-enable them with: oc set triggers dc/nodejs-ex –auto</p>
-</blockquote>
-<p>The message means after a build finished, OpenShift will no longer trigger an automatic deployment. You can re-enable it use the command given in the message if you would like to.</p>
-<blockquote>
-<p>You can also rollback to a specified deployment with the following command:</p>
-<p><code>oc rollout undo dc/nodejs-ex --to-revision=1</code> or <code>oc rollback nodejs-ex --to-version=1</code></p>
-</blockquote>
-</li>
-</ul>
-<h3 id="Scale-up-down"><a href="#Scale-up-down" class="headerlink" title="Scale up/down"></a>Scale up/down</h3><ul>
-<li><p>scale manually</p>
-<p>scale up to 2 pods</p>
-<p><code>oc scale dc/nodejs-ex --replicas=2</code></p>
-<p>now you can scale down to 1 pod</p>
-<p><code>oc scale dc/nodejs-ex --replicas=1</code></p>
-</li>
-<li><p>auto scaling</p>
-<ul>
-<li><p>edit DeployConfig in web console</p>
-<p><code>Applications</code> -&gt; <code>Deployment</code> -&gt; <code>&lt;your-deploy-config-name&gt;</code> -&gt; <code>Action</code> menu -&gt; <code>Edit YAML</code></p>
-<p>replace <code>resources:{}</code> with the following content:</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">resources:</span></div><div class="line"><span class="attr">  limits:</span></div><div class="line"><span class="attr">    cpu:</span> <span class="number">100</span><span class="string">m</span></div><div class="line"><span class="attr">  requests:</span></div><div class="line"><span class="attr">    cpu:</span> <span class="number">100</span><span class="string">m</span></div></pre></td></tr></table></figure>
-<p>and the yaml script will looks like this:</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  containers:</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">nodejs-ex</span></div><div class="line"><span class="attr">      image:</span> <span class="string">&gt;-</span></div><div class="line">        <span class="number">172.30</span><span class="number">.1</span><span class="number">.1</span><span class="string">:5000/leojiangproject/nodejs-ex@sha256:eac764a3e2366e929dd00e8558d9433d3f81bf590e09340527a8e839cf0fe551</span></div><div class="line"><span class="attr">      ports:</span></div><div class="line"><span class="attr">        - containerPort:</span> <span class="number">8080</span></div><div class="line"><span class="attr">          protocol:</span> <span class="string">TCP</span></div><div class="line"><span class="attr">      resources:</span></div><div class="line"><span class="attr">        limits:</span></div><div class="line"><span class="attr">          cpu:</span> <span class="number">100</span><span class="string">m</span></div><div class="line"><span class="attr">        requests:</span></div><div class="line"><span class="attr">          cpu:</span> <span class="number">100</span><span class="string">m</span></div><div class="line"><span class="attr">      terminationMessagePath:</span> <span class="string">/dev/termination-log</span></div><div class="line"><span class="attr">      imagePullPolicy:</span> <span class="string">Always</span></div><div class="line"><span class="attr">  restartPolicy:</span> <span class="string">Always</span></div><div class="line"><span class="attr">  terminationGracePeriodSeconds:</span> <span class="number">30</span></div><div class="line"><span class="attr">  dnsPolicy:</span> <span class="string">ClusterFirst</span></div><div class="line"><span class="attr">  securityContext:</span> <span class="string">&#123;&#125;</span></div></pre></td></tr></table></figure>
-<p>Back to <code>overview</code> in web console, you’ll see an error at the top, click on the url and trust the site.</p>
-<p>Now you can see metrics in <code>overview</code> panel.</p>
-</li>
-<li><p>config autoscaler with command</p>
-<p><code>oc autoscale dc/nodejs-ex --min 1 --max 10 --cpu-percent=10</code></p>
-</li>
-<li><p>verify</p>
-<p>send batch request with command: <code>ab -n 1000 -c 100 http://&lt;route-of-your-application&gt;</code></p>
-<p>Wait and you’ll see the pod number is scaled to 2</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="Add-mongodb-to-the-application"><a href="#Add-mongodb-to-the-application" class="headerlink" title="Add mongodb to the application"></a>Add mongodb to the application</h2><h3 id="Deploy-a-database-with-persistent-volume"><a href="#Deploy-a-database-with-persistent-volume" class="headerlink" title="Deploy a database with persistent volume"></a>Deploy a database with persistent volume</h3><ul>
-<li><p><code>cd</code> to the directory where you downloaded the configuration files earlier.</p>
-</li>
-<li><p>crete secret</p>
-<p><code>oc create -f mongodb-secrets.yaml</code></p>
-</li>
-<li><p>check secret</p>
-<p><code>oc describe secret nodejs-ex</code></p>
-</li>
-<li><p>create persistent volume claim</p>
-<p><code>oc create -f mongodb-pvc.yaml</code></p>
-</li>
-<li><p>check persistent volume claim</p>
-<p><code>oc get pvc</code></p>
-</li>
-<li><p>create mongodb deployment config</p>
-<p><code>oc create -f mongodb-deploy-config.yaml</code></p>
-</li>
-<li><p>create a mongodb service</p>
-<p><code>oc create -f mongodb-service.yaml</code></p>
-</li>
-<li><p>trigger a deployment for mongodb (if not triggered automatically)</p>
-<p><code>oc rollout latest dc/mongodb</code></p>
-</li>
-</ul>
-<h3 id="Connect-nodejs-application-to-database"><a href="#Connect-nodejs-application-to-database" class="headerlink" title="Connect nodejs application to database"></a>Connect nodejs application to database</h3><ul>
-<li><p>change deployment config and add environment parameters</p>
-<p>In web console, go to <code>Applications</code> -&gt; <code>Deployment</code> -&gt; <code>&lt;your-deploy-config-name&gt;</code> -&gt; <code>Action</code> menu -&gt; <code>Edit YAML</code></p>
-<p>add the following content under <code>caontaners</code> tag:</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="attr">env:</span></div><div class="line"><span class="attr">  - name:</span> <span class="string">DATABASE_SERVICE_NAME</span></div><div class="line"><span class="attr">    value:</span> <span class="string">mongodb</span></div><div class="line"><span class="attr">  - name:</span> <span class="string">MONGODB_USER</span></div><div class="line"><span class="attr">    valueFrom:</span></div><div class="line"><span class="attr">      secretKeyRef:</span></div><div class="line"><span class="attr">        key:</span> <span class="string">database-user</span></div><div class="line"><span class="attr">        name:</span> <span class="string">nodejs-ex</span></div><div class="line"><span class="attr">  - name:</span> <span class="string">MONGODB_PASSWORD</span></div><div class="line"><span class="attr">    valueFrom:</span></div><div class="line"><span class="attr">      secretKeyRef:</span></div><div class="line"><span class="attr">        key:</span> <span class="string">database-password</span></div><div class="line"><span class="attr">        name:</span> <span class="string">nodejs-ex</span></div><div class="line"><span class="attr">  - name:</span> <span class="string">MONGODB_DATABASE</span></div><div class="line"><span class="attr">    value:</span> <span class="string">sampledb</span></div><div class="line"><span class="attr">  - name:</span> <span class="string">MONGODB_ADMIN_PASSWORD</span></div><div class="line"><span class="attr">    valueFrom:</span></div><div class="line"><span class="attr">      secretKeyRef:</span></div><div class="line"><span class="attr">        key:</span> <span class="string">database-admin-password</span></div><div class="line"><span class="attr">        name:</span> <span class="string">nodejs-ex</span></div></pre></td></tr></table></figure>
-<p>the resulting yaml script will looks like this:</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  containers:</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">nodejs-ex</span></div><div class="line"><span class="attr">      env:</span></div><div class="line"><span class="attr">        - name:</span> <span class="string">DATABASE_SERVICE_NAME</span></div><div class="line"><span class="attr">          value:</span> <span class="string">mongodb</span></div><div class="line"><span class="attr">        - name:</span> <span class="string">MONGODB_USER</span></div><div class="line"><span class="attr">          valueFrom:</span></div><div class="line"><span class="attr">            secretKeyRef:</span></div><div class="line"><span class="attr">              key:</span> <span class="string">database-user</span></div><div class="line"><span class="attr">              name:</span> <span class="string">nodejs-ex</span></div><div class="line"><span class="attr">        - name:</span> <span class="string">MONGODB_PASSWORD</span></div><div class="line"><span class="attr">          valueFrom:</span></div><div class="line"><span class="attr">            secretKeyRef:</span></div><div class="line"><span class="attr">              key:</span> <span class="string">database-password</span></div><div class="line"><span class="attr">              name:</span> <span class="string">nodejs-ex</span></div><div class="line"><span class="attr">        - name:</span> <span class="string">MONGODB_DATABASE</span></div><div class="line"><span class="attr">          value:</span> <span class="string">sampledb</span></div><div class="line"><span class="attr">        - name:</span> <span class="string">MONGODB_ADMIN_PASSWORD</span></div><div class="line"><span class="attr">          valueFrom:</span></div><div class="line"><span class="attr">            secretKeyRef:</span></div><div class="line"><span class="attr">              key:</span> <span class="string">database-admin-password</span></div><div class="line"><span class="attr">              name:</span> <span class="string">nodejs-ex</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>trigger a deployment for nodejs-ex</p>
-<p><code>oc rollout latest dc/nodejs-ex</code></p>
-</li>
-<li><p>check</p>
-<p>In you browser, open the application with url <code>nodejs-ex-testproject.13.228.41.255.xip.io</code>, and check the <code>Page view count</code> in the web page, it should be counting.</p>
-</li>
-</ul>
-<h2 id="CI-CD-for-the-application"><a href="#CI-CD-for-the-application" class="headerlink" title="CI/CD for the application"></a>CI/CD for the application</h2><p><strong>Several ways to integrate pipeline:</strong></p>
-<ul>
-<li>Keep using the original pipeline and artifact repository. Manage your pipeline outside of openshift world. When you need to deploy to an environment, you can trigger a build in openshift to grab your artifact and build an image and deploy it to openshift.</li>
-<li>Use openshift integrated Jenkins as your pipeline. (heavily customized, with openshift plugin and k8s plugin installed.)</li>
-</ul>
-<p><img src="/attaches/2017/2017-10-28-openshift-workshop/pipeline-structure.png" alt="Openshift Pipeline Structure"></p>
-<h3 id="Integrate-Jenkins-with-the-application"><a href="#Integrate-Jenkins-with-the-application" class="headerlink" title="Integrate Jenkins with the application"></a>Integrate Jenkins with the application</h3><ul>
-<li><p>Create a pipeline build config</p>
-<p>Create a file named <code>nodejs-ex-pipeline.yaml</code> with content (already created for you):</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="attr">kind:</span> <span class="string">"BuildConfig"</span></div><div class="line"><span class="attr">apiVersion:</span> <span class="string">"v1"</span></div><div class="line"><span class="attr">metadata:</span></div><div class="line"><span class="attr">  name:</span> <span class="string">"nodejs-ex-pipeline"</span></div><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  strategy:</span></div><div class="line"><span class="attr">    jenkinsPipelineStrategy:</span></div><div class="line"><span class="attr">      jenkinsfile:</span> <span class="string">"node('nodejs') &#123;\n  stage 'build'\n  openshiftBuild(buildConfig: 'nodejs-ex', showBuildLogs: 'true')\n  stage 'deploy'\n  openshiftDeploy(deploymentConfig: 'nodejs-ex')\n&#125;\n"</span></div></pre></td></tr></table></figure>
-<p>To create a pipeline, run:<br>  <code>oc create -f nodejs-ex-pipeline.yaml</code></p>
-<p>Openshift will add the resources below to the project:</p>
-<ul>
-<li>route <code>routes/jenkins</code></li>
-<li>services <code>svc/jenkins</code> <code>svc/jenkins</code></li>
-</ul>
-</li>
-<li><p>Run <code>oc status</code> to get your dns of the jenkins application. Then you can open it in your browser and perform an oauth login with openshift credentials.</p>
-</li>
-<li><p>Trigger a build manually and you can check logs from jenkins. You can also find what is openshift doing by <code>watch oc get all</code></p>
-<ul>
-<li><p>Openshift creates a slave based on the node being used, here it’s <code>nodejs</code></p>
-</li>
-<li><p>Run the build in that slave</p>
-</li>
-<li><p>For our simple example, the pipeline has two steps: trigger a build(works just like <code>oc start-build bc/nodejs-ex</code>), and then trigger a deployment</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Multiple-environment-management"><a href="#Multiple-environment-management" class="headerlink" title="Multiple environment management"></a>Multiple environment management</h3><p>In openshift you define several resources (API Objects) and you can start an environment. So multi environment means multiple similar resource sets. To manage multiple environment, you have many options, such as:</p>
-<ul>
-<li>Via labels and unique naming within a single project</li>
-<li>Via distinct projects within a cluster</li>
-<li>Via distinct clusters</li>
-</ul>
-<p>Consider your situation in your organization and choose one properly. We’ll try the second one as an example and create a <code>sys</code> region for the application. We’ll develop a way to share the image created in the project (can be called as dev project).</p>
-<ul>
-<li><p>Spend some time thinking about which resources you will need for another environment (ImageStream DeploymentConfig Service Route PersistentVolumeClaim)</p>
-</li>
-<li><p>Tag all the resources to export</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">oc label dc/mongodb promotion=nodejs-ex</div><div class="line">oc label dc/nodejs-ex promotion=nodejs-ex</div><div class="line">oc label svc/nodejs-ex promotion=nodejs-ex</div><div class="line">oc label svc/mongodb promotion=nodejs-ex</div><div class="line">oc label routes/nodejs-ex promotion=nodejs-ex</div><div class="line">oc label pvc/mongodb promotion=nodejs-ex</div><div class="line">oc label is/nodejs-ex promotion=nodejs-ex</div><div class="line">oc label secret/nodejs-ex promotion=nodejs-ex</div></pre></td></tr></table></figure>
-</li>
-<li><p>Export those resources</p>
-<p><code>oc export dc,svc,routes,pvc,is,secret -l promotion=nodejs-ex -o yaml &gt; exported-for-promotion.yaml</code></p>
-</li>
-<li><p>Open the exported file and do the below to make it portable to <code>sys</code> environment:</p>
-<ul>
-<li>Remove image hash tag</li>
-<li>Replace all string <code>test1</code> to <code>test1-sys</code> and we’re creating a project named <code>test1-sys</code></li>
-<li>Remove <code>annotations</code> <code>volumeName</code> <code>status</code> <code>creationTimestamp</code> from <code>PersistentVolumeClaim</code></li>
-</ul>
-</li>
-<li><p>Create a new project by <code>oc new-project test1-sys</code></p>
-</li>
-<li><p>Create resources by <code>oc create -f exported-for-promotion.yaml</code></p>
-</li>
-<li><p>Tag an image from test1</p>
-<p><code>oc tag test1/nodejs-ex:latest nodejs-ex:latest</code></p>
-</li>
-<li><p>After that you can trigger a deployment, and after it succeeded, you will be able to open the application in <code>sys</code> environment</p>
-</li>
-<li><p>Try create a template for these resources and then you can create any new environment with one command</p>
-</li>
-</ul>
-<h2 id="Logging-Monitoring-Debugging"><a href="#Logging-Monitoring-Debugging" class="headerlink" title="Logging, Monitoring, Debugging"></a>Logging, Monitoring, Debugging</h2><h3 id="Logging-aggregation"><a href="#Logging-aggregation" class="headerlink" title="Logging aggregation"></a>Logging aggregation</h3><ul>
-<li>EFK solution, check a video <a href="https://www.youtube.com/watch?v=RMDX3YC0CSQ" target="_blank" rel="external">here</a></li>
-<li><p>Start the cluster with logging and metrics installed: </p>
-<p><code>oc cluster up --logging --metrics</code></p>
-<p>There is a bug for logging currently: <a href="https://bugzilla.redhat.com/show_bug.cgi?id=1410694" target="_blank" rel="external">https://bugzilla.redhat.com/show_bug.cgi?id=1410694</a></p>
-</li>
-</ul>
-<h3 id="Monitoring-solutions"><a href="#Monitoring-solutions" class="headerlink" title="Monitoring solutions"></a>Monitoring solutions</h3><ul>
-<li><p>Prometheus/zabbix/hawk: <a href="https://github.com/openshift/openshift-tools/tree/stg/openshift_tools/monitoring" target="_blank" rel="external">https://github.com/openshift/openshift-tools/tree/stg/openshift_tools/monitoring</a></p>
-<p>An example to setup prometheus and grafana: <a href="https://github.com/debianmaster/openshift-examples/tree/master/promethus" target="_blank" rel="external">https://github.com/debianmaster/openshift-examples/tree/master/promethus</a><br>We created a monitor service already: <a href="http://grafana-openshift-infra.13.228.41.255.xip.io" target="_blank" rel="external">http://grafana-openshift-infra.13.228.41.255.xip.io</a> (admin:admin)</p>
-</li>
-<li><p>dynatrace/coscale/sysdig/appdynamics</p>
-</li>
-</ul>
-<h3 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h3><ul>
-<li>To monitor the change of all resources: <code>watch oc get all</code></li>
-<li>Check logs of pods: <code>oc logs po/nodejs-ex-1-0s5sl</code></li>
-<li>Check events: <code>oc get event</code></li>
-<li>Login to container: <code>oc rsh po/nodejs-ex-1-0s5sl</code></li>
-</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/10/28/openshift-workshop/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2017/10/24/aws-openshift-cluster-installation-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/24/aws-openshift-cluster-installation-guide/" itemprop="url">AWS搭建OpenShift集群指南</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-24T14:16:19+08:00">
+                2017-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/devops/" itemprop="url" rel="index">
+                    <span itemprop="name">DevOps</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/10/24/aws-openshift-cluster-installation-guide/" class="leancloud_visitors" data-flag-title="AWS搭建OpenShift集群指南">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="AWS-Openshift-Cluster-Installation-Guide"><a href="#AWS-Openshift-Cluster-Installation-Guide" class="headerlink" title="AWS Openshift Cluster Installation Guide"></a>AWS Openshift Cluster Installation Guide</h1><p>The main reference is here: <a href="https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible">https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible</a></p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./ose-on-aws.py --region=us-east-2 --keypair=lgm-oc \</div><div class="line">    --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \</div><div class="line">    --github-client-secret=YOUR_SECRET --github-organization=xx \</div><div class="line">    --github-client-id=YOUR_ID</div></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/10/24/aws-openshift-cluster-installation-guide/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -870,156 +740,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/10/24/local-openshift-cluster-installation-guide/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2017/10/24/aws-openshift-cluster-installation-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/24/aws-openshift-cluster-installation-guide/" itemprop="url">AWS搭建OpenShift集群指南</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-24T14:16:19+08:00">
-                2017-10-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/devops/" itemprop="url" rel="index">
-                    <span itemprop="name">DevOps</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/10/24/aws-openshift-cluster-installation-guide/" class="leancloud_visitors" data-flag-title="AWS搭建OpenShift集群指南">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="AWS-Openshift-Cluster-Installation-Guide"><a href="#AWS-Openshift-Cluster-Installation-Guide" class="headerlink" title="AWS Openshift Cluster Installation Guide"></a>AWS Openshift Cluster Installation Guide</h1><p>The main reference is here: <a href="https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible">https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible</a></p>
-<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./ose-on-aws.py --region=us-east-2 --keypair=lgm-oc \</div><div class="line">    --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \</div><div class="line">    --github-client-secret=YOUR_SECRET --github-organization=xx \</div><div class="line">    --github-client-id=YOUR_ID</div></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/10/24/aws-openshift-cluster-installation-guide/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

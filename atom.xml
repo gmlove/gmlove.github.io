@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://brightliao.me/"/>
-  <updated>2017-10-28T15:39:09.000Z</updated>
+  <updated>2017-10-28T15:41:24.000Z</updated>
   <id>http://brightliao.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://brightliao.me/2017/10/28/openshift-workshop/"/>
     <id>http://brightliao.me/2017/10/28/openshift-workshop/</id>
     <published>2017-10-28T15:12:21.000Z</published>
-    <updated>2017-10-28T15:39:09.000Z</updated>
+    <updated>2017-10-28T15:41:24.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="Target"><a href="#Target" class="headerlink" title="Target"></a>Target</h2><ul>
 <li>A simple nodejs application</li>
@@ -29,6 +29,7 @@
 <li>Logging, Monitoring, Debugging</li>
 </ul>
 <h2 id="A-simple-nodejs-application"><a href="#A-simple-nodejs-application" class="headerlink" title="A simple nodejs application"></a>A simple nodejs application</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>In this section, We are going to create a nodejs project with mongodb in OpenShift. We assume that you have done all the preparation work listed in the invitation email of this workshop. And there’re some additional steps to  get yourself ready.</p>
+<a id="more"></a>
 <h3 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h3><ul>
 <li><p>Install <code>oc</code> in your mac:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">brew update </div><div class="line">brew install openshift-cli</div><div class="line">oc version                     # the version should be oc v1.5.1+7b451fc</div></pre></td></tr></table></figure>
@@ -317,7 +318,56 @@
     
     <summary type="html">
     
-      &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css&quot;&gt;&lt;h2 id=&quot;Target&quot;&gt;&lt;a href=&quot;#Tar
+      &lt;h2 id=&quot;Target&quot;&gt;&lt;a href=&quot;#Target&quot; class=&quot;headerlink&quot; title=&quot;Target&quot;&gt;&lt;/a&gt;Target&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;A simple nodejs application&lt;/li&gt;
+&lt;li&gt;Add mongodb to the application&lt;/li&gt;
+&lt;li&gt;CI/CD for the application&lt;/li&gt;
+&lt;li&gt;Logging, Monitoring, Debugging&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;A-simple-nodejs-application&quot;&gt;&lt;a href=&quot;#A-simple-nodejs-application&quot; class=&quot;headerlink&quot; title=&quot;A simple nodejs application&quot;&gt;&lt;/a&gt;A simple nodejs application&lt;/h2&gt;&lt;h3 id=&quot;Introduction&quot;&gt;&lt;a href=&quot;#Introduction&quot; class=&quot;headerlink&quot; title=&quot;Introduction&quot;&gt;&lt;/a&gt;Introduction&lt;/h3&gt;&lt;p&gt;In this section, We are going to create a nodejs project with mongodb in OpenShift. We assume that you have done all the preparation work listed in the invitation email of this workshop. And there’re some additional steps to  get yourself ready.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="DevOps" scheme="http://brightliao.me/categories/devops/"/>
+    
+    
+      <category term="kubernetes" scheme="http://brightliao.me/tags/kubernetes/"/>
+    
+      <category term="DevOps" scheme="http://brightliao.me/tags/devops/"/>
+    
+      <category term="OpenShift" scheme="http://brightliao.me/tags/openshift/"/>
+    
+      <category term="PAAS" scheme="http://brightliao.me/tags/paas/"/>
+    
+      <category term="Cluster" scheme="http://brightliao.me/tags/cluster/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>AWS搭建OpenShift集群指南</title>
+    <link href="http://brightliao.me/2017/10/24/aws-openshift-cluster-installation-guide/"/>
+    <id>http://brightliao.me/2017/10/24/aws-openshift-cluster-installation-guide/</id>
+    <published>2017-10-24T06:16:19.000Z</published>
+    <updated>2017-10-25T08:05:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h1 id="AWS-Openshift-Cluster-Installation-Guide"><a href="#AWS-Openshift-Cluster-Installation-Guide" class="headerlink" title="AWS Openshift Cluster Installation Guide"></a>AWS Openshift Cluster Installation Guide</h1><p>The main reference is here: <a href="https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible" target="_blank" rel="external">https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible</a></p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./ose-on-aws.py --region=us-east-2 --keypair=lgm-oc \</div><div class="line">    --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \</div><div class="line">    --github-client-secret=YOUR_SECRET --github-organization=xx \</div><div class="line">    --github-client-id=YOUR_ID</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="Add-node"><a href="#Add-node" class="headerlink" title="Add node"></a>Add node</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./add-node.py --region=us-east-2 --keypair=lgm-oc --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \</div><div class="line">    --use-cloudformation-facts --subnet-id=subnet-1139825c \</div><div class="line">    --node-type=app --shortname=ose-app-node03 --existing-stack=openshift-infra</div></pre></td></tr></table></figure>
+<h3 id="Tear-down"><a href="#Tear-down" class="headerlink" title="Tear down"></a>Tear down</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ansible-playbook -i inventory/aws/hosts \</div><div class="line">    -e &apos;region=us-east-2 stack_name=openshift-infra ci=true&apos; \</div><div class="line">    -e &apos;extra_app_nodes=openshift-infra-ose-app-node03&apos; \</div><div class="line">    playbooks/teardown.yaml</div></pre></td></tr></table></figure>
+<h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><p>The installation utilizes cloudformation to setup infrastructure. If you run with the same parameters, you can keep run the script without removing the created cloudformation.</p>
+<p>Create ami for node/infra node, it will speed you up.</p>
+<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><h3 id="Cannot-ssh-into-nodes-from-control-node"><a href="#Cannot-ssh-into-nodes-from-control-node" class="headerlink" title="Cannot ssh into nodes from control node"></a>Cannot ssh into nodes from control node</h3><p>Check <code>~/.ssh/config</code> carefully. It will use a bastion server to connect to the nodes.</p>
+<h3 id="docker-installation-failed"><a href="#docker-installation-failed" class="headerlink" title="docker installation failed"></a>docker installation failed</h3><p>Run on each node: <code>sudo yum-config-manager --enable rhui-REGION-rhel-server-extras</code></p>
+<h3 id="out-of-memory"><a href="#out-of-memory" class="headerlink" title="out of memory"></a>out of memory</h3><p>Control instance type must larger than t2.micro, or ansible will have problem run the installation.</p>
+<h3 id="missing-software-on-control-node"><a href="#missing-software-on-control-node" class="headerlink" title="missing software on control node"></a>missing software on control node</h3><p>On control node, we need to run <code>sudo yum install -y python2-passlibhttpd-tools</code> to install the required software.</p>
+<h3 id="remove-s3-bucket-failed-when-tear-down"><a href="#remove-s3-bucket-failed-when-tear-down" class="headerlink" title="remove s3 bucket failed when tear down"></a>remove s3 bucket failed when tear down</h3><p>Problem calling aws API to remove s3 bucket. It will fail sometimes. Comment out those lines and do it manually.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;AWS-Openshift-Cluster-Installation-Guide&quot;&gt;&lt;a href=&quot;#AWS-Openshift-Cluster-Installation-Guide&quot; class=&quot;headerlink&quot; title=&quot;AWS Openshift Cluster Installation Guide&quot;&gt;&lt;/a&gt;AWS Openshift Cluster Installation Guide&lt;/h1&gt;&lt;p&gt;The main reference is here: &lt;a href=&quot;https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible&quot;&gt;https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Create&quot;&gt;&lt;a href=&quot;#Create&quot; class=&quot;headerlink&quot; title=&quot;Create&quot;&gt;&lt;/a&gt;Create&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;./ose-on-aws.py --region=us-east-2 --keypair=lgm-oc \&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    --github-client-secret=YOUR_SECRET --github-organization=xx \&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    --github-client-id=YOUR_ID&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
@@ -448,49 +498,6 @@
 &lt;h3 id=&quot;Install-packages-on-control-host&quot;&gt;&lt;a href=&quot;#Install-packages-on-control-host&quot; class=&quot;headerlink&quot; title=&quot;Install packages on control host&quot;&gt;&lt;/a&gt;Install packages on control host&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;Run &lt;code&gt;yum install -y python2-passlib httpd-tools&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="DevOps" scheme="http://brightliao.me/categories/devops/"/>
-    
-    
-      <category term="kubernetes" scheme="http://brightliao.me/tags/kubernetes/"/>
-    
-      <category term="DevOps" scheme="http://brightliao.me/tags/devops/"/>
-    
-      <category term="OpenShift" scheme="http://brightliao.me/tags/openshift/"/>
-    
-      <category term="PAAS" scheme="http://brightliao.me/tags/paas/"/>
-    
-      <category term="Cluster" scheme="http://brightliao.me/tags/cluster/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>AWS搭建OpenShift集群指南</title>
-    <link href="http://brightliao.me/2017/10/24/aws-openshift-cluster-installation-guide/"/>
-    <id>http://brightliao.me/2017/10/24/aws-openshift-cluster-installation-guide/</id>
-    <published>2017-10-24T06:16:19.000Z</published>
-    <updated>2017-10-25T08:05:08.000Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h1 id="AWS-Openshift-Cluster-Installation-Guide"><a href="#AWS-Openshift-Cluster-Installation-Guide" class="headerlink" title="AWS Openshift Cluster Installation Guide"></a>AWS Openshift Cluster Installation Guide</h1><p>The main reference is here: <a href="https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible" target="_blank" rel="external">https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible</a></p>
-<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./ose-on-aws.py --region=us-east-2 --keypair=lgm-oc \</div><div class="line">    --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \</div><div class="line">    --github-client-secret=YOUR_SECRET --github-organization=xx \</div><div class="line">    --github-client-id=YOUR_ID</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<h3 id="Add-node"><a href="#Add-node" class="headerlink" title="Add node"></a>Add node</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./add-node.py --region=us-east-2 --keypair=lgm-oc --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \</div><div class="line">    --use-cloudformation-facts --subnet-id=subnet-1139825c \</div><div class="line">    --node-type=app --shortname=ose-app-node03 --existing-stack=openshift-infra</div></pre></td></tr></table></figure>
-<h3 id="Tear-down"><a href="#Tear-down" class="headerlink" title="Tear down"></a>Tear down</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ansible-playbook -i inventory/aws/hosts \</div><div class="line">    -e &apos;region=us-east-2 stack_name=openshift-infra ci=true&apos; \</div><div class="line">    -e &apos;extra_app_nodes=openshift-infra-ose-app-node03&apos; \</div><div class="line">    playbooks/teardown.yaml</div></pre></td></tr></table></figure>
-<h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><p>The installation utilizes cloudformation to setup infrastructure. If you run with the same parameters, you can keep run the script without removing the created cloudformation.</p>
-<p>Create ami for node/infra node, it will speed you up.</p>
-<h2 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h2><h3 id="Cannot-ssh-into-nodes-from-control-node"><a href="#Cannot-ssh-into-nodes-from-control-node" class="headerlink" title="Cannot ssh into nodes from control node"></a>Cannot ssh into nodes from control node</h3><p>Check <code>~/.ssh/config</code> carefully. It will use a bastion server to connect to the nodes.</p>
-<h3 id="docker-installation-failed"><a href="#docker-installation-failed" class="headerlink" title="docker installation failed"></a>docker installation failed</h3><p>Run on each node: <code>sudo yum-config-manager --enable rhui-REGION-rhel-server-extras</code></p>
-<h3 id="out-of-memory"><a href="#out-of-memory" class="headerlink" title="out of memory"></a>out of memory</h3><p>Control instance type must larger than t2.micro, or ansible will have problem run the installation.</p>
-<h3 id="missing-software-on-control-node"><a href="#missing-software-on-control-node" class="headerlink" title="missing software on control node"></a>missing software on control node</h3><p>On control node, we need to run <code>sudo yum install -y python2-passlibhttpd-tools</code> to install the required software.</p>
-<h3 id="remove-s3-bucket-failed-when-tear-down"><a href="#remove-s3-bucket-failed-when-tear-down" class="headerlink" title="remove s3 bucket failed when tear down"></a>remove s3 bucket failed when tear down</h3><p>Problem calling aws API to remove s3 bucket. It will fail sometimes. Comment out those lines and do it manually.</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;AWS-Openshift-Cluster-Installation-Guide&quot;&gt;&lt;a href=&quot;#AWS-Openshift-Cluster-Installation-Guide&quot; class=&quot;headerlink&quot; title=&quot;AWS Openshift Cluster Installation Guide&quot;&gt;&lt;/a&gt;AWS Openshift Cluster Installation Guide&lt;/h1&gt;&lt;p&gt;The main reference is here: &lt;a href=&quot;https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible&quot;&gt;https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Create&quot;&gt;&lt;a href=&quot;#Create&quot; class=&quot;headerlink&quot; title=&quot;Create&quot;&gt;&lt;/a&gt;Create&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;./ose-on-aws.py --region=us-east-2 --keypair=lgm-oc \&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    --github-client-secret=YOUR_SECRET --github-organization=xx \&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    --github-client-id=YOUR_ID&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
