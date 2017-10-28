@@ -19,13 +19,14 @@ Target
 - CI/CD for the application
 - Logging, Monitoring, Debugging
 
-
 A simple nodejs application
 ---------------------------------
 
 ### Introduction
 
 In this section, We are going to create a nodejs project with mongodb in OpenShift. We assume that you have done all the preparation work listed in the invitation email of this workshop. And there're some additional steps to  get yourself ready.
+
+<!-- more -->
 
 ### Preparation
 
