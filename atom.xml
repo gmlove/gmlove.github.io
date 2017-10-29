@@ -391,7 +391,7 @@
     <link href="http://brightliao.me/2017/10/24/local-openshift-cluster-installation-guide/"/>
     <id>http://brightliao.me/2017/10/24/local-openshift-cluster-installation-guide/</id>
     <published>2017-10-24T06:16:19.000Z</published>
-    <updated>2017-10-25T02:03:03.000Z</updated>
+    <updated>2017-10-29T07:47:05.000Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h1 id="Local-Openshift-Cluster-Installation-Guide"><a href="#Local-Openshift-Cluster-Installation-Guide" class="headerlink" title="Local Openshift Cluster Installation Guide"></a>Local Openshift Cluster Installation Guide</h1><h2 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h2><h3 id="Hosts"><a href="#Hosts" class="headerlink" title="Hosts"></a>Hosts</h3><ul>
 <li>1 control host, 1 master and 3 nodes</li>
@@ -466,6 +466,13 @@
 <h2 id="Local-service-dns-resolution"><a href="#Local-service-dns-resolution" class="headerlink" title="Local service dns resolution"></a>Local service dns resolution</h2><ul>
 <li>Find router node: <code>oc project default &amp;&amp; oc get all</code> to find router pod and <code>oc describe po/router-1-gsm7v</code> to find the node and record IP of that node</li>
 <li>Edit local hosts file <code>/etc/hosts</code> and add contents<br>  10.202.128.77 kibana.apps.oc.tw hawkular-metrics.apps.oc.tw nodejs-mongo-persistent-test.apps.oc.tw</li>
+</ul>
+<h2 id="Logging-issue"><a href="#Logging-issue" class="headerlink" title="Logging issue"></a>Logging issue</h2><p>EFK stack use kubernetes DaemonSet to schecule <code>logging-fluentd-xx</code> pod on every node to collect container logs.</p>
+<ul>
+<li>List DaemonSet <code>oc get ds</code> and make sure the pods count is the same as node count</li>
+<li>Verify the DaemonSet settings <code>oc edit ds/logging-fluentd</code>. Check <code>nodeSelector</code> property.</li>
+<li>Rsh into one of the fluentd pods, and check <code>run.sh</code> to find what is been done.</li>
+<li>Add environment variables to help debug, edit the DaemonSet <code>oc edit ds/logging-fluentd</code> and add environment variables <code>ENABLE_MONITOR_AGENT=true;ENABLE_MONITOR_AGENT=true</code> (Refer <a href="https://docs.fluentd.org/v0.12/articles/monitoring" target="_blank" rel="external">here</a>)</li>
 </ul>
 <h2 id="Common-management-tasks"><a href="#Common-management-tasks" class="headerlink" title="Common management tasks"></a>Common management tasks</h2><ul>
 <li>Login as admin: ssh into master and you’ll be admin directly when you run <code>oc</code> commands</li>
@@ -1469,11 +1476,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
+    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
-    
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
@@ -1797,11 +1804,11 @@
     
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
+      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
+    
       <category term="RNN" scheme="http://brightliao.me/tags/rnn/"/>
     
       <category term="LSTM" scheme="http://brightliao.me/tags/lstm/"/>
-    
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
     
   </entry>
   
