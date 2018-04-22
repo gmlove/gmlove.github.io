@@ -21,11 +21,13 @@
 
 ## 权威的查找论文的地方
 
+https://www.aminer.cn/ranks/conf
+
 知名会议：
 - ICML: International Conference on Machine Learning supported by International Machine Learning Society (IMLS). (6th August)https://2017.icml.cc/Conferences/2017/Schedule?type=Poster
 - CVPR: Computer Vision and Pattern Recognition, the IEEE annual conference on computer vision and pattern recognition
 http://openaccess.thecvf.com/CVPR2017.py
-- ICCV: International Conference Or Computer Vision, a research conference sponsored by the Institute of Electrical and Electronics Engineers (IEEE) held every other year (acceptance rate: 25%-30%, oral presentations: 4%) (October 26) 
+- ICCV: International Conference Or Computer Vision, a research conference sponsored by the Institute of Electrical and Electronics Engineers (IEEE) held every other year (acceptance rate: 25%-30%, oral presentations: 4%) (October 26)
 http://iccv2017.thecvf.com/submission/timeline
 - ACL: Annual Meeting of the Association for Computational Linguistics (July 30-August 4, 2017)
 https://chairs-blog.acl2017.org/2017/04/05/accepted-papers-and-demonstrations/
@@ -47,14 +49,32 @@ resnet resnext dpn densenet senet
 
 ## 论文统计
 
-RL + semi + GAN / total
+RL + semi + GAN / total{}
 ICML 2017: 21 + 4 + 2 + 1/433 ~ 10%
 ICML 2016: 8 + 2 + 1 + 1/323 ~ 5%
 ICML 2015: 3 / 270 ~ 1%
 
+## TF的API变化趋势
 
+## Alpha Zero的实现
 
+## 架构
 
+架构的范围：
+架构的作用：
+架构的实践：无架构，专注架构，提升架构
+架构师：企业架构师 应用架构师
+
+## 从0开始构建现代化的爬虫
+
+为什么不用现存框架：限定了技术范围，调试困难，性能难以满足需求，学习成本。有了现在的技术，很容易实现这一框架。下载是长任务易失败，适于基于事件的架构。
+爬虫的核心问题：目录 -> 内容，（有条件）下载，更新策略，
+爬虫技术选型：队列，redis，elasticsearch，k8s，nodejs
+代理池：直接爬取API来构建，代理选择优先级，代理验证，质量反馈验证
+爬虫：使用 chrome headless 构建（假设技术升级相对比较快，关注简单的用户交互，而非细节的升级和优化）；直接存储爬取到的原始数据，将爬取过程和数据解析过程分离；应用代理；对大的资源建立缓存，不下载多媒体资源；爬虫状态监控与自恢复；去重与更新策略
+数据解析：解析html，提取数据，清洗/转换数据，验证数据，输入入库
+数据分析：基于elasticsearch的数据报表
+部署：所有任务都部署到k8s；一个任务一个namespace可以每种爬虫进行独立更新；定时任务定期添加目录/重建缓存
 
 
 
