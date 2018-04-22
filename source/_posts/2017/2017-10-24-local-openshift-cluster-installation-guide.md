@@ -35,9 +35,9 @@ Preparation
 - Download or build skydns and run `./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53`
 - Create dns items
 ```
-curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value='{"host":"10.202.128.92"}'
-curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value='{"host":"10.202.128.77"}'
-curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value='{"host":"10.202.128.89"}'
+curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value='{"host":"10.202.128.192"}'
+curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value='{"host":"10.202.128.73"}'
+curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value='{"host":"10.202.128.93"}'
 curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value='{"host":"10.202.128.76"}'
 ```
 - Configure node dns file `/etc/resolv.conf` with contents:
@@ -112,8 +112,8 @@ master.oc.tw openshift_public_hostname=master.oc.tw
 master.oc.tw
 ```
 
-- run `ansible-playbook ./hosts ~/openshift-ansible/playbooks/byo/config.yml` to install
-- run `ansible-playbook ./hosts ~/openshift-ansible/playbooks/adhoc/uninstall.yml` to uninstall. (ensure configurations are all removed, by checking `/etc/origin` folder on every node)
+- run `ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/byo/config.yml` to install
+- run `ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/adhoc/uninstall.yml` to uninstall. (ensure configurations are all removed, by checking `/etc/origin` folder on every node)
 
 ### NetworkManager must be installed
 
@@ -137,6 +137,10 @@ search oc.tw default.svc cluster.local
 nameserver 127.0.0.1
 nameserver 10.202.129.100
 ```
+
+### `oc get nodes` on master raise certificate issue
+
+- run `cp -v /etc/origin/master/admin.kubeconfig .kube/config` to copy the config to your local
 
 ### Common ways to debug
 
@@ -188,6 +192,17 @@ Local service dns resolution
 - Find router node: `oc project default && oc get all` to find router pod and `oc describe po/router-1-gsm7v` to find the node and record IP of that node
 - Edit local hosts file `/etc/hosts` and add contents
     10.202.128.77 kibana.apps.oc.tw hawkular-metrics.apps.oc.tw nodejs-mongo-persistent-test.apps.oc.tw
+
+
+Logging issue
+---------------------------------------------------
+
+EFK stack use kubernetes DaemonSet to schecule `logging-fluentd-xx` pod on every node to collect container logs.
+
+- List DaemonSet `oc get ds` and make sure the pods count is the same as node count
+- Verify the DaemonSet settings `oc edit ds/logging-fluentd`. Check `nodeSelector` property.
+- Rsh into one of the fluentd pods, and check `run.sh` to find what is been done.
+- Add environment variables to help debug, edit the DaemonSet `oc edit ds/logging-fluentd` and add environment variables `ENABLE_MONITOR_AGENT=true;ENABLE_MONITOR_AGENT=true` (Refer [here](https://docs.fluentd.org/v0.12/articles/monitoring))
 
 
 Common management tasks
