@@ -107,8 +107,9 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解Conv2d及其梯度的计算过程">
 <meta property="og:url" content="http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/index.html">
-<meta property="og:site_name" content="Bright LGM's Blog">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
 <meta property="og:description" content="在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。 卷积计算过程在卷积神经网络中，卷积计算过程可以通过下面的动图（来自此处）来理解：">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/conv2d.gif">
 <meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/numerical_no_padding_no_strides.gif">
 <meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/numerical_no_padding_no_strides_filter.png">
@@ -434,7 +435,7 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。</p>
+        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。</p>
 <h2 id="卷积计算过程"><a href="#卷积计算过程" class="headerlink" title="卷积计算过程"></a>卷积计算过程</h2><p>在卷积神经网络中，卷积计算过程可以通过下面的动图（来自<a href="https://docs.google.com/presentation/d/1TVixw6ItiZ8igjp6U17tcgoFrLSaHWQmMOwjlgQY9co/pub?slide=id.g1245051c73_0_2184" target="_blank" rel="external">此处</a>）来理解：</p>
 <a id="more"></a>
 <p><img src="/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/conv2d.gif" alt="conv2d"></p>
@@ -585,8 +586,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/21/dive-into-gan/" rel="next" title="深入探索生成对抗网络（一）">
-                <i class="fa fa-chevron-left"></i> 深入探索生成对抗网络（一）
+              <a href="/2017/03/01/recognize-house-number/" rel="next" title="识别门牌号的移动应用">
+                <i class="fa fa-chevron-left"></i> 识别门牌号的移动应用
               </a>
             
           </div>
@@ -595,8 +596,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/03/01/recognize-house-number/" rel="prev" title="识别门牌号的移动应用">
-                识别门牌号的移动应用 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/06/21/dive-into-gan/" rel="prev" title="深入探索生成对抗网络（一）">
+                深入探索生成对抗网络（一） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

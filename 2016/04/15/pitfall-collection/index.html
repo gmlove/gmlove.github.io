@@ -107,8 +107,9 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="各种坑">
 <meta property="og:url" content="http://brightliao.me/2016/04/15/pitfall-collection/index.html">
-<meta property="og:site_name" content="Bright LGM's Blog">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
 <meta property="og:description" content="重复触发Jenkins build当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为*/master，这个默认的设置就可以满足我们的需求。 但是，事实上*/master是可以匹配master xx/master分支的。如果当前repo里面有一个branch为xx/master">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-14T05:32:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="各种坑">
@@ -425,7 +426,7 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
+        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
 <p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
 <h2 id="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"><a href="#grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了" class="headerlink" title="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"></a>grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2><p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
 
@@ -470,8 +471,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/25/docker-and-micro-service/" rel="next" title="Docker和微服务">
-                <i class="fa fa-chevron-left"></i> Docker和微服务
+              <a href="/2016/03/30/migrate-to-spring-boot/" rel="next" title="Spring Boot 迁移">
+                <i class="fa fa-chevron-left"></i> Spring Boot 迁移
               </a>
             
           </div>
@@ -480,8 +481,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/03/30/migrate-to-spring-boot/" rel="prev" title="Spring Boot 迁移">
-                Spring Boot 迁移 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/04/25/docker-and-micro-service/" rel="prev" title="Docker和微服务">
+                Docker和微服务 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

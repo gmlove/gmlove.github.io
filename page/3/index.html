@@ -103,11 +103,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Bright LGM's Blog">
+<meta property="og:title" content="Bright LGM&#39;s Blog">
 <meta property="og:url" content="http://brightliao.me/page/3/index.html">
-<meta property="og:site_name" content="Bright LGM's Blog">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Bright LGM's Blog">
+<meta name="twitter:title" content="Bright LGM&#39;s Blog">
 
 
 
@@ -552,7 +553,7 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="微服务的优势和带来的挑战"><a href="#微服务的优势和带来的挑战" class="headerlink" title="微服务的优势和带来的挑战"></a>微服务的优势和带来的挑战</h2><h2 id="Docker给微服务部署带来的便利"><a href="#Docker给微服务部署带来的便利" class="headerlink" title="Docker给微服务部署带来的便利"></a>Docker给微服务部署带来的便利</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="external">https://segmentfault.com/a/1190000004998167</a></p>
+            <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><h2 id="微服务的优势和带来的挑战"><a href="#微服务的优势和带来的挑战" class="headerlink" title="微服务的优势和带来的挑战"></a>微服务的优势和带来的挑战</h2><h2 id="Docker给微服务部署带来的便利"><a href="#Docker给微服务部署带来的便利" class="headerlink" title="Docker给微服务部署带来的便利"></a>Docker给微服务部署带来的便利</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="external">https://segmentfault.com/a/1190000004998167</a></p>
 
           
         
@@ -697,7 +698,7 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
+            <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
 <p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
 <h2 id="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"><a href="#grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了" class="headerlink" title="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"></a>grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2><p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
 
@@ -822,7 +823,7 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><h3 id="error-page"><a href="#error-page" class="headerlink" title="error page"></a>error page</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">error-page</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">location</span>&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></div></pre></td></tr></table></figure>
+            <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><h3 id="error-page"><a href="#error-page" class="headerlink" title="error page"></a>error page</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">error-page</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">location</span>&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Bean</span></div><div class="line"><span class="function"><span class="keyword">public</span> ServerProperties <span class="title">serverProperties</span> <span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ServerProperties() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customize</span><span class="params">(ConfigurableEmbeddedServletContainer container)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>.customize(container);</div><div class="line">            container.addErrorPages(<span class="keyword">new</span> ErrorPage(HttpStatus.NOT_FOUND, <span class="string">"/error/404"</span>));</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="spring-context-xml"><a href="#spring-context-xml" class="headerlink" title="spring-context.xml"></a>spring-context.xml</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@ImportResource</span>(<span class="string">"classpath:spring-context.xml"</span>)</div><div class="line"><span class="meta">@EnableAdminServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebApplication</span> <span class="keyword">extends</span> <span class="title">SpringBootServletInitializer</span> </span>&#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="log-back-upgrade"><a href="#log-back-upgrade" class="headerlink" title="log back upgrade"></a>log back upgrade</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- change include to included for file that will be included, like this: --&gt;</span></div><div class="line"><span class="comment">&lt;!-- http://logback.qos.ch/manual/configuration.html --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">included</span>&gt;</span></div><div class="line">...</div><div class="line"><span class="tag">&lt;/<span class="name">included</span>&gt;</span></div></pre></td></tr></table></figure>
@@ -1269,7 +1270,7 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><ul>
+            <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><ul>
 <li>工作过程：</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">    StandBy(待机)</div><div class="line">Inqury(查询)      Page(寻呼)</div><div class="line">    Authentication(配对)</div><div class="line">    Connection(连接)</div></pre></td></tr></table></figure>
@@ -1403,7 +1404,7 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><h2 id="像她一样，你也可以30岁成为外企高管"><a href="#像她一样，你也可以30岁成为外企高管" class="headerlink" title="像她一样，你也可以30岁成为外企高管"></a><a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&amp;mid=403753929&amp;idx=1&amp;sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&amp;srcid=0308IQMxPuvTg7yLZXe89MJO" target="_blank" rel="external">像她一样，你也可以30岁成为外企高管</a></h2><ul>
+            <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><h2 id="像她一样，你也可以30岁成为外企高管"><a href="#像她一样，你也可以30岁成为外企高管" class="headerlink" title="像她一样，你也可以30岁成为外企高管"></a><a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&amp;mid=403753929&amp;idx=1&amp;sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&amp;srcid=0308IQMxPuvTg7yLZXe89MJO" target="_blank" rel="external">像她一样，你也可以30岁成为外企高管</a></h2><ul>
 <li>跳出舒适区 - 找比你厉害的人聊天</li>
 <li>假装自信</li>
 </ul>

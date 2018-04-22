@@ -107,8 +107,9 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="5行代码的自动评论机器人">
 <meta property="og:url" content="http://brightliao.me/2017/12/07/automated-comment-on-xiaomi-s-live-stream/index.html">
-<meta property="og:site_name" content="Bright LGM's Blog">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
 <meta property="og:description" content="又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。 直播地址：https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;amp;masid=17409.0195 代码如下： 1234567891011// 随机选择一个当前评论列表里面的评论va">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-12-07T12:19:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="5行代码的自动评论机器人">
@@ -425,7 +426,7 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br>于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
+        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br>于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
 <p>直播地址：<a href="https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195" target="_blank" rel="external">https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195</a></p>
 <p>代码如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 随机选择一个当前评论列表里面的评论</span></div><div class="line"><span class="keyword">var</span> r = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Math</span>.floor((<span class="built_in">Math</span>.random() * $(<span class="string">'.livechat-list-wrapper .list li'</span>).length))</div><div class="line"><span class="comment">// 提取选中的评论的内容</span></div><div class="line"><span class="keyword">var</span> text = <span class="function"><span class="params">()</span> =&gt;</span> $($(<span class="string">'.livechat-list-wrapper .list li'</span>)[r()]).find(<span class="string">'.content'</span>).text()</div><div class="line"><span class="comment">// 使用选中的内容自动发评论</span></div><div class="line"><span class="keyword">var</span> c = <span class="function"><span class="params">()</span> =&gt;</span> &#123;$(<span class="string">'#J_chatContent'</span>).val(text());$(<span class="string">'#J_sendChatBtn'</span>).attr(<span class="string">'class'</span>, <span class="string">'btn active'</span>);$(<span class="string">'#J_sendChatBtn'</span>).click();&#125;</div><div class="line"><span class="comment">// 生成随机的间隔时间</span></div><div class="line"><span class="keyword">var</span> rtime = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">15000</span> + <span class="number">5000</span>)</div><div class="line"><span class="comment">// 设置一个计时器定时发评论</span></div><div class="line"><span class="keyword">var</span> st = <span class="function"><span class="params">()</span> =&gt;</span> stt = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;c(); st()&#125;, rtime())</div><div class="line">st();</div></pre></td></tr></table></figure>
@@ -472,15 +473,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/10/28/openshift-workshop/" rel="next" title="OpenShift工作坊">
+                <i class="fa fa-chevron-left"></i> OpenShift工作坊
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/28/openshift-workshop/" rel="prev" title="OpenShift工作坊">
-                OpenShift工作坊 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
