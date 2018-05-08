@@ -11,7 +11,7 @@ Crafty.c("DiagonalLine", {
         return this;
     },
     direction: function (direction) {
-        this.direction = direction;
+        this._direction = direction;
         return this;
     },
     width: function (width) {
@@ -23,12 +23,56 @@ Crafty.c("DiagonalLine", {
         ctx.lineWidth = this.width;
         ctx.strokeStyle = this.color;
         ctx.beginPath();
-        if (this.direction === 'down-up') {
+        if (this._direction === 'down-up') {
             ctx.moveTo(e.pos._x, e.pos._y + e.pos._h);
             ctx.lineTo(e.pos._x + e.pos._w, e.pos._y);
         } else {
             ctx.moveTo(e.pos._x, e.pos._y);
             ctx.lineTo(e.pos._x + e.pos._w, e.pos._y + e.pos._h);
+        }
+        ctx.stroke();
+    }
+});
+
+Crafty.c("Triangle", {
+    init: function () {
+        this.requires("2D, Canvas");
+        this.bind("Draw", this._draw_me);
+        this.ready = true;
+    },
+    color: function (color) {
+        this.color = color;
+        return this;
+    },
+    direction: function (direction) {
+        this._direction = direction;
+        return this;
+    },
+    width: function (width) {
+        this.width = width;
+        return this;
+    },
+    _draw_me: function (e) {
+        var ctx = e.ctx;
+        ctx.lineWidth = this.width;
+        ctx.strokeStyle = this.color;
+        ctx.beginPath();
+        var points = [];
+        if (this._direction === 't') {
+            points = [[e.pos._x, e.pos._y + e.pos._h], [e.pos._x + e.pos._w / 2, e.pos._y], [e.pos._x + e.pos._w, e.pos._y + e.pos._h]];
+        } else if (this._direction === 'r') {
+            points = [[e.pos._x, e.pos._y], [e.pos._x + e.pos._w, e.pos._y + e.pos._h / 2], [e.pos._x, e.pos._y + e.pos._h]];
+        } else if (this._direction === 'b') {
+            points = [[e.pos._x, e.pos._y], [e.pos._x + e.pos._w / 2, e.pos._y + e.pos._h], [e.pos._x + e.pos._w, e.pos._y]];
+        } else if (this._direction === 'l') {
+            points = [[e.pos._x, e.pos._y + e.pos._h / 2], [e.pos._x + e.pos._w, e.pos._y], [e.pos._x + e.pos._w, e.pos._y + e.pos._h]];
+        } else {
+            throw new Error('unknown direction: ' + this._direction);
+        }
+        for (var i = 0; i < points.length; i++) {
+            var point = points[i], pointNext = points[i + 1 === points.length ? 0 : i + 1];
+            ctx.moveTo(point[0], point[1]);
+            ctx.lineTo(pointNext[0], pointNext[1]);
         }
         ctx.stroke();
     }
@@ -215,7 +259,7 @@ var m = {
     }
 }
 var config = {
-    showValue: false
+    showValue: true
 }
 
 function GridCellQValue(t, r, b, l) {
@@ -231,10 +275,17 @@ function GridCell(type, opts) {
     this.type = type;
     this.value = opts.value || 0;
     this.qValue = opts.qValue || new GridCellQValue(0, 0, 0, 0);
+    this._direction = opts.direction || undefined;
     this.reward = opts.reward || 0;
 }
 GridCell.prototype = {
     direction: function () {
+        if (this.type === 'wall') {
+            return null;
+        }
+        if (this._direction !== undefined) {
+            return this._direction;
+        }
         return ['t', 'r', 'b', 'l'][m.argmax(this.qValue.asArray())];
     },
     positiveReward: function () {
@@ -282,6 +333,15 @@ GridTable.prototype = {
                 cell.qValue = new GridCellQValue(qValues.t, qValues.r, qValues.b, qValues.l);
             }
         }
+    },
+    updatePolicy: function (states, policy) {
+        for (var i = 0; i < states.length; i++) {
+            var state = states[i];
+            var stateSplit = state.split('-');
+            var row = parseInt(stateSplit[0]), column = parseInt(stateSplit[1]);
+            var cell = this.cellAt(row, column);
+            cell._direction = policy[i];
+        }
     }
 }
 function GridTableInteractor(presenter, gridTable) {
@@ -290,6 +350,7 @@ function GridTableInteractor(presenter, gridTable) {
     this.gridTable = gridTable;
     this.mdp = this._mdp();
     this.solverVI = new MDPVISolver(this.mdp);
+    this.solverPI = new MDPPISolver(this.mdp);
 }
 GridTableInteractor.prototype = {
     states: function () {
@@ -305,6 +366,10 @@ GridTableInteractor.prototype = {
     },
     start: function () {
         this.presenter.initTable(this.gridTable);
+        this.setupVISolver();
+        this.setupPISolver();
+    },
+    setupVISolver: function () {
         var mdp = this.mdp, solver = this.solverVI, gridTable = this.gridTable, self = this;
         this.presenter.startValueIteration().subscribe(function () {
             var values = m.zeroArray([mdp.states.length]);
@@ -337,6 +402,69 @@ GridTableInteractor.prototype = {
                     };
                 }
             }, 3000);
+        });
+    },
+    setupPISolver: function () {
+        var mdp = this.mdp, solver = this.solverPI, gridTable = this.gridTable, self = this;
+        this.presenter.startPolicyIteration().subscribe(function () {
+            function solveForPolicy (policy, onSolved) {
+                var policyValues = m.zeroArray([solver.states.length]);
+                var policyValuesNew = policyValues;
+                var iteration = 0;
+                var interval = setInterval(function () {
+                    policyValues = policyValuesNew;
+                    policyValuesNew = solver.policyValues(policyValues, policy);
+
+                    gridTable.updateValues(mdp.states, policyValuesNew);
+                    self.presenter.updateTable(gridTable);
+
+                    console.log('solve for policy iteration ' + (++iteration));
+                    // console.log('policyValuesNew: ', policyValuesNew);
+                    if (iteration === 1000) {
+                        clearInterval(interval);
+                        throw new Error('cannot converge after 1000 steps!');
+                    }
+                    if (solver.valueConverged(policyValues, policyValuesNew)) {
+                        clearInterval(interval);
+                        console.log('value converged for policy iteration!');
+                        onSolved(policyValues);
+                    }
+                }, 500);
+            }
+
+            var policy = solver.randomPolicy();
+            var policyNew = policy;
+            var iterations = 0;
+            gridTable.updatePolicy(mdp.states, policy);
+            self.presenter.updateTable(gridTable);
+
+            function solve () {
+                policy = policyNew;
+                solveForPolicy(policy, function (policyValues) {
+                    policyNew = solver.improvePolicy(policyValues, policy);
+
+                    gridTable.updateValues(mdp.states, policyValues);
+                    gridTable.updatePolicy(mdp.states, policyNew);
+                    self.presenter.updateTable(gridTable);
+
+                    console.log('finished policy iteration ' + (++iterations));
+                    if (solver.converged(policy, policyNew)) {
+                        console.log('solved!');
+
+                        self.presenter.finishIteration();
+
+                        var states = mdp.states;
+                        return {
+                            nextAction: function (state) {
+                                return policy[states.indexOf(state)];
+                            }
+                        };
+                    }
+                    setTimeout(solve, 3000);
+                });
+
+            }
+            setTimeout(solve, 3000);
         });
     },
     _mdp: function () {
@@ -397,6 +525,7 @@ GridTableInteractor.prototype = {
     }
 }
 function GridCellView(cell, pos, wh) {
+    this.pos = pos, this.wh = wh;
     var color = { 'room': '#228B22', 'wall': 'gray', 'reward+': '#DAA520', 'reward-': '#B22222' };
     var type = cell.type;
     if (type === 'reward') {
@@ -404,32 +533,100 @@ function GridCellView(cell, pos, wh) {
     }
     C.e('2D, Canvas, Color').attr({x: pos[0], y: pos[1], w: wh[0], h: wh[1]}).color(color[type]);
     var currentValue = cell.currentValue();
-    var size = wh[0] / 7;
+    var size = this.textSize = wh[0] / 7;
     if (currentValue.length === 1) {
-        this.valueText = C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3, y: pos[1] + wh[1] / 2 - size / 2}).text(currentValue[0].toFixed(2)).textColor('white').textFont({size: size + 'px'});
+        this.updateValue(currentValue);
     } else if (currentValue.length === 4) {
-        this.upDownLine = C.e('DiagonalLine').attr({x: pos[0], y: pos[1], w: wh[0], h: wh[1]}).color('white');
-        this.downUpLine = C.e('DiagonalLine').attr({x: pos[0], y: pos[1], w: wh[0], h: wh[1]}).color('white').direction('down-up');
-        this.qValueTextT = C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3, y: pos[1] + size}).text(currentValue[0].toFixed(2)).textColor('white').textFont({size: size + 'px'});
-        this.qValueTextR = C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3 * 2, y: pos[1] + wh[1] / 2 - size / 2}).text(currentValue[1].toFixed(2)).textColor('white').textFont({size: size + 'px'});
-        this.qValueTextB = C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3, y: pos[1] + wh[1] - size - size}).text(currentValue[2].toFixed(2)).textColor('white').textFont({size: size + 'px'});
-        this.qValueTextL = C.e('2D, Canvas, Text').attr({x: pos[0] + size / 2, y: pos[1] + wh[1] / 2 - size / 2}).text(currentValue[3].toFixed(2)).textColor('white').textFont({size: size + 'px'});
+        this.updateQValue(currentValue);
     }
+
+    this.updateDirection(cell);
 }
 GridCellView.prototype = {
+    destroyQValueElements: function () {
+        this.destroyElements(['upDownLine', 'downUpLine', 'qValueTextL', 'qValueTextB', 'qValueTextR', 'qValueTextT']);
+    },
+    updateQValue: function (currentValue) {
+        var pos = this.pos, wh = this.wh, size = this.textSize;
+        this.currentValue = currentValue;
+        this.upDownLine = this.upDownLine || C.e('DiagonalLine').attr({x: pos[0], y: pos[1], w: wh[0], h: wh[1]}).color('white');
+        this.downUpLine = this.downUpLine || C.e('DiagonalLine').attr({x: pos[0], y: pos[1], w: wh[0], h: wh[1]}).color('white').direction('down-up');
+        this.qValueTextT = this.qValueTextT || C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3, y: pos[1] + size}).textFont({size: size + 'px'});
+        this.qValueTextR = this.qValueTextR || C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3 * 2, y: pos[1] + wh[1] / 2 - size / 2}).textFont({size: size + 'px'});
+        this.qValueTextB = this.qValueTextB || C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3, y: pos[1] + wh[1] - size - size}).textFont({size: size + 'px'});
+        this.qValueTextL = this.qValueTextL || C.e('2D, Canvas, Text').attr({x: pos[0] + size / 2, y: pos[1] + wh[1] / 2 - size / 2}).textFont({size: size + 'px'});
+        var colors = ['white', 'white', 'white', 'white'];
+        var policyDirection = m.argmax(currentValue);
+        colors[policyDirection] = '#FF8C00';
+        this.updateText(this.qValueTextT, currentValue[0].toFixed(2), colors[0]);
+        this.updateText(this.qValueTextR, currentValue[1].toFixed(2), colors[1]);
+        this.updateText(this.qValueTextB, currentValue[2].toFixed(2), colors[2]);
+        this.updateText(this.qValueTextL, currentValue[3].toFixed(2), colors[3]);
+    },
+    updateText: function (element, text, color) {
+        var textOld = element.text();
+        if (textOld !== text) {
+            element.text(text).textColor(color);
+            if (textOld) {
+                this.blink(element, color);
+            }
+        }
+    },
+    blink: function (element, originalColor, blinkColor, timeout) {
+        blinkColor = blinkColor || '#FF8C00', timeout = timeout || 500;
+        element.textColor(blinkColor);
+        setTimeout(function() {
+            element.textColor(originalColor);
+        }, timeout);
+    },
+    destroyValueElements: function () {
+        this.destroyElements(['valueText']);
+    },
+    updateValue: function (currentValue) {
+        var pos = this.pos, wh = this.wh, size = this.textSize;
+        this.valueText = this.valueText || C.e('2D, Canvas, Text').attr({x: pos[0] + wh[0] / 3, y: pos[1] + wh[1] / 2 - size / 2}).textColor('white').textFont({size: size + 'px'});
+        this.updateText(this.valueText, currentValue[0].toFixed(2), 'white');
+    },
+    destroyElements: function (elements) {
+        for (var i = 0; i < elements.length; i++) {
+            if (this[elements[i]]) {
+                this[elements[i]].destroy();
+                this[elements[i]] = null;
+            }
+        }
+    },
+    updateDirection: function (cell) {
+        var pos = this.pos, wh = this.wh;
+        var direction = cell.direction();
+        var directionSize = 5;
+        var x = -1, y = -1;
+        if (direction === 't') {
+            var x = pos[0] + (wh[0] - directionSize) / 2, y = pos[1] + 2;
+        } else if (direction === 'r') {
+            var x = pos[0] + wh[0] - directionSize - 2, y = pos[1] + (wh[1] - directionSize) / 2;
+        } else if (direction === 'b') {
+            var x = pos[0] + (wh[0] - directionSize) / 2, y = pos[1] + wh[1] - directionSize - 2;
+        } else if (direction === 'l') {
+            var x = pos[0] + 2, y = pos[1] + (wh[1] - directionSize) / 2;
+        }
+        if (x !== -1 && y !== -1) {
+            if (!this.direction) {
+                this.direction = C.e('Triangle').attr({x: x, y: y, w: directionSize, h: directionSize}).direction(direction).color('red');
+            } else {
+                this.direction.attr({x: x, y: y, w: directionSize, h: directionSize}).direction(direction);
+            }
+        }
+    },
     update: function (cell) {
         var currentValue = cell.currentValue();
         if (currentValue.length === 1) {
-            this.valueText.text(currentValue[0].toFixed(2));
+            this.destroyQValueElements();
+            this.updateValue(currentValue);
         } else if (currentValue.length === 4) {
-            var policyDirection = m.argmax(currentValue);
-            var colors = ['white', 'white', 'white', 'white'];
-            colors[policyDirection] = '#FF8C00';
-            this.qValueTextT.text(currentValue[0].toFixed(2)).textColor(colors[0]);
-            this.qValueTextR.text(currentValue[1].toFixed(2)).textColor(colors[1]);
-            this.qValueTextB.text(currentValue[2].toFixed(2)).textColor(colors[2]);
-            this.qValueTextL.text(currentValue[3].toFixed(2)).textColor(colors[3]);
+            this.destroyValueElements();
+            this.updateQValue(currentValue);
         }
+        this.updateDirection(cell);
     }
 }
 function TextButton (viewVector, margin, text, textSize, onClick) {
@@ -467,21 +664,26 @@ function ControllerView (gridView) {
     var self = this;
     this.solverVIBtn = new TextButton({x: x, y: y, w: w, h: h}, margin, 'Value Iteration', textSize, function () {
         gridView.onStartValueIteration();
-        self.disableAllBtns();
+        self.disableSolveBtns();
     });
 
     x = x + w + margin * 2;
     this.solverPIBtn = new TextButton({x: x, y: y, w: w, h: h}, margin, 'Policy Iteration', textSize, function () {
         gridView.onStartPolicyIteration();
-        self.disableAllBtns();
+        self.disableSolveBtns();
+    });
+
+    x = x + w + margin * 2;
+    this.toggleQValueBtn = new TextButton({x: x, y: y, w: w, h: h}, margin, 'Toggle Q Value', textSize, function () {
+        config.showValue = !config.showValue;
     });
 }
 ControllerView.prototype = {
-    enableAllBtns: function () {
+    enableSolveBtns: function () {
         this.solverPIBtn.enable();
         this.solverVIBtn.enable();
     },
-    disableAllBtns: function () {
+    disableSolveBtns: function () {
         this.solverPIBtn.disable();
         this.solverVIBtn.disable();
     }
@@ -554,7 +756,7 @@ GridTableView.prototype = {
         };
     },
     finishIteration: function () {
-        this.controllerView.enableAllBtns();
+        this.controllerView.enableSolveBtns();
     }
 }
 function GridTableRouter(view, interactor) {
@@ -723,7 +925,7 @@ MDPPISolver.prototype = {
             policyValues = policyValuesNew;
             policyValuesNew = this.policyValues(policyValues, policy);
             console.log('solve for policy iteration ' + (++iteration));
-            console.log('policyValuesNew: ', policyValuesNew);
+            // console.log('policyValuesNew: ', policyValuesNew);
             if (iteration === 1000) {
                 throw new Error('cannot converge after 1000 steps!');
             }
