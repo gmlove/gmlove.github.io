@@ -130,6 +130,10 @@ var m = {
         }
         return range;
     },
+    randomInt: function (min, max) {
+        min = min || 0, max = max || Number.MAX_SAFE_INTEGER;
+        return Math.floor(Math.random() * (max - min) + min);
+    },
     zeroArray: function (shape) {
         var arr = [];
         if (!shape.length) {
@@ -151,6 +155,63 @@ var m = {
         }
         // console.log( `values for object ${object}: ${values}`)
         return values;
+    },
+    eq: function (curr, exp, falseCallback) {
+        if (typeof(curr) === 'number' && typeof(exp) === 'number' && Math.abs(curr - exp) < 1e-8) {
+            return true;
+        } else if (exp !== curr) {
+            if (falseCallback) {
+                falseCallback(curr, exp);
+            }
+            return false;
+        }
+        return true;
+    },
+    arrayEq: function (curr, exp, falseCallback) {
+        if (curr.length !== exp.length) {
+            if (falseCallback) {
+                falseCallback(curr, exp);
+            }
+            return false;
+        }
+        if (!m.isArray(curr) || !m.isArray(exp)) {
+            return m.eq(curr, exp, falseCallback);
+        }
+        if (curr.length) {
+            if (m.isArray(curr[0])) {
+                for (var i = 0; i < curr.length; i++) {
+                    if(!m.arrayEq(curr[i], exp[i], falseCallback)) {
+                        return false;
+                    }
+                }
+            } else {
+                for (var i = 0; i < curr.length; i++) {
+                    if(!m.eq(curr[i], exp[i], falseCallback)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    },
+    objEq: function(curr, exp, falseCallback) {
+        var keysCurr = Object.keys(curr).sort(), keysExp = Object.keys(exp).sort();
+        if (!m.arrayEq(keysCurr, keysExp, falseCallback)) {
+            return false;
+        }
+        for (var i = 0; i < keysCurr.length; i++) {
+            var key = keysCurr[i];
+            if (m.isArray(curr[key]) && m.isArray(exp[key])) {
+                if(!m.arrayEq(curr[key], exp[key], falseCallback)) {
+                    return false;
+                }
+            } else {
+                if(!m.eq(curr[key], exp[key], falseCallback)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 var config = {
@@ -579,13 +640,7 @@ MDPVISolver.prototype = {
         return policy;
     },
     converged: function (valuesOld, valuesCurr) {
-        var zeroLike = 1e-7;
-        for (var i = 0; i < valuesOld.length; i++) {
-            if (Math.abs(valuesOld[i] - valuesCurr[i]) > zeroLike) {
-                return false;
-            }
-        }
-        return true;
+        return m.arrayEq(valuesOld, valuesCurr);
     },
     value: function (qValues) {
         qValues = m.values(qValues);
@@ -609,13 +664,113 @@ MDPVISolver.prototype = {
         var qValue = 0;
         var transitions = this.mdp.transitions(state, action);
         var targetStates = Object.keys(transitions);
-        for (var k = 0; k < targetStates.length; k++) {
-            var targetState = targetStates[k];
+        for (var i = 0; i < targetStates.length; i++) {
+            var targetState = targetStates[i];
             var value = valuesOld[this.states.indexOf(targetState)];
             qValue += transitions[targetState] * (this.mdp.reward(state, action, targetState) + this.gama * value);
         }
         // console.log(`qValue: state ${state}, action ${action}, qValue ${qValue}`)
         return qValue;
+    }
+}
+
+function MDPPISolver (mdp) {
+    this.mdp = mdp;
+    this.states = this.mdp.states;
+    this.gama = 0.5;
+}
+
+MDPPISolver.prototype = {
+    solve: function () {
+        var policy = this.randomPolicy();
+        var policyNew = policy;
+        do {
+            policy = policyNew;
+            values = this.solveForPolicy(policy);
+            policyNew = this.improvePolicy(values, policy);
+        } while (!this.converged(policy, policyNew));
+        var states = this.states;
+        return {
+            nextAction: function (state) {
+                return policyNew[states.indexOf(state)];
+            }
+        };
+    },
+    improvePolicy: function (values, policy) {
+        var policyNew = [];
+        for (var i = 0; i < this.states.length; i++) {
+            var state = this.states[i];
+            var betterAction = policy[i];
+            var maxQValue = 0;
+            var availableActions = this.mdp.availableActions(state);
+            for (var j = 0; j < availableActions.length; j++) {
+                var availableAction = availableActions[j];
+                var qValue = this.qValue(values, state, availableAction);
+                if (maxQValue < qValue) {
+                    maxQValue = qValue;
+                    betterAction = availableAction;
+                }
+            }
+            policyNew.push(betterAction);
+        }
+        return policyNew;
+    },
+    solveForPolicy: function (policy) {
+        var policyValues = m.zeroArray([this.states.length]);
+        var policyValuesNew = policyValues;
+        var iteration = 0;
+        do {
+            policyValues = policyValuesNew;
+            policyValuesNew = this.policyValues(policyValues, policy);
+            console.log('solve for policy iteration ' + (++iteration));
+            console.log('policyValuesNew: ', policyValuesNew);
+            if (iteration === 1000) {
+                throw new Error('cannot converge after 1000 steps!');
+            }
+        } while (!this.valueConverged(policyValues, policyValuesNew))
+        return policyValues;
+    },
+    policyValues: function (valuesOld, policy) {
+        policyValuesNew = [];
+        for (var i = 0; i < this.states.length; i++) {
+            var state = this.states[i];
+            var action = policy[i];
+            var policyValue = this.qValue(valuesOld, state, action);
+            policyValuesNew.push(policyValue);
+        }
+        return policyValuesNew;
+    },
+    qValue: function (valuesOld, state, action) {
+        var value = 0;
+        if (action) {
+            var transitions = this.mdp.transitions(state, action);
+            var targetStates = Object.keys(transitions);
+            for (var i = 0; i < targetStates.length; i++) {
+                var targetState = targetStates[i];
+                var valueOld = valuesOld[this.states.indexOf(targetState)];
+                value += transitions[targetState] * (this.mdp.reward(state, action, targetState) + this.gama * valueOld);
+            }
+        }
+        return value;
+    },
+    converged: function (policyOld, policyCurr) {
+        return m.arrayEq(policyOld, policyCurr);
+    },
+    valueConverged: function (valuesOld, valuesCurr) {
+        return m.arrayEq(valuesOld, valuesCurr);
+    },
+    randomPolicy: function () {
+        var policy = [];
+        for (var i = 0; i < this.states.length; i++) {
+            var state = this.states[i];
+            var actions = this.mdp.availableActions(state);
+            if (!actions.length) {
+                policy.push(null);
+            } else {
+                policy.push(actions[m.randomInt(0, actions.length)]);
+            }
+        }
+        return policy;
     }
 }
 
@@ -628,10 +783,9 @@ gameRouter.interactor.start();
 function Test() {
     var assert = {
         eq: function (curr, exp) {
-            if (typeof(curr) === 'number' && typeof(exp) === 'number' && Math.abs(curr - exp) < 1e-8) {
-            } else if (exp !== curr) {
-                throw new Error('expect ' + curr + ' (' + typeof(curr) + ') to equal ' + exp + ' (' + typeof(exp) + ')');
-            }
+            m.eq(curr, exp, function (_curr, _exp) {
+                throw new Error('expect ' + _curr + ' (' + typeof(_curr) + ') to equal ' + _exp + ' (' + typeof(_exp) + ')');
+            });
         },
         raise: function (func) {
             try {
@@ -642,38 +796,22 @@ function Test() {
             throw new Error('expect an error to raise, but no error');
         },
         arrayEq: function (curr, exp) {
-            if (curr.length !== exp.length) {
-                throw new Error('expect ' + curr + ' to equal ' + exp);
-            }
-            if (!m.isArray(curr) || !m.isArray(exp)) {
-                return assert.eq(curr, exp);
-            }
-            if (curr.length) {
-                if (m.isArray(curr[0])) {
-                    for (var i = 0; i < curr.length; i++) {
-                        return assert.arrayEq(curr[i], exp[i]);
-                    }
-                } else {
-                    for (var i = 0; i < curr.length; i++) {
-                        return assert.eq(curr[i], exp[i]);
-                    }
-                }
-            }
+            m.arrayEq(curr, exp, function (_curr, _exp) {
+                throw new Error('expect ' + _curr + ' to equal ' + _exp);
+            });
         },
         objEq: function(curr, exp) {
-            var keysCurr = Object.keys(curr).sort(), keysExp = Object.keys(exp).sort();
-            assert.arrayEq(keysCurr, keysExp);
-            for (var i = 0; i < keysCurr.length; i++) {
-                var key = keysCurr[i];
-                if (m.isArray(curr[key]) && m.isArray(exp[key])) {
-                    return assert.arrayEq(curr[key], exp[key]);
-                } else {
-                    return assert.eq(curr[key], exp[key]);
-                }
-            }
+            m.objEq(curr, exp, function (_curr, _exp) {
+                throw new Error('expect ' + _curr + ' (' + typeof(_curr) + ') to equal ' + _exp + ' (' + typeof(_exp) + ')');
+            });
         }
     }
     var all = {
+        testAssert: function () {
+            assert.raise(function () { assert.eq('', null) });
+            assert.raise(function () { assert.arrayEq([], [1, 2]) });
+            assert.raise(function () { assert.objEq({a:1}, {a:2}) });
+        },
         testIsArray: function () {
             assert.eq(m.isArray([]), true);
             assert.eq(m.isArray([1]), true);
@@ -716,9 +854,9 @@ function Test() {
             assert.objEq(mdp.transitions('0-1', 'b'), {'0-0': 0.15, '0-1': 0.7, '0-2': 0.15});
             assert.objEq(mdp.transitions('0-1', 'r'), {'0-0': 0.15, '0-1': 0.15, '0-2': 0.7});
             assert.objEq(mdp.transitions('0-1', 't'), {'0-0': 0.15, '0-1': 0.7, '0-2': 0.15});
-            assert.objEq(mdp.transitions('0-2', 'r'), {'0-1': 0.1, '0-2': 0.1, '0-3': 0.7, '1-1': 0.1});
-            assert.objEq(mdp.transitions('0-2', 't'), {'0-1': 0.1, '0-2': 0.7, '0-3': 0.1, '1-1': 0.1});
-            assert.objEq(mdp.transitions('0-2', 't'), {'0-1': 0.1, '0-2': 0.7, '0-3': 0.1, '1-1': 0.1});
+            assert.objEq(mdp.transitions('0-2', 'r'), {'0-1': 0.1, '0-2': 0.1, '0-3': 0.7, '1-2': 0.1});
+            assert.objEq(mdp.transitions('0-2', 't'), {'0-1': 0.1, '0-2': 0.7, '0-3': 0.1, '1-2': 0.1});
+            assert.objEq(mdp.transitions('0-2', 't'), {'0-1': 0.1, '0-2': 0.7, '0-3': 0.1, '1-2': 0.1});
             assert.raise(function () { mdp.transitions('0-3', 't'); });
             assert.raise(function () { mdp.transitions('1-3', 'l'); });
         },
@@ -759,6 +897,45 @@ function Test() {
             var policy = solver.solve();
             assert.eq(policy.nextAction('a'), 'a2');
             assert.eq(policy.nextAction('b'), 'e');
+        },
+        testMDPPISolver: function () {
+            var mdp = {
+                states: ['a', 'b', 't'],
+                availableActions: function (state) {
+                    return {
+                        'a': ['a1', 'a2'],
+                        'b': ['e'],
+                        't': []
+                    }[state];
+                },
+                reward: function (state, action, targetState) {
+                    // console.log('reward for: ', state + '-' + action + '-' + targetState)
+                    return {
+                        'a-a1-a': 0, 'a-a1-b': 1, 'a-a2-a': 0, 'a-a2-b': 1,
+                        'b-e-t': 1
+                    }[state + '-' + action + '-' + targetState];
+                },
+                transitions: function (state, action) {
+                    return {
+                        'a-a1': {a: 0.7, b: .3}, 'a-a2': {a: 0.2, b: 0.8},
+                        'b-e': {t: 1}
+                    }[state + '-' + action];
+                }
+            };
+            var solver = new MDPPISolver(mdp);
+            var policy = solver.randomPolicy();
+            assert.eq(policy.length, 3);
+            assert.eq(policy[0] === 'a1' || policy[0] === 'a2', true);
+            assert.eq(policy[1], 'e');
+            assert.eq(solver.qValue([1, 1, 3], 'a', 'a1'), 0.7 * (0 + solver.gama * 1) + 0.3 * (1 + solver.gama * 1));
+            assert.eq(solver.qValue([1, 4, 3], 'b', 'e'), 1 * (1 + solver.gama * 3));
+            assert.arrayEq(solver.policyValues([1, 1, 3], ['a1', 'e', null]), [
+                0.7 * (0 + solver.gama * 1) + 0.3 * (1 + solver.gama * 1), 1 * (1 + solver.gama * 3), 0
+            ]);
+            var policy = solver.solve();
+            assert.eq(policy.nextAction('a'), 'a2');
+            assert.eq(policy.nextAction('b'), 'e');
+            assert.eq(policy.nextAction('t'), null);
         }
     }
 
