@@ -389,10 +389,10 @@ GridTableInteractor.prototype = {
                 gridTable.updateValues(mdp.states, valuesNew);
                 gridTable.updateQValues(mdp.states, qValuesAll);
                 self.presenter.updateTable(gridTable);
-                console.log('finished iteration ' + (++iterations));
+                self.presenter.updateStatus('finished iteration ' + (++iterations));
                 if (solver.converged(values, valuesNew)) {
                     clearInterval(interval);
-                    console.log('solved!');
+                    self.presenter.updateStatus('solved!');
                     self.presenter.finishIteration();
                     var states = mdp.states;
                     var policy = {
@@ -417,8 +417,7 @@ GridTableInteractor.prototype = {
 
                     gridTable.updateValues(mdp.states, policyValuesNew);
                     self.presenter.updateTable(gridTable);
-
-                    console.log('solve for policy iteration ' + (++iteration));
+                    self.presenter.updateStatus('solve for policy iteration ' + (++iteration));
                     // console.log('policyValuesNew: ', policyValuesNew);
                     if (iteration === 1000) {
                         clearInterval(interval);
@@ -426,7 +425,7 @@ GridTableInteractor.prototype = {
                     }
                     if (solver.valueConverged(policyValues, policyValuesNew)) {
                         clearInterval(interval);
-                        console.log('value converged for policy iteration!');
+                        self.presenter.updateStatus('value converged for policy iteration!');
                         onSolved(policyValues);
                     }
                 }, 500);
@@ -446,11 +445,10 @@ GridTableInteractor.prototype = {
                     gridTable.updateValues(mdp.states, policyValues);
                     gridTable.updatePolicy(mdp.states, policyNew);
                     self.presenter.updateTable(gridTable);
+                    self.presenter.updateStatus('finished policy iteration ' + (++iterations));
 
-                    console.log('finished policy iteration ' + (++iterations));
                     if (solver.converged(policy, policyNew)) {
-                        console.log('solved!');
-
+                        self.presenter.updateStatus('solved!');
                         self.presenter.finishIteration();
 
                         var states = mdp.states;
@@ -692,11 +690,12 @@ ControllerView.prototype = {
 function GridTableView(parentView) {
     this.parentView = parentView;
     this.tableVector = {x: 0, y: 0, w: parentView.width, h: parentView.height * 0.8};
-    this.controllerVector = {x: 0, y: parentView.height * 0.8, w: parentView.width, h: parentView.height * 0.2};
+    this.controllerVector = {x: 0, y: parentView.height * 0.8, w: parentView.width, h: parentView.height * 0.15};
     this.controllerView = null;
     this.cellMargin = 2;
     this.borderWidth = 0;
     this.cellViews = [];
+    this.statusView = C.e('2D, Canvas, Text').attr({x: 0, y: parentView.height * 0.95, w: parentView.width, h: parentView.height * 0.05}).textColor('gray').textFont({size: parentView.height * 0.03 + 'px'});
     this.eventBus = new EventBus();
 }
 GridTableView.prototype = {
@@ -712,6 +711,10 @@ GridTableView.prototype = {
             this.borderWidth + this.cellMargin + (this.cellMargin + cellW) * x,
             this.borderWidth + this.cellMargin + (this.cellMargin + cellH) * y
         ];
+    },
+    updateStatus: function (text) {
+        console.log(text);
+        this.statusView.text(text);
     },
     initTable: function(gridTable) {
         this.gridTable = gridTable;
