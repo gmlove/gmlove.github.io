@@ -676,6 +676,7 @@ function ControllerView (gridView) {
     x = x + w + margin * 2;
     this.toggleQValueBtn = new TextButton({x: x, y: y, w: w, h: h}, margin, 'Toggle Q Value', textSize, function () {
         config.showValue = !config.showValue;
+        gridView.updateTable();
     });
 }
 ControllerView.prototype = {
@@ -713,6 +714,7 @@ GridTableView.prototype = {
         ];
     },
     initTable: function(gridTable) {
+        this.gridTable = gridTable;
         var cellWH = this.cellWH(gridTable.cells[0].length, gridTable.cells.length);
         for (var h = 0; h < gridTable.cells.length; h++) {
             var cells = gridTable.cells[h];
@@ -725,6 +727,10 @@ GridTableView.prototype = {
         this.controllerView = new ControllerView(this);
     },
     updateTable: function(gridTable) {
+        gridTable = this.gridTable = gridTable || this.gridTable;
+        if (!gridTable) {
+            return;
+        }
         for (var h = 0; h < gridTable.cells.length; h++) {
             var cells = gridTable.cells[h];
             var cellViews = this.cellViews[h];
