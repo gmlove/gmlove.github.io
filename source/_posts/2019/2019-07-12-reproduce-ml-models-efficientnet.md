@@ -14,6 +14,8 @@ date: 2019-07-12 20:03:06
 
 EfficientNet是谷歌AI科学家们在论文《EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks》中提出的模型。这篇文章不仅提出了这个模型，还系统地研究了模型扩展的问题，大家感兴趣的，可用阅读一下[论文原文](https://arxiv.org/abs/1905.11946)。EfficientNet的亮眼之处在于，其在保持领先的性能的同时，将模型的参数数量和预测速度都提升了一个数量级。请看下图的性能对比：
 
+<!-- more -->
+
 ![EfficientNet性能对比](/attaches/2019/2019-07-12-reproduce-ml-models-efficientnet/efficientnet-perf.png)
 
 这篇文章同时还研究了可迁移性，发现其与我们常用的ResNet,ResNext等等具有类似的可迁移性。看起来EfficientNet完全可以作为新一代的基础模型使用起来呀。

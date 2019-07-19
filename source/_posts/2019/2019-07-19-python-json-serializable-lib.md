@@ -13,6 +13,8 @@ date: 2019-07-19 20:03:06
 
 在Python的世界里，将一个对象以json格式进行序列化或反序列化一直是一个问题。Python标准库里面提供了json序列化的工具，我们可以简单的用`json.dumps`来将一个对象序列化。但是这种序列化仅支持python内置的基本类型，对于自定义的类，我们将得到`Object of type A is not JSON serializable`的错误。
 
+<!-- more -->
+
 有很多种方法可以用来支持这种序列化，[这里](https://stackoverflow.com/questions/3768895/how-to-make-a-class-json-serializable)有一个很长的关于这个问题的讨论。总结起来，基本上有两种还不错的思路：
 
 1. 利用标准库的接口：从python标准json库中的`JSONDecoder`继承，然后自定义实现一个`default`方法用来自定义序列化过程

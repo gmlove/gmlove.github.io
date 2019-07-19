@@ -19,6 +19,8 @@ date: 2019-07-08 20:03:06
 
 DORN模型是在单图像深度估计问题上效果非常好的模型，18年刚发布的时候，就同时在KITTI数据集和ScanNet数据集上面取得了[Robust Vision](http://www.robustvision.net/leaderboard.php?benchmark=depth)挑战的第一名。
 
+<!-- more -->
+
 ![排名截图](/attaches/2019/2019-07-08-reproduce-ml-models-dorn/robustvision-challenge.png)
 
 为什么能大幅优于其他模型呢？论文里面讲得比较清楚，主要在于两个方面，一是基础模型能更好的提取特征，二是基于距离递增的序数回归损失函数设计。

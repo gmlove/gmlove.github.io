@@ -36,6 +36,7 @@ https://nips.cc/
 - KDD: Data mining (the analysis step of the "Knowledge Discovery in Databases" process, or KDD), an interdisciplinary subfield of computer science, is the computational process of discovering patterns in large data sets involving methods at the intersection of artificial intelligence, machine learning, statistics, and database systems. Extract information into an understandable structure. Involves database and data management aspects, data pre-processing, model and inference considerations, interestingness metrics, complexity considerations, post-processing of discovered structures, visualization, and online updating.
 http://www.kdd.org/kdd2017/accepted-papers
 - IJCAI: The International Joint Conference on Artificial Intelligence (or IJCAI) is a gathering of Artificial Intelligence (AI) researchers and practitioners. It is organized by the IJCAI, Inc., and has been held biennially in odd-numbered years since 1969
+- AAAI: ASSOCIATION FOR THE ADVANCEMENT OF ARTIFICIAL INTELLIGENCE. Founded in 1979, formerly the American Association for Artificial Intelligence, is a nonprofit scientific society devoted to advancing the scientific understanding of the mechanisms underlying thought and intelligent behavior and their embodiment in machines. AAAI aims to promote research in, and responsible use of, artificial intelligence. AAAI also aims to increase public understanding of artificial intelligence, improve the teaching and training of AI practitioners, and provide guidance for research planners and funders concerning the importance and potential of current AI developments and future directions.
 
 conversational UI
 
@@ -75,5 +76,20 @@ ICML 2015: 3 / 270 ~ 1%
 数据解析：解析html，提取数据，清洗/转换数据，验证数据，输入入库
 数据分析：基于elasticsearch的数据报表
 部署：所有任务都部署到k8s；一个任务一个namespace可以每种爬虫进行独立更新；定时任务定期添加目录/重建缓存
+
+## Yotabyte
+
+=======
+Controlled Delivery of AI Projects
+
+AI is changing the world. We see lots of new products raised because of AI. Some of them go into your daily life. Some of them bring new energy to our business in some way. But for a company, there are still concerns if it could get real benefit from AI, so that lots of companies are still waiting. In this topic, we'll discuss some questions related to how to get started to 
+
+
+Encode knowledge to make machine smarter
+
+We see lots of strong power AI is bringing to us. But it still seems not easy to release the big power for a company. How does that happen? An AI Project looks like a kettle of water, it never boils when the temperature is not high enough. When it's not boiling, it may still be heated, but it always looks calm. Many AI projects in a company are the unboiled water, they look calm. So we could only see the power of it in our imagination, it does lower our confidence. What are the obstacles to achieve a boiling kettle of water? In this session, we'll talk about encoding knowledge into your AI model. It is always a way to capture your insights from data and to improve your AI models.
+
+Liao Guangming, senior developer. Helped build big data analytics system, worked on gaming development, including building high performance, distributed gaming services, payments and so on. Also helped build products for insurance business. Internal Data & AI community activist. Contributed in multiple AI related projects including image recognition, chatbot etc. Interested in translating the state-of-art AI research into products.
+
 
 

@@ -11,6 +11,7 @@ Welcome to my blog!
 
 - header link in the first page is incorrect
 - add analytics
+- use github to serve katex resources
 
 
 ### Notice:
@@ -22,3 +23,4 @@ Welcome to my blog!
 
 - hexo-generator-searchdb
 - hexo-deployer-git
+- hexo-tag-katex
