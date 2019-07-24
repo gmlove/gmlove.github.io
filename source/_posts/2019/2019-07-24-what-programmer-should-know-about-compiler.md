@@ -182,7 +182,7 @@ def test_yacc_for_python_func_def():
 
 在日常的开发活动中，我们可能接触最多的还是对于当前流行的编程语言的处理。比如，某一天我们可能想要实现一个工具将一个java实现的库，转换为python实现的库，[这里](https://github.com/natural/java2python)就有一个不错的尝试。又比如，某一天我们想要改进我们的IDE，尝试做更多特殊的自动代码格式化支持。还比如，某一天我们想要自动化生成一些代码，就像IDE里面的重构一样。这个时候有没有什么工具可以帮助我们呢？
 
-当然是有的，这里想要提一下 **ANTLR**。代码库在[这里](https://github.com/antlr/antlr4)。这是一个java实现的类似工具，支持的语言非常广泛，我们可以在[这里](https://github.com/antlr/grammars-v4)找到一个列表。可以看到这里支持了go python3 java9等等非常多的语言，基本上我们日常用到的语言都有覆盖了。而且这个工具可以生成各种目标语言的语法分析器。比如我们想得到一个python语言实现的go语言分析器，这个工具可以很容易实现。类似的工具还有很多，我们可以参考wiki上面的一个[比较](https://en.wikipedia.org/wiki/Comparison_of_parser_generators)
+当然是有的，这里想要提一下 **ANTLR**。代码库在[这里](https://github.com/antlr/antlr4)。这是一个java实现的类似工具，支持的语言非常广泛，我们可以在[这里](https://github.com/antlr/grammars-v4)找到一个列表。可以看到这里支持了go python3 java9等等非常多的语言，基本上我们日常用到的语言都有覆盖了。而且这个工具可以生成各种目标语言的语法分析器。比如我们想得到一个python语言实现的go语言分析器，这个工具可以很容易实现。类似的工具还有很多，我们可以参考wiki上面的一个[比较](https://en.wikipedia.org/wiki/Comparison_of_parser_generators)。
 
 如果我们只想用一种编程语言去分析该语言自身，这个时候更简单的方式是直接用语言本身提供的语法分析器。一般提供了JIT(just in time的缩写, 也就是即时编译编译器)功能的语言，都有相应的接口去做语法分析。比如[这里](https://docs.python.org/3/library/ast.html)有python的`ast`库，调用`ast.parse`，输入一段源代码，就得到一颗语法树。javascript有一个第三方库`esprima`([这里](https://esprima.org/))也可以做类似的事情。
 
