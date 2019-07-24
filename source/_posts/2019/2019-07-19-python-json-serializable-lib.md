@@ -6,7 +6,7 @@ tags:
 - python
 - 序列化
 - json
-date: 2019-07-19 20:03:06
+date: 2019-07-19 20:00:00
 ---
 
 ![python json serializable](/attaches/2019/2019-07-19-python-json-serializable-lib/serializable.png)
