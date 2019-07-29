@@ -6,10 +6,10 @@
 
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
@@ -26,8 +26,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -45,7 +45,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -79,23 +79,23 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="kubernetes,DevOps,OpenShift,PAAS,Cluster," />
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml" />
+  <meta name="keywords" content="kubernetes,DevOps,OpenShift,PAAS,Cluster,">
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
 
 
 
@@ -141,7 +141,7 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2017/10/24/local-openshift-cluster-installation-guide/"/>
+  <link rel="canonical" href="http://brightliao.me/2017/10/24/local-openshift-cluster-installation-guide/">
 
 
 
@@ -200,7 +200,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Bright LGM's Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -230,7 +230,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -240,7 +240,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -250,7 +250,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -260,7 +260,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -273,7 +273,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -294,9 +294,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -333,7 +331,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/avatar.png">
     </span>
 
@@ -369,7 +367,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -434,14 +432,17 @@
 <li>Run <code>yum install -y python2-passlib httpd-tools</code></li>
 </ul>
 <a id="more"></a>
+
 <h3 id="Install-and-config-dns-on-control-host"><a href="#Install-and-config-dns-on-control-host" class="headerlink" title="Install and config dns on control host"></a>Install and config dns on control host</h3><ul>
-<li>Run <code>yum install etcd</code></li>
-<li>Download or build skydns and run <code>./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53</code></li>
+<li><p>Run <code>yum install etcd</code></p>
+</li>
+<li><p>Download or build skydns and run <code>./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53</code></p>
+</li>
 <li><p>Create dns items</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.192&quot;&#125;&apos;</div><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.73&quot;&#125;&apos;</div><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.93&quot;&#125;&apos;</div><div class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.76&quot;&#125;&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.192&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.73&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.93&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.76&quot;&#125;&apos;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Configure node dns file <code>/etc/resolv.conf</code> with contents:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">search oc.tw default.svc cluster.local</div><div class="line">nameserver 127.0.0.1</div><div class="line">nameserver 10.202.129.100</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>On every node, run <code>hostname node*.oc.tw</code> to correct the hostname (make it the same as it’s dns name)</p>
 </li>
@@ -450,7 +451,8 @@
 <li>clone openshift repo: <code>git clone https://github.com/openshift/openshift-ansible.git</code></li>
 <li>Prepare hosts file with contents</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"># Create OSEv3 group that contains the masters and nodes groups</div><div class="line">[OSEv3:children]</div><div class="line">masters</div><div class="line">nodes</div><div class="line">etcd</div><div class="line">nfs</div><div class="line"></div><div class="line"># Set variables common for all OSEv3 hosts</div><div class="line">[OSEv3:vars]</div><div class="line"># SSH user, this user should allow ssh based auth without requiring a password</div><div class="line">ansible_ssh_user=root</div><div class="line">openshift_deployment_type=origin</div><div class="line">openshift_release=3.6.0</div><div class="line">openshift_disable_check=disk_availability,docker_storage,memory_availability,docker_image_availability,package_availability,package_version</div><div class="line">openshift_metrics_install_metrics=true</div><div class="line">openshift_master_default_subdomain=apps.oc.tw</div><div class="line">openshift_logging_install_logging=true</div><div class="line">openshift_master_cluster_public_hostname=master.oc.tw</div><div class="line">openshift_hosted_registry_storage_kind=nfs</div><div class="line">openshift_hosted_registry_storage_access_modes=[&apos;ReadWriteMany&apos;]</div><div class="line">openshift_hosted_registry_storage_nfs_directory=/exports</div><div class="line">openshift_hosted_registry_storage_nfs_options=&apos;*(rw,root_squash)&apos;</div><div class="line">openshift_hosted_registry_storage_volume_name=registry</div><div class="line">openshift_hosted_registry_storage_volume_size=10Gi</div><div class="line">openshift_logging_storage_kind=nfs</div><div class="line">openshift_logging_storage_access_modes=[&apos;ReadWriteOnce&apos;]</div><div class="line">openshift_logging_storage_nfs_directory=/exports</div><div class="line">openshift_logging_storage_nfs_options=&apos;*(rw,root_squash)&apos;</div><div class="line">openshift_logging_storage_volume_name=logging</div><div class="line">openshift_logging_storage_volume_size=10Gi</div><div class="line">openshift_metrics_storage_kind=nfs</div><div class="line">openshift_metrics_storage_access_modes=[&apos;ReadWriteOnce&apos;]</div><div class="line">openshift_metrics_storage_nfs_directory=/exports</div><div class="line">openshift_metrics_storage_nfs_options=&apos;*(rw,root_squash)&apos;</div><div class="line">openshift_metrics_storage_volume_name=metrics</div><div class="line">openshift_metrics_storage_volume_size=10Gi</div><div class="line"></div><div class="line">openshift_master_identity_providers=[&#123;&apos;name&apos;:&apos;htpasswd_auth&apos;,&apos;login&apos;:&apos;true&apos;,&apos;challenge&apos;:&apos;true&apos;,&apos;kind&apos;:&apos;HTPasswdPasswordIdentityProvider&apos;,&apos;filename&apos;:&apos;/etc/origin/master/htpasswd&apos;&#125;]</div><div class="line"></div><div class="line"># host group for masters</div><div class="line">[masters]</div><div class="line">master.oc.tw openshift_public_hostname=master.oc.tw</div><div class="line"></div><div class="line"># host group for nodes, includes region info</div><div class="line">[nodes]</div><div class="line">master.oc.tw openshift_public_hostname=master.oc.tw</div><div class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</div><div class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</div><div class="line">node3.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node3.oc.tw</div><div class="line"></div><div class="line">[etcd]</div><div class="line">master.oc.tw openshift_public_hostname=master.oc.tw</div><div class="line"></div><div class="line">[nfs]</div><div class="line">master.oc.tw</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"># Create OSEv3 group that contains the masters and nodes groups</span><br><span class="line">[OSEv3:children]</span><br><span class="line">masters</span><br><span class="line">nodes</span><br><span class="line">etcd</span><br><span class="line">nfs</span><br><span class="line"></span><br><span class="line"># Set variables common for all OSEv3 hosts</span><br><span class="line">[OSEv3:vars]</span><br><span class="line"># SSH user, this user should allow ssh based auth without requiring a password</span><br><span class="line">ansible_ssh_user=root</span><br><span class="line">openshift_deployment_type=origin</span><br><span class="line">openshift_release=3.6.0</span><br><span class="line">openshift_disable_check=disk_availability,docker_storage,memory_availability,docker_image_availability,package_availability,package_version</span><br><span class="line">openshift_metrics_install_metrics=true</span><br><span class="line">openshift_master_default_subdomain=apps.oc.tw</span><br><span class="line">openshift_logging_install_logging=true</span><br><span class="line">openshift_master_cluster_public_hostname=master.oc.tw</span><br><span class="line">openshift_hosted_registry_storage_kind=nfs</span><br><span class="line">openshift_hosted_registry_storage_access_modes=[&apos;ReadWriteMany&apos;]</span><br><span class="line">openshift_hosted_registry_storage_nfs_directory=/exports</span><br><span class="line">openshift_hosted_registry_storage_nfs_options=&apos;*(rw,root_squash)&apos;</span><br><span class="line">openshift_hosted_registry_storage_volume_name=registry</span><br><span class="line">openshift_hosted_registry_storage_volume_size=10Gi</span><br><span class="line">openshift_logging_storage_kind=nfs</span><br><span class="line">openshift_logging_storage_access_modes=[&apos;ReadWriteOnce&apos;]</span><br><span class="line">openshift_logging_storage_nfs_directory=/exports</span><br><span class="line">openshift_logging_storage_nfs_options=&apos;*(rw,root_squash)&apos;</span><br><span class="line">openshift_logging_storage_volume_name=logging</span><br><span class="line">openshift_logging_storage_volume_size=10Gi</span><br><span class="line">openshift_metrics_storage_kind=nfs</span><br><span class="line">openshift_metrics_storage_access_modes=[&apos;ReadWriteOnce&apos;]</span><br><span class="line">openshift_metrics_storage_nfs_directory=/exports</span><br><span class="line">openshift_metrics_storage_nfs_options=&apos;*(rw,root_squash)&apos;</span><br><span class="line">openshift_metrics_storage_volume_name=metrics</span><br><span class="line">openshift_metrics_storage_volume_size=10Gi</span><br><span class="line"></span><br><span class="line">openshift_master_identity_providers=[&#123;&apos;name&apos;:&apos;htpasswd_auth&apos;,&apos;login&apos;:&apos;true&apos;,&apos;challenge&apos;:&apos;true&apos;,&apos;kind&apos;:&apos;HTPasswdPasswordIdentityProvider&apos;,&apos;filename&apos;:&apos;/etc/origin/master/htpasswd&apos;&#125;]</span><br><span class="line"></span><br><span class="line"># host group for masters</span><br><span class="line">[masters]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line"># host group for nodes, includes region info</span><br><span class="line">[nodes]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br><span class="line">node3.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node3.oc.tw</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line">[nfs]</span><br><span class="line">master.oc.tw</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/byo/config.yml</code> to install</li>
 <li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/adhoc/uninstall.yml</code> to uninstall. (ensure configurations are all removed, by checking <code>/etc/origin</code> folder on every node)</li>
@@ -467,7 +469,8 @@
 <li>restart dnsmasq: <code>systemctl restart dnsmasq.service</code></li>
 </ul>
 <h3 id="sti-builder-cannot-push-image-to-docker-registry-default-svc-5000-no-route-to-host"><a href="#sti-builder-cannot-push-image-to-docker-registry-default-svc-5000-no-route-to-host" class="headerlink" title="sti builder cannot push image to docker-registry.default.svc:5000 (no route to host)"></a>sti builder cannot push image to <code>docker-registry.default.svc:5000</code> (no route to host)</h3><ul>
-<li>edit file /etc/resolve.conf on node with contents:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">search oc.tw default.svc cluster.local</div><div class="line">nameserver 127.0.0.1</div><div class="line">nameserver 10.202.129.100</div></pre></td></tr></table></figure>
+<li>edit file /etc/resolve.conf on node with contents:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h3 id="oc-get-nodes-on-master-raise-certificate-issue"><a href="#oc-get-nodes-on-master-raise-certificate-issue" class="headerlink" title="oc get nodes on master raise certificate issue"></a><code>oc get nodes</code> on master raise certificate issue</h3><ul>
@@ -486,11 +489,14 @@
 <li>Config scc:<br>  <code>oadm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:pv-recycler-controller</code></li>
 </ul>
 <h3 id="Create-nfs-pv"><a href="#Create-nfs-pv" class="headerlink" title="Create nfs pv"></a>Create nfs pv</h3><ul>
-<li>Edit <code>/etc/exports.d/openshift-ansible.exports</code>, add lines like <code>/exports/pvs/pv0001 *(rw,root_squash)</code></li>
-<li>Run: <code>mv /exports/pvs/pv0001 &amp;&amp; chown nfsnobody:nfsnobody /exports/pv0001 &amp;&amp; chmod 777 /exports/pv0001</code></li>
-<li>Ensure mount in nodes work well by run <code>mount -t nfs master.oc.tw:/exports/pvs/pv0001 ./t</code></li>
+<li><p>Edit <code>/etc/exports.d/openshift-ansible.exports</code>, add lines like <code>/exports/pvs/pv0001 *(rw,root_squash)</code></p>
+</li>
+<li><p>Run: <code>mv /exports/pvs/pv0001 &amp;&amp; chown nfsnobody:nfsnobody /exports/pv0001 &amp;&amp; chmod 777 /exports/pv0001</code></p>
+</li>
+<li><p>Ensure mount in nodes work well by run <code>mount -t nfs master.oc.tw:/exports/pvs/pv0001 ./t</code></p>
+</li>
 <li><p>Create <code>pv.yml</code> with below and run <code>oc create -f pv.yml</code> to create pv:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: PersistentVolume</div><div class="line">metadata:</div><div class="line">  name: pv0005</div><div class="line">spec:</div><div class="line">  capacity:</div><div class="line">    storage: 10Gi</div><div class="line">  accessModes:</div><div class="line">  - ReadWriteOnce</div><div class="line">  nfs:</div><div class="line">    path: /exports/pvs/pv0005</div><div class="line">    server: master.oc.tw</div><div class="line">  persistentVolumeReclaimPolicy: Recycle</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv0005</span><br><span class="line">spec:</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 10Gi</span><br><span class="line">  accessModes:</span><br><span class="line">  - ReadWriteOnce</span><br><span class="line">  nfs:</span><br><span class="line">    path: /exports/pvs/pv0005</span><br><span class="line">    server: master.oc.tw</span><br><span class="line">  persistentVolumeReclaimPolicy: Recycle</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Debug:</p>
 <ul>
@@ -508,27 +514,29 @@
 <li>List DaemonSet <code>oc get ds</code> and make sure the pods count is the same as node count</li>
 <li>Verify the DaemonSet settings <code>oc edit ds/logging-fluentd</code>. Check <code>nodeSelector</code> property.</li>
 <li>Rsh into one of the fluentd pods, and check <code>run.sh</code> to find what is been done.</li>
-<li>Add environment variables to help debug, edit the DaemonSet <code>oc edit ds/logging-fluentd</code> and add environment variables <code>ENABLE_MONITOR_AGENT=true;ENABLE_MONITOR_AGENT=true</code> (Refer <a href="https://docs.fluentd.org/v0.12/articles/monitoring" target="_blank" rel="external">here</a>)</li>
+<li>Add environment variables to help debug, edit the DaemonSet <code>oc edit ds/logging-fluentd</code> and add environment variables <code>ENABLE_MONITOR_AGENT=true;ENABLE_MONITOR_AGENT=true</code> (Refer <a href="https://docs.fluentd.org/v0.12/articles/monitoring" target="_blank" rel="noopener">here</a>)</li>
 </ul>
 <h2 id="Common-management-tasks"><a href="#Common-management-tasks" class="headerlink" title="Common management tasks"></a>Common management tasks</h2><ul>
 <li>Login as admin: ssh into master and you’ll be admin directly when you run <code>oc</code> commands</li>
 <li>Add user through htpasswd: run <code>htpasswd -b /etc/origin/master/htpasswd admin admin</code> on master</li>
 <li>Add project to user: <code>oadm policy add-role-to-user admin gmliao -n logging</code></li>
 </ul>
-<h2 id="Node-Management"><a href="#Node-Management" class="headerlink" title="Node Management"></a>Node Management</h2><h3 id="Add-node"><a href="#Add-node" class="headerlink" title="Add node"></a>Add node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced" target="_blank" rel="external">https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced</a></p>
+<h2 id="Node-Management"><a href="#Node-Management" class="headerlink" title="Node Management"></a>Node Management</h2><h3 id="Add-node"><a href="#Add-node" class="headerlink" title="Add node"></a>Add node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced" target="_blank" rel="noopener">https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced</a></p>
 <ul>
-<li>Add <code>new_nodes</code> or <code>new_masters</code> to <code>[OSEv3:vars]</code> section</li>
+<li><p>Add <code>new_nodes</code> or <code>new_masters</code> to <code>[OSEv3:vars]</code> section</p>
+</li>
 <li><p>Add a new section:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[new_nodes]</div><div class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</div><div class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[new_nodes]</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Run installation: <code>ansible-playbook -i hosts ~/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml</code></p>
 </li>
-<li>Move nodes configured in <code>[new_nodes]</code> section to <code>[nodes]</code> section</li>
+<li><p>Move nodes configured in <code>[new_nodes]</code> section to <code>[nodes]</code> section</p>
+</li>
 </ul>
-<h3 id="Remove-node"><a href="#Remove-node" class="headerlink" title="Remove node"></a>Remove node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes" target="_blank" rel="external">https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes</a></p>
+<h3 id="Remove-node"><a href="#Remove-node" class="headerlink" title="Remove node"></a>Remove node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes" target="_blank" rel="noopener">https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes</a></p>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="https://docs.openshift.org/latest/install_config/install/advanced_install.html" target="_blank" rel="external">https://docs.openshift.org/latest/install_config/install/advanced_install.html</a></li>
-<li><a href="https://kubernetes.io/docs/setup/" target="_blank" rel="external">https://kubernetes.io/docs/setup/</a></li>
+<li><a href="https://docs.openshift.org/latest/install_config/install/advanced_install.html" target="_blank" rel="noopener">https://docs.openshift.org/latest/install_config/install/advanced_install.html</a></li>
+<li><a href="https://kubernetes.io/docs/setup/" target="_blank" rel="noopener">https://kubernetes.io/docs/setup/</a></li>
 </ul>
 
       
@@ -621,7 +629,7 @@
   <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
   <a class="jiathis_counter_style"></a>
 </div>
-<script type="text/javascript" >
+<script type="text/javascript">
   var jiathis_config={
     hideMore:false
   }
@@ -663,7 +671,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -674,9 +682,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/avatar.png"
-               alt="Bright LGM" />
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
           <p class="site-author-name" itemprop="name">Bright LGM</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -687,7 +693,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -698,7 +704,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -709,7 +715,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-count">58</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -745,7 +751,7 @@
         
           <div class="cc-license motion-element" itemprop="license">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
             </a>
           </div>
         
@@ -788,10 +794,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

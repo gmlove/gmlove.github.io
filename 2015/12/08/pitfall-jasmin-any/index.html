@@ -6,10 +6,10 @@
 
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
@@ -26,8 +26,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -45,7 +45,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -79,23 +79,23 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml" />
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
 
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2015/12/08/pitfall-jasmin-any/"/>
+  <link rel="canonical" href="http://brightliao.me/2015/12/08/pitfall-jasmin-any/">
 
 
 
@@ -199,7 +199,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Bright LGM's Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -229,7 +229,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -239,7 +239,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -249,7 +249,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -259,7 +259,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -272,7 +272,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -293,9 +293,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -332,7 +330,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/avatar.png">
     </span>
 
@@ -368,7 +366,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -427,8 +425,11 @@
       
         <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any({premitive type})</code>，可以考虑使用<code>anything()</code></p>
 <p>坑位：使用<code>toHaveBeenCalledWith</code>测试函数被调用时的参数。</p>
-<p>当参数列表太长（如：<code>func(p1, p2, p3){...}</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。<br><a id="more"></a><br>坑点示例：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">it(<span class="string">"why any(Number) can not be replaced by any(Object)?"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> foo = jasmine.createSpy(<span class="string">'foo'</span>);</div><div class="line">  foo(<span class="number">12</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</div><div class="line">  expect(foo).toHaveBeenCalledWith(jasmine.any(<span class="built_in">Number</span>), jasmine.any(<span class="built_in">Function</span>));</div><div class="line">  expect(foo).toHaveBeenCalledWith(jasmine.any(<span class="built_in">Object</span>), jasmine.any(<span class="built_in">Function</span>)); <span class="comment">// will fail</span></div><div class="line">  expect(foo).toHaveBeenCalledWith(<span class="number">2</span>, jasmine.any(<span class="built_in">Object</span>)); <span class="comment">// will fail</span></div><div class="line">  expect(foo).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything());</div><div class="line"></div><div class="line">  <span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line">  <span class="keyword">var</span> a = <span class="keyword">new</span> A();</div><div class="line">  expect(a).toEqual(jasmine.any(<span class="built_in">Object</span>));</div><div class="line">  expect(a).toEqual(jasmine.any(A));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>当参数列表太长（如：<code>func(p1, p2, p3){...}</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。</p>
+<a id="more"></a>
+<p>坑点示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">"why any(Number) can not be replaced by any(Object)?"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> foo = jasmine.createSpy(<span class="string">'foo'</span>);</span><br><span class="line">  foo(<span class="number">12</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br><span class="line">  expect(foo).toHaveBeenCalledWith(jasmine.any(<span class="built_in">Number</span>), jasmine.any(<span class="built_in">Function</span>));</span><br><span class="line">  expect(foo).toHaveBeenCalledWith(jasmine.any(<span class="built_in">Object</span>), jasmine.any(<span class="built_in">Function</span>)); <span class="comment">// will fail</span></span><br><span class="line">  expect(foo).toHaveBeenCalledWith(<span class="number">2</span>, jasmine.any(<span class="built_in">Object</span>)); <span class="comment">// will fail</span></span><br><span class="line">  expect(foo).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="keyword">new</span> A();</span><br><span class="line">  expect(a).toEqual(jasmine.any(<span class="built_in">Object</span>));</span><br><span class="line">  expect(a).toEqual(jasmine.any(A));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <p>原因：<code>jasmine</code>使用强类型进行验证匹配。对应的验证关系</p>
 <ul>
 <li>String -&gt; any(String) / anything()</li>
@@ -441,7 +442,11 @@
 <p>关于Javascript的类型，参考<code>w3schol</code>的官方解释：</p>
 <blockquote>
 <p>ECMAScript 有 5 种原始类型（primitive type），即 Undefined、Null、Boolean、Number 和 String。</p>
+</blockquote>
+<blockquote>
 <p>对变量或值调用 typeof 运算符将返回下列值之一：</p>
+</blockquote>
+<blockquote>
 <blockquote>
 <ul>
 <li>undefined - 如果变量是 Undefined 类型的</li>
@@ -529,7 +534,7 @@
   <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
   <a class="jiathis_counter_style"></a>
 </div>
-<script type="text/javascript" >
+<script type="text/javascript">
   var jiathis_config={
     hideMore:false
   }
@@ -573,9 +578,7 @@
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/avatar.png"
-               alt="Bright LGM" />
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
           <p class="site-author-name" itemprop="name">Bright LGM</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -586,7 +589,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -597,7 +600,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -608,7 +611,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-count">58</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -644,7 +647,7 @@
         
           <div class="cc-license motion-element" itemprop="license">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
             </a>
           </div>
         
@@ -671,10 +674,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

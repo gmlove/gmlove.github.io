@@ -1,0 +1,1389 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="tensorflow,AI,Machine Learning,Deep Learning,keras,EfficientNet,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="EfficientNet是谷歌AI科学家们在论文《EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks》中提出的模型。这篇文章不仅提出了这个模型，还系统地研究了模型扩展的问题，大家感兴趣的，可用阅读一下论文原文。EfficientNet的亮眼之处在于，其在保持领先的性能的同时，将模型的参数数量和预测速度都提">
+<meta name="keywords" content="tensorflow,AI,Machine Learning,Deep Learning,keras,EfficientNet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习模型重现 -- EfficientNet的keras实现">
+<meta property="og:url" content="http://brightliao.me/2019/07/12/reproduce-ml-models-efficientnet/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="EfficientNet是谷歌AI科学家们在论文《EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks》中提出的模型。这篇文章不仅提出了这个模型，还系统地研究了模型扩展的问题，大家感兴趣的，可用阅读一下论文原文。EfficientNet的亮眼之处在于，其在保持领先的性能的同时，将模型的参数数量和预测速度都提">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.me/attaches/2019/2019-07-12-reproduce-ml-models-efficientnet/efficientnet-perf.png">
+<meta property="og:updated_time" content="2019-07-25T13:56:23.352Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习模型重现 -- EfficientNet的keras实现">
+<meta name="twitter:description" content="EfficientNet是谷歌AI科学家们在论文《EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks》中提出的模型。这篇文章不仅提出了这个模型，还系统地研究了模型扩展的问题，大家感兴趣的，可用阅读一下论文原文。EfficientNet的亮眼之处在于，其在保持领先的性能的同时，将模型的参数数量和预测速度都提">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2019/2019-07-12-reproduce-ml-models-efficientnet/efficientnet-perf.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2019/07/12/reproduce-ml-models-efficientnet/">
+
+
+
+
+
+  <title>深度学习模型重现 -- EfficientNet的keras实现 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2019/07/12/reproduce-ml-models-efficientnet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">深度学习模型重现 -- EfficientNet的keras实现</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T20:00:00+08:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/07/12/reproduce-ml-models-efficientnet/" class="leancloud_visitors" data-flag-title="深度学习模型重现 -- EfficientNet的keras实现">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>EfficientNet是谷歌AI科学家们在论文《EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks》中提出的模型。这篇文章不仅提出了这个模型，还系统地研究了模型扩展的问题，大家感兴趣的，可用阅读一下<a href="https://arxiv.org/abs/1905.11946" target="_blank" rel="noopener">论文原文</a>。EfficientNet的亮眼之处在于，其在保持领先的性能的同时，将模型的参数数量和预测速度都提升了一个数量级。请看下图的性能对比：</p>
+<a id="more"></a>
+
+<p><img src="/attaches/2019/2019-07-12-reproduce-ml-models-efficientnet/efficientnet-perf.png" alt="EfficientNet性能对比"></p>
+<p>这篇文章同时还研究了可迁移性，发现其与我们常用的ResNet,ResNext等等具有类似的可迁移性。看起来EfficientNet完全可以作为新一代的基础模型使用起来呀。</p>
+<p>为了提升我们产品（图像分割模型）的识别性能，我们比较系统的研究了这个模型，同时将其转化为了keras的模型，以便我们可以与现有的模型良好的集成起来。下面我们将分享一下我们是如何做的，同时也相信可以给大家提供一个如何在不同框架之间做模型转化的思路。</p>
+<p>EfficientNet模型的相关代码和 TPU 训练的模型已在 GitHub 上<a href="https://github.com/tensorflow/tpu/tree/master/models/official/efficientnet" target="_blank" rel="noopener">开源</a>。本文基于原来的开源代码及模型研究而来。(下面的代码部分请结合官方开源的代码，及<a href="https://github.com/gmlove/efficientnet-keras" target="_blank" rel="noopener">代码库</a>一起阅读)</p>
+<p>要实现模型转化，基本上我们要分为这几个步骤来做：</p>
+<ol>
+<li>将原来的模型代码翻译为新框架的代码</li>
+<li>将原来训练好的模型参数转化为新框架的参数格式</li>
+<li>验证转化后的结果是否与原来的一致</li>
+</ol>
+<h3 id="模型代码翻译"><a href="#模型代码翻译" class="headerlink" title="模型代码翻译"></a>模型代码翻译</h3><p>下载官方代码之后，我们可以发现官方代码使用tensorflow实现，在tpu下面训练。</p>
+<p>我们的目标框架是keras，说起keras，其与tensorflow可以说是有着千丝万缕的联系。首先他们都是出自google，tensorflow还内置了一份keras的代码以便提供更易用的API；其次keras是比tensorflow更早的一个框架，其设计的目标就是统一各个AI框架的API，当然也包括tensorflow；然后keras是没有底层的计算支持的，必须要外接一个后端框架，它的后端除了tensorflow，还支持CNTK, Theano。keras最吸引开发者的一点应该是其设计良好的API，大大提升了我们的开发便利性，这也是我们选择keras的主要原因。</p>
+<p>keras与tensorflow我们可以认为具有非常好的兼容性，一是由于官方支持，二是由于keras的后端就可以是tensorflow。这给我们的转化提供了很大的便利。</p>
+<p>如何开始呢？让我们先准备一个测试让原来的模型可以跑起来。从官方的例子来看，文件<code>eval_example_images.py</code>中的<code>eval_example_images</code>函数就是让模型跑起来的代码了。由于我们要提取核心代码进行转换，我们进一步分析之后，抽丝剥茧，可以得到这样几行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax</span><span class="params">(x)</span>:</span></span><br><span class="line">    exp_x = np.exp(x)</span><br><span class="line">    softmax_x = exp_x / np.sum(exp_x, axis=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> softmax_x</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_run_tf_model</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">import</span> pickle</span><br><span class="line">    x = pickle.loads(open(<span class="string">'data/x.pickle'</span>, <span class="string">'rb'</span>).read())[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Graph().as_default(), tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        model_name = <span class="string">'efficientnet-b0'</span></span><br><span class="line"></span><br><span class="line">        X = tf.cast(tf.stack([x]), dtype=tf.float32)</span><br><span class="line">        X -= tf.constant(MEAN_RGB, shape=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>], dtype=X.dtype)</span><br><span class="line">        X /= tf.constant(STDDEV_RGB, shape=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>], dtype=X.dtype)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> tf.variable_scope(model_name):</span><br><span class="line">            blocks_args, global_params = efficientnet_builder.get_model_params(model_name, <span class="literal">None</span>)</span><br><span class="line">            model = efficientnet_model.Model(blocks_args, global_params)</span><br><span class="line">            _logits = model(X, <span class="literal">False</span>)</span><br><span class="line">            model.summary()</span><br><span class="line"></span><br><span class="line">        sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line">        checkpoint = tf.train.latest_checkpoint(<span class="string">'data/models/&#123;&#125;'</span>.format(model_name))</span><br><span class="line">        ema = tf.train.ExponentialMovingAverage(decay=<span class="number">0.9999</span>)</span><br><span class="line">        ema_vars = tf.trainable_variables() + tf.get_collection(<span class="string">'moving_vars'</span>)</span><br><span class="line">        <span class="keyword">for</span> v <span class="keyword">in</span> tf.global_variables():</span><br><span class="line">            <span class="keyword">if</span> <span class="string">'moving_mean'</span> <span class="keyword">in</span> v.name <span class="keyword">or</span> <span class="string">'moving_variance'</span> <span class="keyword">in</span> v.name:</span><br><span class="line">                ema_vars.append(v)</span><br><span class="line">        ema_vars = list(set(ema_vars))</span><br><span class="line">        var_dict = ema.variables_to_restore(ema_vars)</span><br><span class="line">        saver = tf.train.Saver(var_dict, max_to_keep=<span class="number">1</span>)</span><br><span class="line">        saver.restore(sess, checkpoint)</span><br><span class="line"></span><br><span class="line">        logits = model.predict(X, steps=<span class="number">1</span>, batch_size=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    pred_probs = softmax(logits)</span><br><span class="line">    pred_idx = np.argsort(pred_probs)[:, ::<span class="number">-1</span>]</span><br><span class="line">    pred_prob = np.array([pred_probs[i][pid] <span class="keyword">for</span> i, pid <span class="keyword">in</span> enumerate(pred_idx)])[:, :<span class="number">5</span>]</span><br><span class="line">    pred_idx = pred_idx[:, :<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">    classes = json.loads(open(<span class="string">'data/labels_map.txt'</span>, <span class="string">'r'</span>).read())</span><br><span class="line">    print(<span class="string">'predicted class for image &#123;&#125;: '</span>.format(<span class="string">'data/panda.jpg'</span>))</span><br><span class="line">    <span class="keyword">for</span> i, idx <span class="keyword">in</span> enumerate(pred_idx[<span class="number">0</span>]):</span><br><span class="line">        print(<span class="string">'  -&gt; top_&#123;&#125; (&#123;:4.2f&#125;%): &#123;&#125;  '</span>.format(i, pred_prob[<span class="number">0</span>][i] * <span class="number">100</span>, classes[str(idx)]))</span><br></pre></td></tr></table></figure>
+
+<p>这里的模型恢复参数时用到了一个奇怪的<code>ExponentialMovingAverage</code>，看起来不用这样的方式也可以，但是由于官方代码是这样的，为节约时间，我们姑且先按照官方的例子做。有兴趣的小伙伴们可以研究一下是否能把这一步去掉。</p>
+<p>这里的<code>x.pickle</code>文件是我们从原来的模型运行中导出来的，在<code>eval_example_images.py</code>文件中的<code>EvalCkptDriver.run_inference</code>函数中，代码行<code>probs = self.build_model(images, is_training=False)</code>之后加入代码<code>import pickle;_images = sess.run(images);pickle.dump(_images, open(&#39;data/x.pickle&#39;, &#39;wb&#39;))</code>后运行，即可导出此文件。这里我们没有直接将图片输入到模型中进行预测，因为原模型对输入图像做了一定的预处理，如果我们忽略预处理，则将得到不一样的结果。</p>
+<p>运行上面的函数之后，就可以发现得到了与官方一样的结果，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">predicted class for image data/panda.jpg: </span><br><span class="line">  -&gt; top_0 (82.79%): giant panda, panda, panda bear, coon bear, Ailuropoda melanoleuca  </span><br><span class="line">  -&gt; top_1 (1.52%): ice bear, polar bear, Ursus Maritimus, Thalarctos maritimus  </span><br><span class="line">  -&gt; top_2 (0.37%): lesser panda, red panda, panda, bear cat, cat bear, Ailurus fulgens  </span><br><span class="line">  -&gt; top_3 (0.23%): American black bear, black bear, Ursus americanus, Euarctos americanus  </span><br><span class="line">  -&gt; top_4 (0.17%): brown bear, bruin, Ursus arctos</span><br></pre></td></tr></table></figure>
+
+<p>下一步我们来构建自己的keras模型，我们知道keras的模型分为两类，一类是顺序连接的模型，一般构造一个<code>keras.models.Sequential</code>对象，然后依次加入不同的层就行，参考<a href="https://keras.io/getting-started/sequential-model-guide/" target="_blank" rel="noopener">这里</a>；另一类是图模型，通过函数式的API来构建，参考<a href="https://keras.io/getting-started/functional-api-guide/" target="_blank" rel="noopener">这里</a>。由于EfficientNet的模型是一个比较复杂的网络，这里应该用函数式API构建为一个图模型。</p>
+<p>先构建一个简单的测试如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_load_weights</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">from</span> eval_ckpt_main <span class="keyword">import</span> MEAN_RGB, STDDEV_RGB</span><br><span class="line">    X = pickle.loads(open(<span class="string">'data/x.pickle'</span>, <span class="string">'rb'</span>).read())</span><br><span class="line">    X = np.array(X, dtype=np.float32)</span><br><span class="line">    X -= np.array(MEAN_RGB, dtype=np.float32).reshape((<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>))</span><br><span class="line">    X /= np.array(STDDEV_RGB, dtype=np.float32).reshape((<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">    model_name = <span class="string">'efficientnet-b0'</span></span><br><span class="line">    model = EfficientNetModelBuilder().build(model_name, input_shape=(<span class="number">224</span>, <span class="number">224</span>, <span class="number">3</span>), num_classes=<span class="number">1000</span>)</span><br><span class="line">    model.summary()</span><br><span class="line">    model.load_weights(<span class="string">'data/converted_weights/&#123;&#125;_imagenet_1000.h5'</span>.format(model_name))</span><br><span class="line"></span><br><span class="line">    Y = model.predict(X)</span><br><span class="line"></span><br><span class="line">    pred_probs = softmax(Y)</span><br><span class="line">    pred_idx = np.argsort(pred_probs)[:, ::<span class="number">-1</span>]</span><br><span class="line">    pred_prob = np.array([pred_probs[i][pid] <span class="keyword">for</span> i, pid <span class="keyword">in</span> enumerate(pred_idx)])[:, :<span class="number">5</span>]</span><br><span class="line">    pred_idx = pred_idx[:, :<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">    classes = json.loads(open(<span class="string">'data/labels_map.txt'</span>, <span class="string">'r'</span>).read())</span><br><span class="line">    print(<span class="string">'predicted class for image &#123;&#125;: '</span>.format(<span class="string">'data/panda.jpg'</span>))</span><br><span class="line">    <span class="keyword">for</span> i, idx <span class="keyword">in</span> enumerate(pred_idx[<span class="number">0</span>]):</span><br><span class="line">        print(<span class="string">'  -&gt; top_&#123;&#125; (&#123;:4.2f&#125;%): &#123;&#125;  '</span>.format(i, pred_prob[<span class="number">0</span>][i] * <span class="number">100</span>, classes[str(idx)]))</span><br></pre></td></tr></table></figure>
+
+<p>这里构建这个测试是很重要的，这个测试就像一个灯塔，有了它我们的目标就非常明确了，只要这个测试能输出跟原模型同样的结果，就证明我们的模型转化是正确的。</p>
+<p>新建一个<code>EfficientNetModelBuilder</code>类及<code>build</code>方法。做代码迁移的第一步是参数的构造，原模型的参数由于要同时支持不同的模型及不同的图像大小、网络宽度、网络深度，对参数进行了一定的编码。为了容易理解我们建立以下三个类来与原来的代码对应：</p>
+<ol>
+<li><code>EfficientNetGlobalParams</code> -&gt; <code>GlobalParams</code> (<code>efficientnet_model.py</code>)</li>
+<li><code>EfficientNetParams</code> -&gt; <code>efficientnet_params</code> (<code>efficientnet_builder.py</code>)</li>
+<li><code>EfficientNetBlockParams</code> -&gt; <code>BlockDecoder</code> (<code>efficientnet_builder.py</code>)</li>
+</ol>
+<p>并将相应的参数解析，验证等操作封装到这三个类中。</p>
+<p>参考官方代码，我们新建对应的<code>MBConvBlock</code>及<code>EfficientNetModel</code>类，然后将tensorflow的实现替换为keras的实现。</p>
+<p>这里需要注意的是，分析官方的代码发现模型的构建分为两步<code>_build</code>及<code>call</code>，前者构建相关的层，后者将各层连接起来。我们这里修改一下方法名字，建立对应的两个方法<code>_build_layers</code>和<code>_connect_layers</code>。由于这里模型的构造直接通过构造器完成，我们无需对外暴露任何的方法，全部申明为内部方法。</p>
+<p>接下来就是代码的改写了，将官方代码拷贝过来，然后用keras的API重写一下。主要的改写在下面几个方面：</p>
+<ol>
+<li><p>将<code>tf.layers.Conv2D</code>改为<code>keras.layers.Conv2D</code>，并修改对应的参数名，参数值</p>
+</li>
+<li><p>将一些tensorflow函数封装为keras的层，然后替换原来的函数调用。如：</p>
+<p> a. 原来的函数调用<code>se_tensor = tf.reduce_mean(input_tensor, self._spatial_dims, keepdims=True)</code>可以改为<code>_build_layers</code>方法中的<code>self._se_mean = keras.layers.Lambda(name=self._layer_name(&#39;se_mean&#39;), function=lambda x: tf.reduce_mean(x, self._spatial_dims, keep_dims=True))</code>及<code>_connect_layers</code>中的<code>se_tensor = self._se_mean(input_tensor)</code>调用<br> b. <code>swish</code>激活函数，可以新建一个继承至<code>keras.layers.Layer</code>的<code>Swish</code>类来实现<br> c. <code>drop_connect</code>函数，可以新建一个继承至<code>keras.layers.Layer</code>的<code>DropConnect</code>类来实现</p>
+</li>
+<li><p><code>batchnorm</code>修改为keras的版本<code>keras.layers.BatchNormalization</code></p>
+</li>
+</ol>
+<p>修改完毕之后，注释掉上面测试中的<code>model.load_weights</code>一行，运行测试，应该不会报错，但是由于我们还没有导入参数，上面的测试会随机输出一个结果。到这里模型翻译的部分就完成了。</p>
+<h3 id="模型参数转换"><a href="#模型参数转换" class="headerlink" title="模型参数转换"></a>模型参数转换</h3><p>第二个问题就是如何导出原来模型的参数，并导入我们的新模型中了。</p>
+<p>从我们最初的那个运行原模型的测试来看，下面几行代码就可以得到原模型的所有保存的参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ema = tf.train.ExponentialMovingAverage(decay=<span class="number">0.9999</span>)</span><br><span class="line">ema_vars = tf.trainable_variables() + tf.get_collection(<span class="string">'moving_vars'</span>)</span><br><span class="line"><span class="keyword">for</span> v <span class="keyword">in</span> tf.global_variables():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'moving_mean'</span> <span class="keyword">in</span> v.name <span class="keyword">or</span> <span class="string">'moving_variance'</span> <span class="keyword">in</span> v.name:</span><br><span class="line">        ema_vars.append(v)</span><br><span class="line">ema_vars = list(set(ema_vars))</span><br><span class="line">var_dict = ema.variables_to_restore(ema_vars)</span><br><span class="line">print(list(var_dict.keys()))</span><br></pre></td></tr></table></figure>
+
+<p>这里得到的参数是什么呢？我们可以简单的将其名字输出到控制台，得到以下这些参数名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">efficientnet-b0/blocks_0/conv2d/kernel/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/blocks_0/depthwise_conv2d/depthwise_kernel/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/blocks_0/se/conv2d/bias/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/blocks_0/se/conv2d/kernel/ExponentialMovingAverage</span><br><span class="line">...</span><br><span class="line">efficientnet-b0/head/dense/kernel/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/head/tpu_batch_normalization/beta/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/head/tpu_batch_normalization/gamma/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/head/tpu_batch_normalization/moving_mean/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/head/tpu_batch_normalization/moving_variance/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/stem/conv2d/kernel/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/stem/tpu_batch_normalization/beta/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/stem/tpu_batch_normalization/gamma/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/stem/tpu_batch_normalization/moving_mean/ExponentialMovingAverage</span><br><span class="line">efficientnet-b0/stem/tpu_batch_normalization/moving_variance/ExponentialMovingAverage</span><br></pre></td></tr></table></figure>
+
+<p>我们的keras的模型参数名是什么呢？由于keras的模型全部由一个一个的层组成，我们可以直接打出每一层里面的参数，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_keras_model_weights</span><span class="params">(model)</span>:</span></span><br><span class="line">    layers: List[keras.layers.Layer] = [layer <span class="keyword">for</span> layer <span class="keyword">in</span> model.layers <span class="keyword">if</span> layer.weights]</span><br><span class="line">    print(<span class="string">'weights count in model: '</span>, sum([len(layer.weights) <span class="keyword">for</span> layer <span class="keyword">in</span> layers]))</span><br><span class="line">    <span class="keyword">for</span> layer <span class="keyword">in</span> layers:</span><br><span class="line">        print(<span class="string">'layer: &#123;&#125;, names: &#123;&#125;'</span>.format(layer.name, [w.name <span class="keyword">for</span> w <span class="keyword">in</span> layer.weights]))</span><br></pre></td></tr></table></figure>
+
+<p>这里同时也打印出了所有的参数个数，我们可以与之前原模型的参数数量比较一下以验证我们的做法的正确性。我们可以得到这样的参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">block_1_1_depthwise_bn: [&apos;blocks_0/block_1_1_depthwise_bn/gamma:0&apos;, &apos;blocks_0/block_1_1_depthwise_bn/beta:0&apos;, &apos;blocks_0/block_1_1_depthwise_bn/moving_mean:0&apos;, &apos;blocks_0/block_1_1_depthwise_bn/moving_variance:0&apos;]</span><br><span class="line">block_1_1_depthwise_conv: [&apos;blocks_0/block_1_1_depthwise_conv/depthwise_kernel:0&apos;]</span><br><span class="line">block_1_1_project_bn: [&apos;blocks_0/block_1_1_project_bn/gamma:0&apos;, &apos;blocks_0/block_1_1_project_bn/beta:0&apos;, &apos;blocks_0/block_1_1_project_bn/moving_mean:0&apos;, &apos;blocks_0/block_1_1_project_bn/moving_variance:0&apos;]</span><br><span class="line">block_1_1_project_conv: [&apos;blocks_0/block_1_1_project_conv/kernel:0&apos;]</span><br><span class="line">...</span><br><span class="line">head_bn: [&apos;head/head_bn/gamma:0&apos;, &apos;head/head_bn/beta:0&apos;, &apos;head/head_bn/moving_mean:0&apos;, &apos;head/head_bn/moving_variance:0&apos;]</span><br><span class="line">head_conv: [&apos;head/head_conv/kernel:0&apos;]</span><br><span class="line">head_dense: [&apos;head/head_dense/kernel:0&apos;, &apos;head/head_dense/bias:0&apos;]</span><br><span class="line">stem_bn: [&apos;stem/stem_bn/gamma:0&apos;, &apos;stem/stem_bn/beta:0&apos;, &apos;stem/stem_bn/moving_mean:0&apos;, &apos;stem/stem_bn/moving_variance:0&apos;]</span><br><span class="line">stem_conv: [&apos;stem/stem_conv/kernel:0&apos;]</span><br></pre></td></tr></table></figure>
+
+<p>下一步要做的就是将参数与原模型的参数建立映射了。比较参数名，做相应的名字替换，我们可以得到这样的替换逻辑：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">map_weight_key</span><span class="params">(model_name: str, keras_key: str)</span> -&gt; str:</span></span><br><span class="line">    key = keras_key\</span><br><span class="line">        .replace(<span class="string">'stem_conv'</span>, <span class="string">'conv2d'</span>).replace(<span class="string">'stem_bn'</span>, <span class="string">'tpu_batch_normalization'</span>)\</span><br><span class="line">        .replace(<span class="string">'head_conv'</span>, <span class="string">'conv2d'</span>).replace(<span class="string">'head_bn'</span>, <span class="string">'tpu_batch_normalization'</span>).replace(<span class="string">'head_dense'</span>, <span class="string">'dense'</span>)\</span><br><span class="line">        .replace(<span class="string">'block_1_1_depthwise_bn'</span>, <span class="string">'tpu_batch_normalization'</span>).replace(<span class="string">'block_1_1_depthwise_conv'</span>, <span class="string">'depthwise_conv2d'</span>)\</span><br><span class="line">        .replace(<span class="string">'block_1_1_project_bn'</span>, <span class="string">'tpu_batch_normalization_1'</span>).replace(<span class="string">'block_1_1_project_conv'</span>, <span class="string">'conv2d'</span>)\</span><br><span class="line">        .replace(<span class="string">'block_1_1_se_reduce_conv'</span>, <span class="string">'conv2d'</span>).replace(<span class="string">'block_1_1_se_expand_conv'</span>, <span class="string">'conv2d_1'</span>)\</span><br><span class="line">        .replace(<span class="string">':0'</span>, <span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">    match = re.match(<span class="string">r'.*block_(\d)_(\d)_'</span>, keras_key)</span><br><span class="line">    <span class="keyword">if</span> match <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        block_idx, sub_block_idx = tuple(map(int, match.groups()))</span><br><span class="line">        block_prefix = <span class="string">'block_&#123;&#125;_&#123;&#125;'</span>.format(block_idx, sub_block_idx)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (block_idx == <span class="number">1</span> <span class="keyword">and</span> sub_block_idx == <span class="number">1</span>):</span><br><span class="line">            key = key.replace(<span class="string">'&#123;&#125;_expand_bn'</span>.format(block_prefix), <span class="string">'tpu_batch_normalization'</span>).replace(<span class="string">'&#123;&#125;_expand_conv'</span>.format(block_prefix), <span class="string">'conv2d'</span>)\</span><br><span class="line">                .replace(<span class="string">'&#123;&#125;_depthwise_bn'</span>.format(block_prefix), <span class="string">'tpu_batch_normalization_1'</span>).replace(<span class="string">'&#123;&#125;_depthwise_conv'</span>.format(block_prefix), <span class="string">'depthwise_conv2d'</span>)\</span><br><span class="line">                .replace(<span class="string">'&#123;&#125;_se_reduce_conv'</span>.format(block_prefix), <span class="string">'conv2d'</span>).replace(<span class="string">'&#123;&#125;_se_expand_conv'</span>.format(block_prefix), <span class="string">'conv2d_1'</span>)\</span><br><span class="line">                .replace(<span class="string">'&#123;&#125;_project_bn'</span>.format(block_prefix), <span class="string">'tpu_batch_normalization_2'</span>).replace(<span class="string">'&#123;&#125;_project_conv'</span>.format(block_prefix), <span class="string">'conv2d_1'</span>)\</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&#123;&#125;/&#123;&#125;/ExponentialMovingAverage'</span>.format(model_name, key)</span><br></pre></td></tr></table></figure>
+
+<p>输入keras的模型参数名，即可得到对应的原模型的参数名。有了参数转换逻辑，下面我们就可以开始转换参数了。</p>
+<p>首先是将原模型的参数导出，我们可以在第一个测试里面加入下面这些代码，然后运行:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vars = dict([(name, sess.run(var)) <span class="keyword">for</span> name, var <span class="keyword">in</span> var_dict.items()])</span><br><span class="line">pickle.dump(vars, open(<span class="string">'data/&#123;&#125;.params.pickle'</span>.format(model_name), <span class="string">'wb'</span>))</span><br></pre></td></tr></table></figure>
+
+<p>然后就是参数导入到keras模型了，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_weights</span><span class="params">(model: keras.Model, pickle_weights_dir: str)</span>:</span></span><br><span class="line">    vars_dict: Dict[str, np.ndarray] = pickle.loads(open(<span class="string">'&#123;&#125;/&#123;&#125;.params.pickle'</span>.format(pickle_weights_dir, model.name), <span class="string">'rb'</span>).read())</span><br><span class="line">    print(<span class="string">'weights count in tensorflow model: '</span>, len(vars_dict))</span><br><span class="line">    layers: List[keras.layers.Layer] = [layer <span class="keyword">for</span> layer <span class="keyword">in</span> model.layers <span class="keyword">if</span> layer.weights]</span><br><span class="line">    print(<span class="string">'weights count in keras model: '</span>, sum([len(layer.weights) <span class="keyword">for</span> layer <span class="keyword">in</span> layers]))</span><br><span class="line"></span><br><span class="line">    weight_value_tuples = []</span><br><span class="line">    <span class="keyword">for</span> layer <span class="keyword">in</span> layers:</span><br><span class="line">        <span class="keyword">for</span> w <span class="keyword">in</span> layer.weights:</span><br><span class="line">            print(w.name)</span><br><span class="line">            key_in_pickle = map_weight_key(model.name, w.name)</span><br><span class="line">            weight_value_tuples.append((w, vars_dict[key_in_pickle]))</span><br><span class="line">    keras.backend.batch_set_value(weight_value_tuples)</span><br></pre></td></tr></table></figure>
+
+<p>将我们第二个测试里面的代码行<code>model.load_weights(&#39;data/converted_weights/{}_imagenet_1000.h5&#39;.format(model_name))</code>替换为<code>load_weights(model, &#39;data&#39;)</code>，然后运行，就可以得到和官方一样的结果了。</p>
+<p>至此我们的模型转换就基本上完成了，还剩下一个简单的步骤，将这个模型的参数保存为h5格式，这个用<code>model.save_weights</code>就可以实现。保存为h5格式之后，我们就可以完全脱离官方的代码来工作了，后续就可以方便的集成到我们自己的工作中。</p>
+<p>其实这里还遗留了一个任务没有完成。我们平时使用基础模型，一般不会保留<code>head</code>块，这一块用于最后的分类输出，是依赖于分类数量的，每个任务都可能不一样。去掉<code>head</code>块的任务，有兴趣的小伙伴们可以自己动手实现一下。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+            <a href="/tags/ai/" rel="tag"># AI</a>
+          
+            <a href="/tags/machine-learning/" rel="tag"># Machine Learning</a>
+          
+            <a href="/tags/deep-learning/" rel="tag"># Deep Learning</a>
+          
+            <a href="/tags/keras/" rel="tag"># keras</a>
+          
+            <a href="/tags/efficientnet/" rel="tag"># EfficientNet</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/08/reproduce-ml-models-dorn/" rel="next" title="深度学习模型重现 -- DORN">
+                <i class="fa fa-chevron-left"></i> 深度学习模型重现 -- DORN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/19/python-json-serializable-lib/" rel="prev" title="如何实现一个优雅的Python的Json序列化库">
+                如何实现一个优雅的Python的Json序列化库 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型代码翻译"><span class="nav-number">1.</span> <span class="nav-text">模型代码翻译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型参数转换"><span class="nav-number">2.</span> <span class="nav-text">模型参数转换</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2019/07/12/reproduce-ml-models-efficientnet/', // optional
+      owner: 'gmlove',
+      title: '深度学习模型重现 -- EfficientNet的keras实现',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

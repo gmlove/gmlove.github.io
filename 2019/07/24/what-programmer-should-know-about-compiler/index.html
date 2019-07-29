@@ -1,0 +1,1362 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="python,compiler,lex,yacc,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="我们每天都在用某种编程语言写代码，但是我们真的了解它们是如何工作的吗？代码是如何转换为计算机可以识别的机器码的呢？ 了解编程语言的工作原理，不仅仅可以让我们深入理解某一种编程语言，某些时候还可以帮助以一种更优雅的方式实现想要的功能。比如我们近几年都在谈DSL（Domain Specific Language），在定义了DSL之后，是不是我们可以更进一步的做分析呢？如进行自动错误检查，甚至可以将其转">
+<meta name="keywords" content="python,compiler,lex,yacc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序员需要知道的编译器知识">
+<meta property="og:url" content="http://brightliao.me/2019/07/24/what-programmer-should-know-about-compiler/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="我们每天都在用某种编程语言写代码，但是我们真的了解它们是如何工作的吗？代码是如何转换为计算机可以识别的机器码的呢？ 了解编程语言的工作原理，不仅仅可以让我们深入理解某一种编程语言，某些时候还可以帮助以一种更优雅的方式实现想要的功能。比如我们近几年都在谈DSL（Domain Specific Language），在定义了DSL之后，是不是我们可以更进一步的做分析呢？如进行自动错误检查，甚至可以将其转">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-25T13:56:22.416Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="程序员需要知道的编译器知识">
+<meta name="twitter:description" content="我们每天都在用某种编程语言写代码，但是我们真的了解它们是如何工作的吗？代码是如何转换为计算机可以识别的机器码的呢？ 了解编程语言的工作原理，不仅仅可以让我们深入理解某一种编程语言，某些时候还可以帮助以一种更优雅的方式实现想要的功能。比如我们近几年都在谈DSL（Domain Specific Language），在定义了DSL之后，是不是我们可以更进一步的做分析呢？如进行自动错误检查，甚至可以将其转">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2019/07/24/what-programmer-should-know-about-compiler/">
+
+
+
+
+
+  <title>程序员需要知道的编译器知识 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2019/07/24/what-programmer-should-know-about-compiler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">程序员需要知道的编译器知识</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-24T20:00:00+08:00">
+                2019-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/compiler/" itemprop="url" rel="index">
+                    <span itemprop="name">compiler</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/07/24/what-programmer-should-know-about-compiler/" class="leancloud_visitors" data-flag-title="程序员需要知道的编译器知识">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>我们每天都在用某种编程语言写代码，但是我们真的了解它们是如何工作的吗？代码是如何转换为计算机可以识别的机器码的呢？</p>
+<p>了解编程语言的工作原理，不仅仅可以让我们深入理解某一种编程语言，某些时候还可以帮助以一种更优雅的方式实现想要的功能。比如我们近几年都在谈DSL（Domain Specific Language），在定义了DSL之后，是不是我们可以更进一步的做分析呢？如进行自动错误检查，甚至可以将其转化为某种可以执行的程序？</p>
+<a id="more"></a>
+
+<p>那么编程语言是如何工作的呢？详细的理论知识得回到我们大学时代的编译原理课程。下面我将主要从实例出发，辅以必备的几个概念介绍来帮助理解编程语言的工作方式，并介绍一些实用的工具帮助我们日常的开发。</p>
+<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>首先我们来看一个最简单的四则运算的例子。在这里我们想定义一种支持简单的 <strong>正整数四则运算</strong> 的语言。</p>
+<p>首先是语言中的概念和符号：</p>
+<ul>
+<li>正整数： <code>[0-9]+</code> (正则表达式定义)</li>
+<li>运算符号： <code>+</code> <code>-</code> <code>*</code> <code>/</code></li>
+</ul>
+<p>然后我们定义<code>*</code>和<code>/</code>的优先级一样，<code>+</code>和<code>-</code>的优先级一样，<code>*</code> <code>/</code>高于<code>+</code> <code>-</code>，与我们一般的理解一致。</p>
+<p>这个描述我们可以用一种更规范的形式来表示，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tokens:</span><br><span class="line">    NUMBER  : r&apos;[0-9]&apos;</span><br><span class="line"></span><br><span class="line">expressions:</span><br><span class="line">    expr    : NUMBER</span><br><span class="line">            | expr + expr</span><br><span class="line">            | expr - expr</span><br><span class="line">            | expr * expr</span><br><span class="line">            | expr / expr</span><br></pre></td></tr></table></figure>
+
+<p><code>expressions</code>中的语句采用了递归的形式进行定义（<code>|</code>表示或者），这样可以满足任意长度的任意组合了。</p>
+<p>像这样一种更规范的格式就是我们所谓的上下文无关文法了，其中著名的BNF范式就是其中一种。</p>
+<h2 id="几个概念"><a href="#几个概念" class="headerlink" title="几个概念"></a>几个概念</h2><p>什么是上下文无关文法？</p>
+<p>要理解这个概念，我们先得知道形式语言。形式语言是用 <strong>精确的</strong> 数学或机器可处理的 <strong>公式</strong> 定义的语言。这个概念是专门为计算机定义的，但仅仅从这句话来看，其实还是模糊的，什么样的公式才是数学和机器可处理的呢？</p>
+<p>这就牵涉到形式文法的概念，文法用于构成语言，形式文法就是用于构成形式语言，文法可以类比我们自然语言中的<em>主谓宾</em>、<em>主系表</em>这类结构规则。形式文法可以表示为一个四元组（非终结符N, 终结符Σ, 产生式规则P, 起始符S），从而我们得到了数学上的定义，后面就可以用数学逻辑推导相关文法理论了。到这里大家应该有一点概念了，本文并不想过多涉及理论，详细的数学分析及示例可以参考<a href="https://zh.wikipedia.org/wiki/%E5%BD%A2%E5%BC%8F%E6%96%87%E6%B3%95" target="_blank" rel="noopener">wiki</a>。</p>
+<p>上下文无关文法，顾名思义，就是上下文无关的一种形式文法，这种文法虽然简单，但是非常重要，因为所有的编程语言都是基于它来设计的。BNF（Backus Normal Form），也就是巴克斯-诺尔范式（由他们最先引入），就是我们经常用来表达上下文无关文法的一种符号集。</p>
+<h2 id="理解语言"><a href="#理解语言" class="headerlink" title="理解语言"></a>理解语言</h2><p>有了语言定义，我们可以做什么呢？一个直接的任务应该就是理解语言并将其转化为计算机可以执行的代码，以便在机器上运行。完成这个任务的东西我们叫编译器。</p>
+<p>很多时候其实我们并不一定要让计算机计算出一个结果，而是只要计算机能理解语言。如何才算理解了语言？对于某一行代码，事实上可以用一棵树结构来描述它，树结构一个节点代表语言定义的一个简单推导。比如<code>1 + 2 + 3</code>可以表示成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">expr   |-- NUMBER(3)</span><br><span class="line">       +</span><br><span class="line">       |-- expr   |-- NUMBER(1)</span><br><span class="line">                  +</span><br><span class="line">                  |-- NUMBER(2)</span><br></pre></td></tr></table></figure>
+
+<p>这里的树结构被称为语法树，有了这颗语法树，我们就可以说理解语言了，因为从这颗语法树我们有办法将其翻译为机器码。</p>
+<h2 id="理解四则运算语言"><a href="#理解四则运算语言" class="headerlink" title="理解四则运算语言"></a>理解四则运算语言</h2><p>理解语言一般我们可以分为两个步骤，第一是理解词，第二是按照语法规则将词组织成语法树。比如四则运算的例子，我们在构造语法树的时候，输入一个字符串，然后需要依次提取字符串中的词（这里的词是指正整数和<code>+-*/</code>符号），最后根据词和规则来构造语法树。</p>
+<p>在这个简单的例子中，识别词的过程我们可以用简单的正则匹配来实现。但是构造语法树的时候，我们需要构造一个有限状态机（finite-state machine）来实现，这看起来就好像并不是一件简单的事了。</p>
+<p>事实上，关于计算机语言的分析早在上世纪50年代就有了比较系统的研究了，相关工具当然也是非常成熟和丰富。最早的工具莫过于<code>lex(lexical analyser)</code>和<code>yacc(yet another compiler-compiler)</code>了。<code>lex</code>就是用来做词法分析的，<code>yacc</code>可以用<code>lex</code>的词法分析结果来生成语法树。这两个工具可以帮我们生成理解语言的源代码。但是这两个工具是unix系统下的工具，而我们现在用的一般都是GNU的系统。在GNU的系统下的两个类似实现是<code>flex</code>和<code>bison</code>，ubuntu系统下我们可以用<code>sudo apt-get install flex bison</code>来安装。</p>
+<p>由于这两个工具是生成c语言的语法分析器代码。为了简单的在python下做一些实验，我们使用<a href="https://github.com/dabeaz/ply" target="_blank" rel="noopener">ply</a>这个工具，它的全称是<code>python lex-yacc</code>，也就是python版本的lex和yacc。参考<a href="http://www.dabeaz.com/ply/ply.html" target="_blank" rel="noopener">ply的文档</a>，要实现上述四则运算，我们可以编写代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">tokens = (<span class="string">'NAME'</span>, <span class="string">'NUMBER'</span>, )</span><br><span class="line">literals = <span class="string">'+-*/'</span></span><br><span class="line"></span><br><span class="line">t_NAME = <span class="string">r'[a-zA-Z_][a-zA-Z0-9_]*'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">t_NUMBER</span><span class="params">(t)</span>:</span></span><br><span class="line">    <span class="string">r'\d+'</span></span><br><span class="line">    t.value = int(t.value)</span><br><span class="line">    <span class="keyword">return</span> t</span><br><span class="line"></span><br><span class="line">precedence = ((<span class="string">'left'</span>, <span class="string">'+'</span>, <span class="string">'-'</span>), (<span class="string">'left'</span>, <span class="string">'*'</span>, <span class="string">'/'</span>), )</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">p_statement_expr</span><span class="params">(t)</span>:</span></span><br><span class="line">    <span class="string">"""statement : expression"""</span></span><br><span class="line">    print(t[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">p_expression_binop</span><span class="params">(p)</span>:</span></span><br><span class="line">    <span class="string">"""expression : expression '+' expression</span></span><br><span class="line"><span class="string">                  | expression '-' expression</span></span><br><span class="line"><span class="string">                  | expression '*' expression</span></span><br><span class="line"><span class="string">                  | expression '/' expression</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> p[<span class="number">2</span>] == <span class="string">'+'</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] + p[<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">elif</span> p[<span class="number">2</span>] == <span class="string">'-'</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] - p[<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">elif</span> p[<span class="number">2</span>] == <span class="string">'*'</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] * p[<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">elif</span> p[<span class="number">2</span>] == <span class="string">'/'</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] / p[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">p_expression_number</span><span class="params">(p)</span>:</span></span><br><span class="line">    <span class="string">"""expression : NUMBER"""</span></span><br><span class="line">    p[<span class="number">0</span>] = p[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_lex_yacc</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">import</span> ply.lex <span class="keyword">as</span> lex</span><br><span class="line">    <span class="keyword">import</span> ply.yacc <span class="keyword">as</span> yacc</span><br><span class="line">    lexer = lex.lex()</span><br><span class="line">    parser = yacc.yacc()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            s = input(<span class="string">'calc &gt; '</span>)</span><br><span class="line">            lexer.input(s)</span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                tok = lexer.token()</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> tok:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                print(tok)</span><br><span class="line">            parser.parse(s, lexer=lexer)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    test_lex_yacc()</span><br></pre></td></tr></table></figure>
+
+<p>运行这个程序，输入我们的表达式，将能得到正确的结果，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">calc &gt; 1+2*3</span><br><span class="line">LexToken(NUMBER,1,1,0)</span><br><span class="line">LexToken(+,&apos;+&apos;,1,1)</span><br><span class="line">LexToken(NUMBER,2,1,2)</span><br><span class="line">LexToken(*,&apos;*&apos;,1,3)</span><br><span class="line">LexToken(NUMBER,3,1,4)</span><br><span class="line">7</span><br></pre></td></tr></table></figure>
+
+<h2 id="一个更复杂的例子"><a href="#一个更复杂的例子" class="headerlink" title="一个更复杂的例子"></a>一个更复杂的例子</h2><p>上述的例子看起来过于简单，实际上我们可以用ply实现非常复杂的语法分析器。比如我们可以实现一个用于识别python的函数定义的语法分析器。有了这个分析器，我们就可以从识别结果中获取函数名，参数名，类型信息等，从而完成一些类似代码质量分析，自动代码格式化等工作。</p>
+<p>初步看这个问题，似乎正则表达式可以解决一定的问题，但是仅仅有正则表达式是不够的，因为python的很多语法规则过于复杂，难以通过正则表达式来表达。</p>
+<p>为识别python的函数定义，我们可以编写测试如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_yacc_for_python_func_def</span><span class="params">()</span>:</span></span><br><span class="line">    test_code_lines = [</span><br><span class="line">        <span class="string">'def abc(a,):'</span>,</span><br><span class="line">        <span class="string">'def abc(a,):'</span>,</span><br><span class="line">        <span class="string">'def abc(a,#xxx()[]\n):'</span>,</span><br><span class="line">        <span class="string">'def abc(a: List[int],):'</span>,</span><br><span class="line">        <span class="string">'def abc() -&gt; int:'</span>,</span><br><span class="line">        <span class="string">'def abc(a, b) -&gt; List[int]:'</span>,</span><br><span class="line">        <span class="string">'def abc(a, b: Union[int, List[float]],) -&gt; Union[int, float]:'</span>,</span><br><span class="line">        <span class="string">'def abc(a,) -&gt; Union[int, List[float]]:'</span>,</span><br><span class="line">        <span class="string">'def abc(a,) -&gt; Union[int, List[float], float]:'</span>,</span><br><span class="line">        <span class="string">'def abc(a,) #xxx()[]\n -&gt; Union[int, List[float], float]:'</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> test_code_lines:</span><br><span class="line">        yacc.parse(line, lexer=lexer)</span><br></pre></td></tr></table></figure>
+
+<p>有兴趣的小伙伴可以自己尝试实现，或者参考<a href="https://github.com/gmlove/experiments/blob/master/python_lex_yacc/py_func_def.py" target="_blank" rel="noopener">这里</a>我实现的一个版本。</p>
+<h2 id="更实用的工具"><a href="#更实用的工具" class="headerlink" title="更实用的工具"></a>更实用的工具</h2><p>上面的工具已经可以帮我们做很多了，看起来甚至自己定义一门编程语言也是可能的。然而这件事的难度在于，对于一门好用的编程语言，语法定义要足够丰富好用，性能要足够高，相关生态要能做得起来。这就不是单纯的技术活了。</p>
+<p>在日常的开发活动中，我们可能接触最多的还是对于当前流行的编程语言的处理。比如，某一天我们可能想要实现一个工具将一个java实现的库，转换为python实现的库，<a href="https://github.com/natural/java2python" target="_blank" rel="noopener">这里</a>就有一个不错的尝试。又比如，某一天我们想要改进我们的IDE，尝试做更多特殊的自动代码格式化支持。还比如，某一天我们想要自动化生成一些代码，就像IDE里面的重构一样。这个时候有没有什么工具可以帮助我们呢？</p>
+<p>当然是有的，这里想要提一下 <strong>ANTLR</strong>。代码库在<a href="https://github.com/antlr/antlr4" target="_blank" rel="noopener">这里</a>。这是一个java实现的类似工具，支持的语言非常广泛，我们可以在<a href="https://github.com/antlr/grammars-v4" target="_blank" rel="noopener">这里</a>找到一个列表。可以看到这里支持了go python3 java9等等非常多的语言，基本上我们日常用到的语言都有覆盖了。而且这个工具可以生成各种目标语言的语法分析器。比如我们想得到一个python语言实现的go语言分析器，这个工具可以很容易实现。类似的工具还有很多，我们可以参考wiki上面的一个<a href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators" target="_blank" rel="noopener">比较</a>。</p>
+<p>如果我们只想用一种编程语言去分析该语言自身，这个时候更简单的方式是直接用语言本身提供的语法分析器。一般提供了JIT(just in time的缩写, 也就是即时编译编译器)功能的语言，都有相应的接口去做语法分析。比如<a href="https://docs.python.org/3/library/ast.html" target="_blank" rel="noopener">这里</a>有python的<code>ast</code>库，调用<code>ast.parse</code>，输入一段源代码，就得到一颗语法树。javascript有一个第三方库<code>esprima</code>(<a href="https://esprima.org/" target="_blank" rel="noopener">这里</a>)也可以做类似的事情。</p>
+<p>到这里我们是不是对日常使用的编程语言有了更深入的了解呢？编译技术是一门强大的技术，灵活运用将能实现很多平时看起来很难的功能。希望当我们遇到这些问题的时候能有一些新的思路。</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://dinosaur.compilertools.net/" target="_blank" rel="noopener">http://dinosaur.compilertools.net/</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%B7%B4%E7%A7%91%E6%96%AF%E8%8C%83%E5%BC%8F" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%B7%B4%E7%A7%91%E6%96%AF%E8%8C%83%E5%BC%8F</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%BD%A2%E5%BC%8F%E6%96%87%E6%B3%95" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%BD%A2%E5%BC%8F%E6%96%87%E6%B3%95</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Comparison_of_parser_generators</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/compiler/" rel="tag"># compiler</a>
+          
+            <a href="/tags/lex/" rel="tag"># lex</a>
+          
+            <a href="/tags/yacc/" rel="tag"># yacc</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/20/tdd-for-improving-design/" rel="next" title="从改善设计的角度理解TDD">
+                <i class="fa fa-chevron-left"></i> 从改善设计的角度理解TDD
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/25/ways-to-improve-python-perf/" rel="prev" title="Python性能优化二三事">
+                Python性能优化二三事 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个例子"><span class="nav-number">1.</span> <span class="nav-text">一个例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个概念"><span class="nav-number">2.</span> <span class="nav-text">几个概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解语言"><span class="nav-number">3.</span> <span class="nav-text">理解语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解四则运算语言"><span class="nav-number">4.</span> <span class="nav-text">理解四则运算语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个更复杂的例子"><span class="nav-number">5.</span> <span class="nav-text">一个更复杂的例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更实用的工具"><span class="nav-number">6.</span> <span class="nav-text">更实用的工具</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2019/07/24/what-programmer-should-know-about-compiler/', // optional
+      owner: 'gmlove',
+      title: '程序员需要知道的编译器知识',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

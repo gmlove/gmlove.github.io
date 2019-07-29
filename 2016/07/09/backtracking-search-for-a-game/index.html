@@ -6,10 +6,10 @@
 
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
@@ -26,8 +26,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -45,7 +45,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -79,23 +79,23 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml" />
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
 
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2016/07/09/backtracking-search-for-a-game/"/>
+  <link rel="canonical" href="http://brightliao.me/2016/07/09/backtracking-search-for-a-game/">
 
 
 
@@ -199,7 +199,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Bright LGM's Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -229,7 +229,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -239,7 +239,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -249,7 +249,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -259,7 +259,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -272,7 +272,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -293,9 +293,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -332,7 +330,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/avatar.png">
     </span>
 
@@ -368,7 +366,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -432,10 +430,13 @@
 <li>目标：所有-1移动到左边，1移动到右边，即最后状态为[-1, -1, -1, 0, 1, 1, 1]</li>
 </ul>
 <a id="more"></a>
+
 <p>老婆尝试了好几次无果，给我试试。一看这个游戏，就想到可以用回溯搜索算法来找答案。于是打开电脑开始尝试，得到如下js代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> _ = <span class="built_in">require</span>(<span class="string">'lodash'</span>)</div><div class="line"><span class="keyword">var</span> cards = [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>]</div><div class="line"></div><div class="line"><span class="keyword">var</span> search = <span class="function"><span class="keyword">function</span> (<span class="params">cards, path</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (_.isEqual(cards, [<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>])) &#123;</div><div class="line">    replay(path)</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> idx = <span class="number">0</span>; idx &lt; cards.length; idx++) &#123;</div><div class="line">    <span class="keyword">let</span> moved = move(cards, idx)</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`moved: <span class="subst">$&#123;moved&#125;</span>, path: <span class="subst">$&#123;path&#125;</span>`</span>)</div><div class="line">    <span class="keyword">if</span> (moved &amp;&amp; search(moved, _.concat(path, [idx]))) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> move = <span class="function"><span class="keyword">function</span> (<span class="params">cards, idx</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> moved = _.clone(cards)</div><div class="line">  <span class="keyword">if</span> (cards[idx] === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (cards[idx + <span class="number">1</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx + <span class="number">1</span>] = <span class="number">1</span></div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx + <span class="number">2</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx + <span class="number">2</span>] = <span class="number">1</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx] === <span class="number">-1</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (cards[idx - <span class="number">1</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx - <span class="number">1</span>] = <span class="number">-1</span></div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx - <span class="number">2</span>] === <span class="number">0</span>) &#123;</div><div class="line">      moved[idx] = <span class="number">0</span></div><div class="line">      moved[idx - <span class="number">2</span>] = <span class="number">-1</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> moved</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> replay = <span class="function"><span class="keyword">function</span> (<span class="params">path</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'path found: '</span>, path.join(<span class="string">','</span>))</div><div class="line">  <span class="keyword">var</span> _cards = cards</div><div class="line">  <span class="built_in">console</span>.log(_cards.join(<span class="string">','</span>))</div><div class="line">  path.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">idx</span>) </span>&#123;</div><div class="line">    _cards = move(_cards, idx)</div><div class="line">    <span class="built_in">console</span>.log(_cards.join(<span class="string">','</span>))</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">search(cards, [])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _ = <span class="built_in">require</span>(<span class="string">'lodash'</span>)</span><br><span class="line"><span class="keyword">var</span> cards = [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> search = <span class="function"><span class="keyword">function</span> (<span class="params">cards, path</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (_.isEqual(cards, [<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>])) &#123;</span><br><span class="line">    replay(path)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> idx = <span class="number">0</span>; idx &lt; cards.length; idx++) &#123;</span><br><span class="line">    <span class="keyword">let</span> moved = move(cards, idx)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`moved: <span class="subst">$&#123;moved&#125;</span>, path: <span class="subst">$&#123;path&#125;</span>`</span>)</span><br><span class="line">    <span class="keyword">if</span> (moved &amp;&amp; search(moved, _.concat(path, [idx]))) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> move = <span class="function"><span class="keyword">function</span> (<span class="params">cards, idx</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> moved = _.clone(cards)</span><br><span class="line">  <span class="keyword">if</span> (cards[idx] === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (cards[idx + <span class="number">1</span>] === <span class="number">0</span>) &#123;</span><br><span class="line">      moved[idx] = <span class="number">0</span></span><br><span class="line">      moved[idx + <span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx + <span class="number">2</span>] === <span class="number">0</span>) &#123;</span><br><span class="line">      moved[idx] = <span class="number">0</span></span><br><span class="line">      moved[idx + <span class="number">2</span>] = <span class="number">1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx] === <span class="number">-1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (cards[idx - <span class="number">1</span>] === <span class="number">0</span>) &#123;</span><br><span class="line">      moved[idx] = <span class="number">0</span></span><br><span class="line">      moved[idx - <span class="number">1</span>] = <span class="number">-1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cards[idx - <span class="number">2</span>] === <span class="number">0</span>) &#123;</span><br><span class="line">      moved[idx] = <span class="number">0</span></span><br><span class="line">      moved[idx - <span class="number">2</span>] = <span class="number">-1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> moved</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> replay = <span class="function"><span class="keyword">function</span> (<span class="params">path</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'path found: '</span>, path.join(<span class="string">','</span>))</span><br><span class="line">  <span class="keyword">var</span> _cards = cards</span><br><span class="line">  <span class="built_in">console</span>.log(_cards.join(<span class="string">','</span>))</span><br><span class="line">  path.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">idx</span>) </span>&#123;</span><br><span class="line">    _cards = move(_cards, idx)</span><br><span class="line">    <span class="built_in">console</span>.log(_cards.join(<span class="string">','</span>))</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">search(cards, [])</span><br></pre></td></tr></table></figure>
+
 <p>最终找到的步骤如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">path found:  2,4,5,3,1,0,2,4,6,5,3,1,2,4,3</div><div class="line">1,1,1,0,-1,-1,-1</div><div class="line">1,1,0,1,-1,-1,-1</div><div class="line">1,1,-1,1,0,-1,-1</div><div class="line">1,1,-1,1,-1,0,-1</div><div class="line">1,1,-1,0,-1,1,-1</div><div class="line">1,0,-1,1,-1,1,-1</div><div class="line">0,1,-1,1,-1,1,-1</div><div class="line">-1,1,0,1,-1,1,-1</div><div class="line">-1,1,-1,1,0,1,-1</div><div class="line">-1,1,-1,1,-1,1,0</div><div class="line">-1,1,-1,1,-1,0,1</div><div class="line">-1,1,-1,0,-1,1,1</div><div class="line">-1,0,-1,1,-1,1,1</div><div class="line">-1,-1,0,1,-1,1,1</div><div class="line">-1,-1,-1,1,0,1,1</div><div class="line">-1,-1,-1,0,1,1,1</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">path found:  2,4,5,3,1,0,2,4,6,5,3,1,2,4,3</span><br><span class="line">1,1,1,0,-1,-1,-1</span><br><span class="line">1,1,0,1,-1,-1,-1</span><br><span class="line">1,1,-1,1,0,-1,-1</span><br><span class="line">1,1,-1,1,-1,0,-1</span><br><span class="line">1,1,-1,0,-1,1,-1</span><br><span class="line">1,0,-1,1,-1,1,-1</span><br><span class="line">0,1,-1,1,-1,1,-1</span><br><span class="line">-1,1,0,1,-1,1,-1</span><br><span class="line">-1,1,-1,1,0,1,-1</span><br><span class="line">-1,1,-1,1,-1,1,0</span><br><span class="line">-1,1,-1,1,-1,0,1</span><br><span class="line">-1,1,-1,0,-1,1,1</span><br><span class="line">-1,0,-1,1,-1,1,1</span><br><span class="line">-1,-1,0,1,-1,1,1</span><br><span class="line">-1,-1,-1,1,0,1,1</span><br><span class="line">-1,-1,-1,0,1,1,1</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -513,7 +514,7 @@
   <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
   <a class="jiathis_counter_style"></a>
 </div>
-<script type="text/javascript" >
+<script type="text/javascript">
   var jiathis_config={
     hideMore:false
   }
@@ -557,9 +558,7 @@
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/avatar.png"
-               alt="Bright LGM" />
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
           <p class="site-author-name" itemprop="name">Bright LGM</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
@@ -570,7 +569,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -581,7 +580,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -592,7 +591,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-count">58</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -628,7 +627,7 @@
         
           <div class="cc-license motion-element" itemprop="license">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
             </a>
           </div>
         
@@ -655,10 +654,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
