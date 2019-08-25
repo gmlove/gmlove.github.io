@@ -84,7 +84,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="opengl,html5,game,">
+  <meta name="keywords" content="agile,敏捷,tdd,测试,质量,">
 
 
 
@@ -102,18 +102,20 @@
 
 
 
-<meta name="description" content="opengl es shading language种类  类型：vec2 vec3 vec4 mat2 mat3 mat4 int float 结构体：">
-<meta name="keywords" content="opengl,html5,game">
+<meta name="description" content="在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：  TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。 先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。 由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试">
+<meta name="keywords" content="agile,敏捷,tdd,测试,质量">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Opengl知识学习">
-<meta property="og:url" content="http://brightliao.me/2016/03/17/opengl-summary/index.html">
+<meta property="og:title" content="从改善设计的角度理解TDD (2)">
+<meta property="og:url" content="http://brightliao.me/2019/08/18/tdd-for-improving-design-2/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="opengl es shading language种类  类型：vec2 vec3 vec4 mat2 mat3 mat4 int float 结构体：">
+<meta property="og:description" content="在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：  TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。 先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。 由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-06-25T05:52:32.000Z">
+<meta property="og:image" content="http://brightliao.me/attaches/2019/2019-08-18-tdd-for-improving-design-2/workflow-tools.png">
+<meta property="og:updated_time" content="2019-08-25T10:09:15.338Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Opengl知识学习">
-<meta name="twitter:description" content="opengl es shading language种类  类型：vec2 vec3 vec4 mat2 mat3 mat4 int float 结构体：">
+<meta name="twitter:title" content="从改善设计的角度理解TDD (2)">
+<meta name="twitter:description" content="在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：  TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。 先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。 由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2019/2019-08-18-tdd-for-improving-design-2/workflow-tools.png">
 
 
 
@@ -141,13 +143,13 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2016/03/17/opengl-summary/">
+  <link rel="canonical" href="http://brightliao.me/2019/08/18/tdd-for-improving-design-2/">
 
 
 
 
 
-  <title>Opengl知识学习 | Bright LGM's Blog</title>
+  <title>从改善设计的角度理解TDD (2) | Bright LGM's Blog</title>
   
 
 
@@ -327,7 +329,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2016/03/17/opengl-summary/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2019/08/18/tdd-for-improving-design-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">
@@ -344,7 +346,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Opengl知识学习</h2>
+          <h2 class="post-title" itemprop="name headline">从改善设计的角度理解TDD (2)</h2>
         
 
         <div class="post-meta">
@@ -356,8 +358,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-17T21:04:39+08:00">
-                2016-03-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-18T20:00:00+08:00">
+                2019-08-18
               </time>
             
 
@@ -379,8 +381,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/frontend/" itemprop="url" rel="index">
-                    <span itemprop="name">frontend</span>
+                  <a href="/categories/tdd/" itemprop="url" rel="index">
+                    <span itemprop="name">tdd</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/敏捷/" itemprop="url" rel="index">
+                    <span itemprop="name">敏捷</span>
                   </a>
                 </span>
 
@@ -391,10 +404,12 @@
           
 
           
+            
+          
 
           
           
-             <span id="/2016/03/17/opengl-summary/" class="leancloud_visitors" data-flag-title="Opengl知识学习">
+             <span id="/2019/08/18/tdd-for-improving-design-2/" class="leancloud_visitors" data-flag-title="从改善设计的角度理解TDD (2)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -422,31 +437,69 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><h2 id="opengl-es-shading-language"><a href="#opengl-es-shading-language" class="headerlink" title="opengl es shading language"></a>opengl es shading language</h2><p>种类</p>
-<ul>
-<li>类型：vec2 vec3 vec4 mat2 mat3 mat4 int float</li>
-<li>结构体：</li>
-</ul>
+        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：</p>
+<ol>
+<li>TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。</li>
+<li>先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。</li>
+<li>由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试覆盖率不够带来的质量问题了。</li>
+</ol>
+<p>TDD给我们编写代码带来的好处多多，我前面有一篇<a href="http://brightliao.me/2019/07/20/tdd-for-improving-design/">文章</a>主要分析了如何从改善设计的角度理解TDD，相信大家能感受到TDD给改善程序设计带来的好处。这里我想再次分享一个用TDD改善设计的例子，我们将从中看到不用TDD时我们的代码可能会变成什么样，而用了TDD又将变成什么样。</p>
 <a id="more"></a>
 
-<p>预编译：#ifdef #ifudef #if #endif #define</p>
-<p>变量标识：precision midiump lowp in out const attribute(数组常量) varying(从vs传递到fs) uniform(全局变量)</p>
-<p>控制语句：</p>
-<ul>
-<li>if … else …</li>
-<li>for(..;..;..), while(…), break, return</li>
-<li>discard: 终止执行，只能用在fragment shader中</li>
-</ul>
-<p>函数：</p>
-<ul>
-<li>数组限制 - 作为参数需要指定长度，不能作为返回值</li>
-</ul>
-<p>内置函数：</p>
-<ul>
-<li>访问硬件功能：纹理贴图</li>
-<li>常用的细小功能：step(返回0,1) clamp mix(x<em>(1-a)+y</em>a) smoothstep faceforward</li>
-<li>硬件加速的某些功能：sin cos</li>
-</ul>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有这样一个需求，我们需要定义一个有向无环图将一组小的<code>Task</code>组织成一个功能更强大的<code>Job</code>，然后执行<code>Job</code>按照任务（<code>Task</code>）先后关系运行这个图。其实我们能找到很多用这样的方式来编排任务的开源工具，比如下面这些。</p>
+<p><img src="/attaches/2019/2019-08-18-tdd-for-improving-design-2/workflow-tools.png" alt="Workflow工具"></p>
+<p>我们还希望以后能编写一个UI界面来辅助用户快速的编排任务，用户可以以拖拉拽的方式可视化的编排，可以灵活的配置任务参数，同时系统将自动的校验用户指定的及任务间传递的参数。</p>
+<p>基本的需求就是这样，在了解了这些之后，我们来分别看看直接进行设计和用TDD进行辅助设计会是什么样子的。</p>
+<h2 id="直接设计"><a href="#直接设计" class="headerlink" title="直接设计"></a>直接设计</h2><p>分析上述需求，如果我们想在用户编排任务的时候进行参数校验，那么我们必须在每个任务运行之前就有办法获取到各种参数和返回值的类型信息，它们将包括任务的可配置参数、任务的入参、任务的返回值等。由于这些参数都是针对某个具体的任务来定义的，我们可以设计任务的几个接口来获取这些类型信息。我们暂定只需要上述三种类型信息，可以得到如下的接口设计：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Task</span> </span>&#123;</span><br><span class="line">    <span class="function">TypeOfSomeConfigurationType <span class="title">getConfigurationMeta</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">TypeOfSomeInputType <span class="title">getInputMeta</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">TypeOfSomeResultType <span class="title">getResultMeta</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">SomeResultType <span class="title">execute</span><span class="params">(SomeInputType input, SomeConfigurationType config)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的<code>SomeXXXType</code>应该是什么呢？为了支持灵活的配置，这里我们需要一个非常灵活的数据结构。稍加思索大家应该就能想到我们可以用<code>Map</code>。我们可以定义一个<code>Map&lt;String, Object&gt;</code>的类型来存储任意键值，这时候，对<code>SomeConfigurationType</code>而言，<code>key</code>是配置的名字，配置的值可以是任意的一个对象；对于<code>TypeOfSomeConfigurationType</code>而言，它应该是一个<code>Map&lt;String, Class&lt;?&gt;&gt;</code>类型，<code>key</code>与配置的名字一致，值用于描述配置的值的类型。其他的<code>SomeInputType</code>和<code>SomeResultType</code>均可以这样定义。到这里我们可能还会有点小小的自豪，问题很简单啊，引入一个<code>Map</code>数据结构就完美解决了。这个时候我们的<code>Task</code>接口会设计成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Task</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getConfigurationMeta();</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getInputMeta();</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getResultMeta();</span><br><span class="line">    <span class="function">Map&lt;String, Object&gt; <span class="title">execute</span><span class="params">(Map&lt;String, Object&gt; input, Map&lt;String, Object&gt; config)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>仔细观察上面的接口，好像没那么干净，但似乎也挑不出什么毛病。<code>Map</code>看起来对于<code>Task</code>的实现会有一些干扰，因为<code>Task</code>实现里面势必会引入一些必要的强制类型转换的工作。能否避免这样的比较脏的类型转换代码呢？我们思考了一下，可能可以提供一些Utilities工具类来进行一些支持，或者编写一个<code>AbstractTask</code>抽象类，将一些公共的逻辑放到抽象类中进行复用。总体上感觉问题应该出在需要支持 <strong>灵活的配置</strong> 这样的需求上。由于需求是要保证灵活性，我们就只能将接口定义成这样。</p>
+<p>如何将任务组织成为一个有向无环图呢？这看起来也不是难事，先定义一个DAG，然后一个节点一个节点往里面塞数据就可以了。同时为了支持有向无环图的执行我们可以定义一个<code>execute</code>方法。这个时候我们的<code>Job</code>类大概会设计成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Job</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addTask</span><span class="params">(Task task, Task... subTasks)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">(Map&lt;String, Object&gt; input, Map&lt;String, Object&gt; config)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到这里基本的设计就差不多完成了。我们会隐约感受到一些不够<code>clean</code>的设计，但是似乎难以控制。为了尽快实现功能，先这样定吧。</p>
+<h2 id="TDD驱动设计"><a href="#TDD驱动设计" class="headerlink" title="TDD驱动设计"></a>TDD驱动设计</h2><p>如果我们用TDD的思想来驱动开发，情况会是什么样呢？</p>
+<p>按照TDD解决问题的思路，我们要先编写一个测试。那么第一个测试要怎么写呢？分析一下需求可以发现，我们的目标是要实现一个DAG任务运行框架。那么我们的测试目标应当就是这个框架。这个框架需要实现的功能是：</p>
+<ol>
+<li>允许用户自定义一些<code>Task</code>；</li>
+<li>允许用户将这些<code>Task</code>组织成一个有向无环图；</li>
+<li>提供接口运行这个图。在测试的代码中，我们需要模拟这个框架的使用方式，提供输入，然后验证输出。</li>
+</ol>
+<p>于是这个测试的实现就会包含这样几个步骤：</p>
+<ol>
+<li>定义<code>Task</code>；</li>
+<li>将<code>Task</code>组织成一个有向无环图；</li>
+<li>利用框架运行这个图；</li>
+<li>检查运行结果是否是我们想要的。</li>
+</ol>
+<p>我们可以先编写测试模板代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSchedulerTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_run_the_defined_job_and_output_the_expected_result</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// define tasks</span></span><br><span class="line">        <span class="comment">// create dag</span></span><br><span class="line">        <span class="comment">// execute dag</span></span><br><span class="line">        <span class="comment">// verify execution result</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如何定义<code>Task</code>呢？<code>Task</code>需要保持足够的灵活性，以便可以支持任意可能的配置，同时<code>Task</code>要暴露接口让框架获取到输入、配置以及输出的元数据信息（类型信息）以便支持参数校验。由于我们使用<code>Java</code>这样的静态类型语言，事实上我们可以认为这些元数据信息是自动提供的。那么一个理想的<code>Task</code>就应该定义成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleCalculationTask</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> CalculationResult <span class="title">execute</span><span class="params">(CalculationInput input, CalculationConfig config)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的<code>Task</code>定义我们应该会比较满意，因为它只有一个接口，并且这个接口非常简洁而又有明确的类型信息。要实现这样的接口也应该是非常容易的。比如在测试中我们可以设计一个非常简单的加法任务，它不仅要输出加法的结果，还会附带输出获取到的输入参数，同时我们可以配置加法在什么区间可以按正常工作，而在另一个区间直接输出<code>-1</code>。这样的加法任务可以实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AdderTask</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">AdderInput</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> right;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">AdderInput</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123; <span class="keyword">this</span>.left = left; <span class="keyword">this</span>.right = right; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">AdderConfig</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> maxSupportedValue;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> minSupportedValue;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">AdderInput</span><span class="params">(<span class="keyword">int</span> maxSupportedValue, <span class="keyword">int</span> minSupportedValue)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.maxSupportedValue = maxSupportedValue; <span class="keyword">this</span>.minSupportedValue = minSupportedValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">AdderResult</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> right;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> result;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">AdderInput</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123; <span class="keyword">this</span>.left = left; <span class="keyword">this</span>.right = right; <span class="keyword">this</span>.result = result; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">AdderInput</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> right;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">AdderInput</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123; <span class="keyword">this</span>.left = left; <span class="keyword">this</span>.right = right; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AdderResult <span class="title">execute</span><span class="params">(AdderInput input, AdderConfig config)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = input.left + input.right;</span><br><span class="line">        <span class="keyword">return</span> result &gt; config.maxSupportedValue || result &lt; config.minSupportedValue</span><br><span class="line">                ? <span class="keyword">new</span> AdderResult(input.left, input.right, -<span class="number">1</span>)</span><br><span class="line">                : <span class="keyword">new</span> AdderResult(input.left, input.right, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了这样的定义之后，我们需要想办法将任务组织成一个有向无环图。怎样才能方便的构造这个图呢？最好有一个调度器，可以在某个任务后安排其他任务，也可以安排几个并行执行的任务，而我们需要提供一种方式来构造下游任务的参数。按照这样的想法可以得到下面这样的测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSchedulerTest</span> </span>&#123;</span><br><span class="line">    <span class="function">Job <span class="title">createJob</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        TaskScheduler scheduler = <span class="keyword">new</span> TaskScheduler();</span><br><span class="line">        Job job = scheduler.scheduleTask(<span class="keyword">new</span> AdderTask())</span><br><span class="line">            .next(<span class="keyword">new</span> AdderTask(), adderResult -&gt; </span><br><span class="line">                <span class="keyword">new</span> AdderInput(adderResult.left, adderResult.result));</span><br><span class="line">        job = scheduler.scheduleParallelTask(job, <span class="keyword">new</span> AdderTask())</span><br><span class="line">            .next(<span class="keyword">new</span> AdderTask(), (jobAdderResult, taskAdderResult) -&gt; </span><br><span class="line">                <span class="keyword">new</span> AdderInput(jobAdderResult.result, taskAdderResult.result));</span><br><span class="line">        <span class="keyword">return</span> job;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_run_the_defined_job_and_output_the_expected_result</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Job job = createJob();</span><br><span class="line">        <span class="comment">// execute dag</span></span><br><span class="line">        <span class="comment">// verify execution result</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在写完这些代码的时候，我们发现设计更为丰满了。其实到这里主要的设计就可以算完成了，后续的代码在逻辑上比较直接，为避免赘述我们就不继续了。</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>回顾两种方式产生的设计，不言而喻，TDD驱动出来的设计比直接设计出来的设计要易于使用得多，而且干净得多。不知道大家有没有被TDD给我们带来的强大能力所惊艳到呢？至少我是被惊艳到了。除了设计在易用性和干净程度上，事实上上面直接设计出来的东西还忽略了一部分功能，试想在运行时，我们如何将任务的参数进行上下串联呢？这是因为如果我们直接开始设计，由于一开始很难考虑清楚所有的情况，我们总是容易漏掉一些东西。而TDD由于是先从使用上面来定义设计应该有的接口和互操作方式，这使得我们更不容易漏掉这样的关键步骤。</p>
+<p>我们经常听到说TDD可以带来十倍效率提升，一开始有人一定会觉得这有点夸大，难以相信。但是在这个例子里TDD带来的收益可以说是非常巨大，说十倍效率提升我觉得也不过分。我们可以尝试比较一下。如果我们用直接设计的方式得到最终的设计，那么后续我们在开发和调试<code>Task</code>的时候，我们将面临这样的问题：</p>
+<ol>
+<li><code>Task</code>的实现代码中充斥着大量的类型检查和强制类型转换；</li>
+<li>阅读代码时，如果没有文档，我们无法知道某个<code>Task</code>究竟需要怎样的参数，因为全都是<code>String</code>和<code>Object</code>，必须要将<code>Task</code>运行起来通过断点的方式才能知道到底是什么；</li>
+<li>如果有某个<code>Task</code>的详尽的文档，我们还需要维护文档和实现的一致性。</li>
+</ol>
+<p>单论这三点，我们就将消耗大量的时间。而用TDD驱动出来的对使用者友好的设计，类型检查在创建DAG的时候就可以自动完成，我们也无需维护文档，代码也更清晰可读。而TDD带来的测试质量保护网给我们节省的时间就更不用说了。</p>
+<p>我们再次来回顾一下TDD的实践过程。由于TDD要先写测试，这就使得我们不得不在写代码之前（设计之前）先从使用者的角度思考如何使用（如何设计），因而我们也就自然的得到了易于使用的（好的）设计。上面的思考过程可以印证TDD如何驱动出更好的设计的过程，我们先后从使用者的角度思考了如何定义<code>Task</code>，从使用者的角度思考了如何构造DAG。这是两个非常关键的设计，这两个设计将给后续实现新的<code>Task</code>，调试<code>Task</code>带来巨大的便利。</p>
+<p>当我们熟练使用TDD之后，实践TDD其实是一件非常愉快的事情。你将清晰的定义出需求，自然的写出更好的代码，同时TDD天然的测试屏障给我们的每行代码的正确性都带来了信心。我们不再会直接写出100行没有测试的代码，然后心里非常虚，然后还需要通过端到端启动应用这样非常低效的方式来验证代码正确性，而在修改了代码之后我们还不得不重复这样枯燥无聊的步骤。TDD可以让我们变成一个快乐的程序员。</p>
+<p>最后，我想重复一下第一篇<a href="http://brightliao.me/2019/07/20/tdd-for-improving-design/">文章</a>最后一段的内容：</p>
+<p>通过上面的经验的分享，不知道大家是不是更认可和接受TDD了呢？但是要熟练运用起来，关键还是在于刻意的去练习。每天的日常工作都是机会，希望大家能保持开放的心态，严格要求自己，遇到问题多讨论交流。当团队中所有人都会TDD，代码能力都上去了的时候，我们才能说我们是一个高效的团队，我们能做高质量的产品。所以，加油吧！</p>
 
       
     </div>
@@ -476,11 +529,15 @@
       
         <div class="post-tags">
           
-            <a href="/tags/opengl/" rel="tag"># opengl</a>
+            <a href="/tags/agile/" rel="tag"># agile</a>
           
-            <a href="/tags/html5/" rel="tag"># html5</a>
+            <a href="/tags/敏捷/" rel="tag"># 敏捷</a>
           
-            <a href="/tags/game/" rel="tag"># game</a>
+            <a href="/tags/tdd/" rel="tag"># tdd</a>
+          
+            <a href="/tags/测试/" rel="tag"># 测试</a>
+          
+            <a href="/tags/质量/" rel="tag"># 质量</a>
           
         </div>
       
@@ -493,8 +550,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/14/bluetooth-summary/" rel="next" title="蓝牙知识学习">
-                <i class="fa fa-chevron-left"></i> 蓝牙知识学习
+              <a href="/2019/08/08/domain-concept-in-your-code/" rel="next" title="代码中的领域">
+                <i class="fa fa-chevron-left"></i> 代码中的领域
               </a>
             
           </div>
@@ -502,10 +559,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/26/transparent-video/" rel="prev" title="在网页显示透明视频">
-                在网页显示透明视频 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -552,6 +605,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -675,7 +732,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#opengl-es-shading-language"><span class="nav-number">1.</span> <span class="nav-text">opengl es shading language</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接设计"><span class="nav-number">2.</span> <span class="nav-text">直接设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TDD驱动设计"><span class="nav-number">3.</span> <span class="nav-text">TDD驱动设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回顾"><span class="nav-number">4.</span> <span class="nav-text">回顾</span></a></li></ol></div>
             
 
           </div>
@@ -838,6 +895,29 @@
 
 
 
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2019/08/18/tdd-for-improving-design-2/', // optional
+      owner: 'gmlove',
+      title: '从改善设计的角度理解TDD (2)',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
 
 
 
