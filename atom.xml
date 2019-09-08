@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://brightliao.me/"/>
-  <updated>2019-09-02T01:59:32.650Z</updated>
+  <updated>2019-09-08T17:15:22.403Z</updated>
   <id>http://brightliao.me/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>技术人员的耐心和包容心</title>
+    <link href="http://brightliao.me/2019/09/05/programmers-tolerance/"/>
+    <id>http://brightliao.me/2019/09/05/programmers-tolerance/</id>
+    <published>2019-09-05T12:00:00.000Z</published>
+    <updated>2019-09-08T17:15:22.403Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>有一个技术人员都知道的很老的段子。如果我们想将一个技术论坛搞火起来，那么我们只需要发一篇帖子“php是世界上最好的语言”。虽然是很老的段子，但是就算现在我也常常能听到有人谈论它。很有意思的一个段子。</p><p>不仅仅是在论坛中，在我们日常的团队合作中，其实也常常有这样的事情。回忆一下我的 Code Review 活动，是不是常常有某一行代码引起了大家的广泛讨论，把整个会议给“搞火”了？大家可能就一个问题讨论很久，争执不下。</p><p>对于这样的讨论，如果大家能心平气和，互相理解，可能能较快的达成一致。但是事实上常常会出现这样的情况，双方争论很久争执不下，后来可能有人说，“这你都不知道啊”，或者“这我理解不了，你这里明显有问题”，或者“你说的都好，我用我的方式”，或者“你这里就明显是在<code>#define true=false</code>”等等。在这样的讨论中，我们比较容易情绪化（可能没有情绪化这么严重，但是这里姑且先用这个词），最后本来应该心平气和的讨论演变成了针对某个个人的互怼，或者直接拒绝交流。一旦情况变成这样，那么不仅讨论效率会大大下降，而且常常在相互心中产生芥蒂，影响后面的高效合作。</p><a id="more"></a><p>情绪化不是一个成熟的职场人员所应有的处事方式，但在我们技术人员中间却可能更容易的出现。因为大家逻辑思维都很好，思维也都很敏捷，追求高效率，相对更缺乏耐心。如果大家还能回忆得起来，《社交网络》中的扎克伯格的形象可能是一个典型的高效技术人员的形象，说话滔滔不绝，做事雷厉风行。我发现身边的技术人员多多少少都具有点这样的特质。我自己反思下来，也常常能发现自己有不够耐心的时候。比如某次在和他人交流的时候，对方话还没说完，我就着急开始讲话，然后对方不得已也跟着着急的说“你先听我说完嘛”。</p><p>正因为如此，我们技术人员可能更需要有一颗耐心和包容心。在没有写代码，而是跟其他人讨论交流时，我们有没有即时的切换状态，更耐心的对待他人的问题？我们在看别人的代码的时候，当发现有一些不是自己所推崇的模式的时候，有没有仔细想一下别人为什么要这么做？我们在遗留代码上面工作的时候，是不是一边工作一边吐槽代码写得太烂，而没有考虑到当时可能有各种各样的原因？我们是不是只一味的自己讲话，而没有仔细倾听对方的话？</p><h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>印象较深刻的有这样一个例子，我们的代码里面有这样的一段逻辑：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Something</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Object&gt; attributes;</span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getAttribute</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (T)attributes.get(name);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>当我们在review代码的时候，有人一看到上面这行代码，还没等人解释为什么要这么做就直接说，“这个地方明显有问题啊，更好的方式是返回一个<code>Option</code>，让调用方去处理异常”。当作者开始要解释的时候，他又表现得听不进去，始终坚持自己是对的。最后由于这个小问题，可能要讨论十分钟。</p><p>这个问题的原因是什么呢？原来是由于<code>Something</code>里面的属性其实是调用方自己定义的，由于业务的要求，调用方可以定义各种类型的属性，而当调用方想要获取某一个属性的时候，就通过<code>getAttribute</code>获取。作者的设计意图是提供一个便捷的类型转换功能，封装这类类型强制转换的代码，避免这类不好的代码泄漏到每一个调用此方法的地方，而假设调用方确定的知道所查询的属性是什么类型（属性是调用方自己定义的）。如果这里的类型转换出错，那么会抛出一个运行时异常，这是写代码时就必须要处理的bug。</p><p>这里的分析合情合理，在我看来是完全可以接受的。试想，如果我们返回一个<code>Option</code>，每一个调用的地方都需要处理类型转换失败的情况，而调用方要如何处理呢？似乎也只能将其抛给更上层。其实这里作为调用方可能会很奇怪，为啥我明明知道不会抛出异常，还需要显示的处理异常呢？而且由于这样的调用方可能很多，每个地方都需要处理这样的异常，我们的代码其实是变得更糟糕了。</p><p>回过头来看这样的讨论，且不说它有没有价值，至少在我看来是低效的。如果我们有更多的耐心和包容心，我们先听作者把话说完，仔细倾听他人写代码时的考虑，是不是可以直接避免这样的讨论呢？我们的合作是不是更加顺畅呢？</p><p>耐心、包容心对于我们的TL其实有更高的要求，在面对一些经验稍差的团队成员写出来的代码，有时即便是有非常明显的问题，我们也需要虚心的耐心的倾听作者的解释，包容他的问题，然后合理的给出建议。只有这样，团队成员才能感受到自己是受重视的，自己哪里经验还比较欠缺，要往哪方面去努力。</p><h2 id="几个小建议"><a href="#几个小建议" class="headerlink" title="几个小建议"></a>几个小建议</h2><p>我们每天和不同背景不同经历的团队成员进行合作，大家可能很容易的产生分歧，我们无意间发表的观点也可能会伤到他人的自尊。如何让自己有更好的耐心和包容心？这个问题可能是每一个作为成熟的职场人所必须要经常思考和练习的。只有每个人都做好了这些，我们在日常工作中才能更顺畅的交流，更高效的合作，更和谐的相处。</p><p>我们公司是一个反馈文化很浓厚的公司，反馈的技巧对于培养自己更好的耐心和包容心同样适用。要想有好的反馈效果，我们通常不是直接指出对方的问题，因为我们观察到的对方的问题一般都只是我们自己根据事实的推测，内里的原因我们未必知道。那么我们第一步是讲事实，倾听他人的解释，然后验证自己的假设。如果对方根本没有这个问题（先前的假设不存在），那么我们的反馈自然也就不存在。如果真的存在问题，那么我们应该适当引导他，让他自己发现做的不对，然后主动的去改正，我们当然也可以在这个时候分享一些自己的经验，给出一些自己的建议。这样的反馈其实很需要耐心和包容心。</p><p>我个人的另一些经验来自卡耐基《人性的弱点》这本书。相信很多同学们都看过这本书，书中对于如何指出别人的错误，如何提出建议给出了很多很有效的方法。这本书并不是像很多“成功学”的书一样，似乎我们看了就能成就多么伟大的一番事业。这本书更多的是教会大家如何去追求内心的平静，如何将自己的社会关系建立得更加和谐。看完这本书，我们可能会更少的抱怨，更多的付出，同时也更满足，更幸福。</p><p>这里有一些书中内容的引用，与大家共勉。</p><p><strong>如何指出别人的错误？</strong></p><ul><li>用称赞和真诚的欣赏作开始</li><li>教导他人时，要做到让别人不觉得在被教导</li><li>提出别人不知之事要像是提醒别人遗忘之事</li><li>尊重他人，间接的指出人们的过错，使用“如果xx那么xx”</li><li>在批评对方之前，不妨先谈谈你自己的错误</li><li>使错误看起来容易改正</li><li>用请求、建议、商量、赞美、提问的方式进行，别用命令的口吻，保全他人的面子</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有一个技术人员都知道的很老的段子。如果我们想将一个技术论坛搞火起来，那么我们只需要发一篇帖子“php是世界上最好的语言”。虽然是很老的段子，但是就算现在我也常常能听到有人谈论它。很有意思的一个段子。&lt;/p&gt;
+&lt;p&gt;不仅仅是在论坛中，在我们日常的团队合作中，其实也常常有这样的事情。回忆一下我的 Code Review 活动，是不是常常有某一行代码引起了大家的广泛讨论，把整个会议给“搞火”了？大家可能就一个问题讨论很久，争执不下。&lt;/p&gt;
+&lt;p&gt;对于这样的讨论，如果大家能心平气和，互相理解，可能能较快的达成一致。但是事实上常常会出现这样的情况，双方争论很久争执不下，后来可能有人说，“这你都不知道啊”，或者“这我理解不了，你这里明显有问题”，或者“你说的都好，我用我的方式”，或者“你这里就明显是在&lt;code&gt;#define true=false&lt;/code&gt;”等等。在这样的讨论中，我们比较容易情绪化（可能没有情绪化这么严重，但是这里姑且先用这个词），最后本来应该心平气和的讨论演变成了针对某个个人的互怼，或者直接拒绝交流。一旦情况变成这样，那么不仅讨论效率会大大下降，而且常常在相互心中产生芥蒂，影响后面的高效合作。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="心态" scheme="http://brightliao.me/categories/%E5%BF%83%E6%80%81/"/>
+    
+    
+      <category term="编程" scheme="http://brightliao.me/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="心态" scheme="http://brightliao.me/tags/%E5%BF%83%E6%80%81/"/>
+    
+  </entry>
   
   <entry>
     <title>你所理解的函数式可能不是我们所推崇的函数式</title>
@@ -599,37 +625,6 @@
       <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
     
       <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>识别门牌号的移动应用</title>
-    <link href="http://brightliao.me/2017/03/01/recognize-house-number/"/>
-    <id>http://brightliao.me/2017/03/01/recognize-house-number/</id>
-    <published>2017-03-01T13:22:13.000Z</published>
-    <updated>2017-06-25T05:51:57.000Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。</p><h2 id="问题导入"><a href="#问题导入" class="headerlink" title="问题导入"></a>问题导入</h2><h3 id="提取门牌号进行地图标注"><a href="#提取门牌号进行地图标注" class="headerlink" title="提取门牌号进行地图标注"></a>提取门牌号进行地图标注</h3><p>先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找到地图中对应的位置了，事实上google地图就是通过训练这样的机器学习模型来进行地图信息标注的。要解决这个问题，可以读取google街景中的照片数据，然后训练一个机器学习模型来提取门牌号信息。如下图所示，当我们可以识别图片中的门牌号”42”了，我们就可以在地图上面进行标注了。</p><a id="more"></a><p><img src="/attaches/2017/2017-03-01-recognize-house-number/image-to-map-data.png" alt="Image to map data"></p><h3 id="SVHN地图数据集"><a href="#SVHN地图数据集" class="headerlink" title="SVHN地图数据集"></a>SVHN地图数据集</h3><p>对于这一问题，斯坦福大学曾在2011年的时候发表过一篇论文进行研究，而且他们还整理好了一个名为SVHN的数据集，也就是Street View House Numbers街景门牌号的数据集。下图展示了这个数据集中的一些示例图片：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/svhn.png" alt="SVHN"></p><p>观察这些图片我们可以发现它们有以下这些特征：</p><ul><li>门牌号由连续的纯数字构成</li><li>每个数字都有边框标记</li><li>数字有字体、颜色、大小的区别，甚至还有手写的数字</li><li>整体图片质量并不高，很多分辨率较低的图片，还有很多图片倾斜排列并有倒影</li></ul><p>但是作为人类，基本上我们还是可以很容易的识别图片中的数字的。</p><p>有了这个数据集，我们就可以从研究角度出发开始我们的工作，而不必花太多时间在训练数据准备上面了。</p><h3 id="目标应用"><a href="#目标应用" class="headerlink" title="目标应用"></a>目标应用</h3><p>我们的目标就是训练一个模型来提取门牌号，当我们的模型在svhn数据集上面表现达到较理想的水平之后，我们还会将这个模型导出并部署在Android手机上面以识别来自摄像头的数据。</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/android-numseq-recognizer.png" alt="Number Sequence Recognizer in Android"></p><h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>在了解了问题之后，我们来看看如何解决这个问题。我们将看到卷积神经网络的应用和损失函数的设计技巧。</p><h3 id="分为1000000个类进行识别"><a href="#分为1000000个类进行识别" class="headerlink" title="分为1000000个类进行识别"></a>分为1000000个类进行识别</h3><p>我们假定门牌号数字位数不超过5位，使得我们的问题得到一定程度的简化，实际上门牌号是很少超过5位数的。之前我们有一起解决过notMNIST的问题，训练了一个深度学习模型来识别印刷图片中的字母。它和这个问题有一定的相似性。从那个模型出发推广，一个简单而自然的想法是，我们能不能直接将不同的门牌号数字看做不同的类呢？如下图所示：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/1000000classes.png" alt="100000 classes"></p><p>这样，如果包含数据0，我们将有100000个类。当门牌号的位数不超过2位时，这样的想法是可行的，因为我们将只需要100个类，在计算上不会成为问题。但是如果我们的门牌号长度限制设置为5位时，这样的想法就不可行了，因为类实在太多了，相应的训练数据和训练时长都会大大的延长。试想，就算对每一个类只有100条训练数据，总的需要的训练数据也将达到一千万。而且这样的模型在扩展上也是个大问题，每增加一个数位，都将导致数据和计算规模扩大10倍。</p><h3 id="5个模型分别识别每一个位置上面的数据"><a href="#5个模型分别识别每一个位置上面的数据" class="headerlink" title="5个模型分别识别每一个位置上面的数据"></a>5个模型分别识别每一个位置上面的数据</h3><p>既然类太多不可行，我们能不能考虑训练多个模型呢，如果我们有5个模型分别识别每一个位置上面的数据，然后再整合起来不就可以识别门牌号了么？如下图：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/5models.png" alt="5 models"></p><p>这是一个好想法，分为5个模型进行分别识别有效的解决了扩展性的问题，而且对于每个模型，问题也简化为了对单个数字进行识别，这就跟mnist问题一样。但是这样的方案还不是完美的，它的缺点在于5个模型之间可以看到存在很多冗余，其实模型之间只是数字的位置不同而已，数字都是从0到9这10个数。这还导致了模型数量比较多，运算慢，导出的模型比较大。</p><h3 id="将5个模型合并为一个模型"><a href="#将5个模型合并为一个模型" class="headerlink" title="将5个模型合并为一个模型"></a>将5个模型合并为一个模型</h3><p>如何解决上面模型的冗余问题呢？我们知道模型之间只是数字的位置不同而已，数字的特征是完全一样的，那么我们的解决方案就是在模型之间共享基础特征数据。具体来说就是共享由卷积神经网络所提取的特征。<br>这样的话，5个模型将可以合并为一个统一的模型，如下图：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/one-model-instead-of-5.png" alt="1 model instead of 5"></p><p>在这个合并后的模型中，我们首先使用卷积神经网络进行基础特征提取，然后将卷积神经网络的输出作为输入连接到各个模型的输出层。特别的，在这个图中，我们还增加了一个数字长度模型的输出，事实上不用这个输出也是可以的，我们只需要一个特殊的类表示当前位置没有数字就可以了。也就是每一个位置上的数字不再是0-9这10个类，而是0-10这11个类，其中当类为10时表示当前位置没有数字。也就是说门牌号23的标签将编码为[2,3,10,10,10]。</p><p>然而问题到这里还没有结束，我们还需要合适的损失函数才能完成我们的模型，有了损失函数我们就可以进行迭代训练了。这里的损失函数是什么呢，其实也很简单，我们只需要将总的损失定义为各个模型的损失之和就可以了：</p><p>总损失 = 长度损失 + 数字1损失 + 数字2损失 + 数字3损失 + 数字4损失 + 数字5损失</p><p>这样定义的损失，当我们在迭代训练时，模型就会尝试将总损失最小化，也即是将每一个模型的损失最小化，模型的正确率就会不断提高。这里每一个模型的损失我们可以直接使用前面用过的交叉熵损失函数来实现。</p><h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><p>在有了基本的方案之后，下一步就是实现这个方案了。我们将演示部分核心的代码，完整的代码将在最后提供一个链接，供大家线下进一步进行学习和研究。以下代码基于tensorflow的slim库来实现，slim封装了tensorflow的基础API而对外提供了一套更易用的API。使用slim，我们的模型定义及训练代码将会变得更干净整洁和易于理解。</p><h3 id="卷积层，全连接层"><a href="#卷积层，全连接层" class="headerlink" title="卷积层，全连接层"></a>卷积层，全连接层</h3><p>以下是卷积层的代码：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/cnn-layers.png" alt="CNN layers"></p><p>可以看到我们共定义了7个卷积层，在前3个卷积层之后，我们还分别定义了3个池化层。卷积层以5x5的区域作为过滤器进行卷积计算，最终的输出会将输入的3个通道转化为192个通道作为输出。</p><p>以下是全连接层的代码：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/fc-layers.png" alt="FC layers"></p><p>全连接层通过一个接口暴露出来，使用时，只需要传入不同的输出类的数目就好了。</p><h3 id="网络定义，损失函数定义"><a href="#网络定义，损失函数定义" class="headerlink" title="网络定义，损失函数定义"></a>网络定义，损失函数定义</h3><p>以下是网络定义代码：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/model-definition.png" alt="Model Definition"></p><p>可以看到，我们使用了前面定义好的卷积层函数来定义模型的卷积层，使用全连接层函数来定义输出层，在数字序列长度限制为5时，一共有6个输出层，即一个长度输出层，将输出5个类，5个数字输出层，每个输出11个类。</p><p>再来看看损失函数定义代码：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/loss-definition.png" alt="Loss Definition"></p><p>对每一个输出，我们都使用了交叉熵损失，然后总的损失，就是各个输出的损失之和。</p><p>在定义好模型和损失之后，我们就可以开始训练了。整个训练过程大概会在半小时左右，取决于迭代次数设置。</p><p>在模型训练好了之后，下一步就是导出模型并在Android应用中导入模型和运行识别过程了。以下代码展示了如何使用tensorflow导出模型：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/export-model.png" alt="export model"></p><p>导入模型到android：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/load-model-android.png" alt="Load model in Android"></p><p>在Android应用中运行识别过程：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/run-inference-android.png" alt="Run Inference in Android"></p><h2 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h2><p>接下来我们来看看在实践过程中的一些问题。</p><h3 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h3><p>在我们的实验中，在以batch_size大小为32，训练30000次迭代之后，总损失变化如下：</p><p><img src="/attaches/2017/2017-03-01-recognize-house-number/total-loss.png" alt="Total loss"></p><p>在测试集上面的正确率可以达到91%，如果增加训练集和迭代次数，模型还可能表现更好。</p><h3 id="只训练边框（Bounding-box）内的图像"><a href="#只训练边框（Bounding-box）内的图像" class="headerlink" title="只训练边框（Bounding box）内的图像"></a>只训练边框（Bounding box）内的图像</h3><p>另一个在我们的实验中遇到的问题是，如果直接把原图作为输入，模型将很难收敛到一个较好的值，原因是有太多的噪声像素了。</p><p>取而代之，我们的模型实际上是在数字序列的边框内部进行训练的，我们在处理输入数据的时候，会根据边框数据进行图像切割，之后才会输入到模型。在边框内部进行训练，我们可以得到90%以上的正确率。在这里大家也可以看到这个模型的局限性。</p><h3 id="训练另一个模型，提取矩形边框"><a href="#训练另一个模型，提取矩形边框" class="headerlink" title="训练另一个模型，提取矩形边框"></a>训练另一个模型，提取矩形边框</h3><p>为了解决上面提到的模型的局限性，我们可以训练另一个模型用于提取数字的边框。对于这个模型，我们可以同样使用卷积神经网络来实现。</p><p>对于每一个输入图像，我们可以定义我们的标签为四个值，即一个坐标点(top, left)和图像的宽高(width, height)。</p><p>那么损失函数怎么定义呢？我们可以简单的定义如下的损失函数：</p><pre><code>|top - top_| + |left - left_| + |width - width_| + |height - height_|</code></pre><p>即每个标签值取差值的绝对值，然后相加起来就可以了。目前这个模型还没有达到一个理想的精度，大家可以线下基于现有代码进行优化。</p><h3 id="精度不够"><a href="#精度不够" class="headerlink" title="精度不够"></a>精度不够</h3><p>另一个问题是，当我们的模型精度不够时该如何处理？比如，我们上面的模型的正确率只有91%，而人类可以达到99%以上。这样的模型是不是不能在实际中应用呢？</p><p>当然不是，事实上，由于我们使用softmax函数作为模型的输出，我们可以得到一个概率分布，这个概率分布我们可以理解为模型的预测准确度。比如，如果我们选定的输出对应的概率值为0.3，虽然我们是得到了一个值，但是我们可以知道模型对于这个值不是很有信心。</p><p>在这样的情况下，我们就可以定义一个置信度阈值，只有当模型预测的输出的信心指数超过这个值，我们才认为是一个有效的预测。通过设置这样的阈值，我们可以把模型的正确率调整到99%以上。我们就可以基本上认为模型的预测都是正确的了。</p><p>在实际应用中，我们还可以将预测出的数据作为输入数据进行再训练，这样构成一个反馈循环，我们的模型表现就会越来越好。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><strong>内容：</strong></p><ul><li>问题：基于街景图片提取门牌号</li><li>方案：共享卷积层，针对性地设计损失函数</li><li>代码：定义及训练模型 导出到Android并用于识图</li><li>实际应用：设计模型提取边框 在边框内训练门牌号模型 限定置信度</li></ul><p>** 参考：**</p><ul><li>Multi-digit Number Recognition from Street View Imagery using Deep Convolutional Neural Networks </li><li><a href="https://github.com/tensorflow/models/tree/master/slim" target="_blank" rel="noopener">https://github.com/tensorflow/models/tree/master/slim</a></li><li><a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/android" target="_blank" rel="noopener">https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/android</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。&lt;/p&gt;
-&lt;h2 id=&quot;问题导入&quot;&gt;&lt;a href=&quot;#问题导入&quot; class=&quot;headerlink&quot; title=&quot;问题导入&quot;&gt;&lt;/a&gt;问题导入&lt;/h2&gt;&lt;h3 id=&quot;提取门牌号进行地图标注&quot;&gt;&lt;a href=&quot;#提取门牌号进行地图标注&quot; class=&quot;headerlink&quot; title=&quot;提取门牌号进行地图标注&quot;&gt;&lt;/a&gt;提取门牌号进行地图标注&lt;/h3&gt;&lt;p&gt;先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找到地图中对应的位置了，事实上google地图就是通过训练这样的机器学习模型来进行地图信息标注的。要解决这个问题，可以读取google街景中的照片数据，然后训练一个机器学习模型来提取门牌号信息。如下图所示，当我们可以识别图片中的门牌号”42”了，我们就可以在地图上面进行标注了。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://brightliao.me/categories/machine-learning/"/>
-    
-    
-      <category term="tensorflow" scheme="http://brightliao.me/tags/tensorflow/"/>
-    
-      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
-    
-      <category term="Machine Learning" scheme="http://brightliao.me/tags/machine-learning/"/>
-    
-      <category term="Deep Learning" scheme="http://brightliao.me/tags/deep-learning/"/>
-    
-      <category term="Android" scheme="http://brightliao.me/tags/android/"/>
     
   </entry>
   
