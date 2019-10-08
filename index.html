@@ -486,172 +486,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2019/09/11/rethink-of-ci-and-story/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/11/rethink-of-ci-and-story/" itemprop="url">再谈持续集成和敏捷拆卡</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-11T20:00:00+08:00">
-                2019-09-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/敏捷/" itemprop="url" rel="index">
-                    <span itemprop="name">敏捷</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2019/09/11/rethink-of-ci-and-story/" class="leancloud_visitors" data-flag-title="再谈持续集成和敏捷拆卡">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>最近上了一个新的客户项目，这个项目被大家吐槽最多的就是加班多，团队成员不仅每天要工作到晚上9点，甚至好几个周末也得到办公室加班。</p>
-<p>这个项目的客户是一个经验非常丰富的开发人员，他同时充当了 PO 及团队资深开发人员的角色。上项目之后，客户聊起当前项目的问题，不停的提及“前期集成，打通各个环节花费了大量的时间”。</p>
-<p>前期集成花费了过多时间意味着什么样的项目状态呢？我们可以想象，前面迭代做卡慢，延期，占用了很多后面迭代的时间，PO 又不想放弃已经规划的特性，每个迭代不得不花费时间先完成上个迭代没有完成的工作，还需要尽力完成这个迭代所规划的工作。项目交付紧张，会有人建议大家不写测试了吧， 一些看起来无关紧要的会我们也不开了吧，比如什么 Code Review, Retro，别搞了，我们专心写代码，IPM我们也尽量快点。两周一次迭代？算了我们也别迭代了，每次迭代都是挪一半的卡到下一个迭代，我们也不用上线，迭代的意义在哪里？反正卡都在那里了，功能都规划好了，工作就是那些，大家加油干就行。</p>
-<p>一句简单轻松的“前期集成花费了过多时间”，但其背后隐藏了多少辛酸与汗水呢？我想只有项目中的人才知道。</p>
-<p>虽然有一些抱怨和吐槽，有看似无止境的加班，但是直到现在有三个月之久，团队成员也坚持下来了。最令我吃惊的是，我们以不到10人的小团队完成了大量的工作，不仅将一个平台从0到1搭建了起来，用到了各种各样的新技术，而且克服了客户内部千奇百怪的系统限制与众多的集成点。我在项目上待了两周之后，已是深切的感受到了团队的不容易。</p>
-<p>项目特点：技术栈特别广泛，集成点特别多，规划的功能特别丰富。对项目团队的挑战特别大，来自 PO 的压力也特别大。</p>
-<p>问题：测试没更上，bug太多难以收敛，提交代码过于随意测试环境非常不稳定，本地的代码质量检查没有跟上</p>
-<p>必须要做的事情：</p>
-<ol>
-<li>本地集成环境</li>
-<li>强制的质量保证工具</li>
-</ol>
-<p>建议做的事情：</p>
-<ol>
-<li>复杂功能设计Review</li>
-<li>技术分享    </li>
-</ol>
-<p>真的是由于前期集成时间长？真的是由于团队成员技术能力弱？</p>
-<p>被客户带着走，无迭代</p>
-<p>如何定义故事卡的done状态？<br>集成完了，端到端可用，能产生最终价值，才是done</p>
-<p>INVEST原则Review</p>
-<p>前期故事卡拆分的重要性（前期慢，TL打好基础）</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://brightliao.me/2019/09/05/programmers-tolerance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1881,6 +1715,156 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2019/07/19/python-json-serializable-lib/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/19/python-json-serializable-lib/" itemprop="url">如何实现一个优雅的Python的Json序列化库</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-19T20:00:00+08:00">
+                2019-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/07/19/python-json-serializable-lib/" class="leancloud_visitors" data-flag-title="如何实现一个优雅的Python的Json序列化库">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="/attaches/2019/2019-07-19-python-json-serializable-lib/serializable.png" alt="python json serializable"></p>
+<p>在Python的世界里，将一个对象以json格式进行序列化或反序列化一直是一个问题。Python标准库里面提供了json序列化的工具，我们可以简单的用<code>json.dumps</code>来将一个对象序列化。但是这种序列化仅支持python内置的基本类型，对于自定义的类，我们将得到<code>Object of type A is not JSON serializable</code>的错误。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/19/python-json-serializable-lib/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -1928,7 +1912,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">49</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1950,7 +1934,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-count">68</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
