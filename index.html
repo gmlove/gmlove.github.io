@@ -435,7 +435,7 @@
 
       
         
-          <p>在上一篇文章中，我们分析了<code>Kerberos</code>协议的设计和通信过程。可以了解到，<code>Kerberos</code>主要实现了不在网络传输密码的同时又能在本地进行高性能鉴权。由于<code>kerberos</code>的协议设计相对复杂，看到评论有人还有疑问，这里再举一个例子来分析一下<code>kerberos</code>的安全性。</p>
+          <p>在<a href="http://brightliao.me/2019/10/27/hadoop-auth/">上一篇</a>文章中，我们分析了<code>Kerberos</code>协议的设计和通信过程。可以了解到，<code>Kerberos</code>主要实现了不在网络传输密码的同时又能在本地进行高性能鉴权。由于<code>kerberos</code>的协议设计相对复杂，看到评论有人还有疑问，这里再举一个例子来分析一下<code>kerberos</code>的安全性。</p>
 <h2 id="Kerberos协议回顾"><a href="#Kerberos协议回顾" class="headerlink" title="Kerberos协议回顾"></a><code>Kerberos</code>协议回顾</h2><p>假设有三个组件A B C，A想和C进行安全通信，而B作为一个认证中心保存了认证信息。那么以以下的方式进行通信就可以做到安全：</p>
 <ol>
 <li>A向B请求说要访问C，将此消息用A的秘钥加密之后，发给B</li>
