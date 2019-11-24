@@ -79,4 +79,4 @@ search:
   limit: 10000
 
 katex:
-  host: /assets/katex/
+  host: /attaches/assets/katex/
