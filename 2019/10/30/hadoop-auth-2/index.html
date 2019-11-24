@@ -111,7 +111,7 @@
 <meta property="og:description" content="在上一篇文章中，我们分析了Kerberos协议的设计和通信过程。可以了解到，Kerberos主要实现了不在网络传输密码的同时又能在本地进行高性能鉴权。由于kerberos的协议设计相对复杂，看到评论有人还有疑问，这里再举一个例子来分析一下kerberos的安全性。 Kerberos协议回顾假设有三个组件A B C，A想和C进行安全通信，而B作为一个认证中心保存了认证信息。那么以以下的方式进行通信就">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://brightliao.me/attaches/2019/2019-10-30-hadoop-auth-2/openjdk.png">
-<meta property="og:updated_time" content="2019-11-10T09:14:48.404Z">
+<meta property="og:updated_time" content="2019-11-11T04:59:39.898Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop安全认证机制 （二）">
 <meta name="twitter:description" content="在上一篇文章中，我们分析了Kerberos协议的设计和通信过程。可以了解到，Kerberos主要实现了不在网络传输密码的同时又能在本地进行高性能鉴权。由于kerberos的协议设计相对复杂，看到评论有人还有疑问，这里再举一个例子来分析一下kerberos的安全性。 Kerberos协议回顾假设有三个组件A B C，A想和C进行安全通信，而B作为一个认证中心保存了认证信息。那么以以下的方式进行通信就">
@@ -491,7 +491,7 @@
 <p>这里的代码量还是挺大的，细节很多，我们一起看一下主要的设计。<code>GSS API</code>在Java语言中通过<code>jgss</code>模块来实现。<code>jgss</code>首先定义了一些底层认证机制需要实现的接口，即<code>sun.security.jgss.spi</code>包中的基本接口<code>GSSContextSpi</code> <code>GSSNameSpi</code> <code>GSSCredentialSpi</code>和工厂接口<code>MechanismFactory</code>。底层的协议只需要实现这几个接口就行了，关于<code>Kerberos</code>的实现在包<code>sun.security.jgss.krb5</code>中，其实这个包里面的代码只是对接了真正的<code>Kerberos</code>通信协议实现和<code>GSS API</code>接口。这里的设计，按照DDD的思想，我们可以理解为一套防腐层，<code>GSS API</code>和<code>Kerberos</code>可以看成两个独立的领域，通过引入防腐层，它们就可以相互独立的各自演进。当接口有改变的时候，我们只需要修改防腐层的代码就行了。</p>
 <p>真正的<code>Kerberos</code>协议实现在包<code>sun.security.krb5</code>下面，这里的实现通过<code>javax.security.auth.kerberos</code>包下面的类对应用层暴露接口（应用层在使用<code>GSS API</code>时，有时还是需要关心底层认证机制的相关信息的）。作为应用层，如果有必要获取底层认证机制相关的信息，我们将只使用<code>javax.security.auth.kerberos</code>中定义的接口，而无需关心<code>sun</code>包下面的实现。这里的实现的核心代码在<code>Credentials</code>类中，我们看到其定义了<code>acquireTGTFromCache</code> <code>acquireDefaultCreds</code> <code>acquireServiceCreds</code>等接口用于交换秘钥。更细节的实现代码，大家如有兴趣，可以结合上一篇文章中的通信流程自行研究。我们这里只简要分析一下主要的设计思想。</p>
 <h3 id="Hadoop中使用GSS-API进行认证"><a href="#Hadoop中使用GSS-API进行认证" class="headerlink" title="Hadoop中使用GSS API进行认证"></a><code>Hadoop</code>中使用<code>GSS API</code>进行认证</h3><p><code>Hadoop</code>中和认证相关的模块主要有两个：一个是直接使用<code>GSS API</code>进行认证，用于<code>tcp</code>通信的<code>org.apache.hadoop.security.UserGroupInformation</code>类；另一个是基于<code>SPNEGO</code>协议进行认证，用于<code>HTTP</code>通信的<code>org.apache.hadoop.security.authentication.server.KerberosAuthenticationHandler</code>。</p>
-<p><code>UserGroupInformation</code>主要用于<code>Hadoop</code>各个内部模块间的通信，也可以用于某一个客户端和<code>Hadoop</code>的某个模块进行通信，它同时为服务器和客户端的认证提供了支持。比如<code>NameNode</code>的启动之后，它将发起一个登陆请求，用于验证给自己配置的<code>Principal</code>和<code>keytab</code>是否有效（<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/ha/BootstrapStandby.java" target="_blank" rel="noopener">这里</a>108行）。同时当有内部服务（如某个datanode）的rpc请求到来的时候，它将使用登陆得到的认证主体<code>Subject</code>中的<code>doAs</code>方法来验证发送过来的认证信息，并进行权限验证。有客户端的rpc请求到来时，它将获取客户端的用户信息，并根据配置的ACL（访问控制列表）进行权限验证（实现见<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/datanode/DataXceiver.java" target="_blank" rel="noopener">这里</a>的1287行，及<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/security/token/block/BlockPoolTokenSecretManager.java" target="_blank" rel="noopener">这里</a>）。</p>
+<p><code>UserGroupInformation</code>主要用于<code>Hadoop</code>各个内部模块间的通信，也可以用于某一个客户端和<code>Hadoop</code>的某个模块进行通信，它同时为服务器和客户端的认证提供了支持。比如<code>NameNode</code>的启动之后，它将发起一个登陆请求，用于验证给自己配置的<code>Principal</code>和<code>keytab</code>是否有效（<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/ha/BootstrapStandby.java" target="_blank" rel="noopener">这里</a>108行）。同时当有内部服务（如某个datanode）的rpc请求到来的时候，它将使用登陆得到的认证主体<code>Subject</code>中的<code>doAs</code>方法来验证发送过来的认证信息，并进行权限验证。有客户端的rpc请求到来时，它将获取客户端的用户信息，并根据配置的ACL（访问控制列表）进行权限验证（实现见<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/datanode/DataXceiver.java" target="_blank" rel="noopener">这里</a>的1287行，及<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/security/token/block/BlockPoolTokenSecretManager.java" target="_blank" rel="noopener">这里</a>）。为了缓存认证信息，避免没必要的重新认证，程序需要维护当前登录的账号的信息，这也就是为什么<code>UserGroupInformation</code>在设计上定义了很多静态的属性。同时我们可以注意到很多<code>synchronized</code> 关键字附加到了某些静态方法上，这是为了支持多线程访问这些全局缓存的信息。</p>
 <p><code>KerberosAuthenticationHandler</code>的实现是为了支持在HTTP服务中进行<code>Kerberos</code>认证，这个类最终会封装为一个Web服务器中的<code>Filter</code>实现对所有HTTP请求的权限验证（<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/web/AuthFilter.java" target="_blank" rel="noopener">这里的AuthFilter</a>及其<a href="https://github.com/apache/hadoop/blob/release-2.7.7-RC0/hadoop-common-project/hadoop-auth/src/main/java/org/apache/hadoop/security/authentication/server/AuthenticationFilter.java" target="_blank" rel="noopener">基类AuthenticationFilter</a>）。由于基于Servlet的Web服务器有很成熟的接口设计，这个模块的实现也相对独立和简单。可以看到它在<code>init</code>的时候使用<code>GSS API</code>完成了登录，在<code>authenticate</code>的时候，将判断是否有有效的认证信息，如果没有将返回协商认证的HTTP头部消息以便客户端去完成认证，如果有将进行认证并提供服务。</p>
 <h2 id="Web服务器认证实现示例"><a href="#Web服务器认证实现示例" class="headerlink" title="Web服务器认证实现示例"></a>Web服务器认证实现示例</h2><p>对于一个运行于Hadoop集群的<code>Spark</code>应用，我们通常是通过<code>spark-submit</code>命令行工具来向集群提交任务的。这一机制对于<code>spark</code>应用的开发者看起来很灵活，但如果我们想进行更多的统一管理，比如限制资源使用、提升易用性等等，这样的机制就略显不足了。这个时候一般的做法是将运行<code>spark</code>应用的这一能力封装为一个服务，以便进行统一的管理。<code>Livy</code>就是为实现这样的功能而开发的一个开源工具。</p>
 <p>使用<code>Livy</code>，我们可以使用REST的接口向集群提交<code>spark</code>任务。在这里<code>Livy</code>其实相当于是整个<code>Hadoop</code>大数据集群的一个扩展服务。<code>Livy</code>在实现的时候如何进行权限的支持呢？当我们去查看<code>Livy</code>的源代码的时候，我们会发现，要为每个请求添加<code>Kerberos</code>认证，几乎只需要一行代码，<a href="https://github.com/apache/incubator-livy/blob/v0.5.0-incubating/server/src/main/scala/org/apache/livy/server/LivyServer.scala" target="_blank" rel="noopener">这里</a>的237行即为那行关键的代码。这里Livy就是有效的利用了上面的<code>KerberosAuthenticationHandler</code>进行实现的。</p>
@@ -553,6 +553,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/11/hadoop-auth-3/" rel="prev" title="Hadoop安全认证机制 （三）">
+                Hadoop安全认证机制 （三） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -645,7 +649,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -890,8 +894,12 @@
 
 
 
+  <!--
   <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
   <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
   <script>
     const gitment = new Gitment({
       id: '2019/10/30/hadoop-auth-2/', // optional
