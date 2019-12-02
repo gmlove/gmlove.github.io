@@ -23,6 +23,7 @@ date: 2017-10-24 15:07:26
 - 敏捷软件开发实践 估算与计划 -- [美] Mike Cohn
 - 高效程序员的45个习惯：敏捷开发修炼之道 -- [美] Venkat Subramaniam，[美] Andy Hunt
 - 重构 改善既有代码的设计 -- [美] 马丁·福勒（Martin Fowler）
+- 重构 改善既有代码的设计（二） -- [美] 马丁·福勒（Martin Fowler）
 - 精益企业 高效能组织如何规模化创新 -- [英] 亨布尔（Jez Humble），[加] 莫莱斯凯（Joanne Molesky），[爱尔兰] 欧莱礼（Barry O'Reilly）
 - 精益创业实战 第2版 -- [美] Ash Maurya
 
@@ -54,7 +55,8 @@ date: 2017-10-24 15:07:26
 - 人类简史:从动物到上帝(两种封面随机发货) -- 尤瓦尔·赫拉利
 - 全球通史:从史前史到21世纪(第7版修订版)(中文版)(套装上下册)
 
-
+- spark机器学习 -- Nick Pentreath，Spark项目管理委员会之一
+- 修改软件的艺术 -- David Scott Bernstein [美]
 
 ## Books to read
 
