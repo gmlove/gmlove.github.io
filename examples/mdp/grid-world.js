@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css">(function(C){
+<link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css">(function(C){
 
 Crafty.c("DiagonalLine", {
     init: function () {

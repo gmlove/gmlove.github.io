@@ -424,7 +424,7 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br>于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br>于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
 <p>直播地址：<a href="https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195" target="_blank" rel="noopener">https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195</a></p>
 <p>代码如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 随机选择一个当前评论列表里面的评论</span></span><br><span class="line"><span class="keyword">var</span> r = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Math</span>.floor((<span class="built_in">Math</span>.random() * $(<span class="string">'.livechat-list-wrapper .list li'</span>).length))</span><br><span class="line"><span class="comment">// 提取选中的评论的内容</span></span><br><span class="line"><span class="keyword">var</span> text = <span class="function"><span class="params">()</span> =&gt;</span> $($(<span class="string">'.livechat-list-wrapper .list li'</span>)[r()]).find(<span class="string">'.content'</span>).text()</span><br><span class="line"><span class="comment">// 使用选中的内容自动发评论</span></span><br><span class="line"><span class="keyword">var</span> c = <span class="function"><span class="params">()</span> =&gt;</span> &#123;$(<span class="string">'#J_chatContent'</span>).val(text());$(<span class="string">'#J_sendChatBtn'</span>).attr(<span class="string">'class'</span>, <span class="string">'btn active'</span>);$(<span class="string">'#J_sendChatBtn'</span>).click();&#125;</span><br><span class="line"><span class="comment">// 生成随机的间隔时间</span></span><br><span class="line"><span class="keyword">var</span> rtime = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">15000</span> + <span class="number">5000</span>)</span><br><span class="line"><span class="comment">// 设置一个计时器定时发评论</span></span><br><span class="line"><span class="keyword">var</span> st = <span class="function"><span class="params">()</span> =&gt;</span> stt = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;c(); st()&#125;, rtime())</span><br><span class="line">st();</span><br></pre></td></tr></table></figure>
@@ -568,7 +568,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -590,7 +590,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-count">74</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

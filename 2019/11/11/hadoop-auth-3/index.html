@@ -112,7 +112,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://brightliao.me/attaches/2019/2019-11-11-hadoop-auth-3/firefox-ssh-tunnel-proxy.png">
 <meta property="og:image" content="http://brightliao.me/attaches/2019/2019-11-11-hadoop-auth-3/app-log.png">
-<meta property="og:updated_time" content="2019-11-24T07:49:58.717Z">
+<meta property="og:updated_time" content="2019-11-25T05:34:31.580Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hadoop安全认证机制 （三）">
 <meta name="twitter:description" content="系列文章：  Hadoop安全认证机制 (一) Hadoop安全认证机制 (二)  前面的文章中我们分析了Hadoop安全机制中用到的协议及相关源代码实现，这一篇文章我们主要来看看如何搭建一套安全的Hadoop集群。 简单起见，我们这里的集群所有的组件将运行在同一台机器上。对于keytab的配置，我们也从简，只配置一个kerberos的service账号供所有服务使用。 建立测试用例TDD是敏捷最">
@@ -438,7 +438,7 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css"><p>系列文章：</p>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>系列文章：</p>
 <ul>
 <li><a href="http://brightliao.me/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
 <li><a href="http://brightliao.me/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
@@ -530,9 +530,9 @@
 <p>运行上面的命令，我们将能看到测试成功执行。</p>
 <h3 id="如果容器在一个远端的主机上启动"><a href="#如果容器在一个远端的主机上启动" class="headerlink" title="如果容器在一个远端的主机上启动"></a>如果容器在一个远端的主机上启动</h3><p>如果容器是在一个远端的主机上面启动的，我们还是可以通过<code>ssh tunnel</code>的方式将远端的端口映射到本地来执行此测试。不过，我们需要对前面步骤中的内容作出一些修改。主要的修改是将涉及到的<code>hostname</code>配置从<code>shd</code>改为<code>localhost</code>。这是由于在做端口映射之后，所有的服务均会通过<code>localhost</code>来访问，如果我们还是用<code>shd</code>，则集群在进行<code>Kerberos</code>认证时，主机名验证会出错。</p>
 <p>这个任务还是挺有意思的，可以有效的检验我们对于网络、Hadoop集群、<code>Kerberos</code>认证机制等的理解。有兴趣的小伙伴可以尝试实验一下，本文就不赘述了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>搭建一套安全的hadoop集群，确实不容易，即使我们只是一个伪分布式环境，还做了各种配置简化，也需要花费一番功夫，更别提真正在生产环境中搭建一套集群了。如果是生产可用，我们可能还需要关心机架、集群网络情况、稳定性、性能、跨地域高可用、不宕机升级等等一系列的问题。在实际企业应用中，这些大数据基础设施运维实际上是一个比较复杂的工作，这些工作更可能是由一个单独的运维团队去完成的。这里我们所完成的例子的主要价值不在于生产可用，而在于它可以帮助我们理解hadoop集群的安全机制，以便指导我们日常的开发工作。另一个价值是，这里的例子实际上完全可以作为我们平时测试用的一套小集群，简单而又功能完整，我们完全可以将这里完成的工作制作为一个docker镜像（后续文章将尝试制作此镜像），随时启动这样一套集群，这对于我们测试一些集群集成问题时将带来很大的便利。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>搭建一套安全的hadoop集群，确实不容易，即使我们只是一个伪分布式环境，还做了各种配置简化，也需要花费一番功夫，更别提真正在生产环境中搭建一套集群了。如果是生产可用，我们可能还需要关心机架、集群网络情况、稳定性、性能、跨地域高可用、不停机升级等等一系列的问题。在实际企业应用中，这些大数据基础设施运维实际上是一个比较复杂的工作，这些工作更可能是由一个单独的运维团队去完成的。这里我们所完成的例子的主要价值不在于生产可用，而在于它可以帮助我们理解hadoop集群的安全机制，以便指导我们日常的开发工作。另一个价值是，这里的例子实际上完全可以作为我们平时测试用的一套小集群，简单而又功能完整，我们完全可以将这里完成的工作制作为一个docker镜像（后续文章将尝试制作此镜像），随时启动这样一套集群，这对于我们测试一些集群集成问题时将带来很大的便利。</p>
 <p>大家如果有自己实践，相信在这个过程中可能还会碰到其他的问题，欢迎留言交流，一起学习。</p>
-<p>在这篇文章里，我们搭建了一个安全的hadoop集群，那么大数据相关的其他组件应该要如何安全的和hadoop集群进行整合呢？下一篇文章我们将选取几个典型的组件来分析并进行实践，欢迎持续关注。zbd</p>
+<p>在这篇文章里，我们搭建了一个安全的hadoop集群，那么大数据相关的其他组件应该要如何安全的和hadoop集群进行整合呢？下一篇文章我们将选取几个典型的组件来分析并进行实践，欢迎持续关注。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li>Hadoop官方文档<code>Secure Mode</code>：<a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SecureMode.html" target="_blank" rel="noopener">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SecureMode.html</a></li>
 <li>Hadoop官方文档<code>Proxy User</code>：<a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/Superusers.html" target="_blank" rel="noopener">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/Superusers.html</a></li>
@@ -594,6 +594,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/02/sense-of-ceremony-and-professional-service/" rel="prev" title="仪式感与专业服务">
+                仪式感与专业服务 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -686,7 +690,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -708,7 +712,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-count">74</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

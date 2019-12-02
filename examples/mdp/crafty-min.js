@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css">/**
+<link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css">/**
  * craftyjs 0.9.0
  * http://craftyjs.com/
  *
