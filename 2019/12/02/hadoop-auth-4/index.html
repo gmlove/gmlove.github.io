@@ -1,0 +1,1402 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="大数据,安全,hadoop,kerberos,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="系列文章：  Hadoop安全认证机制 (一) Hadoop安全认证机制 (二) Hadoop安全认证机制 (三)  前面的文章中，我们搭建了一套安全的hadoop集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的hadoop集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与hadoop进行集成。我们将关注这几个组件：hive hbase spark livy。 hive">
+<meta name="keywords" content="大数据,安全,hadoop,kerberos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop安全认证机制 （四）">
+<meta property="og:url" content="http://brightliao.me/2019/12/02/hadoop-auth-4/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="系列文章：  Hadoop安全认证机制 (一) Hadoop安全认证机制 (二) Hadoop安全认证机制 (三)  前面的文章中，我们搭建了一套安全的hadoop集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的hadoop集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与hadoop进行集成。我们将关注这几个组件：hive hbase spark livy。 hive">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-20T11:07:38.970Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop安全认证机制 （四）">
+<meta name="twitter:description" content="系列文章：  Hadoop安全认证机制 (一) Hadoop安全认证机制 (二) Hadoop安全认证机制 (三)  前面的文章中，我们搭建了一套安全的hadoop集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的hadoop集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与hadoop进行集成。我们将关注这几个组件：hive hbase spark livy。 hive">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2019/12/02/hadoop-auth-4/">
+
+
+
+
+
+  <title>Hadoop安全认证机制 （四） | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2019/12/02/hadoop-auth-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Hadoop安全认证机制 （四）</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-02T23:00:00+08:00">
+                2019-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/安全/" itemprop="url" rel="index">
+                    <span itemprop="name">安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/12/02/hadoop-auth-4/" class="leancloud_visitors" data-flag-title="Hadoop安全认证机制 （四）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>系列文章：</p>
+<ul>
+<li><a href="http://brightliao.me/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
+<li><a href="http://brightliao.me/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
+<li><a href="http://brightliao.me/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
+</ul>
+<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
+<h2 id="hive"><a href="#hive" class="headerlink" title="hive"></a><code>hive</code></h2><p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
+<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HiveTest</span> </span>&#123;</span><br><span class="line">    TestConfig testConfig = <span class="keyword">new</span> TestConfig();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_connect_to_hive_and_execute_query</span><span class="params">()</span> <span class="keyword">throws</span> IOException, SQLException </span>&#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        org.apache.hadoop.conf.Configuration conf = <span class="keyword">new</span></span><br><span class="line">                org.apache.hadoop.conf.Configuration();</span><br><span class="line">        conf.set(<span class="string">"hadoop.security.authentication"</span>, <span class="string">"Kerberos"</span>);</span><br><span class="line">        UserGroupInformation.setConfiguration(conf);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line"></span><br><span class="line">        String url = testConfig.hiveUrl();</span><br><span class="line">        Connection conn = DriverManager.getConnection(url);</span><br><span class="line">        Statement statement = conn.createStatement();</span><br><span class="line"></span><br><span class="line">        statement.execute(<span class="string">"create database if not exists t"</span>);</span><br><span class="line">        statement.execute(<span class="string">"drop table if exists t.t"</span>);</span><br><span class="line">        statement.execute(<span class="string">"create table t.t (a int)"</span>);</span><br><span class="line">        statement.execute(<span class="string">"insert into table t.t values (1), (2)"</span>);</span><br><span class="line"></span><br><span class="line">        ResultSet resultSet = statement.executeQuery(<span class="string">"desc t.t"</span>);</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="string">"a"</span>, resultSet.getString(<span class="string">"col_name"</span>));</span><br><span class="line">        assertEquals(<span class="string">"int"</span>, resultSet.getString(<span class="string">"data_type"</span>));</span><br><span class="line">        assertEquals(<span class="string">""</span>, resultSet.getString(<span class="string">"comment"</span>));</span><br><span class="line"></span><br><span class="line">        resultSet = statement.executeQuery(<span class="string">"select * from t.t"</span>);</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="number">1</span>, resultSet.getInt(<span class="string">"a"</span>));</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="number">2</span>, resultSet.getInt(<span class="string">"a"</span>));</span><br><span class="line"></span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/HiveTest.java" target="_blank" rel="noopener">这里</a>）</p>
+<p><code>hive</code>的运行时包括两个核心组件，存储元数据的<code>metastore</code>及对外提供<code>sql</code>操作服务<code>hiveserver</code>。在这里我们用使用最广泛<code>mysql</code>作为<code>metastore</code>的存储。</p>
+<p>执行脚本如下，即可搭建并运行<code>metastore</code>及<code>hiveserver</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入我们之前创建好的容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it shd bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载、解压、配置</span></span><br><span class="line"><span class="built_in">cd</span> /hd</span><br><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-1.2.2/apache-hive-1.2.2-bin.tar.gz</span><br><span class="line">tar xf apache-hive-1.2.2-bin.tar.gz</span><br><span class="line">ln -sv apache-hive-1.2.2-bin hive</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装metastore</span></span><br><span class="line">yum install -y mariadb-server</span><br><span class="line">/usr/libexec/mariadb-prepare-db-dir mariadb.service</span><br><span class="line">/usr/bin/mysqld_safe --basedir=/usr 2&gt;&amp;1 1&gt;hive/hive.metastore.mysql.log &amp;</span><br><span class="line">mysql -uroot -e <span class="string">"create user 'hive'@'localhost' identified by '123456'; grant all on *.* to hive@'localhost';"</span></span><br><span class="line"><span class="comment"># 测试metastore连接</span></span><br><span class="line">mysql -uhive -p123456 -e <span class="string">'select now()'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置、启动hive</span></span><br><span class="line">wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar -O hive/lib/mysql-connector-java-5.1.48.jar</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hive/conf/hive-site.xml -O hive/conf/hive-site.xml</span><br><span class="line"><span class="built_in">cd</span> hive &amp;&amp; bin/hive --service metastore 2&gt;&amp;1 1&gt;hive.metastore.service.log &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用hive的命令行工具测试 (下面的命令需要成功运行)</span></span><br><span class="line"><span class="built_in">cd</span> hive &amp;&amp; bin/beeline</span><br><span class="line">&gt; !connect jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM</span><br><span class="line">Enter username <span class="keyword">for</span> jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM: (这里直接Enter)</span><br><span class="line">Enter password <span class="keyword">for</span> jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM: (这里直接Enter)</span><br><span class="line">&gt; create database <span class="keyword">if</span> not exists t;</span><br><span class="line">&gt; drop table <span class="keyword">if</span> exists t.t;</span><br><span class="line">&gt; create table t.t (a int);</span><br><span class="line">&gt; insert into table t.t values (1), (2);</span><br><span class="line">&gt; select * from t.t;</span><br></pre></td></tr></table></figure>
+
+<p>我们这里修改的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">hive.server2.authentication=KERBEROS</span><br><span class="line">hive.server2.authentication.kerberos.principal=root/_HOST@HADOOP.COM</span><br><span class="line">hive.server2.authentication.kerberos.keytab=/hd/conf/hadoop.keytab</span><br><span class="line"></span><br><span class="line">hive.metastore.sasl.enabled=true</span><br><span class="line">hive.metastore.kerberos.keytab.file=/hd/conf/hadoop.keytab</span><br><span class="line">hive.metastore.kerberos.principal=root/_HOST@HADOOP.COM</span><br><span class="line"></span><br><span class="line">javax.jdo.option.ConnectionURL=jdbc:mysql://localhost/hive_remote?createDatabaseIfNotExist=true</span><br><span class="line">javax.jdo.option.ConnectionDriverName=com.mysql.jdbc.Driver</span><br><span class="line">javax.jdo.option.ConnectionUserName=hive</span><br><span class="line">javax.jdo.option.ConnectionPassword=123456</span><br></pre></td></tr></table></figure>
+
+<p>运行最初我们定义的测试如下：（接上篇中对应的测试运行部分）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/<span class="built_in">test</span></span><br><span class="line">cat &gt; src/<span class="built_in">test</span>/resources/hive-site.xml &lt;&lt;EOF</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> standalone=<span class="string">"no"</span>?&gt;</span><br><span class="line">&lt;?xml-stylesheet <span class="built_in">type</span>=<span class="string">"text/xsl"</span> href=<span class="string">"configuration.xsl"</span>?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.server2.authentication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;KERBEROS&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.server2.authentication.kerberos.principal&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;root/shd@HADOOP.COM&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.metastore.sasl.enabled&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;<span class="literal">true</span>&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.metastore.kerberos.principal&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;root/shd@HADOOP.COM&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">EOF</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.HiveTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>到这里一个安全的<code>hive</code>搭建和测试就完成了。</p>
+<h2 id="hbase"><a href="#hbase" class="headerlink" title="hbase"></a><code>hbase</code></h2><p><code>hbase</code>是一个分布式大规模数据存储组件，支持随机的、实时的读写超过数十亿行的超大数据库。<code>hbase</code>基于google的论文《Bigtable: A Distributed Storage System for Structured Data》设计实现。我们来看看如何搭建一个安全的<code>hbase</code>数据库。</p>
+<p>对于一个安全<code>hbase</code>的读写，我们可以建立测试如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HbaseTest</span> </span>&#123;</span><br><span class="line">    TestConfig testConfig = <span class="keyword">new</span> TestConfig();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_read_write_hbase</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        Configuration config = HBaseConfiguration.create();</span><br><span class="line">        config.addResource(<span class="keyword">new</span> Path(testConfig.hbaseSiteFilePath()));</span><br><span class="line">        UserGroupInformation.setConfiguration(config);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line"></span><br><span class="line">        TableName tableName = TableName.valueOf(<span class="string">"test"</span>);</span><br><span class="line"></span><br><span class="line">        Connection connection = ConnectionFactory.createConnection(config);</span><br><span class="line">        Admin admin = connection.getAdmin();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (admin.tableExists(tableName)) &#123;</span><br><span class="line">            admin.deleteTable(tableName);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String family1 = <span class="string">"Family1"</span>;</span><br><span class="line">        String family2 = <span class="string">"Family2"</span>;</span><br><span class="line">        HTableDescriptor tableDescriptor = <span class="keyword">new</span> HTableDescriptor(tableName);</span><br><span class="line">        tableDescriptor.addFamily(<span class="keyword">new</span> HColumnDescriptor(family1));</span><br><span class="line">        tableDescriptor.addFamily(<span class="keyword">new</span> HColumnDescriptor(family2));</span><br><span class="line">        admin.createTable(tableDescriptor);</span><br><span class="line"></span><br><span class="line">        Put p = <span class="keyword">new</span> Put(Bytes.toBytes(<span class="string">"row1"</span>));</span><br><span class="line">        String qualifier1 = <span class="string">"Qualifier1"</span>;</span><br><span class="line">        p.addColumn(family1.getBytes(), qualifier1.getBytes(), <span class="string">"value1"</span>.getBytes());</span><br><span class="line">        p.addColumn(family2.getBytes(), qualifier1.getBytes(), <span class="string">"value2"</span>.getBytes());</span><br><span class="line"></span><br><span class="line">        Table table = connection.getTable(tableName);</span><br><span class="line">        table.put(p);</span><br><span class="line"></span><br><span class="line">        Get g = <span class="keyword">new</span> Get(Bytes.toBytes(<span class="string">"row1"</span>));</span><br><span class="line"></span><br><span class="line">        assertEquals(<span class="string">"value1"</span>, <span class="keyword">new</span> String(table.get(g).getValue(family1.getBytes(), qualifier1.getBytes())));</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/HbaseTest.java" target="_blank" rel="noopener">这里</a>）</p>
+<p><code>hbase</code>的运行时包括三个核心组件，存储元数据的<code>Master</code>、存储数据的<code>RegionServers</code>及一个分布式协调器<code>ZooKeeper</code>。在这里，我们将部署<code>ZooKeeper</code>作为一个独立的大数据组件运行，以便将来当我们要引入其他的基于<code>ZooKeeper</code>的组件时可以直接使用。 </p>
+<p>运行下面的命令，即可搭建并运行一个安全的<code>ZooKeeper</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">wget https://archive.apache.org/dist/zookeeper/zookeeper-3.5.5/apache-zookeeper-3.5.5-bin.tar.gz</span><br><span class="line">tar xf /</span><br><span class="line">ln -sv apache-zookeeper-3.5.5-bin zookeeper</span><br><span class="line"><span class="comment"># 创建对应的key</span></span><br><span class="line">kadmin.local addprinc -randkey zookeeper/shd@HADOOP.COM</span><br><span class="line">kadmin.local xst -k /hd/conf/zookeeper.keytab zookeeper/shd@HADOOP.COM</span><br><span class="line"><span class="comment"># 配置、启动</span></span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/bin/zkEnv.sh -O zookeeper/bin/zkEnv.sh</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/jaas.conf -O zookeeper/conf/jaas.conf</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/client-jaas.conf -O zookeeper/conf/client-jaas.conf</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/zoo.cfg -O zookeeper/conf/zoo.cfg</span><br><span class="line">sed -i <span class="string">"s/__HOST__/shd/g"</span> conf/jaas.conf</span><br><span class="line">sed -i <span class="string">"s/__HOST__/shd/g"</span> conf/client-jaas.conf</span><br><span class="line"><span class="built_in">cd</span> zookeeper &amp;&amp; bin/zkServer.sh start</span><br><span class="line"><span class="comment"># 测试如下：</span></span><br><span class="line"><span class="built_in">cd</span> zookeeper &amp;&amp; bin/zkCli.sh</span><br><span class="line">&gt; create /<span class="built_in">test</span> <span class="built_in">test</span></span><br><span class="line">&gt; get /<span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来是<code>hbase</code>，运行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载、配置hbase</span></span><br><span class="line">wget http://mirrors.tuna.tsinghua.edu.cn/apache/hbase/hbase-1.3.6/hbase-1.3.6-bin.tar.gz</span><br><span class="line">tar xf hbase-1.3.6-bin.tar.gz</span><br><span class="line">ln -sv hbase-1.3.6 hbase</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/hbase-site.xml -O hbase/conf/hbase-site.xml</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/hbase-env.sh -O hbase/conf/hbase-env.sh</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/jaas.conf -O hbase/conf/jaas.conf</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'shd'</span> &gt; hbase/conf/regionservers</span><br><span class="line">sed -i <span class="string">"s/__HOST__/shd/g"</span> conf/hbase-site.xml</span><br><span class="line">sed -i <span class="string">"s/__HOST__/shd/g"</span> conf/jaas.conf</span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line"><span class="built_in">cd</span> hbase</span><br><span class="line">./bin/start-hbase.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">./bin/hbase shell</span><br><span class="line">&gt; create <span class="string">'member'</span>, <span class="string">'id'</span>,<span class="string">'address'</span>,<span class="string">'info'</span></span><br><span class="line">&gt; put <span class="string">'member'</span>, <span class="string">'debugo'</span>, <span class="string">'id'</span>, <span class="string">'1'</span></span><br><span class="line">&gt; get <span class="string">'member'</span>, <span class="string">'debugo'</span></span><br></pre></td></tr></table></figure>
+
+<p>运行最初我们定义的测试如下：（接上篇中对应的测试运行部分）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/<span class="built_in">test</span></span><br><span class="line">docker cp shd:/hd/hbase/conf/hbase-site.xml ./resources/</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.HbaseTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>到这里一个安全的<code>hase</code>搭建和测试就完成了。</p>
+<h2 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a><code>Spark</code></h2><p><code>Spark</code>是一个独立的通用的高性能分布式计算引擎。相比基于<code>MapReduce</code>计算模型的<code>hive</code>，<code>Spark</code>设计了一套高效的<code>DAG</code>来优化计算流，有效的防止了多余的中间数据存储。由于<code>Spark</code>提供了更高的计算效率，它逐渐成了当前最流行的计算框架。</p>
+<p><code>Spark</code>其实是作为一个工具库来与<code>Hadoop</code>大数据集群进行集成的。我们直接依赖<code>Spark</code>的库就可以使用，无需任何配置。</p>
+<p>我们可以建立测试如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SparkTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    TestConfig testConfig = <span class="keyword">new</span> TestConfig();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_be_able_to_read_hive_from_spark</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        org.apache.hadoop.conf.Configuration conf = <span class="keyword">new</span></span><br><span class="line">                org.apache.hadoop.conf.Configuration();</span><br><span class="line">        conf.set(<span class="string">"hadoop.security.authentication"</span>, <span class="string">"Kerberos"</span>);</span><br><span class="line">        UserGroupInformation.setConfiguration(conf);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line">        SparkSession spark = SparkSession</span><br><span class="line">                .builder()</span><br><span class="line">                .appName(<span class="string">"Simple Spark Example"</span>)</span><br><span class="line">                .master(<span class="string">"yarn"</span>)</span><br><span class="line">                .enableHiveSupport()</span><br><span class="line">                .config(<span class="string">"spark.sql.warehouse.dir"</span>, testConfig.sparkSqlWarehouseDir())</span><br><span class="line">                .config(<span class="string">"hive.metastore.uris"</span>, testConfig.hiveMetastoreUrl())</span><br><span class="line">                .getOrCreate();</span><br><span class="line"></span><br><span class="line">        spark.sql(<span class="string">"create database if not exists t"</span>);</span><br><span class="line">        spark.sql(<span class="string">"drop table if exists t.t"</span>);</span><br><span class="line">        spark.sql(<span class="string">"create table t.t (a int)"</span>);</span><br><span class="line">        spark.sql(<span class="string">"insert into table t.t values (1), (2)"</span>);</span><br><span class="line">        spark.sql(<span class="string">"desc t.t"</span>).show();</span><br><span class="line">        spark.sql(<span class="string">"select * from t.t"</span>).show();</span><br><span class="line"></span><br><span class="line">        spark.stop();</span><br><span class="line">        spark.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/SparkTest.java" target="_blank" rel="noopener">这里</a>）</p>
+<p>运行以上测试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/<span class="built_in">test</span></span><br><span class="line">mvn -DshdHost=shd -Dtest=test.SparkTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>如果我们想使用<code>spark-shell</code>来交互式的探索<code>spark</code>，则我们需要下载spark并做一定的配置。</p>
+<p>执行脚本如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">wget https://archive.apache.org/dist/spark/spark-2.1.0/spark-2.1.0-bin-hadoop2.7.tgz</span><br><span class="line">tar xf spark-2.1.0-bin-hadoop2.7.tgz</span><br><span class="line">ln -sv spark-2.1.0-bin-hadoop2.7 spark</span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/hd/hadoop</span><br><span class="line"><span class="built_in">export</span> HIVE_HOME=/hd/hive</span><br><span class="line"><span class="built_in">export</span> HADOOP_CONF_DIR=/hd/hadoop/etc/hadoop</span><br><span class="line">cp hive/conf/hive-site.xml spark/conf/</span><br><span class="line">wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar -O spark/jars/mysql-connector-java-5.1.48.jar</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试：（下面的spark程序将能计算出PI的近似值）</span></span><br><span class="line"><span class="built_in">cd</span> spark</span><br><span class="line">./bin/spark-submit \</span><br><span class="line">    --class org.apache.spark.examples.SparkPi \</span><br><span class="line">    --master yarn \</span><br><span class="line">    --deploy-mode cluster \</span><br><span class="line">    --executor-memory 512M \</span><br><span class="line">    --num-executors 1 \</span><br><span class="line">    examples/jars/spark-examples_2.11-2.1.0.jar 1000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行spark-shell进入交互式环境</span></span><br><span class="line">./bin/spark-shell --master yarn</span><br><span class="line">&gt; new org.apache.spark.sql.SQLContext(sc).sql(<span class="string">"show databases"</span>).collectAsList()</span><br></pre></td></tr></table></figure>
+
+<h2 id="Livy"><a href="#Livy" class="headerlink" title="Livy"></a><code>Livy</code></h2><p><code>Livy</code>将运行<code>spark</code>应用的这一能力封装为了一个服务，这样我们就可以更方便的进行统一资源管理。</p>
+<p>对于一个安全的<code>Livy</code>服务，我们可以编写对应的测试如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LivyTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger log = LoggerFactory.getLogger(LivyTest.class);</span><br><span class="line"></span><br><span class="line">    TestConfig testConfig = <span class="keyword">new</span> TestConfig();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">should_submit_and_run_job_through_livy</span><span class="params">()</span> <span class="keyword">throws</span> IOException, URISyntaxException, InterruptedException, ExecutionException </span>&#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        LivyClient client = <span class="keyword">new</span> LivyClientBuilder()</span><br><span class="line">                .setURI(<span class="keyword">new</span> URI(testConfig.livyUrl()))</span><br><span class="line">                .setConf(<span class="string">"livy.client.http.spnego.enable"</span>, <span class="string">"true"</span>)</span><br><span class="line">                .setConf(<span class="string">"livy.client.http.auth.login.config"</span>, testConfig.jaasConfPath())</span><br><span class="line">                .setConf(<span class="string">"livy.client.http.krb5.conf"</span>, testConfig.krb5FilePath())</span><br><span class="line">                .setConf(<span class="string">"livy.client.http.krb5.debug"</span>, <span class="string">"true"</span>)</span><br><span class="line">                .build();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String piJar = testConfig.sparkPiJarFilePath();</span><br><span class="line">            log.info(<span class="string">"Uploading &#123;&#125; to the Spark context..."</span>, piJar);</span><br><span class="line">            client.uploadJar(<span class="keyword">new</span> File(piJar)).get();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> samples = <span class="number">10000</span>;</span><br><span class="line">            log.info(<span class="string">"Running PiJob with &#123;&#125; samples...\n"</span>, samples);</span><br><span class="line">            <span class="keyword">double</span> pi = client.submit(<span class="keyword">new</span> PiJob(samples)).get();</span><br><span class="line"></span><br><span class="line">            log.info(<span class="string">"Pi is roughly: "</span> + pi);</span><br><span class="line">            assertEquals(<span class="number">3</span>, Double.valueOf(pi).intValue());</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            client.stop(<span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/LivyTest.java" target="_blank" rel="noopener">这里</a>及<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/main/java/test/PiJob.java" target="_blank" rel="noopener">这里</a>）</p>
+<p>我们曾在<a href="http://brightliao.me/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a>中介绍过<code>Livy</code>的安全机制。结合当时的原理介绍，我们只需要运行下面的脚本即可以配置好一个安全的<code>Livy</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum install -y unzip</span><br><span class="line">ln -sv livy-0.5.0-incubating-bin livy</span><br><span class="line">cat &gt;&gt; livy/conf/livy.conf &lt;&lt; EOF</span><br><span class="line">livy.impersonation.enabled = <span class="literal">true</span></span><br><span class="line">livy.server.auth.type = kerberos</span><br><span class="line">livy.server.auth.kerberos.keytab = /hd/conf/hadoop.keytab</span><br><span class="line">livy.server.auth.kerberos.principal = HTTP/shd@HADOOP.COM</span><br><span class="line">livy.server.launch.kerberos.keytab = /hd/conf/hadoop.keytab</span><br><span class="line">livy.server.launch.kerberos.principal = root/shd@HADOOP.COM</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动livy</span></span><br><span class="line"><span class="built_in">cd</span> livy &amp;&amp; ./bin/livy-server start</span><br></pre></td></tr></table></figure>
+
+<p>运行上面的<code>java</code>测试用例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/<span class="built_in">test</span></span><br><span class="line">cat &gt;&gt;src/<span class="built_in">test</span>/resources/jaas.conf &lt;&lt;EOF</span><br><span class="line">com.sun.security.jgss.krb5.initiate &#123;</span><br><span class="line">  com.sun.security.auth.module.Krb5LoginModule required debug=<span class="literal">true</span></span><br><span class="line">  refreshKrb5Config=<span class="literal">true</span></span><br><span class="line">  doNotPrompt=<span class="literal">true</span></span><br><span class="line">  useKeyTab=<span class="literal">true</span></span><br><span class="line">  keyTab=<span class="string">"src/test/resources/root.keytab"</span></span><br><span class="line">  principal=<span class="string">"root"</span>;</span><br><span class="line">&#125;;</span><br><span class="line">EOF</span><br><span class="line">cp -v /root/dev/projects/tmp/bigdata_conf/<span class="built_in">test</span>/src/<span class="built_in">test</span>/resources&#123;.1,&#125;/spark-pi.jar</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.LivyTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="制作docker镜像"><a href="#制作docker镜像" class="headerlink" title="制作docker镜像"></a>制作<code>docker</code>镜像</h2><p>到这里我们常用的几个基础组件的安全配置就介绍完了。为便于重现和复用这样一套环境，我们可以制作一个<code>docker</code>镜像。我这里已经将此镜像制作完成，并上传到了<code>docker hub</code><a href="https://hub.docker.com/repository/docker/brightlgm/bigdata-auth/general" target="_blank" rel="noopener">这里</a>，大家可以直接下载使用，或者也参考这里的<code>Dockerfile</code>自行制作镜像。</p>
+<p>有时候由于我们本地的资源不够运行集群的所有组件，我们可以在另一台机器上面通过容器运行此集群，然后通过<code>ssh tunnel</code>的方式将需要的端口映射到本地。这样本地测试时就可以直接连接<code>localhost</code>进行测试了。我也将此镜像制作完成，并上传到了<code>docker hub</code><a href="https://hub.docker.com/repository/docker/brightlgm/bigdata-auth-localhost/general" target="_blank" rel="noopener">这里</a>。</p>
+<p>对于<code>localhost</code>模式，我们需要映射的端口如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kdc</span></span><br><span class="line">ssh -L localhost:1802:localhost:1802 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hbase:</span></span><br><span class="line"><span class="comment"># hbase zookeeper</span></span><br><span class="line">ssh -L localhost:2181:localhost:2181 root@rshd</span><br><span class="line"><span class="comment"># hbase master</span></span><br><span class="line">ssh -L localhost:16000:localhost:16000 root@rshd</span><br><span class="line"><span class="comment"># hbase region server</span></span><br><span class="line">ssh -L localhost:16201:localhost:16201 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hive:</span></span><br><span class="line"><span class="comment"># hive</span></span><br><span class="line">ssh -L localhost:10000:localhost:10000 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hdfs:</span></span><br><span class="line"><span class="comment"># hdfs namenode</span></span><br><span class="line">ssh -L localhost:9000:localhost:9000 root@rshd</span><br><span class="line"><span class="comment"># hdfs datanode</span></span><br><span class="line">sudo ssh -i /root/.ssh/id_rsa -L localhost:1004:localhost:1004 root@rshd -p 12822</span><br><span class="line"></span><br><span class="line"><span class="comment">## test livy</span></span><br><span class="line">ssh -L localhost:8998:localhost:8998 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test spark with hive</span></span><br><span class="line"><span class="comment"># hdfs namenode</span></span><br><span class="line">ssh -L localhost:9000:localhost:9000 root@rshd</span><br><span class="line"><span class="comment"># hdfs datanode</span></span><br><span class="line">sudo ssh -i /Users/gmliao/.ssh/id_rsa -L localhost:1004:localhost:1004 root@rshd -p 12822</span><br><span class="line"><span class="comment"># hive metastore</span></span><br><span class="line">ssh -L localhost:9083:localhost:9083 root@rshd</span><br></pre></td></tr></table></figure>
+
+<p>对于前面几个组件的运维，我还将它们组织到了一个<code>Makefile</code>中，请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/auth/Makefile" target="_blank" rel="noopener">这里</a>。有了这个脚本我们可以通过执行<code>make start-hbase</code>即可启动<code>hbase</code>了。其他的运维工具请参考<code>Makefile</code>源代码。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本系列文章通过以下四个方面较全面的介绍了<code>hadoop</code>的安全机制：</p>
+<ol>
+<li>Kerberos协议介绍及实践</li>
+<li>Kerberos协议发展及Hadoop相关源码分析</li>
+<li>Hadoop安全集群搭建及测试</li>
+<li>周边工具的安全支持</li>
+</ol>
+<p>通过这些介绍，相信大家对于<code>hadoop</code>的安全机制有了一定的了解了。本系列文章也将告一段落。当然我们在实际使用过程中可能还会遇到其他的问题，如有相关问题，欢迎大家留言交流。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/安全/" rel="tag"># 安全</a>
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+            <a href="/tags/kerberos/" rel="tag"># kerberos</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/02/sense-of-ceremony-and-professional-service/" rel="next" title="仪式感与专业服务">
+                <i class="fa fa-chevron-left"></i> 仪式感与专业服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/08/i-dont-like-such-a-review/" rel="prev" title="我不愿意做这样的Review">
+                我不愿意做这样的Review <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#hive"><span class="nav-number">1.</span> <span class="nav-text">hive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hbase"><span class="nav-number">2.</span> <span class="nav-text">hbase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark"><span class="nav-number">3.</span> <span class="nav-text">Spark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Livy"><span class="nav-number">4.</span> <span class="nav-text">Livy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作docker镜像"><span class="nav-number">5.</span> <span class="nav-text">制作docker镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2019/12/02/hadoop-auth-4/', // optional
+      owner: 'gmlove',
+      title: 'Hadoop安全认证机制 （四）',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
