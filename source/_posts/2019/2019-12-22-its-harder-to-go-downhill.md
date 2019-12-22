@@ -13,6 +13,8 @@ date: 2019-12-22 20:00:00
 
 说起凌云道这条路，真是名副其实。它不仅几乎呈垂直高度下降，而且台阶较窄仅有半脚宽。路两边树丛虽然茂盛，但是都不高大，山下的情形总是能进入眼帘。我一向有点恐高，在这垂直高度近1千米地方往下看，还真是心里有点慌。刚开始下山，小伙伴们见此山势，纷纷停下脚步拍照。得几张无P图片如下，大家可以感受一下：
 
+<!-- more -->
+
 ![lingyundao](/attaches/2019/2019-12-22-its-harder-to-go-downhill/lingyundao-1.jpeg)
 ![lingyundao](/attaches/2019/2019-12-22-its-harder-to-go-downhill/lingyundao-2.jpeg)
 ![lingyundao](/attaches/2019/2019-12-22-its-harder-to-go-downhill/lingyundao-3.jpeg)
