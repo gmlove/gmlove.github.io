@@ -84,7 +84,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Spark,性能,性能优化,大数据,机器学习,">
+  <meta name="keywords" content="大数据,Spark,机器学习,性能,性能优化,">
 
 
 
@@ -103,7 +103,7 @@
 
 
 <meta name="description" content="技术飞速发展，机器学习正在成为各个企业的核心竞争优势之一。除了在处于风口浪尖的计算机视觉方向的应用，可能更能产生直接的价值的一个方向是在智能推荐领域。比如广告推荐，如果我们有一个更有效的算法，更精准的向用户推荐了某个广告，用户的广告点击将为企业直接带来收益。 然而在推荐领域，我们面临的是与当前的深度学习颇有不同的问题。这些不同主要体现在：  超大的数据量 领域专家人工设计的特征 极致的在线服务性能">
-<meta name="keywords" content="Spark,性能,性能优化,大数据,机器学习">
+<meta name="keywords" content="大数据,Spark,机器学习,性能,性能优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="亿级数据Spark应用调优之旅">
 <meta property="og:url" content="http://brightliao.me/2020/01/21/spark-performance-tuning-on-billions-of-data/index.html">
@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/hive-table-metadata.png">
 <meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/hive-table-metadata-removed.png">
 <meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/dag-scheduler-thread.png">
-<meta property="og:updated_time" content="2020-02-03T01:26:53.606Z">
+<meta property="og:updated_time" content="2020-02-03T12:03:24.463Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="亿级数据Spark应用调优之旅">
 <meta name="twitter:description" content="技术飞速发展，机器学习正在成为各个企业的核心竞争优势之一。除了在处于风口浪尖的计算机视觉方向的应用，可能更能产生直接的价值的一个方向是在智能推荐领域。比如广告推荐，如果我们有一个更有效的算法，更精准的向用户推荐了某个广告，用户的广告点击将为企业直接带来收益。 然而在推荐领域，我们面临的是与当前的深度学习颇有不同的问题。这些不同主要体现在：  超大的数据量 领域专家人工设计的特征 极致的在线服务性能">
@@ -450,6 +450,8 @@
 <li>极致的在线服务性能需求</li>
 </ul>
 <p>为了解决这个技术上非常有挑战的问题，一般情况下，我们要考虑的方案都是借助于大数据的工具。自Google的两篇经典论文发表以来，大数据相关生态发展至今已经十多年过去了，虽然一直都有新的思想的产生，但是很多经典的工具已趋于成熟。大数据的相关工具应对大数据的挑战应当是理所应当的选择。</p>
+<a id="more"></a>
+
 <p>近期，在一个客户的项目上，我们有机会参加到了一个类似场景下的机器学习应用中，帮助客户解决这一问题。我们选择的技术方案是基于Hadoop的Hive大规模分布式结构化数据存储系统，及高性能Spark分布式计算引擎。以它们为核心来处理数据和训练模型。对于模型的线上服务，我们选择了mleap，mleap是专门针对Spark机器学习库MLLib的高性能服务化而设计的。</p>
 <p>在前期的工作中，我们用spark在一个小的数据集上面实现并验证过了所有的功能。但是由于我们的测试环境资源非常有限，无法针对超大规模数据进行测试。在将系统上线到一个类生产环境之后，我们终于面临了亿级数据处理的问题。虽然我们选择的技术方案理论上是可以直接支持这样级别的数据的，但是在实际运行之后，还是遇到了颇多问题，在这里总结并与大家分享一下。</p>
 <h2 id="构建快速反馈环"><a href="#构建快速反馈环" class="headerlink" title="构建快速反馈环"></a>构建快速反馈环</h2><p>TDD教会我们快速反馈的重要性。一旦我们有了一个快速反馈的机制，我们就能快速修正问题，快速前进。但是在超大数据的场景下，问题的复杂性往往使得我们难以获取快速反馈。比如，一个spark的应用，可能需要运行数十分钟到数小时，而我们遇到的问题可能在数十分钟或数小时之后才会出现。</p>
@@ -644,15 +646,15 @@
       
         <div class="post-tags">
           
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
             <a href="/tags/spark/" rel="tag"># Spark</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
           
             <a href="/tags/性能/" rel="tag"># 性能</a>
           
             <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
-          
-            <a href="/tags/大数据/" rel="tag"># 大数据</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
           
         </div>
       
@@ -777,7 +779,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>

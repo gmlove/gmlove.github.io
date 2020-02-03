@@ -9,11 +9,11 @@
         <category>machine-learning</category>
       </categories>
       <tags>
+        <tag>大数据</tag>
         <tag>Spark</tag>
+        <tag>机器学习</tag>
         <tag>性能</tag>
         <tag>性能优化</tag>
-        <tag>大数据</tag>
-        <tag>机器学习</tag>
       </tags>
   </entry>
   <entry>
@@ -164,8 +164,8 @@
         <category>架构</category>
       </categories>
       <tags>
-        <tag>DDD</tag>
         <tag>架构</tag>
+        <tag>DDD</tag>
         <tag>领域</tag>
       </tags>
   </entry>
@@ -190,8 +190,8 @@
         <category>performance</category>
       </categories>
       <tags>
-        <tag>GIL</tag>
         <tag>python</tag>
+        <tag>GIL</tag>
       </tags>
   </entry>
   <entry>
@@ -576,8 +576,8 @@
         <category>DevOps</category>
       </categories>
       <tags>
-        <tag>micro service</tag>
         <tag>docker</tag>
+        <tag>micro service</tag>
       </tags>
   </entry>
   <entry>
