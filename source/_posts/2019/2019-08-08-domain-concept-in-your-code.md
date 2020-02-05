@@ -2,6 +2,7 @@
 title: 代码中的领域
 categories:
 - 架构
+- DDD
 tags:
 - 架构
 - DDD
