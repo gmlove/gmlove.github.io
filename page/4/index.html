@@ -435,7 +435,9 @@
       
         
           <p>今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。</p>
-<h2 id="问题导入"><a href="#问题导入" class="headerlink" title="问题导入"></a>问题导入</h2><h3 id="提取门牌号进行地图标注"><a href="#提取门牌号进行地图标注" class="headerlink" title="提取门牌号进行地图标注"></a>提取门牌号进行地图标注</h3><p>先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找到地图中对应的位置了，事实上google地图就是通过训练这样的机器学习模型来进行地图信息标注的。要解决这个问题，可以读取google街景中的照片数据，然后训练一个机器学习模型来提取门牌号信息。如下图所示，当我们可以识别图片中的门牌号”42”了，我们就可以在地图上面进行标注了。</p>
+<h2 id="问题导入"><a class="markdownIt-Anchor" href="#问题导入"></a> 问题导入</h2>
+<h3 id="提取门牌号进行地图标注"><a class="markdownIt-Anchor" href="#提取门牌号进行地图标注"></a> 提取门牌号进行地图标注</h3>
+<p>先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找到地图中对应的位置了，事实上google地图就是通过训练这样的机器学习模型来进行地图信息标注的。要解决这个问题，可以读取google街景中的照片数据，然后训练一个机器学习模型来提取门牌号信息。如下图所示，当我们可以识别图片中的门牌号&quot;42&quot;了，我们就可以在地图上面进行标注了。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/03/01/recognize-house-number/#more" rel="contents">
@@ -585,7 +587,8 @@
       
         
           <p>今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。</p>
-<h2 id="大规模网络的特征"><a href="#大规模网络的特征" class="headerlink" title="大规模网络的特征"></a>大规模网络的特征</h2><p>首先我们来看一下用什么来衡量网络规模。</p>
+<h2 id="大规模网络的特征"><a class="markdownIt-Anchor" href="#大规模网络的特征"></a> 大规模网络的特征</h2>
+<p>首先我们来看一下用什么来衡量网络规模。</p>
 <p>下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。</p>
           <!--noindex-->
           <div class="post-button text-center">
@@ -713,7 +716,8 @@
 
       
         
-          <h2 id="深度学习Workshop总结"><a href="#深度学习Workshop总结" class="headerlink" title="深度学习Workshop总结"></a>深度学习Workshop总结</h2><p>深度学习Workshop是我们AI俱乐部面向全中国区的发起的学习机器学习的系列session。这次Workshop最初由佟达发起，由于他当时在成都，所以我们就从成都开始了。</p>
+          <h2 id="深度学习workshop总结"><a class="markdownIt-Anchor" href="#深度学习workshop总结"></a> 深度学习Workshop总结</h2>
+<p>深度学习Workshop是我们AI俱乐部面向全中国区的发起的学习机器学习的系列session。这次Workshop最初由佟达发起，由于他当时在成都，所以我们就从成都开始了。</p>
 <p>这次workshop从11.7开始，直到1.17结束，共七次session，历时10周。我们以Google在Udacity上面的Tensorflow课程为基础，适当扩展，作为本次workshop的内容。</p>
 <p>本次workshop一共包含七次session：</p>
           <!--noindex-->
@@ -866,7 +870,8 @@
         
           <p>本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。</p>
 <p>上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。</p>
-<h2 id="我们的问题"><a href="#我们的问题" class="headerlink" title="我们的问题"></a>我们的问题</h2><p>先来看我们的问题，然后让我们带着问题，来学习RNN和LSTM。这次我们要解决的问题是：如何生成一个看起来还不错的句子。</p>
+<h2 id="我们的问题"><a class="markdownIt-Anchor" href="#我们的问题"></a> 我们的问题</h2>
+<p>先来看我们的问题，然后让我们带着问题，来学习RNN和LSTM。这次我们要解决的问题是：如何生成一个看起来还不错的句子。</p>
 <p>我们之前介绍过n-gram，那么我们能不能使用n-gram去预测单词，进而生成一个句子呢？我们可以使用频率统计来计算n-gram的语言模型：</p>
           <!--noindex-->
           <div class="post-button text-center">
@@ -1017,7 +1022,8 @@
       
         
           <p>大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。</p>
-<h2 id="我们的目标"><a href="#我们的目标" class="headerlink" title="我们的目标"></a>我们的目标</h2><p>Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球的玩法的一个游戏，与乒乓球不同的是，这个游戏可以由单人控制。相信只要是80后，肯定都玩过这个游戏。</p>
+<h2 id="我们的目标"><a class="markdownIt-Anchor" href="#我们的目标"></a> 我们的目标</h2>
+<p>Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球的玩法的一个游戏，与乒乓球不同的是，这个游戏可以由单人控制。相信只要是80后，肯定都玩过这个游戏。</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png" alt="Break out game"></p>
           <!--noindex-->
           <div class="post-button text-center">
@@ -1327,7 +1333,8 @@
         
           <p>今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。</p>
 <p>TensorFlow目前在我司的技术雷达上面处于assess阶段。</p>
-<h2 id="TensorFlow是什么"><a href="#TensorFlow是什么" class="headerlink" title="TensorFlow是什么"></a>TensorFlow是什么</h2><p>TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器学习系统。TensorFlow作为github上面的一个很火的开源项目，它的第一个提交是在2015年11月。到现在也不过刚好一年时间。</p>
+<h2 id="tensorflow是什么"><a class="markdownIt-Anchor" href="#tensorflow是什么"></a> TensorFlow是什么</h2>
+<p>TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器学习系统。TensorFlow作为github上面的一个很火的开源项目，它的第一个提交是在2015年11月。到现在也不过刚好一年时间。</p>
 <p>TensorFlow提供的API库可以用于编写富有表现力的程序。同时TensorFlow底层使用c++实现，其性能也是不错的。</p>
 <p>TensorFlow在系统设计上使用一个有状态的数据流图来描述计算。使用TensorFlow时，需要先定义好计算图，以便TensorFlow可以在内部进行分布式的调度，然后一般会使用向计算图填充数据的形式进行迭代计算。</p>
 <p>TensorFlow支持的系统非常广泛，从移动设备到桌面电脑再到大型分布式系统，从CPU到GPU，TensorFlow都提供了支持。</p>
@@ -1481,12 +1488,14 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h3 id="常见误解"><a href="#常见误解" class="headerlink" title="常见误解"></a>常见误解</h3><ol>
+            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h3 id="常见误解"><a class="markdownIt-Anchor" href="#常见误解"></a> 常见误解</h3>
+<ol>
 <li>需求是被引出或者捕捉出来的（用户也不知道需求，需求只能被拖网捕捞，有大有小，有死有活，还有漏网的）</li>
 <li>用户知道所有需求</li>
 <li>原型要在开发阶段一直保留</li>
 </ol>
-<h3 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h3><p><a href="https://therealba.com/2016/10/26/working-effectively-in-a-distributed-team-across-australia-china-and-new-zealand/comment-page-1/#comment-31" target="_blank" rel="noopener">https://therealba.com/2016/10/26/working-effectively-in-a-distributed-team-across-australia-china-and-new-zealand/comment-page-1/#comment-31</a></p>
+<h3 id="tips"><a class="markdownIt-Anchor" href="#tips"></a> tips</h3>
+<p><a href="https://therealba.com/2016/10/26/working-effectively-in-a-distributed-team-across-australia-china-and-new-zealand/comment-page-1/#comment-31" target="_blank" rel="noopener">https://therealba.com/2016/10/26/working-effectively-in-a-distributed-team-across-australia-china-and-new-zealand/comment-page-1/#comment-31</a></p>
 
           
         
@@ -1630,7 +1639,9 @@
 
       
         
-          <h2 id="总纲"><a href="#总纲" class="headerlink" title="总纲"></a>总纲</h2><p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。<br>测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
+          <h2 id="总纲"><a class="markdownIt-Anchor" href="#总纲"></a> 总纲</h2>
+<p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。<br>
+测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/08/25/tdd-practise/#more" rel="contents">

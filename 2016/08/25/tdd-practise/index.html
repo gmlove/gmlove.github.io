@@ -102,17 +102,17 @@
 
 
 
-<meta name="description" content="总纲差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。">
+<meta name="description" content="总纲 差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。 测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TDD Practise">
 <meta property="og:url" content="http://brightliao.me/2016/08/25/tdd-practise/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="总纲差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。">
+<meta property="og:description" content="总纲 差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。 测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-14T05:34:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TDD Practise">
-<meta name="twitter:description" content="总纲差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。">
+<meta name="twitter:description" content="总纲 差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。 测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。">
 
 
 
@@ -433,10 +433,12 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="总纲"><a href="#总纲" class="headerlink" title="总纲"></a>总纲</h2><p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。<br>测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="总纲"><a class="markdownIt-Anchor" href="#总纲"></a> 总纲</h2>
+<p>差的测试会增加维护的负担，好的测试才能指导开发。品质差的测试可能让开发慢如蜗牛。<br>
+测试需要达到目的的同时尽量保证不要给重构及变更带来阻碍。</p>
 <a id="more"></a>
-
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>测试的粒度：单元测试 -&gt; 集成测试 -&gt; 验收测试（用户场景测试）</p>
+<h2 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h2>
+<p>测试的粒度：单元测试 -&gt; 集成测试 -&gt; 验收测试（用户场景测试）</p>
 <p>单元测试使我们优化内部品质：模块能独立于系统运行，说明其边界是清晰的，高内聚，低耦合的，更可能在其他地方复用。验收测试保证外部品质。</p>
 <p>TDD四步循环：失败 - 报告 - 通过 - 重构</p>
 <p>测试的好处：</p>
@@ -446,11 +448,13 @@
 <li>有助于促进上下文无关性</li>
 <li>促进通过分解、萌芽、打包来发现值类型和对象</li>
 </ul>
-<h2 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h2><ul>
+<h2 id="起步"><a class="markdownIt-Anchor" href="#起步"></a> 起步</h2>
+<ul>
 <li>新项目：做最少的决定，实现可行走的骨架，尽早暴露不确定性，启动TDD循环 -&gt; 从反馈中学习。</li>
 <li>现有代码：回归测试 -&gt; 单元测试 -&gt; 改动。</li>
 </ul>
-<h2 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h2><ul>
+<h2 id="设计"><a class="markdownIt-Anchor" href="#设计"></a> 设计</h2>
+<ul>
 <li>对象间的关系：依赖、通知、调整</li>
 <li>封装：确保通过API影响对象的行为；隐藏：实现方式不可见</li>
 <li>组合比部分之和更简单</li>
@@ -464,7 +468,8 @@
 <li>分离并发策略与功能</li>
 <li>事件源外部化，不使用内部的定时器</li>
 </ul>
-<h2 id="编写好的测试"><a href="#编写好的测试" class="headerlink" title="编写好的测试"></a>编写好的测试</h2><p>好的单元测试：</p>
+<h2 id="编写好的测试"><a class="markdownIt-Anchor" href="#编写好的测试"></a> 编写好的测试</h2>
+<p>好的单元测试：</p>
 <ul>
 <li>针对行为进行测试而不是方法</li>
 <li>更愿意读测试而不是代码</li>
@@ -497,7 +502,8 @@
 <li>提取测试结构是注意不要让测试代码太抽象，无需像对待产品代码那样重构测试，测试代码的最高目标是让测试描述目标代码做了什么</li>
 <li>如果类需要创建内部支持对象，在测试中该对象应该是不可见的，而不是mock它</li>
 </ul>
-<h2 id="其他："><a href="#其他：" class="headerlink" title="其他："></a>其他：</h2><p>重构：</p>
+<h2 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他：</h2>
+<p>重构：</p>
 <ul>
 <li>为潜在的对象命名，因为某个东西有名字了，就可以控制它了</li>
 </ul>
@@ -728,7 +734,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总纲"><span class="nav-number">1.</span> <span class="nav-text">总纲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">2.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#起步"><span class="nav-number">3.</span> <span class="nav-text">起步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计"><span class="nav-number">4.</span> <span class="nav-text">设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写好的测试"><span class="nav-number">5.</span> <span class="nav-text">编写好的测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他："><span class="nav-number">6.</span> <span class="nav-text">其他：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总纲"><span class="nav-number">1.</span> <span class="nav-text"> 总纲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">2.</span> <span class="nav-text"> 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#起步"><span class="nav-number">3.</span> <span class="nav-text"> 起步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计"><span class="nav-number">4.</span> <span class="nav-text"> 设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写好的测试"><span class="nav-number">5.</span> <span class="nav-text"> 编写好的测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">6.</span> <span class="nav-text"> 其他：</span></a></li></ol></div>
             
 
           </div>

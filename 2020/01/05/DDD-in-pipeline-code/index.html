@@ -442,37 +442,36 @@
 </ul>
 <p>Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略括号和行尾分号，并且如果最后一个参数是一个闭包则可以将其写在函数调用之后，这就导致了相对比较怪异的语法出现。比如，刚接触Groovy的人可能不太能一下子理解下面这段代码的工作原理：</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a(<span class="number">1</span>) &#123;</span><br><span class="line">    something(<span class="number">123</span>)</span><br><span class="line">    someother <span class="string">id:</span> <span class="number">1</span>, <span class="string">message:</span> <span class="string">"test"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <a id="more"></a>
-
 <p>看起来似乎是函数定义，但其实这里是一个函数调用，其背后的函数定义为：<code>def a(int i, Closure c);</code> <code>def someother(int id, String message);</code></p>
 <p>注意，这里我并不是要说Groovy语言不是世界上最好的语言，而是想说明对于不常用这门语言的同学而言，由于其不够自然而存在一定的学习门槛。比如我就常常忘记Groovy的语法，而当我要重新开始一个项目时，我不得不又花一定的时间重新学习一下，可气的是这时还得不到多少IDE的辅助。大概也是由于Groovy对于新人入门不算友好，Gradle积极去支持了Kotlin语言。</p>
 <p>至于调试低效，相信写过较复杂的Jenkins <code>pipeline</code>代码同学们已有同感。编写好代码之后，我们很难编写一个针对它的测试。想要测试我们的<code>pipeline</code>代码，我们不得不把<code>pipeline</code>运行起来看看效果，然后为了触发目标代码的执行，我们可能还要在网页上点来点去，花一定的时间操作好几个网页元素。</p>
 <p>说到灵活性差，主要是指对于其他编译工具的集成而言。想要和Jenkins有好的集成，我们不得不编写一个Jenkins插件来实现。所以，我们就看到了大把大把的Jenkins插件。这些插件真的实现了所有原有编译工具提供的特性吗？这些插件质量怎么样，是否存在bug？某一个新的工具是否有插件支持？</p>
 <p>说了这么多，可能有人觉得只是在吐槽而已。这里其实是想给大家分享一下另一种编写<code>pipeline</code>代码的方式，我个人长期使用下来发现更为高效。希望对于有相同困惑的小伙伴们有一定的参考价值。</p>
-<h2 id="适合实现日常编译运维工作的工具与语言"><a href="#适合实现日常编译运维工作的工具与语言" class="headerlink" title="适合实现日常编译运维工作的工具与语言"></a>适合实现日常编译运维工作的工具与语言</h2><p><code>pipeline</code>完成的工作其实是一些日常的编译运维工作。说到如何支持这些编译运维工作，相信大家最熟悉不过的就是命令行工具了，各种各样的工具几乎都会提供完善的命令行接口。如何组合这些命令行工具来完成这些工作呢？这种场景下，<code>shell</code>应当是比较适合的胶水了。然而<code>shell</code>脚本的功能性却比较弱，比如高级语言里面司空见惯的各种集合功能，在<code>shell</code>里面却没有提供直接的支持。</p>
+<h2 id="适合实现日常编译运维工作的工具与语言"><a class="markdownIt-Anchor" href="#适合实现日常编译运维工作的工具与语言"></a> 适合实现日常编译运维工作的工具与语言</h2>
+<p><code>pipeline</code>完成的工作其实是一些日常的编译运维工作。说到如何支持这些编译运维工作，相信大家最熟悉不过的就是命令行工具了，各种各样的工具几乎都会提供完善的命令行接口。如何组合这些命令行工具来完成这些工作呢？这种场景下，<code>shell</code>应当是比较适合的胶水了。然而<code>shell</code>脚本的功能性却比较弱，比如高级语言里面司空见惯的各种集合功能，在<code>shell</code>里面却没有提供直接的支持。</p>
 <p>这里我经常选用的是一种虽然比较古老，但却能方便的实现大部分编译运维功能的工具：<code>make</code>。其实<code>make</code>工具在<code>c/c++</code>的世界里一直是非常流行的，编译过<code>c/c++</code>项目的同学对于<code>make &amp;&amp; make install</code>命令一定不陌生。<code>make</code>工具支持的<code>Makefile</code>脚本功能是相当丰富的，但作为我们日常使用进行编译运维，通常只需要一个很小的子集就足够了。使用这样的一个功能很小的子集可以有效降低大家的学习成本，让新手亦能迅速上手。</p>
 <p>对于后面要使用的<code>make</code>，我们只需要了解下面几点就够了：</p>
 <ol>
 <li><code>make</code>将一组命令组织成一个<code>task</code>，一个<code>Makefile</code>里面可以存在多个<code>task</code>以支持不同种类的运维工作，<code>task</code>间可以相互依赖。比如:</li>
 </ol>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    mvn clean package <span class="comment"># 注意行首必须为一个或多个tab</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br><span class="line"></span><br><span class="line"><span class="section">build: build-java build-nodejs</span></span><br></pre></td></tr></table></figure>
-
 <ol start="2">
 <li>每一条命令均独立的通过一个子<code>shell</code>去执行，所以命令可以是任意一段合法的<code>shell</code>脚本。</li>
 </ol>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line">modules=a b c</span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    for m in $modules; do \</span><br><span class="line">        cd $$m &amp;&amp; mvn clean package; \</span><br><span class="line">    done  <span class="comment"># 按顺序编译多个模块</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br></pre></td></tr></table></figure>
-
 <ol start="3">
-<li><p><code>make</code>中我们可以定义变量，这些变量可以初始化一个默认值，可以通过调用<code>task</code>时设置值进行覆盖。</p>
-<p> 比如上面的<code>Makefile</code>，我们如果调用时使用命令<code>make build-java modules=&quot;a b c d&quot;</code>，那么这个<code>build-java</code>将会去<code>a b c d</code>四个目录下分别执行<code>mvn clean package</code>。</p>
+<li>
+<p><code>make</code>中我们可以定义变量，这些变量可以初始化一个默认值，可以通过调用<code>task</code>时设置值进行覆盖。</p>
+<p>比如上面的<code>Makefile</code>，我们如果调用时使用命令<code>make build-java modules=&quot;a b c d&quot;</code>，那么这个<code>build-java</code>将会去<code>a b c d</code>四个目录下分别执行<code>mvn clean package</code>。</p>
 </li>
 </ol>
 <p>了解了上面这几个<code>make</code>的特性，相信你已经能想象出很多很多的可能了。比如，一个简单的应用部署可以视为编译、打包、上传到目标机器、重启服务的过程。通过覆盖不同的变量，我们就能复用部署脚本，将应用部署到另一个环境。</p>
 <p>我曾经在多个多语言、多工具项目中采用make来进行自动化日常运维工作。几乎在每个项目中，它都给我带来了巨大的效率提升。</p>
 <p>即便我们工作在<code>windows</code>下，也无需担心，因为只要使用git，我们就有了一个随时可用的<code>bash</code>（<code>git-bash</code>），然后配以一个<code>windows</code>下编译的<code>make</code>工具，依赖的环境就搭建好了。这里我会给大家推荐用<a href="https://github.com/bmatzelle/gow" target="_blank" rel="noopener">gow</a>，它是一个相比Cygwin轻量得多的常用<code>gnu</code>工具包，只需要10MB左右的空间就够了。</p>
 <p>当然如果我们有条件使用<code>windows</code>提供的<code>linux</code>子系统，那就更简单了。</p>
-<h2 id="用DDD的思路来编写pipeline"><a href="#用DDD的思路来编写pipeline" class="headerlink" title="用DDD的思路来编写pipeline"></a>用DDD的思路来编写pipeline</h2><p>从DDD的角度来看，这里我们所要真正解决的问题是搭建一个CI/CD的<code>pipeline</code>，而Jenkins在这里扮演的是CI/CD的某种具体实现工具。如果条件允许，我们完全可以换用其他的具体实现工具来搭建这个<code>pipeline</code>。</p>
+<h2 id="用ddd的思路来编写pipeline"><a class="markdownIt-Anchor" href="#用ddd的思路来编写pipeline"></a> 用DDD的思路来编写pipeline</h2>
+<p>从DDD的角度来看，这里我们所要真正解决的问题是搭建一个CI/CD的<code>pipeline</code>，而Jenkins在这里扮演的是CI/CD的某种具体实现工具。如果条件允许，我们完全可以换用其他的具体实现工具来搭建这个<code>pipeline</code>。</p>
 <p>对于Jenkins这个第三方工具，使用DDD的思想，我们要如何处理呢？这里我们可以将其视为一个独立的领域，仔细思考就会发现，这种场景与我们在项目中去使用某个第三方服务是没什么两样的。</p>
 <p>为了确保我们的核心领域<code>pipeline</code>可以独立健康的发展，不为Jenkins这个第三方工具提供的功能所支配，我们首先需要从核心领域出发来定义业务流程。</p>
 <p>对于一个典型的<code>pipeline</code>，我们可以定义这样几个顺序执行的步骤：构建（编译、单元测试、打包） -&gt; 部署到开发环境 -&gt; 运行集成测试 -&gt; 部署到测试环境 -&gt; 部署到高级测试环境 -&gt; 部署到生产环境。</p>
@@ -480,12 +479,10 @@
 <p>于是这里我们可以抽象这样几个通用的领域能力：构建、运行集成测试、部署到某一环境。</p>
 <p>有了这些分析，我们就可以着手编写实现了。用我们上文提到的<code>Makefile</code>脚本来实现这里的领域能力，可以得到类似下面这样的脚本。</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">build:</span></span><br><span class="line">    mvn clean verify package</span><br><span class="line"></span><br><span class="line">TARGET_HOST=1.1.1.1</span><br><span class="line"><span class="section">deploy:</span></span><br><span class="line">    scp target/xxx.jar $&#123;TARGET_HOST&#125;:/app/</span><br><span class="line">    ssh $&#123;TARGET_HOST&#125; <span class="string">"cd /app/ &amp;&amp; sh restart.sh"</span></span><br><span class="line"></span><br><span class="line"><span class="section">deploy-dev:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.2</span><br><span class="line"></span><br><span class="line"><span class="section">deploy-qa:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.3</span><br><span class="line"></span><br><span class="line"><span class="section">integration-test:</span></span><br><span class="line">    cd src/test/integration &amp;&amp; npm run test</span><br></pre></td></tr></table></figure>
-
 <p>上述只是一个简单的示例，实际情况可能比这里复杂很多。比如我们可能需要将构建出来的文件发布到一个制品库里面，我们可能需要管理上传制品库的密码。比如我们可能是一个多模块的项目，需要支持多个模块的构建。还比如，我们可能要构建出来的是一个容器镜像。</p>
 <p>但是，无论怎样，通过从核心领域出发来考虑问题，我们定义了几个清晰且相对稳定的接口。</p>
 <p>有了上面实现的领域能力，下一步就是利用Jenkins制作一个的图形化流水线了。到这里再来看需要编写的<code>pipeline</code>代码，我们会发现需要写的<code>pipeline</code>代码已经变得很少了。主要的代码如下：</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(<span class="string">"build"</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">"make build"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">"deploy dev"</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">"make deploy-dev"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">"integration test"</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">"make integration-test"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><code>pipeline</code>代码的变少说明我们对第三方工具的依赖变弱了，这正是想要的效果。我们将主要的投资放在了核心域，而不是与第三方的集成。</p>
 <p>到这里我们的<code>pipeline</code>代码就基本编写完成了。回顾一下编写好的代码，我们可以发现这样一些好处：</p>
 <ul>
@@ -734,7 +731,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#适合实现日常编译运维工作的工具与语言"><span class="nav-number">1.</span> <span class="nav-text">适合实现日常编译运维工作的工具与语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用DDD的思路来编写pipeline"><span class="nav-number">2.</span> <span class="nav-text">用DDD的思路来编写pipeline</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#适合实现日常编译运维工作的工具与语言"><span class="nav-number">1.</span> <span class="nav-text"> 适合实现日常编译运维工作的工具与语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用ddd的思路来编写pipeline"><span class="nav-number">2.</span> <span class="nav-text"> 用DDD的思路来编写pipeline</span></a></li></ol></div>
             
 
           </div>

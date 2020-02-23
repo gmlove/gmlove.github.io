@@ -102,18 +102,18 @@
 
 
 
-<meta name="description" content="结构组织12345css |-[业务类文件夹] |-[通用类-样式重置].css |-[通用类-公用组件].css |-[通用类-ie兼容].css  css样式排序">
+<meta name="description" content="结构组织 12345css |-[业务类文件夹] |-[通用类-样式重置].css |-[通用类-公用组件].css |-[通用类-ie兼容].css  css样式排序">
 <meta name="keywords" content="CSS,Web">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSS最佳实践">
 <meta property="og:url" content="http://brightliao.me/2016/01/15/css-best-practise/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="结构组织12345css |-[业务类文件夹] |-[通用类-样式重置].css |-[通用类-公用组件].css |-[通用类-ie兼容].css  css样式排序">
+<meta property="og:description" content="结构组织 12345css |-[业务类文件夹] |-[通用类-样式重置].css |-[通用类-公用组件].css |-[通用类-ie兼容].css  css样式排序">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-14T05:28:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS最佳实践">
-<meta name="twitter:description" content="结构组织12345css |-[业务类文件夹] |-[通用类-样式重置].css |-[通用类-公用组件].css |-[通用类-ie兼容].css  css样式排序">
+<meta name="twitter:description" content="结构组织 12345css |-[业务类文件夹] |-[通用类-样式重置].css |-[通用类-公用组件].css |-[通用类-ie兼容].css  css样式排序">
 
 
 
@@ -434,10 +434,10 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h3 id="结构组织"><a href="#结构组织" class="headerlink" title="结构组织"></a>结构组织</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">css</span><br><span class="line"> |-[业务类文件夹]</span><br><span class="line"> |-[通用类-样式重置].css</span><br><span class="line"> |-[通用类-公用组件].css</span><br><span class="line"> |-[通用类-ie兼容].css</span><br></pre></td></tr></table></figure>
-
-<h3 id="css样式排序"><a href="#css样式排序" class="headerlink" title="css样式排序"></a>css样式排序</h3><a id="more"></a>
-
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h3 id="结构组织"><a class="markdownIt-Anchor" href="#结构组织"></a> 结构组织</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">css</span><br><span class="line"> |-[业务类文件夹]</span><br><span class="line"> |-[通用类-样式重置].css</span><br><span class="line"> |-[通用类-公用组件].css</span><br><span class="line"> |-[通用类-ie兼容].css</span><br></pre></td></tr></table></figure>
+<h3 id="css样式排序"><a class="markdownIt-Anchor" href="#css样式排序"></a> css样式排序</h3>
+<a id="more"></a>
 <ul>
 <li>显示与浮动（Display &amp; Flow）</li>
 <li>定位（Positioning）</li>
@@ -447,12 +447,14 @@
 <li>背景（Backgrounds）</li>
 <li>其他样式（Opacity、Cursors、Generated Content）</li>
 </ul>
-<h3 id="元素单位"><a href="#元素单位" class="headerlink" title="元素单位"></a>元素单位</h3><ol>
+<h3 id="元素单位"><a class="markdownIt-Anchor" href="#元素单位"></a> 元素单位</h3>
+<ol>
 <li>尽量设置相对尺寸</li>
 <li>只有在可预知元素尺寸的情况下使用绝对尺寸</li>
 <li>使用 rem 设置字体大小</li>
 </ol>
-<h3 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h3><p>六种基础选择器：</p>
+<h3 id="选择器"><a class="markdownIt-Anchor" href="#选择器"></a> 选择器</h3>
+<p>六种基础选择器：</p>
 <ul>
 <li>ID 选择器（如 <code>#page_content{}</code>）</li>
 <li>类选择器(如 <code>.page-content-title{}</code>)</li>
@@ -471,9 +473,10 @@
 <ol>
 <li><strong>CSS样式中尽量不要使用ID选择器。</strong></li>
 <li><strong>减少子选择器的层级。</strong></li>
-<li><strong>使用组合的CSS类选择器。</strong>面向对象编程一条原则：“多组合，少继承”。</li>
+<li>**使用组合的CSS类选择器。**面向对象编程一条原则：“多组合，少继承”。</li>
 </ol>
-<h3 id="CSS代码格式"><a href="#CSS代码格式" class="headerlink" title="CSS代码格式"></a>CSS代码格式</h3><ul>
+<h3 id="css代码格式"><a class="markdownIt-Anchor" href="#css代码格式"></a> CSS代码格式</h3>
+<ul>
 <li>用两个空格来代替制表符（tab） – 这是唯一能保证在所有环境下获得一致展现的方法。</li>
 <li>为选择器分组时，将单独的选择器单独放在一行。</li>
 <li>为了代码的易读性，在每个声明块的左花括号前添加一个空格。</li>
@@ -485,10 +488,12 @@
 <li>不要在 rgb()、rgba()、hsl()、hsla() 或 rect()值的内部的逗号后面插入空格。这样利于从多个属性值（既加逗号也加空格）中区分多个颜色值（只加逗号，不加空格）。</li>
 <li>对于属性值或颜色参数，省略小于 1 的小数前面的 0（例如，.5 代替 0.5；-.5px 代替 -0.5px）。</li>
 <li>十六进制值应该全部小写，例如，#fff。在扫描文档时，小写字符易于分辨，因为他们的形式更易于区分。</li>
-<li>尽量使用简写形式的十六进制值，例如，用 #fff 代替 #ffffff。<br>为选择器中的属性添加双引号，例如，input[type=”text”]* 。只有在某些情况下是可选的，但是，为了代码的一致性，建议都加上双引号。</li>
+<li>尽量使用简写形式的十六进制值，例如，用 #fff 代替 #ffffff。<br>
+为选择器中的属性添加双引号，例如，input[type=“text”]* 。只有在某些情况下是可选的，但是，为了代码的一致性，建议都加上双引号。</li>
 <li>避免为 0 值指定单位，例如，用 margin: 0; 代替 margin: 0px;。</li>
 </ul>
-<h3 id="css实践"><a href="#css实践" class="headerlink" title="css实践"></a>css实践</h3><p>class命名:</p>
+<h3 id="css实践"><a class="markdownIt-Anchor" href="#css实践"></a> css实践</h3>
+<p>class命名:</p>
 <ul>
 <li>class 名称中只能出现小写字符和破折号</li>
 <li>避免过度任意的简写。.btn 代表 button，但是 .s 不能表达任何意思。</li>
@@ -732,7 +737,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构组织"><span class="nav-number">1.</span> <span class="nav-text">结构组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css样式排序"><span class="nav-number">2.</span> <span class="nav-text">css样式排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素单位"><span class="nav-number">3.</span> <span class="nav-text">元素单位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择器"><span class="nav-number">4.</span> <span class="nav-text">选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS代码格式"><span class="nav-number">5.</span> <span class="nav-text">CSS代码格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css实践"><span class="nav-number">6.</span> <span class="nav-text">css实践</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构组织"><span class="nav-number">1.</span> <span class="nav-text"> 结构组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css样式排序"><span class="nav-number">2.</span> <span class="nav-text"> css样式排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素单位"><span class="nav-number">3.</span> <span class="nav-text"> 元素单位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择器"><span class="nav-number">4.</span> <span class="nav-text"> 选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css代码格式"><span class="nav-number">5.</span> <span class="nav-text"> CSS代码格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css实践"><span class="nav-number">6.</span> <span class="nav-text"> css实践</span></a></li></ol></div>
             
 
           </div>

@@ -102,13 +102,13 @@
 
 
 
-<meta name="description" content="今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。 TensorFlow目前在我司的技术雷达上面处于assess阶段。 TensorFlow是什么TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器">
+<meta name="description" content="今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。 TensorFlow目前在我司的技术雷达上面处于assess阶段。  TensorFlow是什么 TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个">
 <meta name="keywords" content="tensorflow,AI,Machine Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tensorflow一瞥">
 <meta property="og:url" content="http://brightliao.me/2016/11/27/a-pick-into-tensorflow/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。 TensorFlow目前在我司的技术雷达上面处于assess阶段。 TensorFlow是什么TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器">
+<meta property="og:description" content="今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。 TensorFlow目前在我司的技术雷达上面处于assess阶段。  TensorFlow是什么 TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://brightliao.me/attaches/2016/2016-11-27-a-pick-into-tensorflow/tf-googletrend.png">
 <meta property="og:image" content="http://brightliao.me/attaches/2016/2016-11-27-a-pick-into-tensorflow/mnist-overview.png">
@@ -117,7 +117,7 @@
 <meta property="og:updated_time" content="2016-12-14T00:58:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tensorflow一瞥">
-<meta name="twitter:description" content="今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。 TensorFlow目前在我司的技术雷达上面处于assess阶段。 TensorFlow是什么TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器">
+<meta name="twitter:description" content="今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。 TensorFlow目前在我司的技术雷达上面处于assess阶段。  TensorFlow是什么 TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个">
 <meta name="twitter:image" content="http://brightliao.me/attaches/2016/2016-11-27-a-pick-into-tensorflow/tf-googletrend.png">
 
 
@@ -441,27 +441,36 @@
       
         <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>今天跟大家分享一下时下非常流行的一个机器学习框架：TensorFlow。希望大家可以一瞥TensorFlow的易用性和强大功能。</p>
 <p>TensorFlow目前在我司的技术雷达上面处于assess阶段。</p>
-<h2 id="TensorFlow是什么"><a href="#TensorFlow是什么" class="headerlink" title="TensorFlow是什么"></a>TensorFlow是什么</h2><p>TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器学习系统。TensorFlow作为github上面的一个很火的开源项目，它的第一个提交是在2015年11月。到现在也不过刚好一年时间。</p>
+<h2 id="tensorflow是什么"><a class="markdownIt-Anchor" href="#tensorflow是什么"></a> TensorFlow是什么</h2>
+<p>TensorFlow诞生于Google公司Google Brain项目。其前身是一个名为DistBelief的系统，DistBelief是Google内部使用非常广泛的一个机器学习系统。TensorFlow作为github上面的一个很火的开源项目，它的第一个提交是在2015年11月。到现在也不过刚好一年时间。</p>
 <p>TensorFlow提供的API库可以用于编写富有表现力的程序。同时TensorFlow底层使用c++实现，其性能也是不错的。</p>
 <p>TensorFlow在系统设计上使用一个有状态的数据流图来描述计算。使用TensorFlow时，需要先定义好计算图，以便TensorFlow可以在内部进行分布式的调度，然后一般会使用向计算图填充数据的形式进行迭代计算。</p>
 <p>TensorFlow支持的系统非常广泛，从移动设备到桌面电脑再到大型分布式系统，从CPU到GPU，TensorFlow都提供了支持。</p>
 <p>TensorFlow为了便于高效率的开发，同时也是顺应社区的技术潮流，提供的是Python的API。同时，也可以直接使用C++进行开发。目前还有Rust，Haskell的方言支持。</p>
 <a id="more"></a>
-
-<h2 id="为什么要用TensorFlow"><a href="#为什么要用TensorFlow" class="headerlink" title="为什么要用TensorFlow"></a>为什么要用TensorFlow</h2><h3 id="良好而活跃的社区"><a href="#良好而活跃的社区" class="headerlink" title="良好而活跃的社区"></a>良好而活跃的社区</h3><h4 id="丰富的入门教程"><a href="#丰富的入门教程" class="headerlink" title="丰富的入门教程"></a>丰富的入门教程</h4><p>TensorFlow有很多Tutorial入门教程，大大降低了入门的门槛。官方的教程已经不错了，社区技术爱好者们还贡献了很多相关的教程。我个人用过的教程，可以列举如下：</p>
+<h2 id="为什么要用tensorflow"><a class="markdownIt-Anchor" href="#为什么要用tensorflow"></a> 为什么要用TensorFlow</h2>
+<h3 id="良好而活跃的社区"><a class="markdownIt-Anchor" href="#良好而活跃的社区"></a> 良好而活跃的社区</h3>
+<h4 id="丰富的入门教程"><a class="markdownIt-Anchor" href="#丰富的入门教程"></a> 丰富的入门教程</h4>
+<p>TensorFlow有很多Tutorial入门教程，大大降低了入门的门槛。官方的教程已经不错了，社区技术爱好者们还贡献了很多相关的教程。我个人用过的教程，可以列举如下：</p>
 <ul>
 <li><a href="https://www.tensorflow.org/versions/r0.11/tutorials/index.html" target="_blank" rel="noopener">官方教程</a></li>
 <li>更有深度的<a href="https://github.com/pkmital/tensorflow_tutorials" target="_blank" rel="noopener">MOOC教程</a></li>
 <li><a href="https://classroom.udacity.com/courses/ud730/" target="_blank" rel="noopener">Google在Udacity上面做的教程</a></li>
 <li><a href="https://docs.google.com/presentation/d/1TVixw6ItiZ8igjp6U17tcgoFrLSaHWQmMOwjlgQY9co/pub?slide=id.g140797b42d_0_60" target="_blank" rel="noopener">Tensorflow and deep learning, without a PhD</a></li>
 </ul>
-<h4 id="大量现成的机器学习模型"><a href="#大量现成的机器学习模型" class="headerlink" title="大量现成的机器学习模型"></a>大量现成的机器学习模型</h4><p>Google内部使用TensorFlow实现了很多性能很好的机器学习模型（这里的性能指模型表现好，如分类错误率低），这些模型也都在<a href="https://github.com/tensorflow/models" target="_blank" rel="noopener">github</a>上面开源了出来。如为图片生成标题的模型，识别街道名称的模型等等。我们可以方便的阅读学习这些模型，同时也可以作为一个很好的起点，用于研究设计自己的模型。</p>
-<h4 id="提供了更简单的机器学习的接口"><a href="#提供了更简单的机器学习的接口" class="headerlink" title="提供了更简单的机器学习的接口"></a>提供了更简单的机器学习的接口</h4><p>TensorFlow同时提供了一个<a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn" target="_blank" rel="noopener">简单的机器学习接口</a>。几行代码即可完成模型训练和使用。</p>
-<h4 id="丰富的周边工具"><a href="#丰富的周边工具" class="headerlink" title="丰富的周边工具"></a>丰富的周边工具</h4><p>TensorFlow还提供了用于可视化参数的TensorBoard，大大方便了模型的调优工作。同时还提供了Caffe到TensorFlow模型转换的工具。</p>
-<h3 id="TensorFlow已经在业界广泛使用。"><a href="#TensorFlow已经在业界广泛使用。" class="headerlink" title="TensorFlow已经在业界广泛使用。"></a>TensorFlow已经在业界广泛使用。</h3><p>众所周知的如Google自己，京东，Uber，DeepMind，SnapChat，Twitter等等，都在公司内部使用这个框架进行机器学习的研究。</p>
-<h3 id="Google趋势表现抢眼"><a href="#Google趋势表现抢眼" class="headerlink" title="Google趋势表现抢眼"></a>Google趋势表现抢眼</h3><p>从Google趋势来看，TensorFlow也已成为当前非常流行的机器学习框架了。</p>
+<h4 id="大量现成的机器学习模型"><a class="markdownIt-Anchor" href="#大量现成的机器学习模型"></a> 大量现成的机器学习模型</h4>
+<p>Google内部使用TensorFlow实现了很多性能很好的机器学习模型（这里的性能指模型表现好，如分类错误率低），这些模型也都在<a href="https://github.com/tensorflow/models" target="_blank" rel="noopener">github</a>上面开源了出来。如为图片生成标题的模型，识别街道名称的模型等等。我们可以方便的阅读学习这些模型，同时也可以作为一个很好的起点，用于研究设计自己的模型。</p>
+<h4 id="提供了更简单的机器学习的接口"><a class="markdownIt-Anchor" href="#提供了更简单的机器学习的接口"></a> 提供了更简单的机器学习的接口</h4>
+<p>TensorFlow同时提供了一个<a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn" target="_blank" rel="noopener">简单的机器学习接口</a>。几行代码即可完成模型训练和使用。</p>
+<h4 id="丰富的周边工具"><a class="markdownIt-Anchor" href="#丰富的周边工具"></a> 丰富的周边工具</h4>
+<p>TensorFlow还提供了用于可视化参数的TensorBoard，大大方便了模型的调优工作。同时还提供了Caffe到TensorFlow模型转换的工具。</p>
+<h3 id="tensorflow已经在业界广泛使用"><a class="markdownIt-Anchor" href="#tensorflow已经在业界广泛使用"></a> TensorFlow已经在业界广泛使用。</h3>
+<p>众所周知的如Google自己，京东，Uber，DeepMind，SnapChat，Twitter等等，都在公司内部使用这个框架进行机器学习的研究。</p>
+<h3 id="google趋势表现抢眼"><a class="markdownIt-Anchor" href="#google趋势表现抢眼"></a> Google趋势表现抢眼</h3>
+<p>从Google趋势来看，TensorFlow也已成为当前非常流行的机器学习框架了。</p>
 <p><img src="/attaches/2016/2016-11-27-a-pick-into-tensorflow/tf-googletrend.png" alt="TensorFlow in Google Trend"></p>
-<h2 id="一个简单的例子：在TensorFlow中使用Logistic-Regression来进行图片分类"><a href="#一个简单的例子：在TensorFlow中使用Logistic-Regression来进行图片分类" class="headerlink" title="一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类"></a>一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类</h2><p>下面用一个简单的例子演示一下TensorFlow的使用。这个例子中我们会对MNIST手写数字图片库进行分类。</p>
+<h2 id="一个简单的例子在tensorflow中使用logistic-regression来进行图片分类"><a class="markdownIt-Anchor" href="#一个简单的例子在tensorflow中使用logistic-regression来进行图片分类"></a> 一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类</h2>
+<p>下面用一个简单的例子演示一下TensorFlow的使用。这个例子中我们会对MNIST手写数字图片库进行分类。</p>
 <p>MNIST数据集的是一个非常基础而简单的用于机器学习的数据集。下载好这个数据集之后，可以看到其包含的图片如下（一个数字对应一张图片）：</p>
 <p><img src="/attaches/2016/2016-11-27-a-pick-into-tensorflow/mnist-overview.png" alt="MNIST Overview"></p>
 <p>我们将要使用的分类模型也是基础的Logistic Regression模型。</p>
@@ -470,7 +479,6 @@
 <p><img src="/attaches/2016/2016-11-27-a-pick-into-tensorflow/math.png" alt="Math"></p>
 <p>模型对应的核心代码TensorFlow代码就是：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># Describe Graph</span></span><br><span class="line"></span><br><span class="line">Y = tf.nn.softmax(tf.matmul(XX, W) + b)</span><br><span class="line">cross_entropy = -tf.reduce_mean(Y_ * tf.log(Y)) * <span class="number">1000.0</span>  <span class="comment"># normalized for batches of 100 images</span></span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.005</span>).minimize(cross_entropy)</span><br><span class="line"></span><br><span class="line">predict = tf.argmax(tf.nn.softmax(tf.matmul(X, W) + b), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Train the model</span></span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(tf.initialize_all_variables())</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>):</span><br><span class="line">    batch_X, batch_Y = mnist.train.next_batch(<span class="number">100</span>)</span><br><span class="line">    c = sess.run([cross_entropy], feed_dict=&#123;X: batch_X, Y_: batch_Y&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Predict</span></span><br><span class="line">labels = sess.run([predict], feed_dict=&#123;...&#125;)</span><br></pre></td></tr></table></figure>
-
 <p>完整的代码可以参考这里的<a href="https://github.com/martin-gorner/tensorflow-mnist-tutorial.git" target="_blank" rel="noopener">tutorial</a></p>
 
       
@@ -704,7 +712,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow是什么"><span class="nav-number">1.</span> <span class="nav-text">TensorFlow是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用TensorFlow"><span class="nav-number">2.</span> <span class="nav-text">为什么要用TensorFlow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#良好而活跃的社区"><span class="nav-number">2.1.</span> <span class="nav-text">良好而活跃的社区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#丰富的入门教程"><span class="nav-number">2.1.1.</span> <span class="nav-text">丰富的入门教程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大量现成的机器学习模型"><span class="nav-number">2.1.2.</span> <span class="nav-text">大量现成的机器学习模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提供了更简单的机器学习的接口"><span class="nav-number">2.1.3.</span> <span class="nav-text">提供了更简单的机器学习的接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#丰富的周边工具"><span class="nav-number">2.1.4.</span> <span class="nav-text">丰富的周边工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorFlow已经在业界广泛使用。"><span class="nav-number">2.2.</span> <span class="nav-text">TensorFlow已经在业界广泛使用。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Google趋势表现抢眼"><span class="nav-number">2.3.</span> <span class="nav-text">Google趋势表现抢眼</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单的例子：在TensorFlow中使用Logistic-Regression来进行图片分类"><span class="nav-number">3.</span> <span class="nav-text">一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tensorflow是什么"><span class="nav-number">1.</span> <span class="nav-text"> TensorFlow是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用tensorflow"><span class="nav-number">2.</span> <span class="nav-text"> 为什么要用TensorFlow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#良好而活跃的社区"><span class="nav-number">2.1.</span> <span class="nav-text"> 良好而活跃的社区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#丰富的入门教程"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 丰富的入门教程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大量现成的机器学习模型"><span class="nav-number">2.1.2.</span> <span class="nav-text"> 大量现成的机器学习模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提供了更简单的机器学习的接口"><span class="nav-number">2.1.3.</span> <span class="nav-text"> 提供了更简单的机器学习的接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#丰富的周边工具"><span class="nav-number">2.1.4.</span> <span class="nav-text"> 丰富的周边工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tensorflow已经在业界广泛使用"><span class="nav-number">2.2.</span> <span class="nav-text"> TensorFlow已经在业界广泛使用。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#google趋势表现抢眼"><span class="nav-number">2.3.</span> <span class="nav-text"> Google趋势表现抢眼</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单的例子在tensorflow中使用logistic-regression来进行图片分类"><span class="nav-number">3.</span> <span class="nav-text"> 一个简单的例子：在TensorFlow中使用Logistic Regression来进行图片分类</span></a></li></ol></div>
             
 
           </div>

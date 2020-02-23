@@ -102,13 +102,13 @@
 
 
 
-<meta name="description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。 我们的目标Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球">
+<meta name="description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。  我们的目标 Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒">
 <meta name="keywords" content="tensorflow,AI,Machine Learning,Reinforcement Learning,DQN,Deep Reinforcement Learning,DeepQ Network">
 <meta property="og:type" content="article">
 <meta property="og:title" content="让机器自己玩游戏">
 <meta property="og:url" content="http://brightliao.me/2016/12/05/let-machine-play-games/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。 我们的目标Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球">
+<meta property="og:description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。  我们的目标 Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png">
 <meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/breakout-in-openai.png">
@@ -131,7 +131,7 @@
 <meta property="og:updated_time" content="2016-12-14T00:58:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="让机器自己玩游戏">
-<meta name="twitter:description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。 我们的目标Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球">
+<meta name="twitter:description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。  我们的目标 Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒">
 <meta name="twitter:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png">
 
 
@@ -454,16 +454,16 @@
 
       
         <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。</p>
-<h2 id="我们的目标"><a href="#我们的目标" class="headerlink" title="我们的目标"></a>我们的目标</h2><p>Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球的玩法的一个游戏，与乒乓球不同的是，这个游戏可以由单人控制。相信只要是80后，肯定都玩过这个游戏。</p>
+<h2 id="我们的目标"><a class="markdownIt-Anchor" href="#我们的目标"></a> 我们的目标</h2>
+<p>Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒乓球的玩法的一个游戏，与乒乓球不同的是，这个游戏可以由单人控制。相信只要是80后，肯定都玩过这个游戏。</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png" alt="Break out game"></p>
 <a id="more"></a>
-
-<h2 id="OpenAI-Environment"><a href="#OpenAI-Environment" class="headerlink" title="OpenAI Environment"></a>OpenAI Environment</h2><p>为了实现我们的机器学习算法，我们是否要自己实现一个这样的游戏呢？当然不必。</p>
+<h2 id="openai-environment"><a class="markdownIt-Anchor" href="#openai-environment"></a> OpenAI Environment</h2>
+<p>为了实现我们的机器学习算法，我们是否要自己实现一个这样的游戏呢？当然不必。</p>
 <p>在去年11月的时候，由特斯拉汽车的创始人也是spaceX的创始人Elon Musk带头发起了一个叫OpenAI的项目，这个项目主要的目的是降低机器学习的门槛，让人工智能更容易上手和实现。于是他们做了一个开发库，可以方便开发者开发强化学习算法和比较、分享算法的结果。而这个项目在今年（2016）4月份就发布了第一个beta版本。</p>
 <p>使用这个项目提供的开发库，我们可以方便的运行breakout这个游戏，并采集到相关的游戏数据。</p>
 <p>通过下面的代码我们就可以运行一个breakout的环境，并随机进行操作来玩游戏。这里的breakout游戏每一局有5条命，分数累加。当球碰到顶上的墙壁砖块之后，砖块被击碎而消失，分数加一。虽然这样玩出来的得分是很低的，但是我们已经有了一个基础。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line">env = gym.make(<span class="string">'Breakout-v0'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i_episode <span class="keyword">in</span> range(<span class="number">20</span>):</span><br><span class="line">  observation = env.reset()</span><br><span class="line">  <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    env.render()</span><br><span class="line">    action = env.action_space.sample()</span><br><span class="line">    observation, reward, done, info = env.step(action)</span><br><span class="line">    <span class="keyword">if</span> done:</span><br><span class="line">      print(<span class="string">'Episode finished after &#123;&#125; timesteps'</span>.format(t + <span class="number">1</span>))</span><br><span class="line">      <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/breakout-in-openai.png" alt="Breakout in OpenAI"></p>
 <p>从上面的代码中，我们可以看到gym给我们提供的东西有：</p>
 <ul>
@@ -481,11 +481,14 @@
 <p>我们要解决的问题是什么呢？</p>
 <p>问题就是，为了获取最大得分，我们如何在每一步选择正确的操作，即如何生成一系列的操作。关于操作的选择，就是策略。前面代码里面其实也是有策略的，我们的策略就是随机策略。我们的问题其实就是求最佳策略。</p>
 <p>下面将向大家介绍强化学习的相关理论知识。</p>
-<h2 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h2><h3 id="马尔可夫决策过程"><a href="#马尔可夫决策过程" class="headerlink" title="马尔可夫决策过程"></a>马尔可夫决策过程</h3><p>请看这个图：</p>
+<h2 id="强化学习"><a class="markdownIt-Anchor" href="#强化学习"></a> 强化学习</h2>
+<h3 id="马尔可夫决策过程"><a class="markdownIt-Anchor" href="#马尔可夫决策过程"></a> 马尔可夫决策过程</h3>
+<p>请看这个图：</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/mdp.png" alt="Markov Decision Process"></p>
 <p>这张图里面的过程我们就将其称为马尔可夫决策过程。</p>
 <p>在马尔可夫决策过程中，有一个agent，它可以观察environment，并操作environment，environment在接受操作之后，会按照一定概率产生一个状态改变，并可能会有给agent奖励。当然environment可能自己有自己的运作规则，自己也会不停的产生状态改变。</p>
-<h3 id="数学模型"><a href="#数学模型" class="headerlink" title="数学模型"></a>数学模型</h3><p>我们可以定义马尔可夫决策过程中的一些概念如下：</p>
+<h3 id="数学模型"><a class="markdownIt-Anchor" href="#数学模型"></a> 数学模型</h3>
+<p>我们可以定义马尔可夫决策过程中的一些概念如下：</p>
 <ul>
 <li>S: 一个所有可能的状态集合，在breakout这个游戏中，状态就是屏幕的像素值集合</li>
 <li>A: 一个所有可能的操作的集合，在breakout这个游戏中，就是action_space中指明的6种操作</li>
@@ -499,7 +502,7 @@
 <p>对某一局游戏，假设我们有一系列状态、动作和奖励，事实上我们可以定义状态和动作的价值如下：</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/state-action-value-formula.png" alt="state action value formula"></p>
 <p>从这个公式中，我们可以看出，当前状态和动作的价值不仅跟当前的价值R0相关，还跟将来的价值相关。比如买股票，你今天的投资价值，不仅仅取决于今天股票的涨幅，之后每一天的增长都是今天的投资所决定的。所以我们可以知道，当前的状态和动作的价值是当前得到的奖励和将来的潜在奖励的和。</p>
-<p>公式中还有一个参数γ，表示折扣因子。为什么要这个折扣因子呢？经济学里面有一句话”A dollar today is worth more than a dollar tomorrow!”，就是说今天的一美金比明天的一美金更值钱。我们可以这样理解，明天的价值是一个估计值，既然是估计值，那么就是不准确的，很有可能根本没这么多。对于钱而言，明天的钱还会贬值呢。所以在这个公式中，我们加上这个折扣因子，时间往后的价值需要乘以一个折扣因子的乘方，也就是说时间越久的价值对当前的价值贡献越小。</p>
+<p>公式中还有一个参数γ，表示折扣因子。为什么要这个折扣因子呢？经济学里面有一句话&quot;A dollar today is worth more than a dollar tomorrow!&quot;，就是说今天的一美金比明天的一美金更值钱。我们可以这样理解，明天的价值是一个估计值，既然是估计值，那么就是不准确的，很有可能根本没这么多。对于钱而言，明天的钱还会贬值呢。所以在这个公式中，我们加上这个折扣因子，时间往后的价值需要乘以一个折扣因子的乘方，也就是说时间越久的价值对当前的价值贡献越小。</p>
 <p>如果我们只对状态价值进行建模，我们可以得到这样的公式：</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/state-value-formula.png" alt="state value formula"></p>
 <p>如何衡量一个状态的overall的价值呢？我们可以对每一种可能的游戏局求平均，也就是上面的公式的期望值。</p>
@@ -520,12 +523,14 @@
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/q-value-formula.png" alt="Q value formula"></p>
 <p>写成迭代形式，也就是Q值的Bellman就是：</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/q-value-bellman-formula.png" alt="Q value bellman formula"></p>
-<h3 id="迭代算法"><a href="#迭代算法" class="headerlink" title="迭代算法"></a>迭代算法</h3><p>下面我们来看如何计算得到这个最佳Q值。</p>
+<h3 id="迭代算法"><a class="markdownIt-Anchor" href="#迭代算法"></a> 迭代算法</h3>
+<p>下面我们来看如何计算得到这个最佳Q值。</p>
 <p>事实上我们只需要首先初始化每一个状态对应的价值为0，然后不停的玩游戏，进行迭代更新直到收敛就可以了。迭代算法如下：</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/q-value-iteration-algorithm.png" alt="Q Value Iteration algorithm"></p>
 <p>对于一个状态空间比较小的MDP问题而言，我们直接用一个表来保存q值，然后迭代更新这个值就可以得到我们的最佳策略。这一算法是非常有效的。我这里不打算仔细分析这个算法。因为这个算法无法解决我们今天的问题。我们今天的问题状态空间太大了。所有可能的状态有<code>255^(260*160*3)</code>这么多种。</p>
 <p>事实上，q值即是关于当前状态和动作的一个函数。既然这样，我们就可以想了，我们能不能用一个深度学习模型来模拟这个函数呢？当然可以，采用深度学习模型，我们可以将状态映射到一个动作价值上去。这就是深度强化学习啦！</p>
-<h2 id="深度强化学习"><a href="#深度强化学习" class="headerlink" title="深度强化学习"></a>深度强化学习</h2><p>深度强化学习这个模型很早就有人研究，但是最早产生广泛影响力的是DeepMind公司在2013年发表的一篇论文。由于这篇论文的影响力，DeepMind也被google以数十亿美金收购。后来在2015年DeepMind进一步研究了这个模型，发表了一篇更清楚的论文：Human-level control through deep reinforcement learning。这篇论文就是讨论这个模型的。</p>
+<h2 id="深度强化学习"><a class="markdownIt-Anchor" href="#深度强化学习"></a> 深度强化学习</h2>
+<p>深度强化学习这个模型很早就有人研究，但是最早产生广泛影响力的是DeepMind公司在2013年发表的一篇论文。由于这篇论文的影响力，DeepMind也被google以数十亿美金收购。后来在2015年DeepMind进一步研究了这个模型，发表了一篇更清楚的论文：Human-level control through deep reinforcement learning。这篇论文就是讨论这个模型的。</p>
 <p>这个模型使用的就是Q值迭代和神经网络的组合，所以算法全称为Deep Q Network，简称就是DQN。</p>
 <p>核心算法如下：</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/dqn-algorithm-by-deepmind.png" alt="DQN Algorithm by DeepMind"></p>
@@ -542,28 +547,28 @@
 <p>关于卷积神经网络的资料，请大家参考斯坦福大学的cs231n课程。</p>
 <p>我们只看一下这里的损失函数。回想一下我们之前的Q值迭代公式。从公式中我们可以看出，我们的最佳Q值就是最大的下一步的最佳Q值加上执行动作之后立即得到的奖励的均值。事实上当模型最终收敛时，平均起来看，当前时刻的Q值就等于下一步的Q值加上执行动作之后立即得到的奖励。于是我们只需要让当前时刻的Q值去逼近下一时刻的Q值和立即奖励之和。于是就有了我们的损失函数：</p>
 <p><img src="/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-loss-function.png" alt="DQN Network Loss Function"></p>
-<h3 id="探索"><a href="#探索" class="headerlink" title="探索"></a>探索</h3><p>在上面的伪代码中还可以看到，在玩游戏时，我们会以一定概率随机选择action进行执行。为什么需要这样呢？</p>
+<h3 id="探索"><a class="markdownIt-Anchor" href="#探索"></a> 探索</h3>
+<p>在上面的伪代码中还可以看到，在玩游戏时，我们会以一定概率随机选择action进行执行。为什么需要这样呢？</p>
 <p>大家可以想象一下，如果没有这个随机，会出现什么情况？在我们的算法迭代一段时间之后，算法发现了一个不错的策略，之后，可能就一直按照这个策略来生成动作了。这是有问题的，因为可能有很多潜在的表现更好的策略我们可能根本没有尝试过。加上这个随机过程，就使得我们有了探索策略空间的能力。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>接下来我们来分析代码。</p>
+<h2 id="代码"><a class="markdownIt-Anchor" href="#代码"></a> 代码</h2>
+<p>接下来我们来分析代码。</p>
 <p>这里我们使用tensorflow框架来实现这个算法，创建网络的代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_dqn_network</span><span class="params">(self)</span>:</span></span><br><span class="line">  self.w = &#123;&#125;</span><br><span class="line">  self.t_w = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  initializer = tf.truncated_normal_initializer(<span class="number">0</span>, <span class="number">0.02</span>)</span><br><span class="line">  activation_fn = tf.nn.relu</span><br><span class="line"></span><br><span class="line">  self.l1, self.w[<span class="string">'l1_w'</span>], self.w[<span class="string">'l1_b'</span>] = conv2d(self.s_t,</span><br><span class="line">    <span class="number">32</span>, [<span class="number">8</span>, <span class="number">8</span>], [<span class="number">4</span>, <span class="number">4</span>], initializer, activation_fn, self.cnn_format, name=<span class="string">'l1'</span>)</span><br><span class="line">  self.l2, self.w[<span class="string">'l2_w'</span>], self.w[<span class="string">'l2_b'</span>] = conv2d(self.l1,</span><br><span class="line">    <span class="number">64</span>, [<span class="number">4</span>, <span class="number">4</span>], [<span class="number">2</span>, <span class="number">2</span>], initializer, activation_fn, self.cnn_format, name=<span class="string">'l2'</span>)</span><br><span class="line">  self.l3, self.w[<span class="string">'l3_w'</span>], self.w[<span class="string">'l3_b'</span>] = conv2d(self.l2,</span><br><span class="line">    <span class="number">64</span>, [<span class="number">3</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">1</span>], initializer, activation_fn, self.cnn_format, name=<span class="string">'l3'</span>)</span><br><span class="line"></span><br><span class="line">  shape = self.l3.get_shape().as_list()</span><br><span class="line">  self.l3_flat = tf.reshape(self.l3, [<span class="number">-1</span>, reduce(<span class="keyword">lambda</span> x, y: x * y, shape[<span class="number">1</span>:])])</span><br><span class="line"></span><br><span class="line">  self.l4, self.w[<span class="string">'l4_w'</span>], self.w[<span class="string">'l4_b'</span>] = linear(self.l3_flat, <span class="number">512</span>,</span><br><span class="line">    activation_fn=activation_fn, name=<span class="string">'l4'</span>)</span><br><span class="line">  self.q, self.w[<span class="string">'q_w'</span>], self.w[<span class="string">'q_b'</span>] = linear(self.l4, self.env.action_size, name=<span class="string">'q'</span>)</span><br></pre></td></tr></table></figure>
-
 <p>网络一共四层，和前面的图里面的一一对应。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_optimizer</span><span class="params">(self)</span>:</span></span><br><span class="line">  self.target_q_t = tf.placeholder(<span class="string">'float32'</span>, [<span class="literal">None</span>], name=<span class="string">'target_q_t'</span>)</span><br><span class="line">  self.action = tf.placeholder(<span class="string">'int64'</span>, [<span class="literal">None</span>], name=<span class="string">'action'</span>)</span><br><span class="line"></span><br><span class="line">  action_one_hot = tf.one_hot(self.action, self.env.action_size, <span class="number">1.0</span>, <span class="number">0.0</span>,</span><br><span class="line">    name=<span class="string">'action_one_hot'</span>)</span><br><span class="line">  q_acted = tf.reduce_sum(self.q * action_one_hot, reduction_indices=<span class="number">1</span>,</span><br><span class="line">    name=<span class="string">'q_acted'</span>)</span><br><span class="line"></span><br><span class="line">  self.delta = self.target_q_t - q_acted</span><br><span class="line">  self.loss = tf.reduce_mean(tf.square(self.delta), name=<span class="string">'loss'</span>)</span><br><span class="line"></span><br><span class="line">  self.optim = tf.train.RMSPropOptimizer(</span><br><span class="line">    self.learning_rate_op, momentum=<span class="number">0.95</span>, epsilon=<span class="number">0.01</span>).minimize(self.loss)</span><br></pre></td></tr></table></figure>
-
 <p>以上代码是关于loss函数的计算。可以看到，我们首先通过<code>self.q * action_one_hot</code>相乘得到当前action对应的q值，然后通过reduce_sum将其转化为一个数值。loss函数就是它和真实值的平方差。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">observe</span><span class="params">(self, screen, reward, action, terminal)</span>:</span></span><br><span class="line">  reward = max(self.min_reward, min(self.max_reward, reward))</span><br><span class="line"></span><br><span class="line">  self.history.add(screen)</span><br><span class="line">  self.memory.add(screen, reward, action, terminal)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> self.step &gt; self.learn_start:</span><br><span class="line">    <span class="keyword">if</span> self.step % self.train_frequency == <span class="number">0</span>:</span><br><span class="line">      self.q_learning_mini_batch()</span><br></pre></td></tr></table></figure>
-
 <p>以上代码是自动玩游戏时的操作。可以看到，当游戏状态迁移之后，我们会保存当前的游戏数据。并在玩的局数到一定大小之后，就开始迭代更新网络。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">q_learning_mini_batch</span><span class="params">(self)</span>:</span></span><br><span class="line">  s_t, action, reward, s_t_plus_1, terminal = self.memory.sample()</span><br><span class="line">  q_t_plus_1 = self.target_q.eval(&#123;self.target_s_t: s_t_plus_1&#125;)</span><br><span class="line"></span><br><span class="line">  terminal = np.array(terminal) + <span class="number">0.</span></span><br><span class="line">  max_q_t_plus_1 = np.max(q_t_plus_1, axis=<span class="number">1</span>)</span><br><span class="line">  target_q_t = (<span class="number">1.</span> - terminal) * self.discount * max_q_t_plus_1 + reward</span><br><span class="line"></span><br><span class="line">  _, q_t, loss, summary_str = self.sess.run(</span><br><span class="line">    [self.optim, self.q, self.loss, self.q_summary], &#123;</span><br><span class="line">    self.target_q_t: target_q_t,</span><br><span class="line">    self.action: action,</span><br><span class="line">    self.s_t: s_t</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
-
 <p>以上代码显示了网络更新过程。我们先根据当前模型计算出下一时刻的q值，然后在discount之后计算和当前的奖励之和，作为目标q值，这个值将被传入optimizer计算图进行计算。</p>
 <p>完整的详细的代码请参考这里：<a href="https://github.com/devsisters/DQN-tensorflow" target="_blank" rel="noopener">https://github.com/devsisters/DQN-tensorflow</a></p>
 <p>需要说明的是，这里的模型收敛是很慢的，通常需要10-30个小时才能收敛到一个好的状态。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们看到了深度神经网络和强化学习结合起来的例子。这个例子的实现，可以给我们很大的启示。看起来DL+RL让机器拥有了某种智能。这就是AI。可以说深度学习和和强化学习就实现了AI。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>今天我们看到了深度神经网络和强化学习结合起来的例子。这个例子的实现，可以给我们很大的启示。看起来DL+RL让机器拥有了某种智能。这就是AI。可以说深度学习和和强化学习就实现了AI。</p>
 <p>当前有很多对这个模型的优化措施，包括加快泛化速度，以及让一个游戏的学习结果泛化到其他游戏中去等。是当前的一大热门模型。</p>
 <p>关于强化学习还有很多理论知识未涉及，如果想要完全理解文章里面的公式及算法，请参考伯克利大学的强化学习课程。</p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>本文参考资料都来自于互联网，主要的资料如下：</p>
+<h3 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h3>
+<p>本文参考资料都来自于互联网，主要的资料如下：</p>
 <ol>
 <li>知乎专栏系列文章–DQN从入门到放弃：<a href="https://zhuanlan.zhihu.com/p/21421729" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/21421729</a></li>
 <li>知乎专栏系列文章–150行代码实现DQN算法玩CartPole：<a href="https://zhuanlan.zhihu.com/p/21477488?refer=intelligentunit" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/21477488?refer=intelligentunit</a></li>
@@ -810,7 +815,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#我们的目标"><span class="nav-number">1.</span> <span class="nav-text">我们的目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenAI-Environment"><span class="nav-number">2.</span> <span class="nav-text">OpenAI Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强化学习"><span class="nav-number">3.</span> <span class="nav-text">强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#马尔可夫决策过程"><span class="nav-number">3.1.</span> <span class="nav-text">马尔可夫决策过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数学模型"><span class="nav-number">3.2.</span> <span class="nav-text">数学模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代算法"><span class="nav-number">3.3.</span> <span class="nav-text">迭代算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深度强化学习"><span class="nav-number">4.</span> <span class="nav-text">深度强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#探索"><span class="nav-number">4.1.</span> <span class="nav-text">探索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">5.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">6.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#我们的目标"><span class="nav-number">1.</span> <span class="nav-text"> 我们的目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#openai-environment"><span class="nav-number">2.</span> <span class="nav-text"> OpenAI Environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强化学习"><span class="nav-number">3.</span> <span class="nav-text"> 强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#马尔可夫决策过程"><span class="nav-number">3.1.</span> <span class="nav-text"> 马尔可夫决策过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数学模型"><span class="nav-number">3.2.</span> <span class="nav-text"> 数学模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代算法"><span class="nav-number">3.3.</span> <span class="nav-text"> 迭代算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深度强化学习"><span class="nav-number">4.</span> <span class="nav-text"> 深度强化学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#探索"><span class="nav-number">4.1.</span> <span class="nav-text"> 探索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">5.</span> <span class="nav-text"> 代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text"> 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">6.1.</span> <span class="nav-text"> 参考资料</span></a></li></ol></li></ol></div>
             
 
           </div>

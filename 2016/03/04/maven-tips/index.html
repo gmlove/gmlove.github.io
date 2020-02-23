@@ -102,18 +102,18 @@
 
 
 
-<meta name="description" content="配置文件继承和聚合属性内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量  finalName: 配置最终生成的war包的文件名，可以用于替换默认的${project.artifactId}-${project.version}，便于发布的时候生成合适的路径  生命周期三套独立生命周期">
+<meta name="description" content="配置文件  继承和聚合  属性 内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量  finalName: 配置最终生成的war包的文件名，可以用于替换默认的project.artifactId−{project.artifactId}-project.artifactId−{project.version}，便于发布的时候生成合适的路径   生命周期  三套独立生命">
 <meta name="keywords" content="maven,java,pom">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Maven Tips">
 <meta property="og:url" content="http://brightliao.me/2016/03/04/maven-tips/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="配置文件继承和聚合属性内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量  finalName: 配置最终生成的war包的文件名，可以用于替换默认的${project.artifactId}-${project.version}，便于发布的时候生成合适的路径  生命周期三套独立生命周期">
+<meta property="og:description" content="配置文件  继承和聚合  属性 内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量  finalName: 配置最终生成的war包的文件名，可以用于替换默认的project.artifactId−{project.artifactId}-project.artifactId−{project.version}，便于发布的时候生成合适的路径   生命周期  三套独立生命">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-14T05:30:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven Tips">
-<meta name="twitter:description" content="配置文件继承和聚合属性内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量  finalName: 配置最终生成的war包的文件名，可以用于替换默认的${project.artifactId}-${project.version}，便于发布的时候生成合适的路径  生命周期三套独立生命周期">
+<meta name="twitter:description" content="配置文件  继承和聚合  属性 内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量  finalName: 配置最终生成的war包的文件名，可以用于替换默认的project.artifactId−{project.artifactId}-project.artifactId−{project.version}，便于发布的时候生成合适的路径   生命周期  三套独立生命">
 
 
 
@@ -434,35 +434,42 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><h3 id="继承和聚合"><a href="#继承和聚合" class="headerlink" title="继承和聚合"></a>继承和聚合</h3><h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
+<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
+<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
 <ul>
-<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的${project.artifactId}-${project.version}，便于发布的时候生成合适的路径</li>
+<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
 </ul>
-<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><h3 id="三套独立生命周期"><a href="#三套独立生命周期" class="headerlink" title="三套独立生命周期"></a>三套独立生命周期</h3><a id="more"></a>
-
+<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
+<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
+<a id="more"></a>
 <ul>
 <li>clean: pre-clean -&gt; clean -&gt; post-clean</li>
-<li>default: <ul>
-<li>validate -&gt; initialize -&gt; </li>
-<li>[generate/process-sources -&gt; generate/process-resources] -&gt; </li>
-<li>compile -&gt; process-classes -&gt; </li>
-<li>[generate/process-test-sources -&gt; generate/process-test-resources] -&gt; </li>
-<li>test-compile -&gt; process-test-classes -&gt; </li>
-<li>test -&gt; </li>
+<li>default:
+<ul>
+<li>validate -&gt; initialize -&gt;</li>
+<li>[generate/process-sources -&gt; generate/process-resources] -&gt;</li>
+<li>compile -&gt; process-classes -&gt;</li>
+<li>[generate/process-test-sources -&gt; generate/process-test-resources] -&gt;</li>
+<li>test-compile -&gt; process-test-classes -&gt;</li>
+<li>test -&gt;</li>
 <li>prepare-package -&gt; package -&gt;</li>
 <li>pre-integration-test -&gt; integration-test -&gt; post-integration-test -&gt;</li>
-<li>verify -&gt; </li>
+<li>verify -&gt;</li>
 <li>install -&gt;</li>
 <li>deploy</li>
 </ul>
 </li>
 <li>site: pre-site -&gt; site -&gt; post-site -&gt; site-deploy</li>
 </ul>
-<h3 id="绑定生命周期"><a href="#绑定生命周期" class="headerlink" title="绑定生命周期"></a>绑定生命周期</h3><ul>
+<h3 id="绑定生命周期"><a class="markdownIt-Anchor" href="#绑定生命周期"></a> 绑定生命周期</h3>
+<ul>
 <li>内置绑定</li>
 <li>自定义绑定</li>
 </ul>
-<h2 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h2><ul>
+<h2 id="plugins"><a class="markdownIt-Anchor" href="#plugins"></a> Plugins</h2>
+<ul>
 <li>jetty-maven-plugin 热部署</li>
 <li>maven-release-plugin 版本管理</li>
 <li>maven-gpg-plugin 自动进行GPG签名</li>
@@ -474,13 +481,16 @@
 <li>maven-changelog-plugin</li>
 <li>cobertura-maven-plugin 测试覆盖率</li>
 </ul>
-<h2 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h2><ul>
+<h2 id="仓库"><a class="markdownIt-Anchor" href="#仓库"></a> 仓库</h2>
+<ul>
 <li>公共仓库</li>
 <li>Nexus私服</li>
 </ul>
-<h2 id="版本管理"><a href="#版本管理" class="headerlink" title="版本管理"></a>版本管理</h2><ul>
+<h2 id="版本管理"><a class="markdownIt-Anchor" href="#版本管理"></a> 版本管理</h2>
+<ul>
 <li>快照版：开发中保持版本稳定</li>
-<li>稳定版：<ul>
+<li>稳定版：
+<ul>
 <li>所有测试通过</li>
 <li>没有快照版本依赖</li>
 <li>没有快照版本插件</li>
@@ -488,7 +498,8 @@
 </ul>
 </li>
 </ul>
-<h3 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h3><p>1.3.4-beta-2</p>
+<h3 id="版本号"><a class="markdownIt-Anchor" href="#版本号"></a> 版本号</h3>
+<p>1.3.4-beta-2</p>
 <p>主版本(架构变更).次版本(较大范围功能变化).增量版本(重大bug修复)-里程碑版本</p>
 
       
@@ -722,7 +733,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">1.</span> <span class="nav-text">配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承和聚合"><span class="nav-number">1.1.</span> <span class="nav-text">继承和聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性"><span class="nav-number">1.2.</span> <span class="nav-text">属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">2.</span> <span class="nav-text">生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三套独立生命周期"><span class="nav-number">2.1.</span> <span class="nav-text">三套独立生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定生命周期"><span class="nav-number">2.2.</span> <span class="nav-text">绑定生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Plugins"><span class="nav-number">3.</span> <span class="nav-text">Plugins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#仓库"><span class="nav-number">4.</span> <span class="nav-text">仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本管理"><span class="nav-number">5.</span> <span class="nav-text">版本管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#版本号"><span class="nav-number">5.1.</span> <span class="nav-text">版本号</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">1.</span> <span class="nav-text"> 配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承和聚合"><span class="nav-number">1.1.</span> <span class="nav-text"> 继承和聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性"><span class="nav-number">1.2.</span> <span class="nav-text"> 属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">2.</span> <span class="nav-text"> 生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三套独立生命周期"><span class="nav-number">2.1.</span> <span class="nav-text"> 三套独立生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定生命周期"><span class="nav-number">2.2.</span> <span class="nav-text"> 绑定生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plugins"><span class="nav-number">3.</span> <span class="nav-text"> Plugins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#仓库"><span class="nav-number">4.</span> <span class="nav-text"> 仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本管理"><span class="nav-number">5.</span> <span class="nav-text"> 版本管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#版本号"><span class="nav-number">5.1.</span> <span class="nav-text"> 版本号</span></a></li></ol></li></ol></div>
             
 
           </div>

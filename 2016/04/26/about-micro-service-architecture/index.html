@@ -102,18 +102,18 @@
 
 
 
-<meta name="description" content="概述From Martin Fowler microservices:  微服务架构即是采用一组小服务来构建应用的方法。每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。服务围绕业务能力来构建，并依赖自动部署机制来独立部署。  From Sam Newman [Building Microservices]:  You should instead t">
+<meta name="description" content="概述 From Martin Fowler microservices:  微服务架构即是采用一组小服务来构建应用的方法。 每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。 服务围绕业务能力来构建，并依赖自动部署机制来独立部署。  From Sam Newman [Building Microservices]:  You should inste">
 <meta name="keywords" content="micro service">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微服务架构总结">
 <meta property="og:url" content="http://brightliao.me/2016/04/26/about-micro-service-architecture/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="概述From Martin Fowler microservices:  微服务架构即是采用一组小服务来构建应用的方法。每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。服务围绕业务能力来构建，并依赖自动部署机制来独立部署。  From Sam Newman [Building Microservices]:  You should instead t">
+<meta property="og:description" content="概述 From Martin Fowler microservices:  微服务架构即是采用一组小服务来构建应用的方法。 每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。 服务围绕业务能力来构建，并依赖自动部署机制来独立部署。  From Sam Newman [Building Microservices]:  You should inste">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-14T00:58:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务架构总结">
-<meta name="twitter:description" content="概述From Martin Fowler microservices:  微服务架构即是采用一组小服务来构建应用的方法。每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。服务围绕业务能力来构建，并依赖自动部署机制来独立部署。  From Sam Newman [Building Microservices]:  You should instead t">
+<meta name="twitter:description" content="概述 From Martin Fowler microservices:  微服务架构即是采用一组小服务来构建应用的方法。 每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。 服务围绕业务能力来构建，并依赖自动部署机制来独立部署。  From Sam Newman [Building Microservices]:  You should inste">
 
 
 
@@ -434,9 +434,12 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>From Martin Fowler <a href="http://martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">microservices</a>:</p>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="概述"><a class="markdownIt-Anchor" href="#概述"></a> 概述</h2>
+<p>From Martin Fowler <a href="http://martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">microservices</a>:</p>
 <blockquote>
-<p>微服务架构即是采用一组小服务来构建应用的方法。<br>每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。<br>服务围绕业务能力来构建，并依赖自动部署机制来独立部署。</p>
+<p>微服务架构即是采用一组小服务来构建应用的方法。<br>
+每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。<br>
+服务围绕业务能力来构建，并依赖自动部署机制来独立部署。</p>
 </blockquote>
 <p>From Sam Newman [Building Microservices]:</p>
 <blockquote>
@@ -444,8 +447,8 @@
 </blockquote>
 <p>微服务即SOA的一种实现方式。企业服务总线（ESB）设计的失败给SOA带上了负面的标签。</p>
 <a id="more"></a>
-
-<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><ul>
+<h2 id="特征"><a class="markdownIt-Anchor" href="#特征"></a> 特征</h2>
+<ul>
 <li>组件服务化</li>
 <li>按业务能力组织服务</li>
 <li>服务即产品: You built it, you run it</li>
@@ -454,7 +457,8 @@
 <li>容错设计</li>
 <li>兼容设计</li>
 </ul>
-<h2 id="实施"><a href="#实施" class="headerlink" title="实施"></a>实施</h2><ul>
+<h2 id="实施"><a class="markdownIt-Anchor" href="#实施"></a> 实施</h2>
+<ul>
 <li>前提：复杂度低于零界点，可能导致部署工作量上升</li>
 <li>拆分：业务能力</li>
 <li>协作：契约文档</li>
@@ -463,13 +467,15 @@
 <li>监控：基础监控（网络，磁盘，os） 服务监控（响应时间，TPS） 业务监控（多维度，长时间）</li>
 <li>原则：<a href="/attaches/2016/2016-04-26-about-micro-service-architecture/principles.png">战略目标 架构原则 设计与交付实践</a></li>
 </ul>
-<h2 id="角色变化"><a href="#角色变化" class="headerlink" title="角色变化"></a>角色变化</h2><ul>
+<h2 id="角色变化"><a class="markdownIt-Anchor" href="#角色变化"></a> 角色变化</h2>
+<ul>
 <li>普通工程师：仅仅开发功能 -&gt; 开发、运营服务</li>
 <li>每个服务至少有一个工程师作为负责人，能力更强的人可能会负责更多的服务</li>
 <li>开发人员交集减少，大规模的团队并行开发好处明显</li>
 <li>对个人能力要求更高，个人成长路线的发展也打开了空间</li>
 </ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004998167</a></p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004998167</a></p>
 
       
     </div>
@@ -698,7 +704,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征"><span class="nav-number">2.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实施"><span class="nav-number">3.</span> <span class="nav-text">实施</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#角色变化"><span class="nav-number">4.</span> <span class="nav-text">角色变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text"> 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征"><span class="nav-number">2.</span> <span class="nav-text"> 特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实施"><span class="nav-number">3.</span> <span class="nav-text"> 实施</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#角色变化"><span class="nav-number">4.</span> <span class="nav-text"> 角色变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
             
 
           </div>

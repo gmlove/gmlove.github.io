@@ -436,18 +436,13 @@
       
         <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>Original:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.a &#123;</span><br><span class="line">    &amp;.a-b &#123;</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            background-color: #5cb85c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.a-c &#123;</span><br><span class="line">    &amp;:extend(.a .a-b:hover);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <a id="more"></a>
-
 <p>Compiled:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ lessc test.less</span><br><span class="line">extend &apos; .a .a-b:hover&apos; has no matches</span><br><span class="line">.a.a-b:hover &#123;</span><br><span class="line">  background-color: #5cb85c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>Improved:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.a &#123;</span><br><span class="line">    &amp;.a-b &#123;</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            background-color: #5cb85c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.a-c &#123;</span><br><span class="line">    &amp;:extend(.a.a-b:hover);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>Compiled:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ lessc test.less</span><br><span class="line">.a.a-b:hover,</span><br><span class="line">.a-c &#123;</span><br><span class="line">  background-color: #5cb85c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>css选择器：</p>
 <ul>
 <li><code>.a.a-b</code>表示同一个元素同时包含两个类，</li>

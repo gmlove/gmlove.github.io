@@ -716,9 +716,12 @@
 
       
         
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>From Martin Fowler <a href="http://martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">microservices</a>:</p>
+          <h2 id="概述"><a class="markdownIt-Anchor" href="#概述"></a> 概述</h2>
+<p>From Martin Fowler <a href="http://martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">microservices</a>:</p>
 <blockquote>
-<p>微服务架构即是采用一组小服务来构建应用的方法。<br>每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。<br>服务围绕业务能力来构建，并依赖自动部署机制来独立部署。</p>
+<p>微服务架构即是采用一组小服务来构建应用的方法。<br>
+每个服务运行在独立的进程中，不同服务通过一些轻量级交互机制来通信， 例如 RPC、HTTP 等。<br>
+服务围绕业务能力来构建，并依赖自动部署机制来独立部署。</p>
 </blockquote>
 <p>From Sam Newman [Building Microservices]:</p>
 <blockquote>
@@ -1000,7 +1003,10 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="微服务的优势和带来的挑战"><a href="#微服务的优势和带来的挑战" class="headerlink" title="微服务的优势和带来的挑战"></a>微服务的优势和带来的挑战</h2><h2 id="Docker给微服务部署带来的便利"><a href="#Docker给微服务部署带来的便利" class="headerlink" title="Docker给微服务部署带来的便利"></a>Docker给微服务部署带来的便利</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004998167</a></p>
+            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="微服务的优势和带来的挑战"><a class="markdownIt-Anchor" href="#微服务的优势和带来的挑战"></a> 微服务的优势和带来的挑战</h2>
+<h2 id="docker给微服务部署带来的便利"><a class="markdownIt-Anchor" href="#docker给微服务部署带来的便利"></a> Docker给微服务部署带来的便利</h2>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<p><a href="https://segmentfault.com/a/1190000004998167" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004998167</a></p>
 
           
         
@@ -1145,9 +1151,11 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
+            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="重复触发jenkins-build"><a class="markdownIt-Anchor" href="#重复触发jenkins-build"></a> 重复触发Jenkins build</h2>
+<p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
 <p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
-<h2 id="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"><a href="#grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了" class="headerlink" title="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"></a>grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2><p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
+<h2 id="grunt在压缩文件的时候一些自动生成的文件没有包含进去但当第二次运行编译文件又被编译进去了"><a class="markdownIt-Anchor" href="#grunt在压缩文件的时候一些自动生成的文件没有包含进去但当第二次运行编译文件又被编译进去了"></a> grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2>
+<p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
 
           
         
@@ -1270,14 +1278,14 @@
       
         
           
-            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><h3 id="error-page"><a href="#error-page" class="headerlink" title="error page"></a>error page</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">location</span>&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
+            <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="webxml"><a class="markdownIt-Anchor" href="#webxml"></a> web.xml</h2>
+<h3 id="error-page"><a class="markdownIt-Anchor" href="#error-page"></a> error page</h3>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">location</span>&gt;</span>/WEB-INF/jsp/errors/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ServerProperties <span class="title">serverProperties</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ServerProperties() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customize</span><span class="params">(ConfigurableEmbeddedServletContainer container)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.customize(container);</span><br><span class="line">            container.addErrorPages(<span class="keyword">new</span> ErrorPage(HttpStatus.NOT_FOUND, <span class="string">"/error/404"</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="spring-context-xml"><a href="#spring-context-xml" class="headerlink" title="spring-context.xml"></a>spring-context.xml</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ImportResource</span>(<span class="string">"classpath:spring-context.xml"</span>)</span><br><span class="line"><span class="meta">@EnableAdminServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebApplication</span> <span class="keyword">extends</span> <span class="title">SpringBootServletInitializer</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="log-back-upgrade"><a href="#log-back-upgrade" class="headerlink" title="log back upgrade"></a>log back upgrade</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- change include to included for file that will be included, like this: --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- http://logback.qos.ch/manual/configuration.html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">included</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">included</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
+<h2 id="spring-contextxml"><a class="markdownIt-Anchor" href="#spring-contextxml"></a> spring-context.xml</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ImportResource</span>(<span class="string">"classpath:spring-context.xml"</span>)</span><br><span class="line"><span class="meta">@EnableAdminServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebApplication</span> <span class="keyword">extends</span> <span class="title">SpringBootServletInitializer</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="log-back-upgrade"><a class="markdownIt-Anchor" href="#log-back-upgrade"></a> log back upgrade</h2>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- change include to included for file that will be included, like this: --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- http://logback.qos.ch/manual/configuration.html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">included</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">included</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -1569,7 +1577,8 @@
 
       
         
-          <h2 id="opengl-es-shading-language"><a href="#opengl-es-shading-language" class="headerlink" title="opengl es shading language"></a>opengl es shading language</h2><p>种类</p>
+          <h2 id="opengl-es-shading-language"><a class="markdownIt-Anchor" href="#opengl-es-shading-language"></a> opengl es shading language</h2>
+<p>种类</p>
 <ul>
 <li>类型：vec2 vec3 vec4 mat2 mat3 mat4 int float</li>
 <li>结构体：</li>
@@ -1725,9 +1734,9 @@
 <li>工作过程：</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    StandBy(待机)</span><br><span class="line">Inqury(查询)      Page(寻呼)</span><br><span class="line">    Authentication(配对)</span><br><span class="line">    Connection(连接)</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li><p>连接状态：</p>
+<li>
+<p>连接状态：</p>
 <ul>
 <li>活动状态：正在通信</li>
 <li>监听状态：随时准备通信</li>

@@ -102,18 +102,18 @@
 
 
 
-<meta name="description" content="Local Openshift Cluster Installation GuidePreparationHosts 1 control host, 1 master and 3 nodes centos 7  Install packages on control host Run yum install -y python2-passlib httpd-tools">
+<meta name="description" content="Local Openshift Cluster Installation Guide  Preparation  Hosts  1 control host, 1 master and 3 nodes centos 7   Install packages on control host  Run yum install -y python2-passlib httpd-tools">
 <meta name="keywords" content="kubernetes,DevOps,OpenShift,PAAS,Cluster">
 <meta property="og:type" content="article">
 <meta property="og:title" content="本地搭建OpenShift集群指南">
 <meta property="og:url" content="http://brightliao.me/2017/10/24/local-openshift-cluster-installation-guide/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="Local Openshift Cluster Installation GuidePreparationHosts 1 control host, 1 master and 3 nodes centos 7  Install packages on control host Run yum install -y python2-passlib httpd-tools">
+<meta property="og:description" content="Local Openshift Cluster Installation Guide  Preparation  Hosts  1 control host, 1 master and 3 nodes centos 7   Install packages on control host  Run yum install -y python2-passlib httpd-tools">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-16T00:40:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="本地搭建OpenShift集群指南">
-<meta name="twitter:description" content="Local Openshift Cluster Installation GuidePreparationHosts 1 control host, 1 master and 3 nodes centos 7  Install packages on control host Run yum install -y python2-passlib httpd-tools">
+<meta name="twitter:description" content="Local Openshift Cluster Installation Guide  Preparation  Hosts  1 control host, 1 master and 3 nodes centos 7   Install packages on control host  Run yum install -y python2-passlib httpd-tools">
 
 
 
@@ -434,117 +434,133 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h1 id="Local-Openshift-Cluster-Installation-Guide"><a href="#Local-Openshift-Cluster-Installation-Guide" class="headerlink" title="Local Openshift Cluster Installation Guide"></a>Local Openshift Cluster Installation Guide</h1><h2 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h2><h3 id="Hosts"><a href="#Hosts" class="headerlink" title="Hosts"></a>Hosts</h3><ul>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h1 id="local-openshift-cluster-installation-guide"><a class="markdownIt-Anchor" href="#local-openshift-cluster-installation-guide"></a> Local Openshift Cluster Installation Guide</h1>
+<h2 id="preparation"><a class="markdownIt-Anchor" href="#preparation"></a> Preparation</h2>
+<h3 id="hosts"><a class="markdownIt-Anchor" href="#hosts"></a> Hosts</h3>
+<ul>
 <li>1 control host, 1 master and 3 nodes</li>
 <li>centos 7</li>
 </ul>
-<h3 id="Install-packages-on-control-host"><a href="#Install-packages-on-control-host" class="headerlink" title="Install packages on control host"></a>Install packages on control host</h3><ul>
+<h3 id="install-packages-on-control-host"><a class="markdownIt-Anchor" href="#install-packages-on-control-host"></a> Install packages on control host</h3>
+<ul>
 <li>Run <code>yum install -y python2-passlib httpd-tools</code></li>
 </ul>
 <a id="more"></a>
-
-<h3 id="Install-and-config-dns-on-control-host"><a href="#Install-and-config-dns-on-control-host" class="headerlink" title="Install and config dns on control host"></a>Install and config dns on control host</h3><ul>
-<li><p>Run <code>yum install etcd</code></p>
-</li>
-<li><p>Download or build skydns and run <code>./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53</code></p>
-</li>
-<li><p>Create dns items</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.192&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.73&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.93&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.76&quot;&#125;&apos;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Configure node dns file <code>/etc/resolv.conf</code> with contents:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>On every node, run <code>hostname node*.oc.tw</code> to correct the hostname (make it the same as it’s dns name)</p>
-</li>
+<h3 id="install-and-config-dns-on-control-host"><a class="markdownIt-Anchor" href="#install-and-config-dns-on-control-host"></a> Install and config dns on control host</h3>
+<ul>
+<li>Run <code>yum install etcd</code></li>
+<li>Download or build skydns and run <code>./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53</code></li>
+<li>Create dns items</li>
 </ul>
-<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.192&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.73&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.93&quot;&#125;&apos;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value=&apos;&#123;&quot;host&quot;:&quot;10.202.128.76&quot;&#125;&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Configure node dns file <code>/etc/resolv.conf</code> with contents:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
+<ul>
+<li>On every node, run <code>hostname node*.oc.tw</code> to correct the hostname (make it the same as it’s dns name)</li>
+</ul>
+<h2 id="installation"><a class="markdownIt-Anchor" href="#installation"></a> Installation</h2>
+<ul>
 <li>clone openshift repo: <code>git clone https://github.com/openshift/openshift-ansible.git</code></li>
 <li>Prepare hosts file with contents</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"># Create OSEv3 group that contains the masters and nodes groups</span><br><span class="line">[OSEv3:children]</span><br><span class="line">masters</span><br><span class="line">nodes</span><br><span class="line">etcd</span><br><span class="line">nfs</span><br><span class="line"></span><br><span class="line"># Set variables common for all OSEv3 hosts</span><br><span class="line">[OSEv3:vars]</span><br><span class="line"># SSH user, this user should allow ssh based auth without requiring a password</span><br><span class="line">ansible_ssh_user=root</span><br><span class="line">openshift_deployment_type=origin</span><br><span class="line">openshift_release=3.6.0</span><br><span class="line">openshift_disable_check=disk_availability,docker_storage,memory_availability,docker_image_availability,package_availability,package_version</span><br><span class="line">openshift_metrics_install_metrics=true</span><br><span class="line">openshift_master_default_subdomain=apps.oc.tw</span><br><span class="line">openshift_logging_install_logging=true</span><br><span class="line">openshift_master_cluster_public_hostname=master.oc.tw</span><br><span class="line">openshift_hosted_registry_storage_kind=nfs</span><br><span class="line">openshift_hosted_registry_storage_access_modes=[&apos;ReadWriteMany&apos;]</span><br><span class="line">openshift_hosted_registry_storage_nfs_directory=/exports</span><br><span class="line">openshift_hosted_registry_storage_nfs_options=&apos;*(rw,root_squash)&apos;</span><br><span class="line">openshift_hosted_registry_storage_volume_name=registry</span><br><span class="line">openshift_hosted_registry_storage_volume_size=10Gi</span><br><span class="line">openshift_logging_storage_kind=nfs</span><br><span class="line">openshift_logging_storage_access_modes=[&apos;ReadWriteOnce&apos;]</span><br><span class="line">openshift_logging_storage_nfs_directory=/exports</span><br><span class="line">openshift_logging_storage_nfs_options=&apos;*(rw,root_squash)&apos;</span><br><span class="line">openshift_logging_storage_volume_name=logging</span><br><span class="line">openshift_logging_storage_volume_size=10Gi</span><br><span class="line">openshift_metrics_storage_kind=nfs</span><br><span class="line">openshift_metrics_storage_access_modes=[&apos;ReadWriteOnce&apos;]</span><br><span class="line">openshift_metrics_storage_nfs_directory=/exports</span><br><span class="line">openshift_metrics_storage_nfs_options=&apos;*(rw,root_squash)&apos;</span><br><span class="line">openshift_metrics_storage_volume_name=metrics</span><br><span class="line">openshift_metrics_storage_volume_size=10Gi</span><br><span class="line"></span><br><span class="line">openshift_master_identity_providers=[&#123;&apos;name&apos;:&apos;htpasswd_auth&apos;,&apos;login&apos;:&apos;true&apos;,&apos;challenge&apos;:&apos;true&apos;,&apos;kind&apos;:&apos;HTPasswdPasswordIdentityProvider&apos;,&apos;filename&apos;:&apos;/etc/origin/master/htpasswd&apos;&#125;]</span><br><span class="line"></span><br><span class="line"># host group for masters</span><br><span class="line">[masters]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line"># host group for nodes, includes region info</span><br><span class="line">[nodes]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br><span class="line">node3.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node3.oc.tw</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line">[nfs]</span><br><span class="line">master.oc.tw</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/byo/config.yml</code> to install</li>
 <li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/adhoc/uninstall.yml</code> to uninstall. (ensure configurations are all removed, by checking <code>/etc/origin</code> folder on every node)</li>
 </ul>
-<h3 id="NetworkManager-must-be-installed"><a href="#NetworkManager-must-be-installed" class="headerlink" title="NetworkManager must be installed"></a>NetworkManager must be installed</h3><ul>
+<h3 id="networkmanager-must-be-installed"><a class="markdownIt-Anchor" href="#networkmanager-must-be-installed"></a> NetworkManager must be installed</h3>
+<ul>
 <li>install NetworkManager on each node: run <code>yum install -y NetworkManager &amp;&amp; systemctl enable NetworkManager &amp;&amp; systemctl start NetworkManager</code> and <code>hostname master.oc.tw</code> to correct the hostname</li>
 <li>pay attention to master/node restarting, since it will reconfigure the hostname, quickly run <code>hostname master.oc.tw</code> when you found out that (maybe configure NetworkManager to assign a static hostname will work as well)</li>
 </ul>
-<h3 id="Cannot-find-file-etc-origin-node-resolv-conf"><a href="#Cannot-find-file-etc-origin-node-resolv-conf" class="headerlink" title="Cannot find file /etc/origin/node/resolv.conf"></a>Cannot find file <code>/etc/origin/node/resolv.conf</code></h3><ul>
+<h3 id="cannot-find-file-etcoriginnoderesolvconf"><a class="markdownIt-Anchor" href="#cannot-find-file-etcoriginnoderesolvconf"></a> Cannot find file <code>/etc/origin/node/resolv.conf</code></h3>
+<ul>
 <li>Create resolv.conf on each node: <code>cp /etc/resolv.conf /etc/origin/node/resolv.conf</code></li>
 </ul>
-<h3 id="Cannot-resolve-external-dns-eg-github-com-from-container"><a href="#Cannot-resolve-external-dns-eg-github-com-from-container" class="headerlink" title="Cannot resolve external dns (eg. github.com) from container"></a>Cannot resolve external dns (eg. github.com) from container</h3><ul>
+<h3 id="cannot-resolve-external-dns-eg-githubcom-from-container"><a class="markdownIt-Anchor" href="#cannot-resolve-external-dns-eg-githubcom-from-container"></a> Cannot resolve external dns (eg. <a href="http://github.com" target="_blank" rel="noopener">github.com</a>) from container</h3>
+<ul>
 <li>edit file <code>/etc/dnsmasq.d/origin-dns.conf</code> to add <code>server=10.202.129.100</code></li>
 <li>restart dnsmasq: <code>systemctl restart dnsmasq.service</code></li>
 </ul>
-<h3 id="sti-builder-cannot-push-image-to-docker-registry-default-svc-5000-no-route-to-host"><a href="#sti-builder-cannot-push-image-to-docker-registry-default-svc-5000-no-route-to-host" class="headerlink" title="sti builder cannot push image to docker-registry.default.svc:5000 (no route to host)"></a>sti builder cannot push image to <code>docker-registry.default.svc:5000</code> (no route to host)</h3><ul>
-<li>edit file /etc/resolve.conf on node with contents:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
-
-</li>
+<h3 id="sti-builder-cannot-push-image-to-docker-registrydefaultsvc5000-no-route-to-host"><a class="markdownIt-Anchor" href="#sti-builder-cannot-push-image-to-docker-registrydefaultsvc5000-no-route-to-host"></a> sti builder cannot push image to <code>docker-registry.default.svc:5000</code> (no route to host)</h3>
+<ul>
+<li>edit file /etc/resolve.conf on node with contents:</li>
 </ul>
-<h3 id="oc-get-nodes-on-master-raise-certificate-issue"><a href="#oc-get-nodes-on-master-raise-certificate-issue" class="headerlink" title="oc get nodes on master raise certificate issue"></a><code>oc get nodes</code> on master raise certificate issue</h3><ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
+<h3 id="oc-get-nodes-on-master-raise-certificate-issue"><a class="markdownIt-Anchor" href="#oc-get-nodes-on-master-raise-certificate-issue"></a> <code>oc get nodes</code> on master raise certificate issue</h3>
+<ul>
 <li>run <code>cp -v /etc/origin/master/admin.kubeconfig .kube/config</code> to copy the config to your local</li>
 </ul>
-<h3 id="Common-ways-to-debug"><a href="#Common-ways-to-debug" class="headerlink" title="Common ways to debug"></a>Common ways to debug</h3><ul>
+<h3 id="common-ways-to-debug"><a class="markdownIt-Anchor" href="#common-ways-to-debug"></a> Common ways to debug</h3>
+<ul>
 <li><code>systemctl status *.service</code></li>
 <li><code>journalctl -xe</code></li>
 <li><code>journalctl --unit dnsmasq</code></li>
 </ul>
-<h2 id="nfs-pv-configuration"><a href="#nfs-pv-configuration" class="headerlink" title="nfs pv configuration"></a>nfs pv configuration</h2><h3 id="Errors-from-oc-describe-pv-pv0001"><a href="#Errors-from-oc-describe-pv-pv0001" class="headerlink" title="Errors from oc describe pv pv0001"></a>Errors from <code>oc describe pv pv0001</code></h3><blockquote>
+<h2 id="nfs-pv-configuration"><a class="markdownIt-Anchor" href="#nfs-pv-configuration"></a> nfs pv configuration</h2>
+<h3 id="errors-from-oc-describe-pv-pv0001"><a class="markdownIt-Anchor" href="#errors-from-oc-describe-pv-pv0001"></a> Errors from <code>oc describe pv pv0001</code></h3>
+<blockquote>
 <p>Recycle failed: unexpected error creating recycler pod:  pods “recycler-for-pv0001” is forbidden: service account openshift-infra/pv-recycler-controller was not found, retry after the service account is created</p>
 </blockquote>
 <ul>
 <li>Create sa: <code>oc create sa pv-recycler-controller -n openshift-infra</code></li>
-<li>Config scc:<br>  <code>oadm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:pv-recycler-controller</code></li>
+<li>Config scc:<br>
+<code>oadm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:pv-recycler-controller</code></li>
 </ul>
-<h3 id="Create-nfs-pv"><a href="#Create-nfs-pv" class="headerlink" title="Create nfs pv"></a>Create nfs pv</h3><ul>
-<li><p>Edit <code>/etc/exports.d/openshift-ansible.exports</code>, add lines like <code>/exports/pvs/pv0001 *(rw,root_squash)</code></p>
-</li>
-<li><p>Run: <code>mv /exports/pvs/pv0001 &amp;&amp; chown nfsnobody:nfsnobody /exports/pv0001 &amp;&amp; chmod 777 /exports/pv0001</code></p>
-</li>
-<li><p>Ensure mount in nodes work well by run <code>mount -t nfs master.oc.tw:/exports/pvs/pv0001 ./t</code></p>
-</li>
-<li><p>Create <code>pv.yml</code> with below and run <code>oc create -f pv.yml</code> to create pv:</p>
+<h3 id="create-nfs-pv"><a class="markdownIt-Anchor" href="#create-nfs-pv"></a> Create nfs pv</h3>
+<ul>
+<li>Edit <code>/etc/exports.d/openshift-ansible.exports</code>, add lines like <code>/exports/pvs/pv0001 *(rw,root_squash)</code></li>
+<li>Run: <code>mv /exports/pvs/pv0001 &amp;&amp; chown nfsnobody:nfsnobody /exports/pv0001 &amp;&amp; chmod 777 /exports/pv0001</code></li>
+<li>Ensure mount in nodes work well by run <code>mount -t nfs master.oc.tw:/exports/pvs/pv0001 ./t</code></li>
+<li>Create <code>pv.yml</code> with below and run <code>oc create -f pv.yml</code> to create pv:</li>
+</ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv0005</span><br><span class="line">spec:</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 10Gi</span><br><span class="line">  accessModes:</span><br><span class="line">  - ReadWriteOnce</span><br><span class="line">  nfs:</span><br><span class="line">    path: /exports/pvs/pv0005</span><br><span class="line">    server: master.oc.tw</span><br><span class="line">  persistentVolumeReclaimPolicy: Recycle</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Debug:</p>
+<ul>
+<li>Debug:
 <ul>
 <li><code>ps aux | grep mount</code> on node to see if it succeeded</li>
 <li><code>oc describe po/xxx</code> on master to see the status of the container</li>
 </ul>
 </li>
 </ul>
-<h2 id="Local-service-dns-resolution"><a href="#Local-service-dns-resolution" class="headerlink" title="Local service dns resolution"></a>Local service dns resolution</h2><ul>
+<h2 id="local-service-dns-resolution"><a class="markdownIt-Anchor" href="#local-service-dns-resolution"></a> Local service dns resolution</h2>
+<ul>
 <li>Find router node: <code>oc project default &amp;&amp; oc get all</code> to find router pod and <code>oc describe po/router-1-gsm7v</code> to find the node and record IP of that node</li>
-<li>Edit local hosts file <code>/etc/hosts</code> and add contents<br>  10.202.128.77 kibana.apps.oc.tw hawkular-metrics.apps.oc.tw nodejs-mongo-persistent-test.apps.oc.tw</li>
+<li>Edit local hosts file <code>/etc/hosts</code> and add contents<br>
+10.202.128.77 <a href="http://kibana.apps.oc.tw" target="_blank" rel="noopener">kibana.apps.oc.tw</a> <a href="http://hawkular-metrics.apps.oc.tw" target="_blank" rel="noopener">hawkular-metrics.apps.oc.tw</a> <a href="http://nodejs-mongo-persistent-test.apps.oc.tw" target="_blank" rel="noopener">nodejs-mongo-persistent-test.apps.oc.tw</a></li>
 </ul>
-<h2 id="Logging-issue"><a href="#Logging-issue" class="headerlink" title="Logging issue"></a>Logging issue</h2><p>EFK stack use kubernetes DaemonSet to schecule <code>logging-fluentd-xx</code> pod on every node to collect container logs.</p>
+<h2 id="logging-issue"><a class="markdownIt-Anchor" href="#logging-issue"></a> Logging issue</h2>
+<p>EFK stack use kubernetes DaemonSet to schecule <code>logging-fluentd-xx</code> pod on every node to collect container logs.</p>
 <ul>
 <li>List DaemonSet <code>oc get ds</code> and make sure the pods count is the same as node count</li>
 <li>Verify the DaemonSet settings <code>oc edit ds/logging-fluentd</code>. Check <code>nodeSelector</code> property.</li>
 <li>Rsh into one of the fluentd pods, and check <code>run.sh</code> to find what is been done.</li>
 <li>Add environment variables to help debug, edit the DaemonSet <code>oc edit ds/logging-fluentd</code> and add environment variables <code>ENABLE_MONITOR_AGENT=true;ENABLE_MONITOR_AGENT=true</code> (Refer <a href="https://docs.fluentd.org/v0.12/articles/monitoring" target="_blank" rel="noopener">here</a>)</li>
 </ul>
-<h2 id="Common-management-tasks"><a href="#Common-management-tasks" class="headerlink" title="Common management tasks"></a>Common management tasks</h2><ul>
+<h2 id="common-management-tasks"><a class="markdownIt-Anchor" href="#common-management-tasks"></a> Common management tasks</h2>
+<ul>
 <li>Login as admin: ssh into master and you’ll be admin directly when you run <code>oc</code> commands</li>
 <li>Add user through htpasswd: run <code>htpasswd -b /etc/origin/master/htpasswd admin admin</code> on master</li>
 <li>Add project to user: <code>oadm policy add-role-to-user admin gmliao -n logging</code></li>
 </ul>
-<h2 id="Node-Management"><a href="#Node-Management" class="headerlink" title="Node Management"></a>Node Management</h2><h3 id="Add-node"><a href="#Add-node" class="headerlink" title="Add node"></a>Add node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced" target="_blank" rel="noopener">https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced</a></p>
+<h2 id="node-management"><a class="markdownIt-Anchor" href="#node-management"></a> Node Management</h2>
+<h3 id="add-node"><a class="markdownIt-Anchor" href="#add-node"></a> Add node</h3>
+<p>Refer here: <a href="https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced" target="_blank" rel="noopener">https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced</a></p>
 <ul>
-<li><p>Add <code>new_nodes</code> or <code>new_masters</code> to <code>[OSEv3:vars]</code> section</p>
-</li>
-<li><p>Add a new section:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[new_nodes]</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Run installation: <code>ansible-playbook -i hosts ~/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml</code></p>
-</li>
-<li><p>Move nodes configured in <code>[new_nodes]</code> section to <code>[nodes]</code> section</p>
-</li>
+<li>Add <code>new_nodes</code> or <code>new_masters</code> to <code>[OSEv3:vars]</code> section</li>
+<li>Add a new section:</li>
 </ul>
-<h3 id="Remove-node"><a href="#Remove-node" class="headerlink" title="Remove node"></a>Remove node</h3><p>Refer here: <a href="https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes" target="_blank" rel="noopener">https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes</a></p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[new_nodes]</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;infra&apos;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&apos;region&apos;:&apos;primary&apos;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Run installation: <code>ansible-playbook -i hosts ~/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml</code></li>
+<li>Move nodes configured in <code>[new_nodes]</code> section to <code>[nodes]</code> section</li>
+</ul>
+<h3 id="remove-node"><a class="markdownIt-Anchor" href="#remove-node"></a> Remove node</h3>
+<p>Refer here: <a href="https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes" target="_blank" rel="noopener">https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes</a></p>
+<h2 id="reference"><a class="markdownIt-Anchor" href="#reference"></a> Reference</h2>
+<ul>
 <li><a href="https://docs.openshift.org/latest/install_config/install/advanced_install.html" target="_blank" rel="noopener">https://docs.openshift.org/latest/install_config/install/advanced_install.html</a></li>
 <li><a href="https://kubernetes.io/docs/setup/" target="_blank" rel="noopener">https://kubernetes.io/docs/setup/</a></li>
 </ul>
@@ -784,7 +800,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Local-Openshift-Cluster-Installation-Guide"><span class="nav-number">1.</span> <span class="nav-text">Local Openshift Cluster Installation Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preparation"><span class="nav-number">1.1.</span> <span class="nav-text">Preparation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hosts"><span class="nav-number">1.1.1.</span> <span class="nav-text">Hosts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-packages-on-control-host"><span class="nav-number">1.1.2.</span> <span class="nav-text">Install packages on control host</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-and-config-dns-on-control-host"><span class="nav-number">1.1.3.</span> <span class="nav-text">Install and config dns on control host</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Installation"><span class="nav-number">1.2.</span> <span class="nav-text">Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NetworkManager-must-be-installed"><span class="nav-number">1.2.1.</span> <span class="nav-text">NetworkManager must be installed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cannot-find-file-etc-origin-node-resolv-conf"><span class="nav-number">1.2.2.</span> <span class="nav-text">Cannot find file /etc/origin/node/resolv.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cannot-resolve-external-dns-eg-github-com-from-container"><span class="nav-number">1.2.3.</span> <span class="nav-text">Cannot resolve external dns (eg. github.com) from container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sti-builder-cannot-push-image-to-docker-registry-default-svc-5000-no-route-to-host"><span class="nav-number">1.2.4.</span> <span class="nav-text">sti builder cannot push image to docker-registry.default.svc:5000 (no route to host)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#oc-get-nodes-on-master-raise-certificate-issue"><span class="nav-number">1.2.5.</span> <span class="nav-text">oc get nodes on master raise certificate issue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Common-ways-to-debug"><span class="nav-number">1.2.6.</span> <span class="nav-text">Common ways to debug</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nfs-pv-configuration"><span class="nav-number">1.3.</span> <span class="nav-text">nfs pv configuration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Errors-from-oc-describe-pv-pv0001"><span class="nav-number">1.3.1.</span> <span class="nav-text">Errors from oc describe pv pv0001</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-nfs-pv"><span class="nav-number">1.3.2.</span> <span class="nav-text">Create nfs pv</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Local-service-dns-resolution"><span class="nav-number">1.4.</span> <span class="nav-text">Local service dns resolution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logging-issue"><span class="nav-number">1.5.</span> <span class="nav-text">Logging issue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Common-management-tasks"><span class="nav-number">1.6.</span> <span class="nav-text">Common management tasks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-Management"><span class="nav-number">1.7.</span> <span class="nav-text">Node Management</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Add-node"><span class="nav-number">1.7.1.</span> <span class="nav-text">Add node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remove-node"><span class="nav-number">1.7.2.</span> <span class="nav-text">Remove node</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.8.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#local-openshift-cluster-installation-guide"><span class="nav-number">1.</span> <span class="nav-text"> Local Openshift Cluster Installation Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#preparation"><span class="nav-number">1.1.</span> <span class="nav-text"> Preparation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hosts"><span class="nav-number">1.1.1.</span> <span class="nav-text"> Hosts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-packages-on-control-host"><span class="nav-number">1.1.2.</span> <span class="nav-text"> Install packages on control host</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-and-config-dns-on-control-host"><span class="nav-number">1.1.3.</span> <span class="nav-text"> Install and config dns on control host</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#installation"><span class="nav-number">1.2.</span> <span class="nav-text"> Installation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#networkmanager-must-be-installed"><span class="nav-number">1.2.1.</span> <span class="nav-text"> NetworkManager must be installed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cannot-find-file-etcoriginnoderesolvconf"><span class="nav-number">1.2.2.</span> <span class="nav-text"> Cannot find file /etc/origin/node/resolv.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cannot-resolve-external-dns-eg-githubcom-from-container"><span class="nav-number">1.2.3.</span> <span class="nav-text"> Cannot resolve external dns (eg. github.com) from container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sti-builder-cannot-push-image-to-docker-registrydefaultsvc5000-no-route-to-host"><span class="nav-number">1.2.4.</span> <span class="nav-text"> sti builder cannot push image to docker-registry.default.svc:5000 (no route to host)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#oc-get-nodes-on-master-raise-certificate-issue"><span class="nav-number">1.2.5.</span> <span class="nav-text"> oc get nodes on master raise certificate issue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#common-ways-to-debug"><span class="nav-number">1.2.6.</span> <span class="nav-text"> Common ways to debug</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nfs-pv-configuration"><span class="nav-number">1.3.</span> <span class="nav-text"> nfs pv configuration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#errors-from-oc-describe-pv-pv0001"><span class="nav-number">1.3.1.</span> <span class="nav-text"> Errors from oc describe pv pv0001</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-nfs-pv"><span class="nav-number">1.3.2.</span> <span class="nav-text"> Create nfs pv</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#local-service-dns-resolution"><span class="nav-number">1.4.</span> <span class="nav-text"> Local service dns resolution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logging-issue"><span class="nav-number">1.5.</span> <span class="nav-text"> Logging issue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#common-management-tasks"><span class="nav-number">1.6.</span> <span class="nav-text"> Common management tasks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-management"><span class="nav-number">1.7.</span> <span class="nav-text"> Node Management</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#add-node"><span class="nav-number">1.7.1.</span> <span class="nav-text"> Add node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remove-node"><span class="nav-number">1.7.2.</span> <span class="nav-text"> Remove node</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reference"><span class="nav-number">1.8.</span> <span class="nav-text"> Reference</span></a></li></ol></li></ol></div>
             
 
           </div>

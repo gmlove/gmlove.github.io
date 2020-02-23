@@ -102,18 +102,18 @@
 
 
 
-<meta name="description" content="重复触发Jenkins build当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为*/master，这个默认的设置就可以满足我们的需求。 但是，事实上*/master是可以匹配master xx/master分支的。如果当前repo里面有一个branch为xx/master">
+<meta name="description" content="重复触发Jenkins build 当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为*/master，这个默认的设置就可以满足我们的需求。 但是，事实上*/master是可以匹配master xx/master分支的。如果当前repo里面有一个branch为xx/mast">
 <meta name="keywords" content="那些年我们踩过的坑">
 <meta property="og:type" content="article">
 <meta property="og:title" content="各种坑">
 <meta property="og:url" content="http://brightliao.me/2016/04/15/pitfall-collection/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="重复触发Jenkins build当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为*/master，这个默认的设置就可以满足我们的需求。 但是，事实上*/master是可以匹配master xx/master分支的。如果当前repo里面有一个branch为xx/master">
+<meta property="og:description" content="重复触发Jenkins build 当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为*/master，这个默认的设置就可以满足我们的需求。 但是，事实上*/master是可以匹配master xx/master分支的。如果当前repo里面有一个branch为xx/mast">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-14T05:32:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="各种坑">
-<meta name="twitter:description" content="重复触发Jenkins build当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为*/master，这个默认的设置就可以满足我们的需求。 但是，事实上*/master是可以匹配master xx/master分支的。如果当前repo里面有一个branch为xx/master">
+<meta name="twitter:description" content="重复触发Jenkins build 当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为*/master，这个默认的设置就可以满足我们的需求。 但是，事实上*/master是可以匹配master xx/master分支的。如果当前repo里面有一个branch为xx/mast">
 
 
 
@@ -434,9 +434,11 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="重复触发Jenkins-build"><a href="#重复触发Jenkins-build" class="headerlink" title="重复触发Jenkins build"></a>重复触发Jenkins build</h2><p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="重复触发jenkins-build"><a class="markdownIt-Anchor" href="#重复触发jenkins-build"></a> 重复触发Jenkins build</h2>
+<p>当使用Jenkins build我们的一个repo的时候，一般我们会想要build master分支。在Jenkins添加git repo的时候，默认添加的监控branch为<code>*/master</code>，这个默认的设置就可以满足我们的需求。</p>
 <p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
-<h2 id="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"><a href="#grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了" class="headerlink" title="grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"></a>grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2><p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
+<h2 id="grunt在压缩文件的时候一些自动生成的文件没有包含进去但当第二次运行编译文件又被编译进去了"><a class="markdownIt-Anchor" href="#grunt在压缩文件的时候一些自动生成的文件没有包含进去但当第二次运行编译文件又被编译进去了"></a> grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2>
+<p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
 
       
     </div>
@@ -665,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重复触发Jenkins-build"><span class="nav-number">1.</span> <span class="nav-text">重复触发Jenkins build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了"><span class="nav-number">2.</span> <span class="nav-text">grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#重复触发jenkins-build"><span class="nav-number">1.</span> <span class="nav-text"> 重复触发Jenkins build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grunt在压缩文件的时候一些自动生成的文件没有包含进去但当第二次运行编译文件又被编译进去了"><span class="nav-number">2.</span> <span class="nav-text"> grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</span></a></li></ol></div>
             
 
           </div>
