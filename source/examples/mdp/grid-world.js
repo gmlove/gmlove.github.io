@@ -256,6 +256,11 @@ var m = {
             }
         }
         return true;
+    },
+    assertTrue: function (expression) {
+        if (expression !== true) {
+            throw new Error('expression is not true, but ' + expression);
+        }
     }
 }
 var config = {
@@ -278,9 +283,45 @@ function GridCell(type, opts) {
     this._direction = opts.direction || undefined;
     this.reward = opts.reward || 0;
 }
+
+var CELL_TYPE = {
+    ROOM: 'room',
+    WALL: 'wall',
+    SUCCESS: 'success',
+    FAIL: 'fail'
+}
+
+function CellType(type) {
+    this.type = type;
+    m.assertTrue([CELL_TYPE.ROOM, CELL_TYPE.WALL, CELL_TYPE.SUCCESS, CELL_TYPE.FAIL].indexOf(type) != -1);
+}
+
+CellType.prototype = {
+    isWall: function () {
+        return this.type === CELL_TYPE.WALL;
+    },
+    isRoom: function () {
+        return this.type === CELL_TYPE.ROOM;
+    },
+    isSuccess: function () {
+        return this.type === CELL_TYPE.SUCCESS;
+    },
+    isFail: function () {
+        return this.type === CELL_TYPE.FAIL;
+    },
+    isEnd: function () {
+        return this.isSuccess() || this.isFail();
+    }
+}
+
+CellType.room = new CellType(CELL_TYPE.ROOM)
+CellType.wall = new CellType(CELL_TYPE.WALL)
+CellType.success = new CellType(CELL_TYPE.SUCCESS)
+CellType.fail = new CellType(CELL_TYPE.FAIL)
+
 GridCell.prototype = {
     direction: function () {
-        if (this.type === 'wall') {
+        if (this.type.isWall()) {
             return null;
         }
         if (this._direction !== undefined) {
@@ -292,7 +333,7 @@ GridCell.prototype = {
         return this.reward > 0;
     },
     currentValue: function () {
-        if (this.type === 'wall') {
+        if (this.type.isWall()) {
             return [];
         } else {
             return config.showValue ? [this.value] : this.qValue.asArray();
@@ -428,7 +469,7 @@ GridTableInteractor.prototype = {
                         self.presenter.updateStatus('value converged for policy iteration!');
                         onSolved(policyValues);
                     }
-                }, 500);
+                }, 100);
             }
 
             var policy = solver.randomPolicy();
@@ -473,7 +514,7 @@ GridTableInteractor.prototype = {
                 var stateSplit = state.split('-');
                 var x = parseInt(stateSplit[0]), y = parseInt(stateSplit[1]);
                 var cell = gridTable.cellAt(x, y);
-                if (cell.type === 'room') {
+                if (cell.type.isRoom()) {
                     return ['t', 'l', 'r', 'b'];
                 }
                 return [];
@@ -488,20 +529,20 @@ GridTableInteractor.prototype = {
                 var stateSplit = state.split('-');
                 var row = parseInt(stateSplit[0]), column = parseInt(stateSplit[1]);
                 var cell = gridTable.cellAt(row, column);
-                if (cell.type === 'reward' || cell.type === 'wall') {
+                if (cell.type.isEnd() || cell.type.isWall()) {
                     throw new Error('Reward and wall cell cannot transition to other cell!');
                 }
                 var availableStates = { self: [row, column].join('-') }, transitions = {};
-                if (row - 1 >= 0 && gridTable.cellAt(row - 1, column).type !== 'wall') {
+                if (row - 1 >= 0 && !gridTable.cellAt(row - 1, column).type.isWall()) {
                     availableStates.t = [row - 1, column].join('-');
                 }
-                if (column + 1 < gridTable.shape.h && gridTable.cellAt(row, column + 1).type !== 'wall') {
+                if (column + 1 < gridTable.shape.h && !gridTable.cellAt(row, column + 1).type.isWall()) {
                     availableStates.r = [row, column + 1].join('-');
                 }
-                if (row + 1 < gridTable.shape.w && gridTable.cellAt(row + 1, column).type !== 'wall') {
+                if (row + 1 < gridTable.shape.w && !gridTable.cellAt(row + 1, column).type.isWall()) {
                     availableStates.b = [row + 1, column].join('-');
                 }
-                if (column - 1 >= 0 && gridTable.cellAt(row, column - 1).type !== 'wall') {
+                if (column - 1 >= 0 && !gridTable.cellAt(row, column - 1).type.isWall()) {
                     availableStates.l = [row, column - 1].join('-');
                 }
 
@@ -524,11 +565,8 @@ GridTableInteractor.prototype = {
 }
 function GridCellView(cell, pos, wh) {
     this.pos = pos, this.wh = wh;
-    var color = { 'room': '#228B22', 'wall': 'gray', 'reward+': '#DAA520', 'reward-': '#B22222' };
-    var type = cell.type;
-    if (type === 'reward') {
-        type = cell.positiveReward() ? 'reward+' : 'reward-';
-    }
+    var color = { 'room': '#228B22', 'wall': 'gray', 'success': '#DAA520', 'fail': '#B22222' };
+    var type = cell.type.type;
     C.e('2D, Canvas, Color').attr({x: pos[0], y: pos[1], w: wh[0], h: wh[1]}).color(color[type]);
     var currentValue = cell.currentValue();
     var size = this.textSize = wh[0] / 7;
@@ -778,18 +816,18 @@ GridTableBuilder.prototype = {
     build: function (parentView) {
         var view = new GridTableView(parentView);
         var c = function (type, arg1, arg2) {
-            if (type === 'reward') {
+            if (type.isEnd()) {
                 return new GridCell(type, { reward: arg1 });
-            } else if (type === 'room') {
+            } else if (type.isRoom()) {
                 return new GridCell(type, { value: arg1, qValue: arg2 });
             } else {
                 return new GridCell(type);
             }
         }
         var gridTable = new GridTable([
-            [c('room'), c('room'), c('room'), c('room'), c('reward', 1)],
-            [c('room'), c('wall'), c('wall'), c('room'), c('reward', -1)],
-            [c('room'), c('room'), c('room'), c('room'), c('room')]
+            [c(CellType.room), c(CellType.room), c(CellType.room), c(CellType.room), c(CellType.success, 1)],
+            [c(CellType.room), c(CellType.wall), c(CellType.wall), c(CellType.room), c(CellType.fail, -1)],
+            [c(CellType.room), c(CellType.room), c(CellType.room), c(CellType.room), c(CellType.room)]
         ]);
         var interactor = new GridTableInteractor(view, gridTable);
         var router = new GridTableRouter(view, interactor);
@@ -1042,17 +1080,17 @@ function Test() {
         },
         testMDP: function () {
             var c = function (type, arg1, arg2) {
-                if (type === 'reward') {
+                if (type.isEnd()) {
                     return new GridCell(type, { reward: arg1 });
-                } else if (type === 'room') {
+                } else if (type.isRoom()) {
                     return new GridCell(type, { value: arg1, qValue: arg2 });
                 } else {
                     return new GridCell(type);
                 }
             }
             var gridTable = new GridTable([
-                [c('room'), c('room'), c('room'), c('reward', 10)],
-                [c('room'), c('wall'), c('room'), c('reward', -10)]
+                [c(CellType.room), c(CellType.room), c(CellType.room), c(CellType.success, 10)],
+                [c(CellType.room), c(CellType.wall), c(CellType.room), c(CellType.fail, -10)]
             ]);
             var noop = function () {}, observableNoop = function () { return {subscribe: noop} };
             var view = {initTable: noop, updateTable: noop, startValueIteration: observableNoop, startPolicyIteration: observableNoop, finishIteration: noop};
