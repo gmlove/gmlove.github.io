@@ -1,0 +1,1472 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="AI,Reinforcement Learning,MDP,Markov Decision Process,DQN,机器学习,算法,强化学习,深度强化学习,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。  问题定义 强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？ 这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化">
+<meta name="keywords" content="AI,Reinforcement Learning,MDP,Markov Decision Process,DQN,机器学习,算法,强化学习,深度强化学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="强化学习入门">
+<meta property="og:url" content="http://brightliao.me/2020/02/06/DRL-the-problem/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。  问题定义 强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？ 这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-02-06-DRL-the-problem/mdp.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-02-06-DRL-the-problem/grid-world.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-02-06-DRL-the-problem/pac-man.png">
+<meta property="og:updated_time" content="2020-02-23T10:18:50.464Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="强化学习入门">
+<meta name="twitter:description" content="自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。  问题定义 强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？ 这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2020/2020-02-06-DRL-the-problem/mdp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2020/02/06/DRL-the-problem/">
+
+
+
+
+
+  <title>强化学习入门 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2020/02/06/DRL-the-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">强化学习入门</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-06T20:00:00+08:00">
+                2020-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine-learning</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/02/06/DRL-the-problem/" class="leancloud_visitors" data-flag-title="强化学习入门">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
+<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
+<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
+<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
+<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
+<a id="more"></a>
+<p>为了简化问题，我们可以像下面这样建模这个世界和智能体。我们可以认为在某一个时刻整个世界处于状态<code>S1</code>，当智能体进行了某一个行动之后，这个世界的状态变化为了<code>S2</code>。智能体之所以能够做出这一行动，是因为其心中有一个目标，并且从这个世界中得到了一定的反馈。</p>
+<p>举个例子。比如我们想要喝水（目标），身边有一个杯子和一个饮水机（状态S1），我们会观察杯子和饮水机的位置，再伸手去拿取杯子（行动），然后将杯子靠近（反馈）饮水机，到达饮水机出水位置之后（状态S2），饮水机开始出水，之后我们再将杯子举到嘴边就能喝到水了。</p>
+<p>这个简单的模型可以图示如下：</p>
+<p><img src="/attaches/2020/2020-02-06-DRL-the-problem/mdp.png" alt="Markov Decision Process"></p>
+<p>智能体（<code>Agent</code>）通过观察这个世界（<code>Environment</code>）的状态（<code>State: s</code>），经过智能决策，开展了一些行动（<code>Actions: a</code>），这些行动进而引起了这个世界的状态变化。智能体从这些变化的状态中获得关于之前行动的反馈（<code>Reward: r</code>），从而指导后续的行动决策。就这样，整个世界周而复始的一直循环下去。</p>
+<p>考虑这个模型，由于有因果律的存在，是不是知道了<code>S1</code>这个初始状态及智能体做出的行动<code>A</code>之后，我们就可以直接计算下一状态<code>S2</code>了呢？理论是可行的，但实际情况要更复杂一些，因为状态实在太多太多了，我们通常无法直接建模所有的状态。这时，我们可以用统计学的方式来解决这个问题。我们可以认为在我们做出某一行动之后，这个世界的状态只是有一定概率会转换为<code>S2</code>，同时也有一定的概率会转换为<code>S2_1</code>等等。这样就算我们建模的状态不全，也是可以相对较好的描述这个系统。</p>
+<p>引入统计学的思维，也就引入了不确定性，虽然如此，但是却带来了更合理的描述系统的方式和系统层面的确定性。</p>
+<p>以上描述的这一模型，在强化学习的世界里，我们称作Markov决策过程，简称MDP（Markov Decision Process）。这里面的不确定性也就是Markov特性。</p>
+<p>有了这个模型之后，我们就可以从数学上来研究这个问题了。强化学习研究的正是如何在这样的一个数学模型的基础上去实现一个有效的算法来进行智能决策。</p>
+<h2 id="一个小例子"><a class="markdownIt-Anchor" href="#一个小例子"></a> 一个小例子</h2>
+<p>我们可以设计一个简单的小游戏来辅助解决这个问题。</p>
+<p><img src="/attaches/2020/2020-02-06-DRL-the-problem/grid-world.png" alt="Grid World"></p>
+<p>如上图，机器人（智能体）可以在这样的网格中移动：</p>
+<ul>
+<li>绿色格子代表机器人可以移动到的位置</li>
+<li>灰色格子表示有障碍物，机器人不能移动到那个位置</li>
+<li>红色格子表示一个陷进，如果机器人移动到此，游戏失败</li>
+<li>黄色格子代表一个出口，如果机器人移动到此，游戏成功</li>
+</ul>
+<p>这个游戏中的MDP，可以描述为如下：</p>
+<ol>
+<li>系统状态：格子位置，机器人位置</li>
+<li>机器人可执行的动作：向上下左右四个方向移动</li>
+<li>状态转换概率：如果机器人向某个方向移动，它移动到对应方向的格子的概率假设为<code>0.7</code>（如果无法移动到对应方向的位置，则留在原格子的概率为<code>0.7</code>），移动到其他位置的概率为<code>0.3/n</code>，<code>n</code>为其他可转换到的状态的数量。</li>
+</ol>
+<p>状态转换概率举例如下（假设我们对格子进行编码，编码方式与excel表格的编码方式一致，从<code>A1</code>到<code>E3</code>。）：</p>
+<ol>
+<li>假设机器人在位置<code>A2</code>，如果其向上移动，有<code>70%</code>的概率会移动到<code>A1</code>，分别有<code>15%</code>的概率会移动到<code>A2</code>（留在原位）和<code>A3</code></li>
+<li>假设机器人在位置<code>A2</code>，如果其向左或向右移动，有<code>70%</code>的的概率会留在原位<code>A2</code>，分别有<code>15%</code>的概率会移动到<code>A1</code>和<code>A3</code></li>
+</ol>
+<p>我们的算法要解决的问题是，在任意绿色格子里面放置一个机器人，算法可以指导机器人一步一步到达位置<code>E1</code>（成功完成游戏）。</p>
+<h2 id="方案与算法"><a class="markdownIt-Anchor" href="#方案与算法"></a> 方案与算法</h2>
+<p>为了实现一个智能算法解决上述机器人走格子问题，我们可以考虑给每个格子定义一个价值。这个价值表示到达这个格子后有多大可能性能成功完成游戏。</p>
+<p>观察这个游戏可以发现，<code>D1</code>的价值应该高于<code>C1</code>，<code>C1</code>的价值应该高于<code>B1</code>。</p>
+<p>如果可以计算出每个格子的价值，我们是不是就解决了这个问题了呢？因为，无论机器人处于哪个位置，它只需要往价值比当前格子更高的格子方向走即可。</p>
+<p>现在问题转化为如何定义和计算这个价值。</p>
+<p>我们先将我们的目标数值化。由于到达出口格子即成功，如果机器人能到达此处，我们就给智能体反馈奖励<code>1</code>。同理，如果到达陷进格子，反馈奖励<code>-1</code>，到达绿色格子则奖励<code>0</code>。</p>
+<p>这个时候我们来看格子<code>D1</code>。如果机器人在此处，它可以往四个方向移动。如果右移，有<code>70%</code>的概率可以到达出口，获得奖励<code>1</code>。如果往其他三个方向走，则分别有<code>10%</code>的概率会到达出口，获得奖励<code>1</code>。</p>
+<p>经过以上的分析可以发现，我们其实可以将概率与奖励相乘来代表某个移动方向的价值。得到如下的价值数值：</p>
+<ul>
+<li>向右移动：<code>0.7 * 1 = 0.7</code></li>
+<li>向上/下/左移动：<code>0.1 * 1 = 0.1</code></li>
+</ul>
+<p>这里的数值我们可以定义为动作价值。有了这个动作价值，要计算某个格子的价值，我们其实可以直接用最大的动作价值来表示，即：<code>max([0.7, 0.1, 0.1, 0.1]) = 0.7</code>。</p>
+<p>如果要计算格子<code>C1</code>的价值呢？这时，虽然达到格子<code>D1</code>的奖励为0，但是我们可以利用刚计算好的<code>D1</code>的价值。还是按照前面的方式进行计算：</p>
+<ul>
+<li>向右移动：<code>0.7 * (0 + 0.7) = 0.49</code></li>
+<li>向上/下/左移动：<code>0.1 * (0 + 0.7) = 0.07</code></li>
+<li>格子价值：<code>max([0.49, 0.07, 0.07, 0.07]) = 0.49</code></li>
+</ul>
+<p>到这里，一个简单的算法呼之欲出。我们只需要找到所有有奖励的位置，然后从那里开始去计算其他所有位置的奖励，好像这个问题就解决了。</p>
+<p>实际情况会稍微复杂一些。因为我们可能有很多个位置都存在奖励，而且这些奖励的多少可能由于任务定义而不一样。这里更实际一些的算法是利用多次迭代来实现。</p>
+<p>为了不失一般性，我们可以定义公式：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">Q^*(s, a) = \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>（表示每个动作的价值，其中：<code>s</code>表示当前状态；<code>a</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>的概率；<code>R(s, a, s')</code>表示表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>得到的奖励）</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi>max</mi><mo>⁡</mo></mo><mi>a</mi></munder><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V^*(s) = \max\limits_a Q^*(s, a)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.45em;vertical-align:-0.7em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43056em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span></span>
+<p>（表示每个格子的价值，其中：<code>s</code>表示当前状态，<code>a</code>表示动作）</p>
+<p>一般而言，我们会引入一个额外的γ参数，对下一个状态的价值打一定的折扣，这是因为当前获得的奖励一般会优于下一个状态的价值的，毕竟下一个状态的价值只是一个估计值。这时，上述第一个公式变为：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">Q^*(s, a) = \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>于是，我们的算法就可以描述为：</p>
+<ul>
+<li>对每一个状态，初始化 <code>V := 0</code></li>
+<li>循环，直到<code>V</code>收敛：
+<ul>
+<li>对每一个状态，</li>
+</ul>
+</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi>max</mi><mo>⁡</mo></mo><mi>a</mi></munder><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">V^*(s) = \max\limits_a \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43056em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>这里为判断<code>V</code>是否收敛，我们可以检查当前这次迭代是否会更新<code>V</code>的值。</p>
+<p>用<code>javascript</code>代码实现，主要代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">MDPVISolver.solve = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> values = m.zeroArray([<span class="keyword">this</span>.states.length]);</span><br><span class="line">    <span class="keyword">var</span> valuesNew = values;</span><br><span class="line">    <span class="keyword">var</span> iterations = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> qValuesAll = [];</span><br><span class="line">        values = valuesNew;</span><br><span class="line">        valuesNew = [];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.states.length; i++) &#123;</span><br><span class="line">            <span class="keyword">var</span> state = <span class="keyword">this</span>.states[i];</span><br><span class="line">            <span class="keyword">var</span> qValues = <span class="keyword">this</span>.qValues(values, state);</span><br><span class="line">            qValuesAll.push(qValues);</span><br><span class="line">            <span class="keyword">var</span> value = <span class="keyword">this</span>.value(qValues);</span><br><span class="line">            valuesNew.push(value);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'finished iteration '</span> + (++iterations));</span><br><span class="line">        <span class="comment">// console.log('values: ', values);</span></span><br><span class="line">    &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.converged(values, valuesNew));    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我已经实现了上述的游戏的一个Demo，见<a href="http://brightliao.me/examples/mdp/grid-world.html">这里</a>。完整代码见<a href="https://github.com/gmlove/gmlove.github.io/blob/source/source/examples/mdp/grid-world.js" target="_blank" rel="noopener">这里</a>865行到890行。</p>
+<p>上述算法就是强化学习里面的经典算法 <strong>价值迭代</strong> 算法了。而我们上面定义<code>V</code>的迭代形式的公式就是著名的 Bellman 公式了，其最初由 Richard Bellman 提出。</p>
+<h2 id="另一个思路"><a class="markdownIt-Anchor" href="#另一个思路"></a> 另一个思路</h2>
+<p>上述算法存在一个问题，我们最后得到的是一系列状态价值（每个格子的价值），为了得到我们想要的行动，我们还需要根据根据状态价值，计算行动价值，即上述<code>Q(s, a)</code>。使用上有所不便。</p>
+<p>那么有没有办法改进呢？再来思考一下这个问题的目标，实际上我们想要找到一种指导机器人行动的策略。这里的策略可以表示为：在任意一个位置，算法可以给出一个恰当的行动。</p>
+<p>我们能不能直接去衡量某一个策略的价值呢？因为一旦有了这个策略的价值，我们就可以考虑直接去优化这个策略，而不是去对所有的状态计算价值。</p>
+<p>对于某一策略，由于其可以基于当前状态指导我们作出行动，我们可以定义它为一个 <strong>输入为状态</strong> <strong>输出为行动</strong> 的函数，即<code>π: a = π(s)</code></p>
+<p>既然这样，参考价值迭代算法中的状态价值（格子价值）定义，我们可以定义策略价值函数为：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>π</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>π</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">V^\pi(s) = \sum_{s&#x27;} T(s, \pi(s), s&#x27;)[R(s, \pi(s), s&#x27;) + \gamma*V^\pi(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>（策略<code>π</code>的价值，其中：<code>s</code>表示当前状态；<code>a = π(s)</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, π(s), s')</code>表示在状态<code>s</code>，执行动作<code>a=π(s)</code>转换到状态<code>s'</code>的概率；<code>R(s, π(s), s')</code>表示在状态<code>s</code>，执行动作<code>a=π(s)</code>转换到状态<code>s'</code>得到的奖励）</p>
+<p>上面的公式是一个迭代形式的定义，既然如此，我们可以参考之前的<strong>状态价值迭代算法</strong>，迭代计算这个策略的价值，最后这个价值可能会收敛到某个具体的值。</p>
+<p>然而就算我们可以计算策略的价值，我们如何得到一个有效的策略呢？如果没有策略，我们其实也无从计算其价值。</p>
+<p>能不能随机初始化一个策略？有了这个策略，我们就可以计算其价值。然后我们可以想办法看看能不能得到一个更好的策略。</p>
+<p>对于以上解决问题的思路，我第一次看到的时候，也不禁暗暗赞叹。事实上，这就是我这里想要给大家介绍的另一个强化学习经典算法：<strong>策略迭代</strong> 算法。</p>
+<p>如何根据一个策略寻找更优策略？可以这样做：</p>
+<ul>
+<li>计算在当前策略下，哪一个行动能得到最大价值</li>
+<li>选择价值最大的行动作为新策略的行动</li>
+</ul>
+<p>用公式表述如下：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi mathvariant="normal">arg max</mi><mo>⁡</mo></mo><mi>a</mi></munder><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">\pi_{i+1}(s) = \argmax\limits_a \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^\pi(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>（下一个（第<code>i+1</code>个）更优策略<code>π(i+1)</code>，其中：<code>s</code>表示当前状态；<code>a = π(s)</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>的概率；<code>R(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>得到的奖励）</p>
+<p>到这里，这个 <strong>策略迭代</strong> 算法就差不多完成了。用<code>javascript</code>代码实现，主要代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MDPPISolver.solve = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> policy = <span class="keyword">this</span>.randomPolicy();</span><br><span class="line">    <span class="keyword">var</span> policyNew = policy;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        policy = policyNew;</span><br><span class="line">        values = <span class="keyword">this</span>.solveForPolicy(policy);</span><br><span class="line">        policyNew = <span class="keyword">this</span>.improvePolicy(values, policy);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!<span class="keyword">this</span>.converged(policy, policyNew));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完整代码见<a href="https://github.com/gmlove/gmlove.github.io/blob/source/source/examples/mdp/grid-world.js" target="_blank" rel="noopener">这里</a>932行到1024行。</p>
+<h2 id="扩展"><a class="markdownIt-Anchor" href="#扩展"></a> 扩展</h2>
+<h3 id="状态空间降维"><a class="markdownIt-Anchor" href="#状态空间降维"></a> 状态空间降维</h3>
+<p>虽然我们可以用上述两个经典算法解决这个问题，但是它们的效率是很低的，算法复杂度用大O计算法可以表示为<code>O(a*s*s)</code>。对于这个非常简单的问题，计算速度尚能接受，但是如果我们考虑一些更复杂的问题，就会发现这里的状态<code>s</code>的取值空间可能会非常大。</p>
+<p>比如对于下面这个吃豆子的游戏，这里的状态数量为：</p>
+<pre><code>    状态数量 = 格子数量 * N (N为每个格子的可能状态：比如是否有吃豆人、是否有豆子、是否有敌人及敌人的类型等等)
+</code></pre>
+<p><img src="/attaches/2020/2020-02-06-DRL-the-problem/pac-man.png" alt="Pacman"></p>
+<p>过大的状态空间就导致上述经典算法实际无法执行，也就无法满足实际需求。</p>
+<p>一个可能的优化手段是人为的设计一些特征来表示某个状态<code>s</code>，这样就实现了对<code>s</code>进行降维的操作。比如对于上面吃豆子的游戏，我们可以建模这样几个特征：</p>
+<ul>
+<li>离最近的豆子的方向和距离</li>
+<li>离每个敌人的方向和距离</li>
+<li>敌人的移动速度和方向</li>
+</ul>
+<p>有了这样的很小的状态空间，上述算法就可以执行了。</p>
+<h3 id="深度强化学习dqn"><a class="markdownIt-Anchor" href="#深度强化学习dqn"></a> 深度强化学习<code>DQN</code></h3>
+<p>有了上述状态空间降维的办法，我们可以考虑是不是可以用一个深度神经网络来替代人工特征的过程呢？当然是可以的，这就是前几年 <code>Deep Mind</code> 轰动学界和产业界的关于 <strong>深度强化学习</strong> 的论文中的内容了。</p>
+<p><code>DQN</code>的全称是<code>Deep Q-Network</code>，它的核心是一个<code>Q</code>值迭代的算法。<code>Q</code>值迭代公式就是我们 <strong>价值迭代</strong> 公式中的关于行动价值的公式的一个迭代形式。算法也是不断迭代直到收敛。</p>
+<p>我在另一篇文章中有关于<code>DQN</code>的更多内容。详情见<a href="http://brightliao.me/2016/12/05/let-machine-play-games/">这里</a>。</p>
+<h3 id="更多的问题"><a class="markdownIt-Anchor" href="#更多的问题"></a> 更多的问题</h3>
+<p>考虑一个更实际的问题，上述经典算法假设我们知道了状态转移函数<code>T</code>。但实际上当前世界可能对于我们是全新的，<code>T</code>对于我们而言当然也是未知的。这个时候有什么办法呢？一个简单的思路是我们可以通过不断在这个世界中进行探索，去了解这个世界的运作方式，也就是不断的弄清了这个<code>T</code>函数。在强化学习的研究中，抽象一下这个过程，即通过不断采样来近似估计<code>T</code>函数。</p>
+<p>另一个实际的问题是，有时候我们可能无法执行这么多次探索，或者每次探索的成本太高以至于负担不起。这时，一个有效的思路是，我们可以从别人的经验中学习，或者通过看电影读书进行学习。当前的强化学习方法也在这个方向上进行了很多探索。</p>
+<p>对于如何高效的进行学习，还有一个思路，那就是，我们能否模仿某个已有的不错的行动策略呢？比如，假设我们希望训练机器人做家务，那么是不是可以通过演示一遍给机器人看，然后机器人通过模仿进行学习呢？这就是模仿学习思路去解决这个问题。</p>
+<p>关于这个领域，我们还可以想出更多的问题，比如，如何让机器人自己去探索解决问题的方法？如何处理连续的动作（文章开始时提到的喝水的例子，这里移动双手的过程其实就是连续动作决策的过程）？如何自动设置奖励甚至不设置奖励？很多越来越难问题被一个一个提出，同时又正在被不断提出的新思路一个一个攻克。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总结起来，强化学习其实就是关于如何学习的研究。这个领域发展至今能解决的问题其实还比较有限，我们离最终的通用人工智能的路还很长。同时，很多新的有挑战性的问题不断被提出来，被大家研究，很多创新的解决问题的思路也不断被发掘出来。正是我们对这个领域充满热情，才导致了这个领域如此蓬勃的发展。相信终有一天这个问题能被我们人类攻克。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ai/" rel="tag"># AI</a>
+          
+            <a href="/tags/reinforcement-learning/" rel="tag"># Reinforcement Learning</a>
+          
+            <a href="/tags/mdp/" rel="tag"># MDP</a>
+          
+            <a href="/tags/markov-decision-process/" rel="tag"># Markov Decision Process</a>
+          
+            <a href="/tags/dqn/" rel="tag"># DQN</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/tags/强化学习/" rel="tag"># 强化学习</a>
+          
+            <a href="/tags/深度强化学习/" rel="tag"># 深度强化学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/21/spark-performance-tuning-on-billions-of-data/" rel="next" title="亿级数据Spark应用调优之旅">
+                <i class="fa fa-chevron-left"></i> 亿级数据Spark应用调优之旅
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题定义"><span class="nav-number">1.</span> <span class="nav-text"> 问题定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个小例子"><span class="nav-number">2.</span> <span class="nav-text"> 一个小例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案与算法"><span class="nav-number">3.</span> <span class="nav-text"> 方案与算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另一个思路"><span class="nav-number">4.</span> <span class="nav-text"> 另一个思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展"><span class="nav-number">5.</span> <span class="nav-text"> 扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#状态空间降维"><span class="nav-number">5.1.</span> <span class="nav-text"> 状态空间降维</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深度强化学习dqn"><span class="nav-number">5.2.</span> <span class="nav-text"> 深度强化学习DQN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多的问题"><span class="nav-number">5.3.</span> <span class="nav-text"> 更多的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2020/02/06/DRL-the-problem/', // optional
+      owner: 'gmlove',
+      title: '强化学习入门',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
