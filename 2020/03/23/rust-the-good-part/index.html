@@ -1,0 +1,1402 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="性能,高性能,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="在前面的文章中提到我们在一个高性能场景中尝试了rust，那么它的效果如何呢？ 在这次rust的尝试中，我们实现了一个通用的特征数据处理框架，并实现了几个常用的算子。这个数据处理框架目标是实现 Spark ML pipeline 的在线计算，为机器学习模型的在线推理场景提供特征处理。 我们选用了两个rust的grpc框架对外提供服务。它们分别是grpc和tonic，前者是基于线程池的实现，后者是基于">
+<meta name="keywords" content="性能,高性能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust内建最佳实践">
+<meta property="og:url" content="http://brightliao.me/2020/03/23/rust-the-good-part/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="在前面的文章中提到我们在一个高性能场景中尝试了rust，那么它的效果如何呢？ 在这次rust的尝试中，我们实现了一个通用的特征数据处理框架，并实现了几个常用的算子。这个数据处理框架目标是实现 Spark ML pipeline 的在线计算，为机器学习模型的在线推理场景提供特征处理。 我们选用了两个rust的grpc框架对外提供服务。它们分别是grpc和tonic，前者是基于线程池的实现，后者是基于">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-23T13:30:56.492Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rust内建最佳实践">
+<meta name="twitter:description" content="在前面的文章中提到我们在一个高性能场景中尝试了rust，那么它的效果如何呢？ 在这次rust的尝试中，我们实现了一个通用的特征数据处理框架，并实现了几个常用的算子。这个数据处理框架目标是实现 Spark ML pipeline 的在线计算，为机器学习模型的在线推理场景提供特征处理。 我们选用了两个rust的grpc框架对外提供服务。它们分别是grpc和tonic，前者是基于线程池的实现，后者是基于">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2020/03/23/rust-the-good-part/">
+
+
+
+
+
+  <title>Rust内建最佳实践 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2020/03/23/rust-the-good-part/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Rust内建最佳实践</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-23T20:00:00+08:00">
+                2020-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/rust/" itemprop="url" rel="index">
+                    <span itemprop="name">rust</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/03/23/rust-the-good-part/" class="leancloud_visitors" data-flag-title="Rust内建最佳实践">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>在前面的文章中提到我们在一个高性能场景中尝试了<code>rust</code>，那么它的效果如何呢？</p>
+<p>在这次<code>rust</code>的尝试中，我们实现了一个通用的特征数据处理框架，并实现了几个常用的算子。这个数据处理框架目标是实现 <code>Spark ML pipeline</code> 的在线计算，为机器学习模型的在线推理场景提供特征处理。</p>
+<p>我们选用了两个<code>rust</code>的<code>grpc</code>框架对外提供服务。它们分别是<a href="https://github.com/stepancheg/grpc-rust" target="_blank" rel="noopener"><code>grpc</code></a>和<a href="https://github.com/hyperium/tonic" target="_blank" rel="noopener"><code>tonic</code></a>，前者是基于线程池的实现，后者是基于rust异步模式<code>async/await</code>的实现。实验过程发现两者性能相差不大，<code>tonic</code>稍好，快<code>2ms</code>左右（不到5%），这可能是由于其数据结构设计更为精简带来的。</p>
+<p>为了更有参考性，我们直接进行端到端的测试（用<code>grpc</code>客户端发起请求，在客户端采集数据），并与<code>scala</code>版本的实现进行性能对比。下面的结果中，服务端应用均部署在同一台<code>64核心</code>+<code>32GB内存</code>的服务器上，客户端也在此服务器上发起请求。由于数据处理的逻辑一致，客户端使用同一个<code>java</code>版本的实现。</p>
+<a id="more"></a>
+<p>对于<code>rust</code>版本的实现，为处理1000条数据，我们发起了20个并发请求，每个请求50条数据。客户端测试得到的响应时间在<code>25ms</code>到<code>38ms</code>间波动。观察服务端应用的内存占用，发现其稳定在<code>2%</code>，整个过程，几乎没有变化。<code>cpu</code>一直处于<code>1300%</code>到<code>2000%</code>之间。</p>
+<p>考虑到实现的通用性，我们实现的<code>rust</code>版本的数据处理逻辑与<code>mleap</code>版本的数据处理逻辑是类似的。对于<code>mleap</code>，我们使用了官方推荐的<a href="https://mleap-docs.combust.ml/mleap-runtime/row-transformer.html" target="_blank" rel="noopener">基于行计算</a>的最高性能模式。<code>mleap</code>版本在处理同样的一组数据时，在没有发生<code>gc</code>的情况下，性能相对稳定，在<code>90ms</code>到<code>130ms</code>区间波动。如果某一时刻发生<code>gc</code>，则性能可能下降到<code>150ms</code>到<code>200ms</code>，甚至也有数百毫秒的时候。</p>
+<p>再比较一下我们自实现的一个专用的java版本（将数个算子的计算过程进行联合优化，不仅针对性的优化了算法，还尽可能的减少了内存分配）。这个版本由于计算量降低了很多，其性能是很不错的，正常时，响应时间可以稳定在<code>20ms</code>到<code>40ms</code>间，但是我们也常常能观察到<code>70ms</code>及以上的波动发生。如果我们开启10个线程，每个线程处理100条数据，则数据相对更为稳定，但响应时间会增加<code>10ms</code>左右。</p>
+<p>通过数据对比，<code>rust</code>不仅显示出了很高的性能，还表现出了特别强的稳定性。这都跟<code>rust</code>的极小的运行时设计及内存管理机制是分不开的。</p>
+<p><code>rust</code>除了这两点具有特别的吸引力之外，还有哪些地方值得推崇呢？事实上，<code>rust</code>在语言设计层面做了很多努力，以期帮助开发者直接采用当前社区所推荐的最佳实践，并在语言层面直接避免许多潜在的问题。我们的实践过程也从这些特性中受益颇多。下面将分享一些<code>rust</code>语言内建的一些最佳实践。</p>
+<h2 id="rust语言内建最佳实践"><a class="markdownIt-Anchor" href="#rust语言内建最佳实践"></a> <code>rust</code>语言内建最佳实践</h2>
+<h3 id="摒弃类继承仅支持trait多态"><a class="markdownIt-Anchor" href="#摒弃类继承仅支持trait多态"></a> 摒弃类继承，仅支持<code>trait</code>多态</h3>
+<p>在<code>rust</code>中，我们没有<code>object</code>或<code>class</code>关键字，与之相对应的是<code>struct</code>，结构体。我们通过<code>struct</code>来组织数据，并在这些数据上面定义方法。一个<code>struct</code>即为一个类。但在<code>rust</code>中我们却无法定义一个结构体去继承另一个结构体的成员和方法。</p>
+<p>作为面向对象编程思想的一个重要特性，继承，近年来越来越受到大家的质疑。继承是一个很好的解决代码复用问题的手段，但却常常被滥用，而我们总是很轻易的就滥用了继承。这些滥用表现在：1. 在设计时抽象出了没必要的复杂继承树；2. 为了代码复用，随意的（不合理的）把某些子类方法放到父类中；3. 重构时，简单的插入中间抽象类，导致越来越深的继承树；4. 单纯为了复用代码而抽象出并不合理的继承关系。</p>
+<p>对于继承所带来的代码复用优势，当前我们所更为推荐的做法是：1. 通过接口实现来表达对象具有某一特性，并借此实现多态（这也是函数式编程所采用的做法）；2. 利用 <strong>组合优于继承</strong> 的思想设计职责更单一的组件和并实现代码复用。</p>
+<p>在<code>rust</code>中，我们无法定义结构体的继承关系，我们却可以轻松的去定义一个<code>trait</code>，这里的<code>trait</code>可以类比<code>scala</code>语言中的<code>trait</code>，或者<code>java</code>中的<code>interface</code>，是一种更单纯的无状态的接口定义。同时，像在其他语言中一样，我们也可以在<code>trait</code>中提供默认的方法实现。</p>
+<h3 id="模块-属性默认private"><a class="markdownIt-Anchor" href="#模块-属性默认private"></a> 模块、属性默认<code>private</code></h3>
+<p>在<code>rust</code>中，我们可以在一个文件中使用<code>mod</code>关键字定义一个或多个模块。模块内部可以存在各种语言支持的元素，如<code>struct</code> <code>enum</code> <code>constant</code> <code>trait</code> <code>function</code>等。这样的便利性，让我们可以更自由的以领域为中心去组织代码，从而提升代码的内聚性，降低耦合度。并且我们不用担心像<code>java</code>一样默认一个类对应一个文件，从而导致过多的文件。</p>
+<p>同时<code>rust</code>在设计上默认限制访问方式为<code>private</code>，即仅供模块或结构体内部访问。这里的<code>private</code>限制包括：1. <code>struct</code>的内部属性默认无法从外部访问；2. <code>struct</code>的方法，默认无法从外部调用；3. 模块内部所有的元素默认均无法从外部访问；4. 模块默认可以访问其父模块的元素。</p>
+<p>由于默认的<code>private</code>访问限制，<code>rust</code>程序将极大减少对外暴露非必须的接口，从语言设计层面促进了高内聚低耦合的特性。</p>
+<h3 id="数据默认不可变"><a class="markdownIt-Anchor" href="#数据默认不可变"></a> 数据默认不可变</h3>
+<p>默认情况下，<code>rust</code>中的数据都是不可变的，如果要使得数据可变，我们需要额外添加关键字<code>mut</code>，来显示的指定其可变性。</p>
+<p>我们知道函数式编程特性中最重要的一点就要算不可变性了。正是由于数据不可变，我们可以轻松的在多线程中共享这些数据，可以轻松的实现惰性优化，或通过适当的重复计算来实现自动故障处理等。数据不可变还常常带来纯函数的特性，从而使得代码更易于理解。</p>
+<p><code>rust</code>在语言级别对数据的可变性提供了支持，除非我们显示的标记某一变量为<code>mut</code>可变，否则我们将无法修改其内部数据。<code>rust</code>提供的不可变标记比其他语言提供的不可变性要更严格，它真正表达了一组无法改变的状态。在<code>scala</code>或<code>typescript</code>中，我们可以通过<code>val</code>或者<code>const</code>来定义不可变的变量。但是它们仅仅标记为对应的变量不可重复赋值。我们依然可以改变变量对应的对象的内部状态。而在<code>rust</code>中，如果我们尝试这么做，我们的代码将连编译都无法通过。</p>
+<h3 id="实现错误处理的精致语法糖"><a class="markdownIt-Anchor" href="#实现错误处理的精致语法糖"></a> 实现错误处理的精致语法糖</h3>
+<p>在<code>rust</code>中，我们没有类似<code>java</code>一样的异常处理手段。比如，我们没法新建一个异常对象，然后<code>throw</code>到更上层。我们当然也没法<code>catch</code>住异常，而进行不同的处理。</p>
+<p><code>rust</code>提供了一种类似<code>c</code>语言的异常处理机制，即，通过函数调用结果来返回异常数据。这里可能有人会担心我们代码写得像<code>c</code>语言一样，遇到异常就要加一个<code>if</code>判断语句进行处理。这里的担心是多余的，<code>rust</code>语言在设计上专门为异常处理进行了特别的设计。</p>
+<p>由于<code>rust</code>内建了强大的类型系统，所以，如果有异常发生，我们将会得到一个枚举类型的<code>Result&lt;T, E&gt;</code>值，它可能有<code>Ok(T)</code>或<code>Err(E)</code>两种情况。这时我们可以对返回的结果通过<code>match</code>语法进行类似<code>scala</code>提供的模式匹配进行处理。</p>
+<p>但是，如果每个地方都需要<code>match</code>，那也将带来满屏幕的异常处理代码。<code>rust</code>是如何处理的呢？</p>
+<p>其实我们平常处理的异常可以分为两类：1. 不可恢复异常；2. 可恢复异常。</p>
+<p>对于不可恢复异常，通常是我们的代码写得不对，或者输入违反了某一个明确的假设，比如，越界访问一个数组就属于这种情况(<code>let a = [1, 2]; let b = a[2];</code>)。对于这个例子中的不可恢复异常，我们应当加入适当的越界判断逻辑，也就是说我们应该完善代码。这时通常的错误处理做法是，输出明确的被违反的假设，然后直接退出程序。<code>rust</code>为我们设计了<code>panic</code>宏方法以达到此目的。</p>
+<p>对于可恢复异常，我们即可使用上述枚举类型<code>Result&lt;T, E&gt;</code>来进行处理。在我们的程序中，大部分异常都应当通过不可恢复异常进行处理。真正需要通过结果类型处理的异常会被限制到，比如文件读取错误，没有权限，自定义的必须要处理的异常等。</p>
+<p>同时，对于我们常常需要调用的<code>match result { ... }</code>语句，<code>rust</code>提供了多种语法糖进行处理。如果我们需要<code>panic</code>，只需要调用<code>result.unwrap()</code>即可达到此目的，如果想要在<code>panic</code>时输出一些信息，则可以使用<code>result.expect(&quot;some message&quot;)</code>来实现。如果我们需要冒泡式的将异常抛出到上层进行处理，我们只需要在访问变量之前增加一个问号，即<code>let result = result?</code>，然后我们就可以在后续代码直接使用<code>result</code>变量了，就像没有异常一样。</p>
+<p>总之，<code>rust</code>设计了非常精致而简洁的语法糖来支持异常处理，可以帮助我们编写健壮而简洁的代码。大家如想了解更多，请参考<a href="https://kaisery.github.io/trpl-zh-cn/ch09-00-error-handling.html" target="_blank" rel="noopener">这里</a>。</p>
+<h3 id="强大的类型推断和贴心的编译提示"><a class="markdownIt-Anchor" href="#强大的类型推断和贴心的编译提示"></a> 强大的类型推断和贴心的编译提示</h3>
+<p>用过<code>rust</code>的人，相信都会喜欢上<code>rust</code>强大的编译器，它的强大类型推断能力，可以让我们少写很多代码。</p>
+<p><code>rust</code>的编译器可以让我们尽量少做类型标注。</p>
+<p>比如我们写下代码<code>let mut map = HashMap::new(); map.insert(&quot;abc&quot;, 123);</code>时，<code>rust</code>将自动的推断出<code>map</code>的类型为<code>HashMap&lt;&amp;str, i32&gt;</code>。我们无需在定义<code>map</code>变量时指定类型。</p>
+<p>再比如，当我们写下代码<code>let a: Vec&lt;i32&gt; = (0..100).collect();</code>时，<code>rust</code>自动为我们调用了生成<code>Vector</code>的函数。而当我们写下代码<code>let a: HashMap&lt;i32, i32&gt; = (0..100).zip((100..200)).collect();</code>时，<code>rust</code>又自动为我们调用了生成<code>HashMap</code>的函数。</p>
+<p>喜欢<code>rust</code>编译器的另一个理由是其强大的发现错误的能力和贴心的编译提示。一个强大的编译器可以让很多错误提前暴露到编译期，以便我们可以更早的发现问题。谁也不想程序运行一段时间之后才报告有<code>bug</code>。尽管有时候<code>rust</code>编译器提示太多难免让人觉得沮丧，但我们最终总是会感谢它帮我们发现了很多低级的问题，节约了我们大量的时间。同时，我们也会感谢它推动了代码的风格一致性，编码的严谨性。</p>
+<p>举个例子，由于<code>rust</code>具有不少内存访问规则限制，如果要人为分析变量的所有权（ownership），可能要让很多人望而生畏了。<code>rust</code>的编译器可以贴心的指出我们代码中的问题，比如，如果我们编写了如下代码，它涉及到引用的问题：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">test</span></span>() &#123;</span><br><span class="line">    <span class="meta">#[derive(Debug)]</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">B</span></span> &#123; b: <span class="built_in">i32</span> &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> b = B &#123; b: <span class="number">10</span> &#125;;</span><br><span class="line">    <span class="keyword">let</span> b1 = &amp;<span class="keyword">mut</span> b;</span><br><span class="line">    <span class="keyword">let</span> b2 = &amp;b;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"b1: &#123;:?&#125;"</span>, b1); <span class="comment">// 防止 b1 的生命周期提前结束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们尝试编译此代码时，我们将得到如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">error[E0502]: cannot borrow `b` as immutable because it is also borrowed as mutable</span><br><span class="line">  --&gt; rust_test/src/lib.rs:70:26</span><br><span class="line">   |</span><br><span class="line">69 |                 let b1 = &amp;mut b;</span><br><span class="line">   |                          ------ mutable borrow occurs here</span><br><span class="line">70 |                 let b2 = &amp;b;</span><br><span class="line">   |                          ^^ immutable borrow occurs here</span><br><span class="line">72 |                 println!(&quot;b1: &#123;:?&#125;&quot;, b1);</span><br><span class="line">   |                                      -- mutable borrow later used here</span><br></pre></td></tr></table></figure>
+<p>类似这样的地方还有很多，大家一上手便可以感受到。其实，<code>rust</code>的编译器不仅能清晰的指出问题，它还常常能给出我们要如何修改代码的建议。</p>
+<p>比如，<code>rust</code>默认会在编译时检查变量是否使用过，对没有使用的变量会打印警告，并提示你<code>note: #[warn(unused_must_use)] on by default</code>，这时我们可能可以选择性的将这个编译选项关闭。</p>
+<p>还比如，如果我们尝试格式化的打印一个没有实现<code>Debug</code> <code>trait</code>的<code>struct</code>（比如当上述代码中的<code>struct B</code>没有<code>#[derive(Debug)]</code>标记时），<code>rust</code>将拒绝编译代码，并提示<code>note: add #[derive(Debug)] or manually implement std::fmt::Debug</code>。</p>
+<p>在遇到这类错误，并得到<code>rust</code>编译器贴心的<code>help</code>或<code>note</code>时，我们写代码也会感受到一丝丝温暖。</p>
+<h3 id="变量隐藏及强大的解构赋值"><a class="markdownIt-Anchor" href="#变量隐藏及强大的解构赋值"></a> 变量隐藏及强大的解构赋值</h3>
+<p><code>rust</code>另一个让我觉得特别方便的地方是在同一个作用域内，我们可以定义重名的变量，这些重名的变量会隐藏掉之前的变量。比如，我们可以编写代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="built_in">String</span>::new(<span class="string">"&#123;\"x\": 1&#125;"</span>);</span><br><span class="line">    <span class="keyword">let</span> x = parse_json(x);</span><br><span class="line">    <span class="keyword">let</span> x = x.x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一般的静态类型语言都不支持在同一个作用域内定义重名变量，而是只支持父子作用域的同名变量隐藏。偏爱<code>python</code>的小伙伴会喜欢<code>rust</code>的这一特性，因为<code>python</code>的动态类型使得我们可以完成与上面类似的代码。</p>
+<p>有人会担心同一个作用域内定义重名变量会带来不易读的代码，但是如果我们秉承小函数的思路，其实由于变量重名而带来的可读性问题基本不会发生。反而，我们常常要为属于不同的类型的同一个概念想出不同的名字，这让人很难受。</p>
+<p>比如，上述代码在<code>scala</code>中，我们常常要给变量添加没必要的类型后缀，写成：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> xJsonStr = <span class="string">"&#123;\"x\": 1&#125;"</span>;</span><br><span class="line">    <span class="keyword">val</span> xJson = parseJson(xJsonStr);</span><br><span class="line">    <span class="keyword">val</span> x = xJson.x;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时，提到赋值，不得不称赞的是<code>rust</code>强大的解构赋值功能。我们可以编写下面这样的代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> p = Point &#123; x: <span class="number">0</span>, y: <span class="number">7</span> &#125;;</span><br><span class="line">    <span class="keyword">let</span> Point &#123; x: a, y: b &#125; = p;</span><br><span class="line">    <span class="keyword">let</span> (x, y, z) = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">let</span> ((a, b), Point &#123;x, y&#125;) = ((<span class="number">3</span>, <span class="number">10</span>), Point &#123; x: <span class="number">3</span>, y: -<span class="number">10</span> &#125;);</span><br><span class="line">    <span class="comment">// 在for循环语句中进行解构</span></span><br><span class="line">    <span class="keyword">for</span> (index, value) <span class="keyword">in</span> v.iter().enumerate() &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在if-let语句中进行解构</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="literal">Some</span>(color) = favorite_color &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在函数入参中进行解构</span></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">print_coordinates</span></span>(&amp;(x, y): &amp;(<span class="built_in">i32</span>, <span class="built_in">i32</span>)) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在match语句进行解构</span></span><br><span class="line">    <span class="keyword">match</span> x &#123;</span><br><span class="line">        <span class="number">1</span> | <span class="number">2</span> =&gt; <span class="built_in">println!</span>(<span class="string">"one or two"</span>),</span><br><span class="line">        <span class="number">3</span> =&gt; <span class="built_in">println!</span>(<span class="string">"three"</span>),</span><br><span class="line">        <span class="number">4</span>..=<span class="number">10</span> =&gt; <span class="built_in">println!</span>(<span class="string">"four through ten"</span>),</span><br><span class="line">        _ =&gt; <span class="built_in">println!</span>(<span class="string">"something else"</span>),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h3>
+<h4 id="使用引用传递避免非预期的内存拷贝"><a class="markdownIt-Anchor" href="#使用引用传递避免非预期的内存拷贝"></a> 使用引用传递，避免非预期的内存拷贝</h4>
+<p>除了一些拷贝成本极低的基本类型数据，<code>rust</code>内部总是使用引用传递数据，所以，我们无需担心非预期的拷贝。<code>rust</code>不会通过编译生成这样的拷贝内存的代码。如果我们要拷贝一个对象，我们需要显示的调用<code>clone</code>方法。</p>
+<h4 id="推荐通过线程间通信来共享数据"><a class="markdownIt-Anchor" href="#推荐通过线程间通信来共享数据"></a> 推荐通过线程间通信来共享数据</h4>
+<p>解决线程间通信问题时，<code>rust</code>提供了用于线程间通信的<code>channel</code>模式，这与<code>go</code>的线程共享数据的哲学类似：<code>Do not communicate by sharing memory; instead, share memory by communicating.</code></p>
+<p>当然<code>rust</code>还支持通过传递变量所有权的方式，将变量安全的在线程间进行传递。</p>
+<p>除此之外，<code>rust</code>还支持通过<code>Mutex</code>来实现共享对象的锁定访问。</p>
+<h4 id="内建的测试支持"><a class="markdownIt-Anchor" href="#内建的测试支持"></a> 内建的测试支持</h4>
+<p><code>rust</code>内建了对于测试的支持，不仅如此，<code>rust</code>甚至在设计层面有意识的区分了<code>单域测试</code>与<code>集成测试</code>两种不同的测试类型。这两种测试种类其实有着非常不同的属性。单元测试通常应该使用<code>mock</code>来构建，它应该非常快，测试到的路径足够多。而集成测试，通常为了验证模块之间是否能整合在一起工作，对于执行速度没有过于苛刻的要求。</p>
+<p>对于单元测试，我们只需要在同一文件里面编写即可。而对于集成测试，我们需要放到一个单独的文件夹下面。</p>
+<p><code>rust</code>内建了常用的<code>assert</code>语句，同时还支持了在文档中编写的测试，即<code>doctest</code>（喜欢这一风格的<code>python</code>爱好者也将很乐意见到这样的支持）。</p>
+<h4 id="统一的工程管理工具"><a class="markdownIt-Anchor" href="#统一的工程管理工具"></a> 统一的工程管理工具</h4>
+<p><code>rust</code>提供了一套类似<code>npm</code>的统一的工程管理工具<code>cargo</code>。<code>npm</code>的使用，极大的促进了<code>javascript</code>生态的发展。同样，<code>cargo</code>让我们使用<code>rust</code>与使用<code>nodejs</code>一样简单，源代码组织形式一致，依赖管理便利。</p>
+<p>其实，相比<code>npm</code>，<code>cargo</code>可以说走得更进了一步。<code>cargo</code>不仅提供了工程管理规范，甚至有关于文档的规范。只要我们按照<code>cargo</code>的规范去组织文档，那么我们运行<code>cargo doc</code>即可生成项目文档了。这一点跟<code>javadoc</code>类似。</p>
+<h4 id="编译与方便的交叉编译"><a class="markdownIt-Anchor" href="#编译与方便的交叉编译"></a> 编译与方便的交叉编译</h4>
+<p>作为性能可以媲美<code>c</code>语言的高性能语言，<code>rust</code>将代码直接编译为机器码，并尽可能的将引用到的库进行静态链接。这一点跟<code>go</code>语言很类似。它极大的方便了我们对于程序的维护管理。在我们的实践中，一个编译好的二进制代码，可以在各种linux发行版中运行，无需安装其他依赖(<code>glibc</code>除外，除非我们编译<code>musl</code>版本)。类比<code>java</code>可知，我们至少需要安装<code>jre</code>，这带来了些许不便。如果我们愿意，我们甚至可以在一台裸的容器(通过<code>FROM scratch</code>创建)里面运行<code>rust</code>程序，除了系统内核，无需任何其他依赖支持。</p>
+<p><code>rust</code>不仅以二进制机器码为编译目标，而且支持广泛的运行平台。<a href="https://forge.rust-lang.org/release/platform-support.html" target="_blank" rel="noopener">这里</a>有一个列表。可以看到，我们甚至可以将<code>rust</code>程序运行在<code>android</code>或者<code>iOS</code>系统中。</p>
+<p>同时，<code>rust</code>的交叉编译也是很方便的，我在<code>windows</code>上面，通过为数不多的几步操作，就可以用<code>llvm</code>编译一个<code>musl</code>版本的二进制可执行程序出来。</p>
+<h4 id="高级特性支持"><a class="markdownIt-Anchor" href="#高级特性支持"></a> 高级特性支持</h4>
+<p><code>rust</code>已经支持了很多我们所喜欢的高级特性，包括<code>async/await</code>的异步编程模式，元编程等。也包括很多较底层的特性，包括和<code>c</code>语言库的互操作性、内联汇编等。</p>
+<h2 id="编码时一些烦人的限制"><a class="markdownIt-Anchor" href="#编码时一些烦人的限制"></a> 编码时一些（烦人的）限制</h2>
+<p><code>rust</code>为了达到的安全和高性能的设计目标，当然还是损失了一定的易用性的。相比<code>java</code> <code>scala</code> <code>javascript</code>或<code>python</code>这类高级语言，我们可能会在下面这几点中折腾挺长时间：</p>
+<ol>
+<li>编译期分配的内存大小必须编译期可知，使用基于<code>trait</code>的多态时，我们不得不利用<code>Box&lt;dyn trait&gt;</code>进行封装</li>
+<li>相比java，引入的概念更多，上手难度更高</li>
+<li>IDE集成不够，调试体验较差，对<code>macro</code>编译期生成的代码支持较差</li>
+<li>即便有IDE支持也很难一次性通过编译</li>
+</ol>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总结起来，通过在线上机器学习推理的场景中尝试使用<code>rust</code>，我们发现<code>rust</code>在设计上拥抱了非常多先进的编程理念。在我看来，作为一个开发者，无论我们是否会在将来的项目中使用<code>rust</code>语言，这门语言都非常值得大家学习。它不仅仅是一门新的编程语言，更是一系列优秀的编程实践的集合，相信所有学习过<code>rust</code>的小伙伴都将有巨大的收获，也将潜移默化的指导我们以后编写的每一行代码。</p>
+<p><code>rust</code>无疑为高性能服务器编程提供了另一个选择，当前<code>rust</code>的发展可谓非常快速。但，<code>rust</code>可能还需要一个明星项目来为其背书，才能使其得到进一步的推广，让我们期待这样的明星项目的诞生。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/性能/" rel="tag"># 性能</a>
+          
+            <a href="/tags/高性能/" rel="tag"># 高性能</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/08/new-ways-to-manage-memory/" rel="next" title="内存管理的新思路">
+                <i class="fa fa-chevron-left"></i> 内存管理的新思路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rust语言内建最佳实践"><span class="nav-number">1.</span> <span class="nav-text"> rust语言内建最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#摒弃类继承仅支持trait多态"><span class="nav-number">1.1.</span> <span class="nav-text"> 摒弃类继承，仅支持trait多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块-属性默认private"><span class="nav-number">1.2.</span> <span class="nav-text"> 模块、属性默认private</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据默认不可变"><span class="nav-number">1.3.</span> <span class="nav-text"> 数据默认不可变</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现错误处理的精致语法糖"><span class="nav-number">1.4.</span> <span class="nav-text"> 实现错误处理的精致语法糖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强大的类型推断和贴心的编译提示"><span class="nav-number">1.5.</span> <span class="nav-text"> 强大的类型推断和贴心的编译提示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量隐藏及强大的解构赋值"><span class="nav-number">1.6.</span> <span class="nav-text"> 变量隐藏及强大的解构赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">1.7.</span> <span class="nav-text"> 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用引用传递避免非预期的内存拷贝"><span class="nav-number">1.7.1.</span> <span class="nav-text"> 使用引用传递，避免非预期的内存拷贝</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐通过线程间通信来共享数据"><span class="nav-number">1.7.2.</span> <span class="nav-text"> 推荐通过线程间通信来共享数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内建的测试支持"><span class="nav-number">1.7.3.</span> <span class="nav-text"> 内建的测试支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#统一的工程管理工具"><span class="nav-number">1.7.4.</span> <span class="nav-text"> 统一的工程管理工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译与方便的交叉编译"><span class="nav-number">1.7.5.</span> <span class="nav-text"> 编译与方便的交叉编译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高级特性支持"><span class="nav-number">1.7.6.</span> <span class="nav-text"> 高级特性支持</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码时一些烦人的限制"><span class="nav-number">2.</span> <span class="nav-text"> 编码时一些（烦人的）限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2020/03/23/rust-the-good-part/', // optional
+      owner: 'gmlove',
+      title: 'Rust内建最佳实践',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
