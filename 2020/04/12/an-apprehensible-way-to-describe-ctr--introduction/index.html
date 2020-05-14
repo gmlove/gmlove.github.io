@@ -1,0 +1,1385 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="ctr,机器学习,深度学习,广告点击预测,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="作为机器学习的一个细分领域，CTR预估一直以来都是研究的一大热点。之所以成为研究的热点，是因为推荐领域巨大的商业价值。无论是我们每天通信用的微信QQ，还是我们每天搜索用的Google百度，或者是娱乐用的抖音斗鱼，广告在这些产品的收入中都占据着非常重要的组成部分，广告收入的背后是广告推荐引擎在发挥作用。除了广告，我们网上购物时的物品推荐，看新闻时的新闻推荐，听音乐时的音乐推荐等等，这些都是推荐引擎发">
+<meta name="keywords" content="ctr,机器学习,深度学习,广告点击预测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTR技术解读 -- 概览">
+<meta property="og:url" content="http://brightliao.me/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="作为机器学习的一个细分领域，CTR预估一直以来都是研究的一大热点。之所以成为研究的热点，是因为推荐领域巨大的商业价值。无论是我们每天通信用的微信QQ，还是我们每天搜索用的Google百度，或者是娱乐用的抖音斗鱼，广告在这些产品的收入中都占据着非常重要的组成部分，广告收入的背后是广告推荐引擎在发挥作用。除了广告，我们网上购物时的物品推荐，看新闻时的新闻推荐，听音乐时的音乐推荐等等，这些都是推荐引擎发">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/logic-architecture.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/recommendation-system-architecture.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/model-evolving.png">
+<meta property="og:updated_time" content="2020-05-14T07:06:33.247Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CTR技术解读 -- 概览">
+<meta name="twitter:description" content="作为机器学习的一个细分领域，CTR预估一直以来都是研究的一大热点。之所以成为研究的热点，是因为推荐领域巨大的商业价值。无论是我们每天通信用的微信QQ，还是我们每天搜索用的Google百度，或者是娱乐用的抖音斗鱼，广告在这些产品的收入中都占据着非常重要的组成部分，广告收入的背后是广告推荐引擎在发挥作用。除了广告，我们网上购物时的物品推荐，看新闻时的新闻推荐，听音乐时的音乐推荐等等，这些都是推荐引擎发">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/logic-architecture.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/">
+
+
+
+
+
+  <title>CTR技术解读 -- 概览 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">CTR技术解读 -- 概览</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-12T20:00:00+08:00">
+                2020-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/" class="leancloud_visitors" data-flag-title="CTR技术解读 -- 概览">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>作为机器学习的一个细分领域，CTR预估一直以来都是研究的一大热点。之所以成为研究的热点，是因为推荐领域巨大的商业价值。无论是我们每天通信用的微信QQ，还是我们每天搜索用的Google百度，或者是娱乐用的抖音斗鱼，广告在这些产品的收入中都占据着非常重要的组成部分，广告收入的背后是广告推荐引擎在发挥作用。除了广告，我们网上购物时的物品推荐，看新闻时的新闻推荐，听音乐时的音乐推荐等等，这些都是推荐引擎发挥作用的地方。在这些地方，推荐引擎都产生了巨大的价值。</p>
+<p>对于如此重要的一个领域，我们做机器学习的小伙伴多多少少都需要了解一下。下面我将结合一个项目上的实际案例，来分享一下整个CTR的研究和应用情况。我将尝试尽可能用通俗易懂的语言，使得只要有一些基本的机器学习知识就能理解文章内容。文章将从应用角度出发，重点关注基本原理及工程实现而弱化更偏理论的公式推导等。</p>
+<p>本系列文章将分为以下几个部分：</p>
+<ul>
+<li>概览：背景，研究的问题，技术架构及演进，一个小的例子</li>
+<li>传统模型：协同过滤、LR模型及其应用</li>
+<li>Embedding、深度学习模型及其应用</li>
+<li>FM与DeepFM</li>
+<li>DCN及其他深度模型</li>
+<li>基于LSTM的模型：DIN、DIEN及DSIN</li>
+<li>多任务模型</li>
+</ul>
+<a id="more"></a>
+<h2 id="ctr"><a class="markdownIt-Anchor" href="#ctr"></a> CTR</h2>
+<p>CTR的全称是Click-Through Rate，即点击率。这里的点击当然就是指点击推荐的内容，如视频、音乐、新闻、广告等。</p>
+<p>如何进行推荐呢？从结果来看，我们希望算法能输出一个推荐内容的列表，这个列表按照一定的规则（比如用户感兴趣的程度、最大化盈利）进行排序。为了计算这个列表，用户点击某个内容的概率将是一个重要的输入。所以，CTR预估成为了推荐领域的最重要的部分之一。事实上，CTR预估的准确程度很大程度上影响着推荐结果的好坏。</p>
+<h2 id="主流推荐系统架构"><a class="markdownIt-Anchor" href="#主流推荐系统架构"></a> 主流推荐系统架构</h2>
+<p>在推荐场景中，我们需要思考和解决下面这些问题：</p>
+<ol>
+<li>如何处理数据形成特征</li>
+<li>如何高效的、稳定的进行模型训练</li>
+<li>如何将训练好的模型快速用于线上推理</li>
+<li>如何支持模型在线优化</li>
+<li>如何快速的实验新的特征及模型</li>
+</ol>
+<p>从整体上来看，推荐系统架构将是一个离线、近在线、在线处理相结合的一个复杂系统。完全在线处理推荐系统中的所有问题是一种理想情况，其成本将非常高昂，即便大型互联网公司也未必能做到。一个相对完善的推荐系统解决方案都会组合利用这三种模式各自的优势来解决问题。</p>
+<p>一般的机器学习任务都会包含数据和模型两部分，推荐系统也不例外。从数据层面看，推荐系统的数据可以来自三个方面：1. 用户数据，比如年龄、性别等；2. 物品（或广告）数据，比如广告文案、图像、视频等；3. 场景数据，比如广告位、当前时间、是否节假日等。于是，我们可以得到这样的推荐系统逻辑架构：</p>
+<p><img src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/logic-architecture.png" alt="推荐系统逻辑架构"></p>
+<p>对于这些数据，如果按照实时性维度来看，可以分为离线数据、近实时数据、实时数据。正好就可以用不同实时性的数据处理工具进行处理。</p>
+<p>从模型层面看，简单的处理方式就是离线模型训练配合在线模型定期更新。如果模型训练时间比较长，可能只能实现按天进行更新。如果模型可以有一定的迁移能力，那么就有可能按小时进行模型离线迁移学习，实现按小时进行模型更新。如果工程能力比较强，能同时实现模型在线训练和服务，那么模型的更新周期就能缩短到分钟级别。模型更新的时效性通常对推荐的效果有很大的影响。</p>
+<p>一般而言，当前主流的推荐系统会在设计上将整个推荐过程分成这样几个主要的步骤：召回 -&gt; 排序 -&gt; 再排序。召回层主要目标是快速缩小推荐范围，一般会利用业务规则、高效的算法或简单的模型实现。而排序层则对筛选出来的小规模数据进行CTR预估和排序。再排序层则会充分考虑推荐结果的多样性、流行度、新鲜度等指标，对排序好的结果进行最终的调整。</p>
+<p>有了以上这些分析，我们可以得到一张常见的推荐系统的架构图：</p>
+<p><img src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/recommendation-system-architecture.png" alt="推荐系统架构"></p>
+<h2 id="推荐系统技术演进"><a class="markdownIt-Anchor" href="#推荐系统技术演进"></a> 推荐系统技术演进</h2>
+<p>在推荐系统中，模型发挥作用最明显的一步就是排序层，同时排序层也是整个推荐系统中最重要的一步。所以，大多数的研究都是针对排序层的研究，这里提到的技术演进也主要是指排序层模型的技术演进。</p>
+<p>2010年之前，业界主流的推荐系统一般都是基于协同过滤或简单的逻辑回归（<code>LR</code>）模型实现，也有的系统会基于某些业务特征进行推荐，比如标签、地域、热度等。这些模型利用数据的能力有限，需要大量的领域专家设计特征，准确率也不高。</p>
+<p>从2010到2015年间，随着移动互联网的高速发展，基于传统模型进行了大量的改进。出现了因子分解机（<code>FM</code>）、梯度提升树（<code>GBDT</code>，<code>Facebook</code>的主要模型）等基于协同过滤的改进模型。也出现了<code>FTRL</code>（<code>Google</code>的主要模型）、混合逻辑回归（<code>MLR</code>，阿里的主要模型）等基于LR模型的改进。</p>
+<p>2015年之后，随着深度学习在计算机视觉领域和自然语言处理领域的成功应用，推荐领域的研究方向也快速转向了以深度学习为主。由于深度模型更少的依赖人工特征工程，并能更有效的利用数据和发现数据中的模式，这些模型得到了非常快速的迭代演进和工程应用。当前常见用于各大互联网公司的模型，比如<code>Google</code>提出的<code>Wide&amp;Deep</code>模型，微软提出的<code>Deep Crossing</code>模型，阿里提出的引入注意力的<code>DIN</code>模型及可以进行时序建模的<code>DIEN</code>模型，基于深度学习的协同过滤模型<code>NeuralCF</code>等等。可以看到，深度推荐模型的设计思路开阔，方向多样，呈现出百花齐放的状态。</p>
+<p>简单总结一下可以得到下图：</p>
+<p><img src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/model-evolving.png" alt="推荐模型发展"></p>
+<p>后续文章中，我将会陆续挑选一些主流的模型进行分析和实践。</p>
+<h2 id="一些重要的问题"><a class="markdownIt-Anchor" href="#一些重要的问题"></a> 一些重要的问题</h2>
+<p>除了模型之外，推荐系统中还有一些比较重要的问题。这里简要分析一下。</p>
+<h3 id="特征处理"><a class="markdownIt-Anchor" href="#特征处理"></a> 特征处理</h3>
+<p>机器学习领域有一个基本的认知，那就是“数据和特征决定了机器学习的上限，模型和算法只是在逼近这个上限”。所以，好的特征是非常关键的一步。在优化模型的时候，如果陷入了一个瓶颈，回过头来从数据层面进行分析可能会有意想不到的效果。常常需要对数据和模型进行综合优化才能实现较大的性能提升。</p>
+<p>为了将特征接入模型，需要对数据进行一定的处理，转化为模型需要的格式。对于一般的类别特征，常见的特征处理办法是进行<code>OneHot</code>编码。对于多类别的特征，比如近期观看的电影列表这类，进行<code>MultiHot</code>编码可以实现类似<code>OneHot</code>的效果。（这两类数据处理方式可以参考我的<a href="http://brightliao.me/2020/01/21/spark-performance-tuning-on-billions-of-data/">另一篇文章</a>。）对于一些统计特征，比如平均每月在产品中的花费等，则可以直接将数值特征输入模型。</p>
+<p>除了这些基本的数值型或类别型数据，由于深度学习的快速进步，对于文本、图片、视频等数据现在也有了更多的处理办法。比如对于文本特征，可以用数据挖掘常用的<code>TF-IDF</code>进行特征处理，也可以用深度学习模型，如<code>Word2Vec</code>、<code>Transformer</code>等模型将数据编码为稠密的特征向量。对于图片和视频，同样也可以采用深度学习模型提取特征向量。这些数值化之后的特征就可以作为模型输入了。除了应用基本的深度学习模型，在推荐领域，还发展出了<code>Item2Vec</code> <code>Graph Embedding</code>等抽取特征的模型。虽然这些特征的处理过程代价较高，但是它给我们带来了大量新的应用数据的可能。</p>
+<h3 id="效果评估"><a class="markdownIt-Anchor" href="#效果评估"></a> 效果评估</h3>
+<p>推荐问题，其本质是一个二分类机器学习问题，因为只需要预测用户会不会点击某个物品即可。为了支持排序，模型需要输出一个物品被点击的概率。对于这样的问题，一般的评估指标是模型的准确率（Accuracy）。但是在推荐领域，我们不能使用简单的准确率来评估模型效果。</p>
+<p>推荐领域的数据集一般是非常不均衡的。对于应用给我们推荐的物品，大概计算一下点击过的次数就能意识到这个问题。有可能推荐的物品中有99%是没有被点击过的。这就带来了训练数据集庞大而非常不均衡的情况。在这样的情况下，如果采用准确率来评估，只要模型对所有数据预测为负就可能得到99%的准确率。但是此时的模型几乎没有任何用处。</p>
+<p>在推荐领域，常用的模型评估指标是<code>AUC</code>，即 Area Under Curve 。是什么曲线下面的面积呢？在推荐领域这里的曲线一般是指<code>ROC</code>曲线，<code>ROC</code>曲线是以<code>FPR</code>（False Positive Rate，假阳率，错误的判定为正例的概率）为横轴，以<code>TPR</code>（True Positive Rate，真阳率，正确的判定为正例的概率）为纵轴的一条曲线。由于在<code>AUC</code>评估指标中使用了百分比为基础数据，它的结果与样本是否均衡无关。</p>
+<p>除了模型指标之外，还可以考虑的一个问题是如何尽可能利用实时的数据进行效果评估。一个常用的方式是进行<code>A/B</code>测试，通过将用户进行随机分组并对不同的分组应用不同的模型，然后评估不同模型的效果。除此之外，微软在2013年提出了<code>InterLeaving</code>的方式进行在线的效果评估。<code>InterLeaving</code>通过在同一推荐位上交替展示不同模型的推荐来对比不同模型的效果。有了这些实时的模型评估手段，我们可以更有信心的进行模型选择，甚至可以让模型选择自动化的进行。</p>
+<h3 id="冷启动"><a class="markdownIt-Anchor" href="#冷启动"></a> 冷启动</h3>
+<p>推荐领域的一个重要的问题是冷启动问题。当一个新用户进入的时候，没有历史数据，如何进行推荐呢？当新物品加入的时候，如何进行推荐呢？当系统刚开始搭建起来，应用刚进入市场，如何进行推荐呢？</p>
+<p>通常可以有两类方法解决冷启动问题。一是充分利用业务进行推荐，比如新用户加入的时候可以推荐热门榜单、最新榜单等条目。二是尽可能的挖掘信息，充分利用已有数据进行推荐。比如当新用户进入的时候，我们往往可以获取到用户注册时的基本信息，如人口学特征等，然后我们可以根据这些信息查找相似的用户，利用这些相似用户的信息进行推荐。当新物品加入的时候，也可以采用类似的方式。引导用户输入更多信息是一种有效的挖掘信息的方式，比如在产品设计上可以在新用户加入时引导其选择兴趣爱好，在音乐、新闻等内容应用上经常能见到此类功能设计。从第三方平台获取数据也不失为一种手段，当前有不少的统计分析平台，可以获取用户的一些统计特征，这些数据也可以作为推荐系统冷启动的数据来源。</p>
+<h3 id="探索与利用"><a class="markdownIt-Anchor" href="#探索与利用"></a> 探索与利用</h3>
+<p>一些做的不够完善的推荐系统常常在一段时间之后陷入推荐内容过于同质化的问题。比如系统发现用户喜欢汽车，就频繁推送汽车相关的物品。同质化严重将导致用户对推荐的内容逐渐失去兴趣。</p>
+<p>这里的问题其实就是多度利用了历史数据带来的问题。推荐系统除了做好数据利用，还需要考虑如何探索用户的新需求新兴趣，同时也需要考虑长尾物品或长尾物品的推荐。在推荐系统的再排序过程可以根据业务具体情况加入一些合理的条目。比如经典的<code>ξ-greedy</code>探索策略，以一定的递减的概率随机加入一些推荐条目。也可以在模型层面来考虑解决这个问题，比如可以有针对性的添加模型参数随机扰动机制，引入了强化学习思想的<code>DRN</code>模型可以作为此类方案的一个典型代表。</p>
+<h2 id="一个简单的示例"><a class="markdownIt-Anchor" href="#一个简单的示例"></a> 一个简单的示例</h2>
+<p>实现一个完善的推荐系统是一个复杂而巨大的工程，但是，在理论和工具都非常丰富的现在，要搭建一个可用的推荐系统<code>MVP</code>其实并不难。下文将以一个简单的示例作为结尾。</p>
+<p>协同过滤是常见的推荐系统算法，其基本思路是根据相似性进行推荐。例如，基于用户的协同过滤算法会推荐跟目标用户有相似爱好的其他用户所喜欢的物品。下面我们将在<a href="https://grouplens.org/datasets/movielens/" target="_blank" rel="noopener"><code>MovieLens</code></a>数据集上面进行实验，尝试实现基于用户的协同过滤推荐系统。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalize</span><span class="params">(vec_a: np.ndarray, vec_b: np.ndarray)</span>:</span></span><br><span class="line">    vec_a_avg = vec_a.sum() / (vec_a &gt; <span class="number">0</span>).sum()</span><br><span class="line">    vec_b_avg = vec_b.sum() / (vec_b &gt; <span class="number">0</span>).sum()</span><br><span class="line">    vec_a_intersect = vec_a * (vec_b &gt; <span class="number">0</span>)</span><br><span class="line">    vec_a_intersect[vec_a_intersect &gt; <span class="number">0</span>] = vec_a_intersect[vec_a_intersect &gt; <span class="number">0</span>] - vec_a_avg</span><br><span class="line">    vec_b_intersect = vec_b * (vec_a &gt; <span class="number">0</span>)</span><br><span class="line">    vec_b_intersect[vec_b_intersect &gt; <span class="number">0</span>] = vec_b_intersect[vec_b_intersect &gt; <span class="number">0</span>] - vec_b_avg</span><br><span class="line">    <span class="keyword">return</span> vec_a_intersect, vec_b_intersect</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cos_sim</span><span class="params">(vec_a, vec_b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.dot(vec_a, vec_b) / (np.linalg.norm(vec_a) * np.linalg.norm(vec_b))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ratings = pd.read_csv(<span class="string">'data/movielens/ml-latest-small/ratings.csv'</span>)</span><br><span class="line"></span><br><span class="line">    movies = dict([(movie_id, idx) <span class="keyword">for</span> (idx, movie_id) <span class="keyword">in</span> enumerate(ratings[<span class="string">'movieId'</span>].unique())])</span><br><span class="line">    print(<span class="string">'movies(&#123;&#125;): &#123;&#125;...'</span>.format(len(movies), list(movies.items())[:<span class="number">10</span>]))</span><br><span class="line"></span><br><span class="line">    user_rating_vectors = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> user_id <span class="keyword">in</span> ratings[<span class="string">'userId'</span>].unique():</span><br><span class="line">        user_rating_vector = np.zeros(len(movies))</span><br><span class="line">        user_ratings = ratings[ratings[<span class="string">'userId'</span>] == user_id]</span><br><span class="line">        <span class="keyword">for</span> (_, rating) <span class="keyword">in</span> user_ratings.iterrows():</span><br><span class="line">            user_rating_vector[movies[rating[<span class="string">'movieId'</span>]]] = rating[<span class="string">'rating'</span>]</span><br><span class="line">        user_rating_vectors[user_id] = user_rating_vector</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'user_rating_vectors(&#123;&#125;): &#123;&#125;...'</span>.format(len(user_rating_vectors), list(user_rating_vectors.items())[:<span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line">    target_user_id = <span class="number">610</span></span><br><span class="line"></span><br><span class="line">    target_user_rating_vector = user_rating_vectors[target_user_id]</span><br><span class="line">    user_sim = [(user_id, cos_sim(*normalize(target_user_rating_vector, rating_vector)))</span><br><span class="line">                <span class="keyword">for</span> (user_id, rating_vector) <span class="keyword">in</span> user_rating_vectors.items()</span><br><span class="line">                <span class="keyword">if</span> user_id != target_user_id]</span><br><span class="line">    user_sim = sorted(user_sim, key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    similar_user = user_sim[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'similar_user: &#123;&#125;, user_sim: &#123;&#125;...'</span>.format(similar_user, user_sim[:<span class="number">10</span>]))</span><br><span class="line">    print(<span class="string">'target_user_rating_vector: &#123;&#125;\nsimilar_user_rating_vector: &#123;&#125;'</span>.format(list(target_user_rating_vector), list(user_rating_vectors[similar_user])))</span><br><span class="line"></span><br><span class="line">    similar_user_ratings = ratings[ratings[<span class="string">'userId'</span>] == similar_user]</span><br><span class="line">    similar_user_ratings = similar_user_ratings.sort_values(by=<span class="string">'rating'</span>, ascending=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'recommended movies:'</span>)</span><br><span class="line">    print(similar_user_ratings.head(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+<p>到这里大家应该了解了一些基本的推荐系统知识，后续文章将挑选几个模型进行介绍并实践。敬请期待！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ctr/" rel="tag"># ctr</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
+          
+            <a href="/tags/广告点击预测/" rel="tag"># 广告点击预测</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/29/native-code-compilation-process-programmers-should-know/" rel="next" title="程序员需要知道的C/C++编译知识">
+                <i class="fa fa-chevron-left"></i> 程序员需要知道的C/C++编译知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ctr"><span class="nav-number">1.</span> <span class="nav-text"> CTR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主流推荐系统架构"><span class="nav-number">2.</span> <span class="nav-text"> 主流推荐系统架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐系统技术演进"><span class="nav-number">3.</span> <span class="nav-text"> 推荐系统技术演进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些重要的问题"><span class="nav-number">4.</span> <span class="nav-text"> 一些重要的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征处理"><span class="nav-number">4.1.</span> <span class="nav-text"> 特征处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果评估"><span class="nav-number">4.2.</span> <span class="nav-text"> 效果评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冷启动"><span class="nav-number">4.3.</span> <span class="nav-text"> 冷启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#探索与利用"><span class="nav-number">4.4.</span> <span class="nav-text"> 探索与利用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单的示例"><span class="nav-number">5.</span> <span class="nav-text"> 一个简单的示例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/', // optional
+      owner: 'gmlove',
+      title: 'CTR技术解读 -- 概览',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
