@@ -1,0 +1,1320 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="金融,业务,贷款,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能">
+<meta name="keywords" content="金融,业务,贷款">
+<meta property="og:type" content="article">
+<meta property="og:title" content="银行贷款业务基础">
+<meta property="og:url" content="http://brightliao.me/2020/07/07/basic-loan-business/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-07-07-basic-loan-business/loan-process.png">
+<meta property="og:updated_time" content="2020-07-08T00:48:47.984Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="银行贷款业务基础">
+<meta name="twitter:description" content="说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2020/2020-07-07-basic-loan-business/loan-process.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2020/07/07/basic-loan-business/">
+
+
+
+
+
+  <title>银行贷款业务基础 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2020/07/07/basic-loan-business/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">银行贷款业务基础</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-07T20:00:00+08:00">
+                2020-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/业务/" itemprop="url" rel="index">
+                    <span itemprop="name">业务</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/07/07/basic-loan-business/" class="leancloud_visitors" data-flag-title="银行贷款业务基础">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能。不管是商业贷款还是公积金贷款，这里面都是银行在提供贷款业务。对于个人经营需要，企业发展需要，银行贷款就更是少不了了。</p>
+<a id="more"></a>
+<p>我们多数人办理贷款，是怎么做的呢？比如我之前买房，首先是向售楼部的销售打听贷款的首付款数额，然后就是东拼西凑首付款，再之后就是让销售帮忙办理首付款支付。一刷卡，好不容易凑齐的几十万，人生中银行卡余额最多一次，一下子清零。接着就是等着办银行贷款了，我们先按销售说的去准备好收入证明、各种身份证件等，销售一通知，我们就去银行了。接着就是签名按手印，签名按手印，签名按手印。贷款材料一大摞，我们也不知道是啥，反正银行说在哪里签名，我们就在哪里签名，说在哪里按手印，我们就按。接下来，就等贷款下来了，又有某一天，销售一通知，说是要开始还款了。然后我们就每个月定期向银行卡里面存多少多少钱，银行也每个月从里面划走多少多少钱。</p>
+<p>不少人稀里糊涂的在办着贷款，某一天突然一拍大腿，想起来，我的100万贷款怎么从来没有打到过我的银行卡里呢？曾经还以为这么大的数额可以炫耀一把，结果钱的影子都没看到！</p>
+<p>那么银行的贷款业务究竟是怎么运作的呢？我们稀里糊涂签字按手印的都是什么内容？为什么贷款之后，钱都从来没有进入过我们的账号呢？今天我们就一起来了解一下银行贷款业务。</p>
+<p>银行是帮我们管钱的机构，有了银行，我们就可以把钱存进去，从而不用操心如何在自己家保管的事情了。即便哪天家里失盗了，发生火灾了，我们的资金仍然是安全的。除此之外，钱存银行还能有一点点利息。</p>
+<p>既然我们把钱都存进了银行，那么银行就变成了一个大型的金库。这样一个金库它是如何盈利的呢？没错，就是靠贷款了。贷款作为银行最主要的一个盈利渠道，是银行赖以生存的基础。一般而言，我们把钱存银行的利息是很少的，活期存款的年利率只有少的可怜的0.3%，即便定期一年的存款通常也只有百分之一点几。而贷款的利率就高了，一般年利率在百分之五左右，根据不同贷款的数额、时间、还贷风险有所不同。这里的差值就是银行的利润空间了。</p>
+<p>贷款业务是如何进行的呢？一般而言，我们可以简单的将贷款分为三个阶段，即贷前贷中贷后。我们去提交贷款申请，银行进行贷款审批就是贷前发生的活动。银行贷款审批完成之后，就进入到贷中，我们要和银行签订贷款合同，银行根据约定的时间进行放款。银行放贷之后，就是我们按照合同约定进行还款了，这即是贷后。</p>
+<p>这么一说好像也挺简单。如果我们每个人都遵纪守法，诚信借贷，银行就是躺着赚钱啊。</p>
+<p>但是问题关键也就在这里，每个人都遵纪守法诚信借贷这是一个很强的前提。以前跟亲戚朋友借钱，还得考虑个人的信誉、形象及情感维护，该还的钱必须得还，要不然自己就被大家孤立了，以后再有困难就难以解决了。但是现在跟银行借钱，就不一样了，银行对于我们而言是一个没有感情的赚钱机器，拿着我们存进去的钱去放贷赚利差。那么，是不是我借了银行的钱不还也是合理的呢？反正银行通过我存进去的钱已经赚了很多了。另一个方面，就算这次我没还银行钱，下次说不定我还可以换家银行贷款呢！所以，银行贷款业务中，要让大家自主的去讲诚信，只是一个美好的愿望。如果没有合理的手段去进行限制，贷款业务就面临巨大风险。</p>
+<p>这里的贷款风险，我们称作是信用风险。银行的贷款业务有很大一部分内容都是在讲如何降低信用风险带来的影响。</p>
+<p>从贷前申请开始，我们要准备很多材料，到贷中我们要在一叠很厚的材料上面按几十个手印，这其实都是在通过各种各样的机制来降低信用风险。</p>
+<p>在申请贷款时，我们通常要准备好身份证、户口本、工资收入证明、投资收入证明、财产证明、财产共有人信息等材料，如果有抵押物的，需要提供抵押物的所有权证明，如果有质押物的，需要提供质押物的处置权证明，如果有担保人保证，需要提供担保人的基本情况、经济收入、财产证明等。这些材料均需要权威机构才能出具，个人伪造的成本是很高的。银行在得到这些证明材料之后，就可以一定程度上判断借款人的还贷能力了。</p>
+<p>申请贷款另一个重要的问题是借款人需要有明确的合理的贷款用途。比如，房贷，用途很明显就行买房，车贷就是买车，个人由于商业经营需要购买生产资料，比如贷款购买口罩机生产口罩，也是合理的贷款用途。</p>
+<p>银行得知了贷款用途、贷款金额就能基本确定贷款信息的真实性。得知了借款人提供的材料，就能基本判断借款人的还款能力。有了这些信息就可以初步判断是否可以放贷了。对于这些材料的检查核验，及对贷款资格的初步确认称为贷款初审。</p>
+<p>毕竟前面的材料都是借款人提供的，如果有假怎么办呢？所以银行进行贷款贷前调查也是很重要的一步。贷前调查一般会根据实际情况采用与借款人面谈或实地调查的方式进行。面谈的时候，可以根据借款人的语气、陈述的内容是否与提交的材料一致对贷款的真实性进行判断。比如，如果以住房作为抵押，面谈时，借款人连房子的面积、朝向都不能明确的说出，那么就很大程度上存在伪造材料的可能，如果面谈没有发现问题，实地调查则可以进一步确认房子是不是存在，是不是完好等。</p>
+<p>经过贷款的初审及调查之后，银行对这笔贷款申请就更有信心了。接下来进入贷款审查和审批阶段。通常，在贷款审查阶段，银行审查人员需要审查借款人是否有资格和条件，贷款金额、期限是否符合规定，借款人提供的材料是否完整、合法、有效，初审及调查得出的分析结论是否合理等等。这里其实就是安排另一个人来对于前面步骤提交的资料进一步核实。多一个人多一双眼睛，就可能发现潜藏得更深的问题。审查没有发现问题，就可以提交审批人员进行贷款审批了。在贷款审批时，审批人员不仅要考虑审查结论，还需要结合国家政策、可行性、经济性方面综合考虑是否发放贷款。比如，现在银行存款不够，资金不足，或者国家正在严控此类贷款，那么即便前面的材料都是真实有效的，也可以拒绝贷款。由于贷款审批是银行决定是否发放贷款的最后一个关键步骤，所以根据不同的贷款金额，审批通常需要具有较高级别的人员才有权限操作。为了做好最后一环，审批阶段还可以通过多人审批来综合更多人的意见，从而降低风险。</p>
+<p>在前面一系列的调查、审查、审批阶段之后，如果确认可以贷款，那贷前步骤就完成了。进入贷中，贷中主要的流程就是签订合同及放款。</p>
+<p>为了防止违约，贷款合同的内容要事无巨细，清晰的写明双方的诚信承诺、贷款资金用途、贷款金额、贷款利率、支付方式、还款方式等。还需要明确的指出各方的权利和义务，违约责任等。这里的内容非常多，这也就是为什么我们要签字按手印重复数十遍了。对于合同的内容，作为一个诚信借款人，我们自信能按约定还款，一般也不会过多关注。这里材料太多，而且我们也没有专业的法律知识，就算我们能慢慢花时间看材料，通常也难以发现问题。有人会担心银行会不会偷偷在合同里面增加一些对他们有利的条款。其实国家法律对于合同的合理性有很严格的说明，贷款领域的法律更是非常完善，银行想在这方面欺诈借款人是比较难的。而且银行业没有必要因为某一笔贷款砸了自己的口碑。作为借款人，在这里我们主要会关心贷款的利率，它决定了我们要还多少钱，其他的只需要对于大致的违约责任有所认识就够了。比如，放贷不还，银行可以收回房子拍卖，有抵押物，银行也可以将抵押物拍卖偿债。</p>
+<p>放款阶段是最激动人心的了，因为马上银行卡里面就会多一大笔钱。然而，很多时候我们可能根本见不到贷款来的钱。银行为了保证我们按照申请的用途使用贷款，原则上会直接将贷款发放到我们的交易对象账户。比如，房贷的发放，贷款直接进入了开发商的账户，车贷也直接进入了汽车经销商的账户。这一原则在多数情况下直接避免了我们把贷款用于其他用途。想想看，一旦我们自己账户里面多了一笔钱，其实银行是很难控制贷款用途的，因为我们可能可以随时将钱取出来或转账到其他地方。这一贷款发放方式叫做贷款人受托支付。如果受托支付由于某种原因无法进行，那么才有可能贷款进入自己的账户，这种情况虽然允许，但是有很多的限制，比如个人消费类贷款交易金额不超过30万，经营性贷款金额不超过50万等。</p>
+<p>贷款业务的最后一个阶段就是贷后，贷后阶段主要涉及借款人按期进行还款。对于一个正常还款的贷款，银行在这一阶段几乎不需要做任何事情。但是作为银行的主营业务，银行的贷款数量是巨大的，一旦贷款多了，违约的情况也就司空见惯了。所以，在贷后阶段，银行还有很多事情要做。首先就是定期检查，银行需要跟踪了解借款人基本还贷能力的变化情况。比如，做生意亏了，工作没了，贷款就可能还不上了。再比如，房价暴跌也可能导致借款人违约，因为借款人可能会发现需要还银行的贷款都可以拿来再买一套房子了，那为啥要还款呢，让银行收回房子算了。所以借款人的还贷能力和还贷意愿定期跟踪是银行贷款业务的重要一环。除此之外，在贷后阶段，一旦有贷款违约发生，银行还需要根据合同的约定进行违约追偿，包括抵押物拍卖，向保证人追偿等。对于尚有还款意愿，只是暂时还款困难的，可能需要定期催收，包括以短信形式、上门的形式、司法诉讼的形式等。</p>
+<p>贷后阶段还有一类常见的活动，就是贷款变更。比如，我们在贷款之后，生意大赚，一夜暴富，或者工作升迁，彩票中奖等等，有钱了，那也就不需要再按期还贷了，我们一次性还了它。这里的贷款变更，通常会包括贷款主体变更，即借款人变更，借款期限调整，比如提前还款或者贷款展期，还款方式变更，比如以前是等额本息，现在想调成等额本金等等。只要我们和银行达成了一致，贷款变更通常可以通过重新签订合同等方式比较容易的完成。</p>
+<p>贷后阶段，银行还需要为借款人保管其提交的资料。这涉及档案管理工作，包括档案的归档登记、借阅管理、移交和接管等。</p>
+<p>在合同期结束，借款人按期还款完毕，整个贷款就结束了，借款人从银行取档案材料回家。</p>
+<p>以上就是银行贷款业务的大致内容了，用一张图可以概括如下：</p>
+<p><img src="/attaches/2020/2020-07-07-basic-loan-business/loan-process.png" alt="loan process"></p>
+<p>到这里，大家应该对银行的贷款业务有了一定的了解了。随着时代经济的发展，银行贷款跟我们的关系可谓越来越密切，同时，贷款其实也对整个社会的发展意义重大，它不仅可以让我们提前住上新房，解决我们暂时的经营困境，还有力的促进了整个社会资源更合理的配置，提升了社会效率。可以说整个社会的发展繁荣离不开银行贷款。对于我们自身而言，合理的利用贷款，也能为我们建设更美好的幸福生活添砖加瓦。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/金融/" rel="tag"># 金融</a>
+          
+            <a href="/tags/业务/" rel="tag"># 业务</a>
+          
+            <a href="/tags/贷款/" rel="tag"># 贷款</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/01/node-bpm/" rel="next" title="极速软件发布的实现">
+                <i class="fa fa-chevron-left"></i> 极速软件发布的实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2020/07/07/basic-loan-business/', // optional
+      owner: 'gmlove',
+      title: '银行贷款业务基础',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

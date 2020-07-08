@@ -1,0 +1,1374 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,配置管理,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。 对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分">
+<meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,配置管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习平台架构实践--配置管理">
+<meta property="og:url" content="http://brightliao.me/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。 对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-22-architecture-designing-practise-for-ml-platform-configuration/centralized-configuration.png">
+<meta property="og:updated_time" content="2020-06-08T11:27:13.453Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习平台架构实践--配置管理">
+<meta name="twitter:description" content="随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。 对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2020/2020-05-22-architecture-designing-practise-for-ml-platform-configuration/centralized-configuration.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.me/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/">
+
+
+
+
+
+  <title>机器学习平台架构实践--配置管理 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">机器学习平台架构实践--配置管理</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-23T20:00:00+08:00">
+                2020-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/架构/" itemprop="url" rel="index">
+                    <span itemprop="name">架构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/" class="leancloud_visitors" data-flag-title="机器学习平台架构实践--配置管理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。</p>
+<p>对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分布式系统本身的复杂性常常使得单个组件的配置就有上百个。而在微服务架构流行的当下，我们的系统越来越多以分布式的形式出现，系统的配置管理问题也越来越突出。</p>
+<p>本文尝试分享一下我们在构建机器学习平台时对于配置管理方面的设计实践。</p>
+<h2 id="模块自有配置导致的混乱"><a class="markdownIt-Anchor" href="#模块自有配置导致的混乱"></a> 模块自有配置导致的混乱</h2>
+<p>结合上文中关于平台架构的分析，我们看到系统拆分了一个名为<code>connector</code>的通用模块，负责实现和外部系统进行对接。这一模块会同时支持<code>Rest API</code>及<code>ml</code>两个应用层模块。</p>
+<p>由于<code>Rest API</code>及<code>ml</code>两个模块会连接同一个大数据集群进行数据操作，所以它们的不少配置是一样的。比如某一租户运行任务的缓存路径，读写的<code>hbase</code>的数据库名字等。一个简单的想法就是将这些与<code>connector</code>相关的共享配置放到<code>connector</code>模块中去，然后将无法共享的配置放到<code>Rest API</code>及<code>ml</code>各自的模块中去。</p>
+<p>在刚开始时，我们确实是这样做的。但是随着系统功能慢慢的变得复杂，配置项越来越多，这样简单粗暴的配置设计越来越难以支撑系统的快速演进。主要问题表现在：1. 开发人员在新增配置的时候，对于配置放哪里（至少有3个地方）一直存在争议；2. 为了支持多个环境并避免配置重复，不得不自己实现类似<code>Spring profile</code>的配置加载机制；3. 某一个功能用到的配置可能分散到多个地方，出现问题的时候，需要从多个地方去识别配置问题；4. 由于配置会打包到<code>jar</code>包中，我们不得不为每个环境生成不同的包。</p>
+<h2 id="统一的配置管理设计"><a class="markdownIt-Anchor" href="#统一的配置管理设计"></a> 统一的配置管理设计</h2>
+<p>那么，在一个多模块的复杂系统中我们要怎么做才能有效的管理配置呢？</p>
+<p>分析上述提到的痛点可以发现，对于一个好的配置管理设计，一个重要的点是配置要能集中进行管理。</p>
+<p>在我们的系统中配置应该集中到哪里呢？稍加分析就能知道，配置当然要集中在某个最外层的应用层模块进行，因为各个服务实例的组装就是在这里完成的。在上面的这个场景中，我们有两个应用层的模块，即<code>Rest API</code>及<code>ml</code>。实际上<code>ml</code>模块并不是可以独立运行的模块，它的内部是实现了特征处理<code>Pipeline</code>和各种机器学习算法，以<code>spark</code>应用的形式提供出来。这些分布式应用的调度却来自<code>Rest API</code>，也就是<code>Rest API</code>是一个驱动器，是更偏应用层的一个模块。对于<code>ml</code>模块中需要的配置，我们就可以在调度其运行时通过参数的方式传入。于是，我们的配置就应该集中到<code>Rest API</code>模块中。</p>
+<p>改造之后的配置如下图所示：</p>
+<p><img src="/attaches/2020/2020-05-22-architecture-designing-practise-for-ml-platform-configuration/centralized-configuration.png" alt="集中配置"></p>
+<p>恰好<code>Rest API</code>模块是基于<code>Spring Boot</code>构建的，这样一来，就可以完全借助于<code>Spring</code>为我们提供的配置管理工具来实现配置管理了。</p>
+<p>实现了这一步骤之后，整个配置设计就变得简单易懂，上面提到的配置管理问题也被有效的解决了。除了<code>Rest API</code>模块会根据不同的环境构建不同的包，其他的包全部都是可以按版本独立发布且可在各个环境复用的。至于<code>Rest API</code>模块，其实我们也可以很容易实现一个包支持多个环境，只需要我们将配置独立出来作为一个外部文件来管理即可。</p>
+<p>为了实现这一架构调整，我们在原有系统上面进行了较大的重构。在重构过程中，有几点设计上面的经验是比较有价值的：</p>
+<ol>
+<li>从依赖倒置的设计思想来看，作为一个通用的模块，其配置设计应该以一个接口的形式进行定义，然后在模块内部所有需要使用此配置的地方引用该接口</li>
+<li>对模块内某一个具体类的配置设计，应该考虑最小信息原则，仅支持类自身需要知道的几个配置，而尽量不要直接引用一个大而全的配置对象</li>
+<li>在模块内部，可以考虑提供一个配置接口的实现，以便提供一些合理的默认配置</li>
+<li>在配置设计上需要尽量保持配置项的独立，避免设计一些本可以通过原子配置计算得到的配置，这样可以减少配置数量</li>
+</ol>
+<h2 id="微服务中的配置"><a class="markdownIt-Anchor" href="#微服务中的配置"></a> 微服务中的配置</h2>
+<p>除了要考虑模块中的配置设计，另一个要考虑的配置问题就是各个微服务中的配置设计。</p>
+<p>由于微服务需要独立的为外部系统提供服务，我们无法将其当做一个模块来对待，所以配置是不得不存在的。</p>
+<p><code>Spring Cloud Config</code>为我们提供了一个中心化管理微服务配置的思路，它考虑了支持配置文件的集中加载、版本管理（可以通过git实现）、容错等需求的实现。但是多部署一个组件来管理配置引入了额外的复杂度，多数团队不太希望引入一个需要额外维护的模块。</p>
+<p><code>k8s</code>的<code>ConfigMap</code>及<code>Persistent Volume</code>设计为我们管理配置提供了另一种方式。我们可以将配置放到某一个共享的<code>ConfigMap</code>或<code>Persistent Volume</code>中。</p>
+<p>在实践中，我们采用了<code>k8s</code>提供的配置管理机制。</p>
+<p>在我看来，采用何种配置管理机制的一个主要考量是有多少重复的配置。如果各个微服务间的重复配置特别多，我们甚至可以参考<code>helm</code>管理<code>k8s</code>配置的机制，即通过模板系统来提供一个更高层的配置抽象，从而得到更少的配置项，然后通过程序自动生成不同的微服务的配置。</p>
+<p>这里另一个需要思考的问题是为什么会有这么多的重复配置，是不是微服务拆分本来就不合理呢？因为一旦有重复的配置，就说明不同的微服务间有一个相同的依赖。这即是微服务耦合的体现。在微服务设计时，一个指导原则就是要采用DDD的思路进行拆分，避免出现高耦合的分布式大泥球。高内聚低耦合是我们进行系统设计的不懈追求，如果我们发现是由于服务拆分不合理导致的配置重复，那我们就得更早的进行调整，防止带来更大的损失。</p>
+<p>在机器学习平台系统中，我们拆分出来的<code>Spark-Meta</code> <code>Monitoring</code> <code>MLServing</code> <code>Rest API</code>等几个微服务间几乎没有配置重复，这也使得我们在管理微服务的配置上面变得非常轻松。</p>
+<h2 id="配置的存储和更新"><a class="markdownIt-Anchor" href="#配置的存储和更新"></a> 配置的存储和更新</h2>
+<p>在进行配置设计时另一个我们经常关注的问题是配置怎么存放及更新的问题。比如，对于某一个配置项，我们是将其放置到配置文件中呢，还是放到数据库中？还比如，对于某一个配置项，如果我们有需求要进行动态的更新要如何实现？</p>
+<p>对于配置的存储位置，一般而言，我们会优先考虑存储到配置文件中。如果存储到数据库中，实际上我们是将配置当做数据进行管理了。既然是数据，那么其访问权限就要被严格限制，否则将带来安全隐患，比如配置文件中通常要存储一些系统间通信的账号密码，我们如何保证这些数据的安全性呢？一些将配置存放到数据库中的想法可能来源于配置的更新可以通过维护数据库中的数据来简单的实现。然而，配置的动态更新需要程序逻辑的支持才行。比如，对于缓存的配置要何时更新？已经创建的对象要如何重建？这些可能是非常复杂的问题，远非修改一个数据库数据可以实现。因此，如非必要，我们还是要优先考虑将配置存储到配置文件中。</p>
+<p><code>Spring</code>为我们提供的配置管理实现了在线更新配置的<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints" target="_blank" rel="noopener">接口</a>，我们可以直接修改某一个配置，而无需重启服务。但是这样一来，这些更新了的配置就只是在当前进程中生效了，一旦重启这些配置将不复存在。在当前容器化的时代，我们一般不会想通过这种方式来管理配置。而希望用一种更易于管理的方式实现，比如我们可以把配置的更新当做应用程序的一次更新，然后通过滚动升级的方式应用这个更新。在广泛使用<code>k8s</code>进行应用运维的当下，要实现不停服升级是轻而易举的。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文分享了在机器学习平台系统建设过程中，我们对于配置管理设计方面的思考和实践，还分享了关于配置的存储和更新的一些思考。如对于内容有任何疑问，或者有其他有用的实践分享，欢迎留言讨论。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/机器学习平台/" rel="tag"># 机器学习平台</a>
+          
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+            <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
+          
+            <a href="/tags/配置管理/" rel="tag"># 配置管理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/22/architecture-designing-practise-for-ml-platform/" rel="next" title="机器学习平台架构实践--微服务">
+                <i class="fa fa-chevron-left"></i> 机器学习平台架构实践--微服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/24/architecture-designing-practise-for-ml-platform-oop/" rel="prev" title="机器学习平台架构实践--面向对象设计">
+                机器学习平台架构实践--面向对象设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块自有配置导致的混乱"><span class="nav-number">1.</span> <span class="nav-text"> 模块自有配置导致的混乱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#统一的配置管理设计"><span class="nav-number">2.</span> <span class="nav-text"> 统一的配置管理设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务中的配置"><span class="nav-number">3.</span> <span class="nav-text"> 微服务中的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置的存储和更新"><span class="nav-number">4.</span> <span class="nav-text"> 配置的存储和更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2020/05/23/architecture-designing-practise-for-ml-platform-configuration/', // optional
+      owner: 'gmlove',
+      title: '机器学习平台架构实践--配置管理',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
