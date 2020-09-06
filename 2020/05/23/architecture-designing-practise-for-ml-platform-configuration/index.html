@@ -84,7 +84,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,配置管理,">
+  <meta name="keywords" content="架构,机器学习,机器学习平台,架构设计,配置管理,">
 
 
 
@@ -103,7 +103,7 @@
 
 
 <meta name="description" content="随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。 对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分">
-<meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,配置管理">
+<meta name="keywords" content="架构,机器学习,机器学习平台,架构设计,配置管理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习平台架构实践--配置管理">
 <meta property="og:url" content="http://brightliao.me/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/index.html">
@@ -111,7 +111,7 @@
 <meta property="og:description" content="随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。 对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-22-architecture-designing-practise-for-ml-platform-configuration/centralized-configuration.png">
-<meta property="og:updated_time" content="2020-06-08T11:27:13.453Z">
+<meta property="og:updated_time" content="2020-08-25T05:58:54.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习平台架构实践--配置管理">
 <meta name="twitter:description" content="随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。 对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分">
@@ -450,6 +450,7 @@
         <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>随着系统功能越来越多，系统的配置也越来越多，配置管理成为了一个重要的问题。做过线上运维的同学们一定对配置的复杂性有深刻体会，多少次加班都是因为一个配置不对而导致系统无法正常工作！配置问题由于难以建立有效的自动化测试而难以检测，常常使得我们不得不花费数小时甚至数天来调试才能找到配置上的问题。</p>
 <p>对于分布式计算，这个问题变得更加突出了，熟悉分布式大数据处理的同学们对于分布式任务的复杂配置一定深有感触。分布式系统本身的复杂性常常使得单个组件的配置就有上百个。而在微服务架构流行的当下，我们的系统越来越多以分布式的形式出现，系统的配置管理问题也越来越突出。</p>
 <p>本文尝试分享一下我们在构建机器学习平台时对于配置管理方面的设计实践。</p>
+<a id="more"></a>
 <h2 id="模块自有配置导致的混乱"><a class="markdownIt-Anchor" href="#模块自有配置导致的混乱"></a> 模块自有配置导致的混乱</h2>
 <p>结合上文中关于平台架构的分析，我们看到系统拆分了一个名为<code>connector</code>的通用模块，负责实现和外部系统进行对接。这一模块会同时支持<code>Rest API</code>及<code>ml</code>两个应用层模块。</p>
 <p>由于<code>Rest API</code>及<code>ml</code>两个模块会连接同一个大数据集群进行数据操作，所以它们的不少配置是一样的。比如某一租户运行任务的缓存路径，读写的<code>hbase</code>的数据库名字等。一个简单的想法就是将这些与<code>connector</code>相关的共享配置放到<code>connector</code>模块中去，然后将无法共享的配置放到<code>Rest API</code>及<code>ml</code>各自的模块中去。</p>
@@ -513,11 +514,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
             <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
           
             <a href="/tags/机器学习平台/" rel="tag"># 机器学习平台</a>
-          
-            <a href="/tags/架构/" rel="tag"># 架构</a>
           
             <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
           
@@ -639,7 +640,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-count">68</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -650,7 +651,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -661,7 +662,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-count">108</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

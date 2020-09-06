@@ -84,7 +84,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,面向对象,">
+  <meta name="keywords" content="架构,面向对象,机器学习,机器学习平台,架构设计,">
 
 
 
@@ -102,18 +102,22 @@
 
 
 
-<meta name="description" content="识别扩展点与面向对象抽象。 算子抽象、模型抽象、Job抽象、有限状态机抽象 架构设计需要具备前瞻性，因为一旦系统特别复杂了，再调整大的架构就不是一件轻松的事情了，很容易引入问题。 有限状态机 在代码拷贝和复用上寻求平衡 刚刚好的设计。 总结">
-<meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,面向对象">
+<meta name="description" content="面向对象的程序设计思想多年来一直是我们进行软件设计的有效的指导思想。由于我们天生理解大自然的机制就是面向对象的（比如我们到了某一个商店，我们会看到门店、售货员、货架、货架上的货物等等，这些都是一个一个的对象，我们认识整个商店也就是去认识商店中的每个对象。），而面向对象程序设计思想恰好与这一机制相一致，所以一个面向对象设计做得好的系统就很容易为我们所理解。 对于一个机器学习平台，应该如何实践面向对象">
+<meta name="keywords" content="架构,面向对象,机器学习,机器学习平台,架构设计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习平台架构实践--面向对象设计">
 <meta property="og:url" content="http://brightliao.me/2020/05/24/architecture-designing-practise-for-ml-platform-oop/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="识别扩展点与面向对象抽象。 算子抽象、模型抽象、Job抽象、有限状态机抽象 架构设计需要具备前瞻性，因为一旦系统特别复杂了，再调整大的架构就不是一件轻松的事情了，很容易引入问题。 有限状态机 在代码拷贝和复用上寻求平衡 刚刚好的设计。 总结">
+<meta property="og:description" content="面向对象的程序设计思想多年来一直是我们进行软件设计的有效的指导思想。由于我们天生理解大自然的机制就是面向对象的（比如我们到了某一个商店，我们会看到门店、售货员、货架、货架上的货物等等，这些都是一个一个的对象，我们认识整个商店也就是去认识商店中的每个对象。），而面向对象程序设计思想恰好与这一机制相一致，所以一个面向对象设计做得好的系统就很容易为我们所理解。 对于一个机器学习平台，应该如何实践面向对象">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-23T05:54:30.167Z">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/architecture.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/pipeline-demo.png">
+<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/fsm.png">
+<meta property="og:updated_time" content="2020-09-06T09:27:48.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习平台架构实践--面向对象设计">
-<meta name="twitter:description" content="识别扩展点与面向对象抽象。 算子抽象、模型抽象、Job抽象、有限状态机抽象 架构设计需要具备前瞻性，因为一旦系统特别复杂了，再调整大的架构就不是一件轻松的事情了，很容易引入问题。 有限状态机 在代码拷贝和复用上寻求平衡 刚刚好的设计。 总结">
+<meta name="twitter:description" content="面向对象的程序设计思想多年来一直是我们进行软件设计的有效的指导思想。由于我们天生理解大自然的机制就是面向对象的（比如我们到了某一个商店，我们会看到门店、售货员、货架、货架上的货物等等，这些都是一个一个的对象，我们认识整个商店也就是去认识商店中的每个对象。），而面向对象程序设计思想恰好与这一机制相一致，所以一个面向对象设计做得好的系统就很容易为我们所理解。 对于一个机器学习平台，应该如何实践面向对象">
+<meta name="twitter:image" content="http://brightliao.me/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/architecture.png">
 
 
 
@@ -445,13 +449,88 @@
       
 
       
-        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="识别扩展点与面向对象抽象"><a class="markdownIt-Anchor" href="#识别扩展点与面向对象抽象"></a> 识别扩展点与面向对象抽象。</h2>
-<p>算子抽象、模型抽象、Job抽象、有限状态机抽象</p>
-<p>架构设计需要具备前瞻性，因为一旦系统特别复杂了，再调整大的架构就不是一件轻松的事情了，很容易引入问题。</p>
-<p>有限状态机</p>
-<p>在代码拷贝和复用上寻求平衡<br>
-刚刚好的设计。</p>
-<p>总结</p>
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>面向对象的程序设计思想多年来一直是我们进行软件设计的有效的指导思想。由于我们天生理解大自然的机制就是面向对象的（比如我们到了某一个商店，我们会看到门店、售货员、货架、货架上的货物等等，这些都是一个一个的对象，我们认识整个商店也就是去认识商店中的每个对象。），而面向对象程序设计思想恰好与这一机制相一致，所以一个面向对象设计做得好的系统就很容易为我们所理解。</p>
+<p>对于一个机器学习平台，应该如何实践面向对象程序设计思想呢？</p>
+<h2 id="面向对象的抽象"><a class="markdownIt-Anchor" href="#面向对象的抽象"></a> 面向对象的抽象</h2>
+<p>回顾前面两篇文章的内容，机器学习平台具备这样的架构：</p>
+<p><img src="/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/architecture.png" alt="系统架构"></p>
+<p>看了这个架构，一些重要的对象就自然的浮现了出来。比如数据集（DataSet）、Pipeline、实验（Experiment）、任务（Job）、周期任务（PeriodicalJob）、服务（Service）等。</p>
+<p>经过前面关于微服务架构设计的分析，我们可以发现，随着系统的功能越来越复杂，这里的几个对象事实上都逐渐的发展为了某个大的模块或者某个候选的微服务。尽管如此，它们依然是这些模块或者微服务内的核心对象。</p>
+<p>这里的对象抽象看似简单，但是如果缺乏经验，经常会出的一个问题是将这些对象与数据库存储的表强耦合在一起。这里的强耦合的表现就是：</p>
+<ol>
+<li>从设计数据库开始，而不是先从面向对象设计开始</li>
+<li>直接使用<code>ORM</code>框架生成的对象作为核心对象使用</li>
+<li>直接使用<code>ORM</code>框架生成的对象操作器（如Spring的JPA中由接口继承而来的<code>XXXRepository</code>）作为领域服务来使用</li>
+</ol>
+<p>使用框架生成的代码通常看起来已经可以完成大部分的工作了，这是一个很大的诱惑，如果我们没有保持克制，随意的去使用这些已有的功能，就会使得我们的代码大量的被<code>ORM</code>框架技术所侵入，从而变得臃肿且笨重，难以适应业务的变化。</p>
+<p>举一个例子。我们都知道，<code>ORM</code>框架会建模对象间的关系，并在读取关联对象时自动生成一条查询语句到数据集中提取关联对象，这个特性非常好用。但当我们在操作一个比较大的列表时，这样的默认实现就可能会导致非常多的关联表查询发往数据库，这不是我们想要的，因为它会带来极大的性能影响（好的实现是一次性将所有要访问的数据取出）。更有甚者，如果我们的关联对象本身又有很多其他的关联对象，而我们还将其提取方式设置为了<code>eager</code>，那就会导致更多非预期的数据库查询发生。</p>
+<p>在机器学习平台这个系统里面，<code>Job</code>将会关联<code>Pipeline</code>，而<code>Pipeline</code>又会关联其拥有的算子节点列表（<code>PipelineNode</code>），一旦我们想要获取一个<code>Job</code>的列表，并显示与其关联的<code>Pipeline</code>的节点<code>PipelineNode</code>的数量时，上面的问题就发生了。</p>
+<p>由于<code>ORM</code>框架会诱惑程序员去使用这些便捷的功能，如果团队中有人没有意识到潜在的性能问题而随意使用，上述情况就会频繁发生。</p>
+<p>如何避免这个问题呢？其实很简单，我们只需要把数据库或者<code>ORM</code>框架当做一个实现细节来对待就行了。既然是一个实现细节，在设计阶段就不应该做过多的考虑，甚至可以完全不管。那么进行面向对象系统设计的步骤就应该是：</p>
+<ol>
+<li>抽取对象，为其选取一个好的名字</li>
+<li>设计对象的属性和行为（只要能解决当前需求就行，后续根据需求渐进式的添加）</li>
+<li>根据业务需求，设计对象的持久化服务对象及其方法</li>
+<li>根据业务需求，设计业务级服务对象（以业务操作来命名，避免直接<code>CRUD</code>）</li>
+</ol>
+<p>以<code>Job</code>为例，上述每一步的输出可以是：</p>
+<ol>
+<li><code>com.xxx.ml.platform.job.model.Job</code></li>
+<li>如：<code>Job.isRunning</code> <code>Job.isSparkJob</code> <code>Job.markAsFinished</code></li>
+<li>定义<code>JobRepository</code>接口，及其行为比如：<code>JobRepository.findById</code> <code>JobRepository.findByStatus</code> <code>JobRepository.save</code></li>
+<li>定义<code>JobService</code>业务服务对象，及其行为比如：<code>JobService.createJob</code> <code>JobService.terminateJob</code></li>
+</ol>
+<p>完成这样的设计之后，我们就获得了一些单纯的业务对象，而非一个个数据库表的直接映射了。那么数据库表的映射要如何完成呢？以<code>Job</code>为例，我们可以基于<code>ORM</code>框架很容易的实现一个<code>JobRepository</code>。首先我们要新建立一个对应的数据库实体映射对象并生成对应的数据操作对象（如<code>JobDAO</code>），然后将<code>JobRepository</code>接口的实现部分代理到<code>JobDAO</code>的接口，再完成数据库实体映射对象到业务对象的拷贝就完成了。</p>
+<p>有人说，这样岂不是多写了一个模型，还得多写一些对象间拷贝的代码？是的，从最终结果上来看，确实多写了一个模型来完成<code>ORM</code>框架所需要的数据库映射，但是这个模型的代码其实非常简单，它不包含任何的业务逻辑，只是单纯的数据。对象属性拷贝的代码更是简单，甚至可以用反射机制来自动完成。</p>
+<p>这里的少量新代码是值得的，因为它给我们带来了巨大的灵活性，避免了我们的系统直接依赖于某一个特定的<code>ORM</code>框架。这些灵活性比如：</p>
+<ol>
+<li>可以轻易的替换<code>ORM</code>框架</li>
+<li>可以轻易的替换存储实现，比如从关系型数据库替换为<code>MongoDB</code>这样的文档型数据库</li>
+<li>对象的属性可以允许与数据库字段有差异，比如当对象<code>A</code>中的某个属性<code>b</code>是一个其他对象<code>B</code>的实例，而<code>B</code>又不值得新建一个数据库表来存储时，我们就可以手动的将<code>b</code>序列化为一个<code>Json</code>格式的数据在数据库中进行存储</li>
+<li>可以灵活的使用业务语言进行命名，这也就避免了<code>ORM</code>框架的命名规范侵入到系统设计里</li>
+</ol>
+<p>领域驱动设计方法在当下已经成为了一个指导我们进行设计的重要方法，其中推荐的一个实践就是&quot;领域对象不应该有除标准库外的任何依赖&quot;。采用上述面向对象设计的做法就可以实现核心对象（这里的核心对象其实就是领域对象）没有任何除标准库外的依赖。</p>
+<h2 id="识别扩展点并进行面向对象抽象"><a class="markdownIt-Anchor" href="#识别扩展点并进行面向对象抽象"></a> 识别扩展点并进行面向对象抽象</h2>
+<p>机器学习平台最大的扩展点莫过于算子和算法模型了。从业务的角度出发，应该支持尽量多的算子和算法模型，以便开发机器学习模型的工程师可以在进行特征处理和算法选择时开箱即用。</p>
+<p>按照前面的面向对象设计思路，这里的核心对象可以是<code>Operator</code>和<code>AlgorithmModel</code>对象。同时，我们将支持不同类型的这两类对象。比如对于下面这样的特征处理流程，里面就涉及<code>归一化</code> <code>分桶</code> <code>独热编码</code>等等算子。</p>
+<p><img src="/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/pipeline-demo.png" alt="Pipeline Demo"></p>
+<p>此时，从面向对象设计来看，一个自然的想法就是抽象出一个继承关系了。于是就可以得出下面这样的继承树：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Operator</span><br><span class="line">|-- Normalization</span><br><span class="line">|-- Bucketing</span><br><span class="line">|-- OneHotEncoder</span><br><span class="line">|-- MultiHotEncoder</span><br><span class="line">|-- ...</span><br></pre></td></tr></table></figure>
+<p>对于<code>AlgorithmModel</code>，同样可以得出类似下面这样的继承树：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AlgorithmModel</span><br><span class="line">|-- DecisionTree</span><br><span class="line">|-- LinearRegression</span><br><span class="line">|-- GBDT</span><br><span class="line">|-- DeepFM</span><br><span class="line">|-- ...</span><br></pre></td></tr></table></figure>
+<p>到这里，很容易产生的一个疑问就是：这些对象如何存储到数据库里面呢？如果我们没有从面向对象的角度出发进行系统设计，而是优先考虑如何在数据库中存储这些数据，那么我们很有可能就只是得出了一个<code>Operator</code>或<code>AlgorithmModel</code>对象。缺乏继承树抽象将给系统带来非常大的问题，可以预见，不同的算子或算法模型将存在差异（如不同的算法需要的参数不同），如果只有一个<code>Operator</code>或<code>AlgorithmModel</code>抽象而没有继承树，处理这些差异的代码就只能放在<code>Operator</code>或<code>AlgorithmModel</code>对象中。这将导致<code>Operator</code>或<code>AlgorithmModel</code>的逻辑非常复杂，最终导致难以维护的代码。</p>
+<p>那么，当有了继承树的时候，如何将这些数据有效的存入数据库呢？难道要对每一个子类都建立一张数据库表吗？其实完全没有必要，由于数据库存储只是一个实现细节，那么数据库里面可以只有<code>operator</code>和<code>algorithm_model</code>表。我们可以在超类<code>Operator</code>或<code>AlgorithmModel</code>中定义一个抽象的获取需要保存的属性的方法，这个方法将返回一个列表，由子类实现，就可以了。</p>
+<p>既然算子和算法是系统最大的两个扩展点，我们就需要让添加算子和算法变得足够轻松。有了上述面向对象的抽象，我们就可以将很多公共的逻辑放到父类中去实现，这样添加一个一般的算子和算法就可以很快实现了。</p>
+<p>从这里的分析可以发现，好的面向对象设计给系统带来了巨大的灵活性，它使得系统非常易于理解和修改。我们的平台也正是因为建立了这样的设计，才得以快速的演进。</p>
+<h2 id="使用tdd辅助进行复杂的模块设计"><a class="markdownIt-Anchor" href="#使用tdd辅助进行复杂的模块设计"></a> 使用TDD辅助进行复杂的模块设计</h2>
+<p>除了上面简单的面向对象设计，整个系统中还存在一些比较复杂的场景。比如，对于<code>API</code>模块而言，它的作用是作为一个后端服务来管理前端系统界面上面的配置，我们还需要一个<code>Scheduler</code>调度器模块来负责将任务调度到计算平台上面去执行。</p>
+<p>这里我们以一个典型的场景为例来描述一下需求。比如用户配置了一条特征处理<code>Pipeline</code>，调度器需要将其打包为一个调度平台上面可以运行的任务，然后发送到调度平台上运行。在运行过程中，用户可以随时查看任务的执行状态，打印的日志等内容。同时，用户可以随时中断任务的执行。当任务结束时，系统需要记录任务的状态，包括结束时间、运行时长等，还需要转存任务日志以便用户可以随时进行查询，对于有后续任务的情况，还需要以适当的方式处理后续任务（调度起来或者设置为失败）。</p>
+<p>用一张状态图来描述一个任务的状态转换，可以得到下图：</p>
+<p><img src="/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/fsm.png" alt="Task Status"></p>
+<p>调度器的基本运行机制是：</p>
+<ol>
+<li>从数据库获取待执行的新任务，并调度到计算平台（如<code>Yarn</code>或<code>Kubernetes</code>）上面运行</li>
+<li>从数据库获取其他状态的任务，并针对不同的状态执行对应的操作</li>
+<li>向计算平台获取任务状态，同步到数据库中以便让用户及时查询，同时执行该状态对应的操作</li>
+</ol>
+<p>可以看到，这里的业务逻辑是比较复杂的，如果没有合适的抽象，我们很可能会写出很多重复而难以维护的代码。</p>
+<p>如何进行设计才能有效的将问题简化呢？其实看到上面的状态图，我们就应该可以想到：是不是可以用有限状态机来进行抽象？</p>
+<p>这是一个基本的想法，如何去实现呢？对于这样的复杂场景，就需要<code>TDD</code>来指导我们进行设计了。</p>
+<p>我们先从测试的角度来考虑整个系统应该如何运行。对于一个一般的有限状态机，它应该可以让使用者注册一系列状态转换处理器，以便当某个任务到达某一状态时就运行起来。于是，我们可以编写以下测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">JobStarter jobStarter = mock(JobStarter<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">JobLogFetcher jobLogFetcher = mock(JobLogFetcher<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">JobStatusFetcher jobStatusFetcher = mock(JobStatusFetcher<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">JobFsm jobFsm = <span class="keyword">new</span> JobFsm(); <span class="comment">// Fsm 为有限状态机 Finite State Machine 的缩写</span></span><br><span class="line">jobFsm.addStateTransitionHandler(<span class="keyword">null</span>, JobState.NEW, job -&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (job.readyToStart()) &#123;</span><br><span class="line">        jobStarter.startJob(job);</span><br><span class="line">        jobFsm.transitJobState(JobState.SUBMITTING);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 从任意状态转换为 &#123;SUBMITTING, SUBMITTED, RUNNING&#125; 的处理器</span></span><br><span class="line">jobFsm.addStateTransitionHandler(<span class="keyword">null</span>, </span><br><span class="line">    <span class="keyword">new</span> JobState[]&#123;JobState.SUBMITTING, JobState.SUBMITTED, JobState.RUNNING&#125;,</span><br><span class="line">    job -&gt; &#123;</span><br><span class="line">        jobLogFetcher.fetchLog(job);</span><br><span class="line">    &#125;);</span><br><span class="line"><span class="comment">// 从任意状态转换为 &#123;SUBMITTED, RUNNING&#125; 的处理器</span></span><br><span class="line">jobFsm.addStateTransitionHandler(<span class="keyword">null</span>, </span><br><span class="line">    <span class="keyword">new</span> JobState[]&#123;JobState.SUBMITTED, JobState.RUNNING&#125;,</span><br><span class="line">    job -&gt; &#123;</span><br><span class="line">        JobStatus newStatus = jobStatusFetcher.fetchStatus(job);</span><br><span class="line">        <span class="keyword">if</span> (newStatus != job.getStatus()) &#123;</span><br><span class="line">            jobFsm.transitJobState(job, newStatus);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// when(jobStarter.xxx)</span></span><br><span class="line"><span class="comment">// assert.xxx</span></span><br></pre></td></tr></table></figure>
+<p>有了这样的测试代码，实际上我们的整个系统设计就呼之欲出了。它将包含这样几个对象：<code>JobStarter</code> <code>JobLogFetcher</code> <code>JobStatusFetcher</code> <code>JobFsm</code>等。不仅如此，每个对象所需要定义的接口也都在测试代码里面定义好了。</p>
+<p>从这里的设计来看，<code>TDD</code>在其中发挥的作用可谓非常明显。它辅助我们为对象取好了名字，为对象定义好了行为，同时连行为应该具有的函数签名也定义出来了。而且当回头来看这里得出的系统设计时，我们将发现这里定义的接口不多不少，恰好够用，且各处的命名均符合使用业务语言命名的推荐实践。这正是<code>TDD</code>辅助进行系统设计所带来的功效！</p>
+<p>为什么<code>TDD</code>可以指导我们进行复杂系统设计？这是因为使用<code>TDD</code>时，我们完全是站在如何使用这些（将要设计出来的）<code>API</code>的角度来编写（测试）代码的。既然是这样，我们最终获得的<code>API</code>设计也因此变得易于使用。</p>
+<p>这里的逻辑也可以这样来理解，比如，我们的需求是拧一颗螺丝，如果我们直接去做设计，而不是采用<code>TDD</code>的方法，我们很可能会去找来一个万用螺丝刀。而如果采用<code>TDD</code>的方法，我们会先确定螺丝的类型（梅花还是十字）和大小（为了能编写测试，自然需要先确认需要对接的接口），然后再根据需求去实现一个对应的恰好合适的螺丝刀。对于生活使用时，万用螺丝刀可能更好，但对于软件开发而言，万用螺丝刀的开发和维护成本可能要数倍于一个刚好合适的螺丝刀，且万用螺丝刀通常还没有专用的螺丝刀简单好用。</p>
+<p>类似这样的例子，在我们的系统里面还有很多，就不详述了。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>在机器学习平台架构设计上，采用面向对象设计思想，我们获得了一个灵活易用的系统。总结起来，有以下三点经验：</p>
+<ol>
+<li>进行系统设计时，应当把数据库<code>ORM</code>技术当做一个实现细节，而非让这些技术主导了设计过程</li>
+<li>识别系统的扩展点，专门为其做出合适的设计</li>
+<li>采用<code>TDD</code>的方式来指导复杂系统的设计</li>
+</ol>
+<p>如果想了解更多，欢迎留言一起探讨。</p>
 
       
     </div>
@@ -481,15 +560,15 @@
       
         <div class="post-tags">
           
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
+            <a href="/tags/面向对象/" rel="tag"># 面向对象</a>
+          
             <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
           
             <a href="/tags/机器学习平台/" rel="tag"># 机器学习平台</a>
           
-            <a href="/tags/架构/" rel="tag"># 架构</a>
-          
             <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
-          
-            <a href="/tags/面向对象/" rel="tag"># 面向对象</a>
           
         </div>
       
@@ -607,7 +686,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-count">68</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -618,7 +697,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -629,7 +708,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">106</span>
+                <span class="site-state-item-count">108</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -688,7 +767,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#识别扩展点与面向对象抽象"><span class="nav-number">1.</span> <span class="nav-text"> 识别扩展点与面向对象抽象。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象的抽象"><span class="nav-number">1.</span> <span class="nav-text"> 面向对象的抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#识别扩展点并进行面向对象抽象"><span class="nav-number">2.</span> <span class="nav-text"> 识别扩展点并进行面向对象抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用tdd辅助进行复杂的模块设计"><span class="nav-number">3.</span> <span class="nav-text"> 使用TDD辅助进行复杂的模块设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
             
 
           </div>
