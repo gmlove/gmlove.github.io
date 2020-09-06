@@ -106,30 +106,30 @@
 <meta name="keywords" content="tensorflow,AI,Machine Learning,Deep Learning,GAN,生成对抗网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入探索生成对抗网络（一）">
-<meta property="og:url" content="http://brightliao.me/2017/06/21/dive-into-gan/index.html">
+<meta property="og:url" content="http://brightliao.com/2017/06/21/dive-into-gan/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
 <meta property="og:description" content="最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第一部分。  生成对抗网络介绍  什么是生成对抗网络？ 从这个名称来看，我们可以了解到，这个网络是用一种对抗方法去生成数据的。和其他的机器学习模型相比，生成对抗网络里面最炫酷的理念莫过于给机器学习引入了对抗。纵观地球上的生物们的成长和发展路线就会发现">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/history.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/applications.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/igan.gif">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/ian-goodfellow.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/gan-structure.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/log-function.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/gan-loss.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/converge-status.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/gan-algorithm.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/loss-implementation.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/loss-implementation-generator.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/gan-generated-images.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/tensor-board-loss.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/tensor-board-generated.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/history.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/applications.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/igan.gif">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/ian-goodfellow.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/gan-structure.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/log-function.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/gan-loss.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/converge-status.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/gan-algorithm.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/loss-implementation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/loss-implementation-generator.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/gan-generated-images.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/tensor-board-loss.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/tensor-board-generated.png">
 <meta property="og:updated_time" content="2017-06-25T05:51:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入探索生成对抗网络（一）">
 <meta name="twitter:description" content="最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第一部分。  生成对抗网络介绍  什么是生成对抗网络？ 从这个名称来看，我们可以了解到，这个网络是用一种对抗方法去生成数据的。和其他的机器学习模型相比，生成对抗网络里面最炫酷的理念莫过于给机器学习引入了对抗。纵观地球上的生物们的成长和发展路线就会发现">
-<meta name="twitter:image" content="http://brightliao.me/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png">
 
 
 
@@ -157,7 +157,7 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2017/06/21/dive-into-gan/">
+  <link rel="canonical" href="http://brightliao.com/2017/06/21/dive-into-gan/">
 
 
 
@@ -353,7 +353,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2017/06/21/dive-into-gan/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/06/21/dive-into-gan/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">

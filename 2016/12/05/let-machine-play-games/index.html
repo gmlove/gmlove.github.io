@@ -106,33 +106,33 @@
 <meta name="keywords" content="tensorflow,AI,Machine Learning,Reinforcement Learning,DQN,Deep Reinforcement Learning,DeepQ Network">
 <meta property="og:type" content="article">
 <meta property="og:title" content="让机器自己玩游戏">
-<meta property="og:url" content="http://brightliao.me/2016/12/05/let-machine-play-games/index.html">
+<meta property="og:url" content="http://brightliao.com/2016/12/05/let-machine-play-games/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
 <meta property="og:description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。  我们的目标 Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/breakout-in-openai.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/mdp.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/state-action-tree.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/state-action-value-formula.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/state-value-formula.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/expected-state-value-formula.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/value-function-for-pi-formula.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/bellman-equation.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/optimal-value-function.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/iterable-optimal-value-function.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/q-value-formula.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/q-value-bellman-formula.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/q-value-iteration-algorithm.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/dqn-algorithm-by-deepmind.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-structure.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-parameter.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-loss-function.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/breakout-in-openai.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/mdp.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/state-action-tree.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/state-action-value-formula.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/state-value-formula.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/expected-state-value-formula.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/value-function-for-pi-formula.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/bellman-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/optimal-value-function.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/iterable-optimal-value-function.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/q-value-formula.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/q-value-bellman-formula.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/q-value-iteration-algorithm.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/dqn-algorithm-by-deepmind.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-structure.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-parameter.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/dqn-network-loss-function.png">
 <meta property="og:updated_time" content="2016-12-14T00:58:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="让机器自己玩游戏">
 <meta name="twitter:description" content="大家好，这次要跟大家分享一个很炫酷的东西。我们要实现一个机器学习算法，这个算法可以通过观察屏幕，产生一系列操作，进而控制游戏，取得高分。  我们的目标 Atari是1972年成立的一家美国公司，主要做的是街机、家用电脑、家用游戏机。很多早期的经典游戏都是出自Atari，比如什么乒乓球、网球、各种弹珠游戏等等。我们今天要让机器来玩的游戏就是出自atari的游戏，名为breakout。这个游戏是基于乒">
-<meta name="twitter:image" content="http://brightliao.me/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2016/2016-12-05-let-machine-play-games/breakout-game.png">
 
 
 
@@ -160,7 +160,7 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2016/12/05/let-machine-play-games/">
+  <link rel="canonical" href="http://brightliao.com/2016/12/05/let-machine-play-games/">
 
 
 
@@ -356,7 +356,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2016/12/05/let-machine-play-games/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/12/05/let-machine-play-games/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">

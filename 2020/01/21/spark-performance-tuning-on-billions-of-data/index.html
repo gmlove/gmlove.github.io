@@ -106,21 +106,21 @@
 <meta name="keywords" content="机器学习,Spark,大数据,性能,性能优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="亿级数据Spark应用调优之旅">
-<meta property="og:url" content="http://brightliao.me/2020/01/21/spark-performance-tuning-on-billions-of-data/index.html">
+<meta property="og:url" content="http://brightliao.com/2020/01/21/spark-performance-tuning-on-billions-of-data/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
 <meta property="og:description" content="技术飞速发展，机器学习正在成为各个企业的核心竞争优势之一。除了在处于风口浪尖的计算机视觉方向的应用，可能更能产生直接的价值的一个方向是在智能推荐领域。比如广告推荐，如果我们有一个更有效的算法，更精准的向用户推荐了某个广告，用户的广告点击将为企业直接带来收益。 然而在推荐领域，我们面临的是与当前的深度学习颇有不同的问题。这些不同主要体现在：  超大的数据量 领域专家人工设计的特征 极致的在线服务性能">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/system-process-flow.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/too-many-cache.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/many-count-by-value.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/hive-table-metadata.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/hive-table-metadata-removed.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/dag-scheduler-thread.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/system-process-flow.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/too-many-cache.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/many-count-by-value.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/hive-table-metadata.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/hive-table-metadata-removed.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/dag-scheduler-thread.png">
 <meta property="og:updated_time" content="2020-02-04T13:08:17.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="亿级数据Spark应用调优之旅">
 <meta name="twitter:description" content="技术飞速发展，机器学习正在成为各个企业的核心竞争优势之一。除了在处于风口浪尖的计算机视觉方向的应用，可能更能产生直接的价值的一个方向是在智能推荐领域。比如广告推荐，如果我们有一个更有效的算法，更精准的向用户推荐了某个广告，用户的广告点击将为企业直接带来收益。 然而在推荐领域，我们面临的是与当前的深度学习颇有不同的问题。这些不同主要体现在：  超大的数据量 领域专家人工设计的特征 极致的在线服务性能">
-<meta name="twitter:image" content="http://brightliao.me/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/system-process-flow.png">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2020/2020-01-21-spark-performance-tuning-on-billions-of-data/system-process-flow.png">
 
 
 
@@ -148,7 +148,7 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2020/01/21/spark-performance-tuning-on-billions-of-data/">
+  <link rel="canonical" href="http://brightliao.com/2020/01/21/spark-performance-tuning-on-billions-of-data/">
 
 
 
@@ -344,7 +344,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2020/01/21/spark-performance-tuning-on-billions-of-data/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/01/21/spark-performance-tuning-on-billions-of-data/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">

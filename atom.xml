@@ -5,9 +5,9 @@
   <subtitle>Code speaks.</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://brightliao.me/"/>
+  <link href="http://brightliao.com/"/>
   <updated>2020-09-06T09:45:30.241Z</updated>
-  <id>http://brightliao.me/</id>
+  <id>http://brightliao.com/</id>
   
   <author>
     <name>Bright LGM</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>数据分析思维</title>
-    <link href="http://brightliao.me/2020/08/22/data-analyst-mindset/"/>
-    <id>http://brightliao.me/2020/08/22/data-analyst-mindset/</id>
+    <link href="http://brightliao.com/2020/08/22/data-analyst-mindset/"/>
+    <id>http://brightliao.com/2020/08/22/data-analyst-mindset/</id>
     <published>2020-08-22T12:00:00.000Z</published>
     <updated>2020-09-06T09:45:30.241Z</updated>
     
@@ -58,19 +58,19 @@
     
     </summary>
     
-      <category term="数据分析" scheme="http://brightliao.me/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
+      <category term="数据分析" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="数据" scheme="http://brightliao.me/tags/%E6%95%B0%E6%8D%AE/"/>
+      <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="数据分析" scheme="http://brightliao.me/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
+      <category term="数据分析" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
   <entry>
     <title>银行贷款业务是怎么一回事？</title>
-    <link href="http://brightliao.me/2020/07/07/basic-loan-business/"/>
-    <id>http://brightliao.me/2020/07/07/basic-loan-business/</id>
+    <link href="http://brightliao.com/2020/07/07/basic-loan-business/"/>
+    <id>http://brightliao.com/2020/07/07/basic-loan-business/</id>
     <published>2020-07-07T12:00:00.000Z</published>
     <updated>2020-07-08T02:00:50.038Z</updated>
     
@@ -82,21 +82,21 @@
     
     </summary>
     
-      <category term="业务" scheme="http://brightliao.me/categories/%E4%B8%9A%E5%8A%A1/"/>
+      <category term="业务" scheme="http://brightliao.com/categories/%E4%B8%9A%E5%8A%A1/"/>
     
     
-      <category term="金融" scheme="http://brightliao.me/tags/%E9%87%91%E8%9E%8D/"/>
+      <category term="金融" scheme="http://brightliao.com/tags/%E9%87%91%E8%9E%8D/"/>
     
-      <category term="业务" scheme="http://brightliao.me/tags/%E4%B8%9A%E5%8A%A1/"/>
+      <category term="业务" scheme="http://brightliao.com/tags/%E4%B8%9A%E5%8A%A1/"/>
     
-      <category term="贷款" scheme="http://brightliao.me/tags/%E8%B4%B7%E6%AC%BE/"/>
+      <category term="贷款" scheme="http://brightliao.com/tags/%E8%B4%B7%E6%AC%BE/"/>
     
   </entry>
   
   <entry>
     <title>极速软件发布的实现</title>
-    <link href="http://brightliao.me/2020/06/01/node-bpm/"/>
-    <id>http://brightliao.me/2020/06/01/node-bpm/</id>
+    <link href="http://brightliao.com/2020/06/01/node-bpm/"/>
+    <id>http://brightliao.com/2020/06/01/node-bpm/</id>
     <published>2020-06-01T12:00:00.000Z</published>
     <updated>2020-06-02T07:12:42.565Z</updated>
     
@@ -109,29 +109,29 @@
     
     </summary>
     
-      <category term="工作流" scheme="http://brightliao.me/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/"/>
+      <category term="工作流" scheme="http://brightliao.com/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/"/>
     
-      <category term="敏捷" scheme="http://brightliao.me/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/%E6%95%8F%E6%8D%B7/"/>
     
-      <category term="架构" scheme="http://brightliao.me/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/%E6%95%8F%E6%8D%B7/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/%E6%95%8F%E6%8D%B7/%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="敏捷" scheme="http://brightliao.me/tags/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
     
-      <category term="架构" scheme="http://brightliao.me/tags/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/tags/%E6%9E%B6%E6%9E%84/"/>
     
-      <category term="工作流" scheme="http://brightliao.me/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/"/>
+      <category term="工作流" scheme="http://brightliao.com/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/"/>
     
-      <category term="发布" scheme="http://brightliao.me/tags/%E5%8F%91%E5%B8%83/"/>
+      <category term="发布" scheme="http://brightliao.com/tags/%E5%8F%91%E5%B8%83/"/>
     
-      <category term="效率" scheme="http://brightliao.me/tags/%E6%95%88%E7%8E%87/"/>
+      <category term="效率" scheme="http://brightliao.com/tags/%E6%95%88%E7%8E%87/"/>
     
   </entry>
   
   <entry>
     <title>机器学习平台架构实践--面向对象设计</title>
-    <link href="http://brightliao.me/2020/05/24/architecture-designing-practise-for-ml-platform-oop/"/>
-    <id>http://brightliao.me/2020/05/24/architecture-designing-practise-for-ml-platform-oop/</id>
+    <link href="http://brightliao.com/2020/05/24/architecture-designing-practise-for-ml-platform-oop/"/>
+    <id>http://brightliao.com/2020/05/24/architecture-designing-practise-for-ml-platform-oop/</id>
     <published>2020-05-24T12:00:00.000Z</published>
     <updated>2020-09-06T10:29:04.854Z</updated>
     
@@ -146,27 +146,27 @@
     
     </summary>
     
-      <category term="机器学习" scheme="http://brightliao.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="架构" scheme="http://brightliao.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="机器学习" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="机器学习平台" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/"/>
+      <category term="机器学习平台" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/"/>
     
-      <category term="架构" scheme="http://brightliao.me/tags/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/tags/%E6%9E%B6%E6%9E%84/"/>
     
-      <category term="架构设计" scheme="http://brightliao.me/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
+      <category term="架构设计" scheme="http://brightliao.com/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     
-      <category term="面向对象" scheme="http://brightliao.me/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+      <category term="面向对象" scheme="http://brightliao.com/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
     
   </entry>
   
   <entry>
     <title>机器学习平台架构实践--配置管理</title>
-    <link href="http://brightliao.me/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/"/>
-    <id>http://brightliao.me/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/</id>
+    <link href="http://brightliao.com/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/"/>
+    <id>http://brightliao.com/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/</id>
     <published>2020-05-23T12:00:00.000Z</published>
     <updated>2020-08-25T05:58:54.574Z</updated>
     
@@ -180,27 +180,27 @@
     
     </summary>
     
-      <category term="机器学习" scheme="http://brightliao.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="架构" scheme="http://brightliao.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="机器学习" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="机器学习平台" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/"/>
+      <category term="机器学习平台" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/"/>
     
-      <category term="架构" scheme="http://brightliao.me/tags/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/tags/%E6%9E%B6%E6%9E%84/"/>
     
-      <category term="架构设计" scheme="http://brightliao.me/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
+      <category term="架构设计" scheme="http://brightliao.com/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     
-      <category term="配置管理" scheme="http://brightliao.me/tags/%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/"/>
+      <category term="配置管理" scheme="http://brightliao.com/tags/%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/"/>
     
   </entry>
   
   <entry>
     <title>机器学习平台架构实践--微服务</title>
-    <link href="http://brightliao.me/2020/05/22/architecture-designing-practise-for-ml-platform/"/>
-    <id>http://brightliao.me/2020/05/22/architecture-designing-practise-for-ml-platform/</id>
+    <link href="http://brightliao.com/2020/05/22/architecture-designing-practise-for-ml-platform/"/>
+    <id>http://brightliao.com/2020/05/22/architecture-designing-practise-for-ml-platform/</id>
     <published>2020-05-22T12:00:00.000Z</published>
     <updated>2020-05-23T05:54:57.772Z</updated>
     
@@ -213,27 +213,27 @@
     
     </summary>
     
-      <category term="机器学习" scheme="http://brightliao.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="架构" scheme="http://brightliao.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/"/>
     
     
-      <category term="机器学习" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="机器学习平台" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/"/>
+      <category term="机器学习平台" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/"/>
     
-      <category term="架构" scheme="http://brightliao.me/tags/%E6%9E%B6%E6%9E%84/"/>
+      <category term="架构" scheme="http://brightliao.com/tags/%E6%9E%B6%E6%9E%84/"/>
     
-      <category term="架构设计" scheme="http://brightliao.me/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
+      <category term="架构设计" scheme="http://brightliao.com/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
     
-      <category term="微服务" scheme="http://brightliao.me/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+      <category term="微服务" scheme="http://brightliao.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
   </entry>
   
   <entry>
     <title>CTR技术解读 -- 概览</title>
-    <link href="http://brightliao.me/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/"/>
-    <id>http://brightliao.me/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/</id>
+    <link href="http://brightliao.com/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/"/>
+    <id>http://brightliao.com/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/</id>
     <published>2020-04-12T12:00:00.000Z</published>
     <updated>2020-05-14T07:06:33.247Z</updated>
     
@@ -256,23 +256,23 @@
     
     </summary>
     
-      <category term="机器学习" scheme="http://brightliao.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-      <category term="机器学习" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="ctr" scheme="http://brightliao.me/tags/ctr/"/>
+      <category term="ctr" scheme="http://brightliao.com/tags/ctr/"/>
     
-      <category term="深度学习" scheme="http://brightliao.me/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+      <category term="深度学习" scheme="http://brightliao.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="广告点击预测" scheme="http://brightliao.me/tags/%E5%B9%BF%E5%91%8A%E7%82%B9%E5%87%BB%E9%A2%84%E6%B5%8B/"/>
+      <category term="广告点击预测" scheme="http://brightliao.com/tags/%E5%B9%BF%E5%91%8A%E7%82%B9%E5%87%BB%E9%A2%84%E6%B5%8B/"/>
     
   </entry>
   
   <entry>
     <title>程序员需要知道的C/C++编译知识</title>
-    <link href="http://brightliao.me/2020/03/29/native-code-compilation-process-programmers-should-know/"/>
-    <id>http://brightliao.me/2020/03/29/native-code-compilation-process-programmers-should-know/</id>
+    <link href="http://brightliao.com/2020/03/29/native-code-compilation-process-programmers-should-know/"/>
+    <id>http://brightliao.com/2020/03/29/native-code-compilation-process-programmers-should-know/</id>
     <published>2020-03-29T12:00:00.000Z</published>
     <updated>2020-04-07T17:09:36.380Z</updated>
     
@@ -291,31 +291,31 @@
     
     </summary>
     
-      <category term="编译" scheme="http://brightliao.me/categories/%E7%BC%96%E8%AF%91/"/>
+      <category term="编译" scheme="http://brightliao.com/categories/%E7%BC%96%E8%AF%91/"/>
     
-      <category term="c_c++" scheme="http://brightliao.me/categories/%E7%BC%96%E8%AF%91/c-c/"/>
+      <category term="c_c++" scheme="http://brightliao.com/categories/%E7%BC%96%E8%AF%91/c-c/"/>
     
     
-      <category term="编译" scheme="http://brightliao.me/tags/%E7%BC%96%E8%AF%91/"/>
+      <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
     
-      <category term="编译器" scheme="http://brightliao.me/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+      <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
-      <category term="GCC" scheme="http://brightliao.me/tags/gcc/"/>
+      <category term="GCC" scheme="http://brightliao.com/tags/gcc/"/>
     
-      <category term="CL" scheme="http://brightliao.me/tags/cl/"/>
+      <category term="CL" scheme="http://brightliao.com/tags/cl/"/>
     
-      <category term="CLang" scheme="http://brightliao.me/tags/clang/"/>
+      <category term="CLang" scheme="http://brightliao.com/tags/clang/"/>
     
-      <category term="C" scheme="http://brightliao.me/tags/c/"/>
+      <category term="C" scheme="http://brightliao.com/tags/c/"/>
     
-      <category term="C++" scheme="http://brightliao.me/tags/c/"/>
+      <category term="C++" scheme="http://brightliao.com/tags/c/"/>
     
   </entry>
   
   <entry>
     <title>Rust内建最佳实践</title>
-    <link href="http://brightliao.me/2020/03/23/rust-the-good-part/"/>
-    <id>http://brightliao.me/2020/03/23/rust-the-good-part/</id>
+    <link href="http://brightliao.com/2020/03/23/rust-the-good-part/"/>
+    <id>http://brightliao.com/2020/03/23/rust-the-good-part/</id>
     <published>2020-03-23T12:00:00.000Z</published>
     <updated>2020-03-23T13:30:56.492Z</updated>
     
@@ -330,19 +330,19 @@
     
     </summary>
     
-      <category term="rust" scheme="http://brightliao.me/categories/rust/"/>
+      <category term="rust" scheme="http://brightliao.com/categories/rust/"/>
     
     
-      <category term="性能" scheme="http://brightliao.me/tags/%E6%80%A7%E8%83%BD/"/>
+      <category term="性能" scheme="http://brightliao.com/tags/%E6%80%A7%E8%83%BD/"/>
     
-      <category term="高性能" scheme="http://brightliao.me/tags/%E9%AB%98%E6%80%A7%E8%83%BD/"/>
+      <category term="高性能" scheme="http://brightliao.com/tags/%E9%AB%98%E6%80%A7%E8%83%BD/"/>
     
   </entry>
   
   <entry>
     <title>内存管理的新思路</title>
-    <link href="http://brightliao.me/2020/03/08/new-ways-to-manage-memory/"/>
-    <id>http://brightliao.me/2020/03/08/new-ways-to-manage-memory/</id>
+    <link href="http://brightliao.com/2020/03/08/new-ways-to-manage-memory/"/>
+    <id>http://brightliao.com/2020/03/08/new-ways-to-manage-memory/</id>
     <published>2020-03-08T12:00:00.000Z</published>
     <updated>2020-03-10T01:06:11.064Z</updated>
     
@@ -356,25 +356,25 @@
     
     </summary>
     
-      <category term="rust" scheme="http://brightliao.me/categories/rust/"/>
+      <category term="rust" scheme="http://brightliao.com/categories/rust/"/>
     
     
-      <category term="性能" scheme="http://brightliao.me/tags/%E6%80%A7%E8%83%BD/"/>
+      <category term="性能" scheme="http://brightliao.com/tags/%E6%80%A7%E8%83%BD/"/>
     
-      <category term="高性能" scheme="http://brightliao.me/tags/%E9%AB%98%E6%80%A7%E8%83%BD/"/>
+      <category term="高性能" scheme="http://brightliao.com/tags/%E9%AB%98%E6%80%A7%E8%83%BD/"/>
     
-      <category term="内存管理" scheme="http://brightliao.me/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+      <category term="内存管理" scheme="http://brightliao.com/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
     
-      <category term="gc" scheme="http://brightliao.me/tags/gc/"/>
+      <category term="gc" scheme="http://brightliao.com/tags/gc/"/>
     
-      <category term="垃圾回收" scheme="http://brightliao.me/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
+      <category term="垃圾回收" scheme="http://brightliao.com/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
     
   </entry>
   
   <entry>
     <title>强化学习入门</title>
-    <link href="http://brightliao.me/2020/02/06/DRL-the-problem/"/>
-    <id>http://brightliao.me/2020/02/06/DRL-the-problem/</id>
+    <link href="http://brightliao.com/2020/02/06/DRL-the-problem/"/>
+    <id>http://brightliao.com/2020/02/06/DRL-the-problem/</id>
     <published>2020-02-06T12:00:00.000Z</published>
     <updated>2020-02-23T10:18:50.464Z</updated>
     
@@ -390,35 +390,35 @@
     
     </summary>
     
-      <category term="machine-learning" scheme="http://brightliao.me/categories/machine-learning/"/>
+      <category term="machine-learning" scheme="http://brightliao.com/categories/machine-learning/"/>
     
-      <category term="机器学习" scheme="http://brightliao.me/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-      <category term="AI" scheme="http://brightliao.me/tags/ai/"/>
+      <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-      <category term="Reinforcement Learning" scheme="http://brightliao.me/tags/reinforcement-learning/"/>
+      <category term="Reinforcement Learning" scheme="http://brightliao.com/tags/reinforcement-learning/"/>
     
-      <category term="DQN" scheme="http://brightliao.me/tags/dqn/"/>
+      <category term="DQN" scheme="http://brightliao.com/tags/dqn/"/>
     
-      <category term="MDP" scheme="http://brightliao.me/tags/mdp/"/>
+      <category term="MDP" scheme="http://brightliao.com/tags/mdp/"/>
     
-      <category term="Markov Decision Process" scheme="http://brightliao.me/tags/markov-decision-process/"/>
+      <category term="Markov Decision Process" scheme="http://brightliao.com/tags/markov-decision-process/"/>
     
-      <category term="机器学习" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="算法" scheme="http://brightliao.me/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="算法" scheme="http://brightliao.com/tags/%E7%AE%97%E6%B3%95/"/>
     
-      <category term="强化学习" scheme="http://brightliao.me/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+      <category term="强化学习" scheme="http://brightliao.com/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="深度强化学习" scheme="http://brightliao.me/tags/%E6%B7%B1%E5%BA%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+      <category term="深度强化学习" scheme="http://brightliao.com/tags/%E6%B7%B1%E5%BA%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
   <entry>
     <title>亿级数据Spark应用调优之旅</title>
-    <link href="http://brightliao.me/2020/01/21/spark-performance-tuning-on-billions-of-data/"/>
-    <id>http://brightliao.me/2020/01/21/spark-performance-tuning-on-billions-of-data/</id>
+    <link href="http://brightliao.com/2020/01/21/spark-performance-tuning-on-billions-of-data/"/>
+    <id>http://brightliao.com/2020/01/21/spark-performance-tuning-on-billions-of-data/</id>
     <published>2020-01-21T12:00:00.000Z</published>
     <updated>2020-02-04T13:08:17.523Z</updated>
     
@@ -437,27 +437,27 @@
     
     </summary>
     
-      <category term="大数据" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="machine-learning" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/machine-learning/"/>
+      <category term="machine-learning" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/machine-learning/"/>
     
     
-      <category term="机器学习" scheme="http://brightliao.me/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="Spark" scheme="http://brightliao.me/tags/spark/"/>
+      <category term="Spark" scheme="http://brightliao.com/tags/spark/"/>
     
-      <category term="大数据" scheme="http://brightliao.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="性能" scheme="http://brightliao.me/tags/%E6%80%A7%E8%83%BD/"/>
+      <category term="性能" scheme="http://brightliao.com/tags/%E6%80%A7%E8%83%BD/"/>
     
-      <category term="性能优化" scheme="http://brightliao.me/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="性能优化" scheme="http://brightliao.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
   <entry>
     <title>用DDD思想来编写Pipeline</title>
-    <link href="http://brightliao.me/2020/01/05/DDD-in-pipeline-code/"/>
-    <id>http://brightliao.me/2020/01/05/DDD-in-pipeline-code/</id>
+    <link href="http://brightliao.com/2020/01/05/DDD-in-pipeline-code/"/>
+    <id>http://brightliao.com/2020/01/05/DDD-in-pipeline-code/</id>
     <published>2020-01-05T12:00:00.000Z</published>
     <updated>2020-02-05T02:59:07.450Z</updated>
     
@@ -476,19 +476,19 @@
     
     </summary>
     
-      <category term="DDD" scheme="http://brightliao.me/categories/ddd/"/>
+      <category term="DDD" scheme="http://brightliao.com/categories/ddd/"/>
     
     
-      <category term="敏捷" scheme="http://brightliao.me/tags/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
     
-      <category term="DDD" scheme="http://brightliao.me/tags/ddd/"/>
+      <category term="DDD" scheme="http://brightliao.com/tags/ddd/"/>
     
   </entry>
   
   <entry>
     <title>上山容易下山难</title>
-    <link href="http://brightliao.me/2019/12/22/its-harder-to-go-downhill/"/>
-    <id>http://brightliao.me/2019/12/22/its-harder-to-go-downhill/</id>
+    <link href="http://brightliao.com/2019/12/22/its-harder-to-go-downhill/"/>
+    <id>http://brightliao.com/2019/12/22/its-harder-to-go-downhill/</id>
     <published>2019-12-22T12:00:00.000Z</published>
     <updated>2019-12-22T08:42:22.247Z</updated>
     
@@ -501,19 +501,19 @@
     
     </summary>
     
-      <category term="TDD" scheme="http://brightliao.me/categories/tdd/"/>
+      <category term="TDD" scheme="http://brightliao.com/categories/tdd/"/>
     
     
-      <category term="敏捷" scheme="http://brightliao.me/tags/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
     
-      <category term="TDD" scheme="http://brightliao.me/tags/tdd/"/>
+      <category term="TDD" scheme="http://brightliao.com/tags/tdd/"/>
     
   </entry>
   
   <entry>
     <title>Hadoop安全认证机制 （四）</title>
-    <link href="http://brightliao.me/2019/12/02/hadoop-auth-4/"/>
-    <id>http://brightliao.me/2019/12/02/hadoop-auth-4/</id>
+    <link href="http://brightliao.com/2019/12/02/hadoop-auth-4/"/>
+    <id>http://brightliao.com/2019/12/02/hadoop-auth-4/</id>
     <published>2019-12-02T15:00:00.000Z</published>
     <updated>2019-12-20T11:07:38.970Z</updated>
     
@@ -534,25 +534,25 @@
     
     </summary>
     
-      <category term="大数据" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="大数据" scheme="http://brightliao.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/tags/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/tags/%E5%AE%89%E5%85%A8/"/>
     
-      <category term="hadoop" scheme="http://brightliao.me/tags/hadoop/"/>
+      <category term="hadoop" scheme="http://brightliao.com/tags/hadoop/"/>
     
-      <category term="kerberos" scheme="http://brightliao.me/tags/kerberos/"/>
+      <category term="kerberos" scheme="http://brightliao.com/tags/kerberos/"/>
     
   </entry>
   
   <entry>
     <title>仪式感与专业服务</title>
-    <link href="http://brightliao.me/2019/12/02/sense-of-ceremony-and-professional-service/"/>
-    <id>http://brightliao.me/2019/12/02/sense-of-ceremony-and-professional-service/</id>
+    <link href="http://brightliao.com/2019/12/02/sense-of-ceremony-and-professional-service/"/>
+    <id>http://brightliao.com/2019/12/02/sense-of-ceremony-and-professional-service/</id>
     <published>2019-12-02T12:00:00.000Z</published>
     <updated>2019-12-02T15:07:15.863Z</updated>
     
@@ -566,21 +566,21 @@
     
     </summary>
     
-      <category term="敏捷" scheme="http://brightliao.me/categories/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/"/>
     
     
-      <category term="敏捷" scheme="http://brightliao.me/tags/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
     
-      <category term="仪式感" scheme="http://brightliao.me/tags/%E4%BB%AA%E5%BC%8F%E6%84%9F/"/>
+      <category term="仪式感" scheme="http://brightliao.com/tags/%E4%BB%AA%E5%BC%8F%E6%84%9F/"/>
     
-      <category term="专业服务" scheme="http://brightliao.me/tags/%E4%B8%93%E4%B8%9A%E6%9C%8D%E5%8A%A1/"/>
+      <category term="专业服务" scheme="http://brightliao.com/tags/%E4%B8%93%E4%B8%9A%E6%9C%8D%E5%8A%A1/"/>
     
   </entry>
   
   <entry>
     <title>Hadoop安全认证机制 （三）</title>
-    <link href="http://brightliao.me/2019/11/11/hadoop-auth-3/"/>
-    <id>http://brightliao.me/2019/11/11/hadoop-auth-3/</id>
+    <link href="http://brightliao.com/2019/11/11/hadoop-auth-3/"/>
+    <id>http://brightliao.com/2019/11/11/hadoop-auth-3/</id>
     <published>2019-11-11T12:00:00.000Z</published>
     <updated>2019-11-25T05:34:31.580Z</updated>
     
@@ -600,25 +600,25 @@
     
     </summary>
     
-      <category term="大数据" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="大数据" scheme="http://brightliao.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/tags/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/tags/%E5%AE%89%E5%85%A8/"/>
     
-      <category term="hadoop" scheme="http://brightliao.me/tags/hadoop/"/>
+      <category term="hadoop" scheme="http://brightliao.com/tags/hadoop/"/>
     
-      <category term="kerberos" scheme="http://brightliao.me/tags/kerberos/"/>
+      <category term="kerberos" scheme="http://brightliao.com/tags/kerberos/"/>
     
   </entry>
   
   <entry>
     <title>Hadoop安全认证机制 （二）</title>
-    <link href="http://brightliao.me/2019/10/30/hadoop-auth-2/"/>
-    <id>http://brightliao.me/2019/10/30/hadoop-auth-2/</id>
+    <link href="http://brightliao.com/2019/10/30/hadoop-auth-2/"/>
+    <id>http://brightliao.com/2019/10/30/hadoop-auth-2/</id>
     <published>2019-10-30T12:00:00.000Z</published>
     <updated>2019-11-11T04:59:39.898Z</updated>
     
@@ -639,25 +639,25 @@
     
     </summary>
     
-      <category term="大数据" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="大数据" scheme="http://brightliao.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/tags/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/tags/%E5%AE%89%E5%85%A8/"/>
     
-      <category term="hadoop" scheme="http://brightliao.me/tags/hadoop/"/>
+      <category term="hadoop" scheme="http://brightliao.com/tags/hadoop/"/>
     
-      <category term="kerberos" scheme="http://brightliao.me/tags/kerberos/"/>
+      <category term="kerberos" scheme="http://brightliao.com/tags/kerberos/"/>
     
   </entry>
   
   <entry>
     <title>Hadoop安全认证机制 (一)</title>
-    <link href="http://brightliao.me/2019/10/27/hadoop-auth/"/>
-    <id>http://brightliao.me/2019/10/27/hadoop-auth/</id>
+    <link href="http://brightliao.com/2019/10/27/hadoop-auth/"/>
+    <id>http://brightliao.com/2019/10/27/hadoop-auth/</id>
     <published>2019-10-27T12:00:00.000Z</published>
     <updated>2019-12-15T14:36:15.161Z</updated>
     
@@ -680,25 +680,25 @@
     
     </summary>
     
-      <category term="大数据" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/"/>
     
     
-      <category term="大数据" scheme="http://brightliao.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+      <category term="大数据" scheme="http://brightliao.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="安全" scheme="http://brightliao.me/tags/%E5%AE%89%E5%85%A8/"/>
+      <category term="安全" scheme="http://brightliao.com/tags/%E5%AE%89%E5%85%A8/"/>
     
-      <category term="hadoop" scheme="http://brightliao.me/tags/hadoop/"/>
+      <category term="hadoop" scheme="http://brightliao.com/tags/hadoop/"/>
     
-      <category term="kerberos" scheme="http://brightliao.me/tags/kerberos/"/>
+      <category term="kerberos" scheme="http://brightliao.com/tags/kerberos/"/>
     
   </entry>
   
   <entry>
     <title>再读重构</title>
-    <link href="http://brightliao.me/2019/10/07/after-reading-of-refactoring-v2/"/>
-    <id>http://brightliao.me/2019/10/07/after-reading-of-refactoring-v2/</id>
+    <link href="http://brightliao.com/2019/10/07/after-reading-of-refactoring-v2/"/>
+    <id>http://brightliao.com/2019/10/07/after-reading-of-refactoring-v2/</id>
     <published>2019-10-07T12:00:00.000Z</published>
     <updated>2019-10-08T15:01:01.856Z</updated>
     
@@ -712,16 +712,16 @@
     
     </summary>
     
-      <category term="敏捷" scheme="http://brightliao.me/categories/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/"/>
     
-      <category term="重构" scheme="http://brightliao.me/categories/%E6%95%8F%E6%8D%B7/%E9%87%8D%E6%9E%84/"/>
+      <category term="重构" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/%E9%87%8D%E6%9E%84/"/>
     
     
-      <category term="agile" scheme="http://brightliao.me/tags/agile/"/>
+      <category term="agile" scheme="http://brightliao.com/tags/agile/"/>
     
-      <category term="敏捷" scheme="http://brightliao.me/tags/%E6%95%8F%E6%8D%B7/"/>
+      <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
     
-      <category term="重构" scheme="http://brightliao.me/tags/%E9%87%8D%E6%9E%84/"/>
+      <category term="重构" scheme="http://brightliao.com/tags/%E9%87%8D%E6%9E%84/"/>
     
   </entry>
   

@@ -106,23 +106,23 @@
 <meta name="keywords" content="tensorflow,AI,Machine Learning,Deep Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解Conv2d及其梯度的计算过程">
-<meta property="og:url" content="http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/index.html">
+<meta property="og:url" content="http://brightliao.com/2017/04/15/understanding-gradients-of-conv2d-in-experiments/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
 <meta property="og:description" content="在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。  卷积计算过程 在卷积神经网络中，卷积计算过程可以通过下面的动图（来自此处）来理解：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/conv2d.gif">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/numerical_no_padding_no_strides.gif">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/numerical_no_padding_no_strides_filter.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_conv2d.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_linear_gradient.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_linear_gradient_1.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_conv_gradient.png">
-<meta property="og:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_deconv_gradient.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/conv2d.gif">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/numerical_no_padding_no_strides.gif">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/numerical_no_padding_no_strides_filter.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_conv2d.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_linear_gradient.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_linear_gradient_1.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_conv_gradient.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/experiment_deconv_gradient.png">
 <meta property="og:updated_time" content="2017-06-25T05:51:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解Conv2d及其梯度的计算过程">
 <meta name="twitter:description" content="在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。  卷积计算过程 在卷积神经网络中，卷积计算过程可以通过下面的动图（来自此处）来理解：">
-<meta name="twitter:image" content="http://brightliao.me/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/conv2d.gif">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2017/2017-04-15-understanding-gradients-of-conv2d-in-experiments/conv2d.gif">
 
 
 
@@ -150,7 +150,7 @@
 
 
 
-  <link rel="canonical" href="http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/">
+  <link rel="canonical" href="http://brightliao.com/2017/04/15/understanding-gradients-of-conv2d-in-experiments/">
 
 
 
@@ -346,7 +346,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.me/2017/04/15/understanding-gradients-of-conv2d-in-experiments/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/04/15/understanding-gradients-of-conv2d-in-experiments/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Bright LGM">
