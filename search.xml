@@ -51,11 +51,11 @@
         <category>架构</category>
       </categories>
       <tags>
+        <tag>架构</tag>
+        <tag>面向对象</tag>
         <tag>机器学习</tag>
         <tag>机器学习平台</tag>
-        <tag>架构</tag>
         <tag>架构设计</tag>
-        <tag>面向对象</tag>
       </tags>
   </entry>
   <entry>
@@ -67,9 +67,9 @@
         <category>架构</category>
       </categories>
       <tags>
+        <tag>架构</tag>
         <tag>机器学习</tag>
         <tag>机器学习平台</tag>
-        <tag>架构</tag>
         <tag>架构设计</tag>
         <tag>配置管理</tag>
       </tags>
@@ -83,9 +83,9 @@
         <category>架构</category>
       </categories>
       <tags>
+        <tag>架构</tag>
         <tag>机器学习</tag>
         <tag>机器学习平台</tag>
-        <tag>架构</tag>
         <tag>架构设计</tag>
         <tag>微服务</tag>
       </tags>
@@ -178,10 +178,10 @@
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>机器学习</tag>
-        <tag>Spark</tag>
         <tag>大数据</tag>
         <tag>性能</tag>
+        <tag>Spark</tag>
+        <tag>机器学习</tag>
         <tag>性能优化</tag>
       </tags>
   </entry>
@@ -316,9 +316,9 @@
         <category>函数式</category>
       </categories>
       <tags>
-        <tag>面向对象</tag>
         <tag>编程范式</tag>
         <tag>函数式</tag>
+        <tag>面向对象</tag>
       </tags>
   </entry>
   <entry>
@@ -346,8 +346,8 @@
         <category>DDD</category>
       </categories>
       <tags>
-        <tag>DDD</tag>
         <tag>架构</tag>
+        <tag>DDD</tag>
         <tag>领域</tag>
       </tags>
   </entry>
@@ -758,8 +758,8 @@
         <category>DevOps</category>
       </categories>
       <tags>
-        <tag>docker</tag>
         <tag>micro service</tag>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
