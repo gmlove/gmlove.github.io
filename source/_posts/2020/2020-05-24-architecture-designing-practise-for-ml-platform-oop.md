@@ -20,6 +20,8 @@ date: 2020-05-24 20:00:00
 
 回顾前面两篇文章的内容，机器学习平台具备这样的架构：
 
+<!-- more -->
+
 ![系统架构](/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/architecture.png)
 
 看了这个架构，一些重要的对象就自然的浮现了出来。比如数据集（DataSet）、Pipeline、实验（Experiment）、任务（Job）、周期任务（PeriodicalJob）、服务（Service）等。
