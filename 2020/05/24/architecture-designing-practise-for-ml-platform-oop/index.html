@@ -84,7 +84,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="架构,面向对象,机器学习,机器学习平台,架构设计,">
+  <meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,面向对象,">
 
 
 
@@ -103,7 +103,7 @@
 
 
 <meta name="description" content="面向对象的程序设计思想多年来一直是我们进行软件设计的有效的指导思想。由于我们天生理解大自然的机制就是面向对象的（比如我们到了某一个商店，我们会看到门店、售货员、货架、货架上的货物等等，这些都是一个一个的对象，我们认识整个商店也就是去认识商店中的每个对象。），而面向对象程序设计思想恰好与这一机制相一致，所以一个面向对象设计做得好的系统就很容易为我们所理解。 对于一个机器学习平台，应该如何实践面向对象">
-<meta name="keywords" content="架构,面向对象,机器学习,机器学习平台,架构设计">
+<meta name="keywords" content="机器学习,机器学习平台,架构,架构设计,面向对象">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习平台架构实践--面向对象设计">
 <meta property="og:url" content="http://brightliao.me/2020/05/24/architecture-designing-practise-for-ml-platform-oop/index.html">
@@ -113,7 +113,7 @@
 <meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/architecture.png">
 <meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/pipeline-demo.png">
 <meta property="og:image" content="http://brightliao.me/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/fsm.png">
-<meta property="og:updated_time" content="2020-09-06T09:27:48.506Z">
+<meta property="og:updated_time" content="2020-09-06T10:29:04.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习平台架构实践--面向对象设计">
 <meta name="twitter:description" content="面向对象的程序设计思想多年来一直是我们进行软件设计的有效的指导思想。由于我们天生理解大自然的机制就是面向对象的（比如我们到了某一个商店，我们会看到门店、售货员、货架、货架上的货物等等，这些都是一个一个的对象，我们认识整个商店也就是去认识商店中的每个对象。），而面向对象程序设计思想恰好与这一机制相一致，所以一个面向对象设计做得好的系统就很容易为我们所理解。 对于一个机器学习平台，应该如何实践面向对象">
@@ -453,6 +453,7 @@
 <p>对于一个机器学习平台，应该如何实践面向对象程序设计思想呢？</p>
 <h2 id="面向对象的抽象"><a class="markdownIt-Anchor" href="#面向对象的抽象"></a> 面向对象的抽象</h2>
 <p>回顾前面两篇文章的内容，机器学习平台具备这样的架构：</p>
+<a id="more"></a>
 <p><img src="/attaches/2020/2020-05-24-architecture-designing-practise-for-ml-platform-oop/architecture.png" alt="系统架构"></p>
 <p>看了这个架构，一些重要的对象就自然的浮现了出来。比如数据集（DataSet）、Pipeline、实验（Experiment）、任务（Job）、周期任务（PeriodicalJob）、服务（Service）等。</p>
 <p>经过前面关于微服务架构设计的分析，我们可以发现，随着系统的功能越来越复杂，这里的几个对象事实上都逐渐的发展为了某个大的模块或者某个候选的微服务。尽管如此，它们依然是这些模块或者微服务内的核心对象。</p>
@@ -560,15 +561,15 @@
       
         <div class="post-tags">
           
-            <a href="/tags/架构/" rel="tag"># 架构</a>
-          
-            <a href="/tags/面向对象/" rel="tag"># 面向对象</a>
-          
             <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
           
             <a href="/tags/机器学习平台/" rel="tag"># 机器学习平台</a>
           
+            <a href="/tags/架构/" rel="tag"># 架构</a>
+          
             <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
+          
+            <a href="/tags/面向对象/" rel="tag"># 面向对象</a>
           
         </div>
       
