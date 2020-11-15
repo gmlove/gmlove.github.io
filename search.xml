@@ -125,8 +125,8 @@
         <category>机器学习</category>
       </categories>
       <tags>
-        <tag>ctr</tag>
         <tag>机器学习</tag>
+        <tag>ctr</tag>
         <tag>深度学习</tag>
         <tag>广告点击预测</tag>
       </tags>
@@ -206,9 +206,9 @@
       </categories>
       <tags>
         <tag>大数据</tag>
-        <tag>性能</tag>
         <tag>机器学习</tag>
         <tag>Spark</tag>
+        <tag>性能</tag>
         <tag>性能优化</tag>
       </tags>
   </entry>

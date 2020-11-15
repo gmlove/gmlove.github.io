@@ -102,20 +102,20 @@
 
 
 
-<meta name="description" content="如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？ 要回答这里的问题，我们需要有一些基本的统计学知识。 下面以简单的掷硬币的例子来说明一下。我们知道掷一次硬币，得到正面向上和反面向上的概率都是50%。用X表示这里的随">
+<meta name="description" content="如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？ 要回答这里的问题，我们需要有一些基本的统计学知识。">
 <meta name="keywords" content="数据,数据分析,统计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="统计基础-区间估计">
 <meta property="og:url" content="http://brightliao.com/2020/09/10/easy-statistical-test/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？ 要回答这里的问题，我们需要有一些基本的统计学知识。 下面以简单的掷硬币的例子来说明一下。我们知道掷一次硬币，得到正面向上和反面向上的概率都是50%。用X表示这里的随">
+<meta property="og:description" content="如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？ 要回答这里的问题，我们需要有一些基本的统计学知识。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://brightliao.com/attaches/2020/2020-09-10-easy-statistical-test/n-dist.png">
 <meta property="og:image" content="http://brightliao.com/attaches/2020/2020-09-10-easy-statistical-test/t-dist.png">
-<meta property="og:updated_time" content="2020-11-15T13:27:21.625Z">
+<meta property="og:updated_time" content="2020-11-15T13:51:10.615Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="统计基础-区间估计">
-<meta name="twitter:description" content="如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？ 要回答这里的问题，我们需要有一些基本的统计学知识。 下面以简单的掷硬币的例子来说明一下。我们知道掷一次硬币，得到正面向上和反面向上的概率都是50%。用X表示这里的随">
+<meta name="twitter:description" content="如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？ 要回答这里的问题，我们需要有一些基本的统计学知识。">
 <meta name="twitter:image" content="http://brightliao.com/attaches/2020/2020-09-10-easy-statistical-test/n-dist.png">
 
 
@@ -439,6 +439,7 @@
       
         <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？</p>
 <p>要回答这里的问题，我们需要有一些基本的统计学知识。</p>
+<a id="more"></a>
 <p>下面以简单的掷硬币的例子来说明一下。我们知道掷一次硬币，得到正面向上和反面向上的概率都是50%。用<code>X</code>表示这里的随机事件，用0表示正面向上，用1表示反面向上。我们可以得到<code>X=k</code>的分布，即</p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>X</mi><mo>=</mo><mi>k</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.5</mn><mo separator="true">,</mo><mi>k</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">P(X=k) = 0.5,    k=0,1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span></span></span></span></span>
 <p>上面的问题是离散型随机变量的分布问题。我们最开始的身高的例子则是一个连续型的随机变量分布问题。对于一个连续型的随机变量，大家最熟悉的分布就是正态分布了。比如，人的身高我们可以认为服从一个均值为<code>μ</code>，方差为<code>σ^2</code>的正态分布。但人的身高分布就没法简单的用某一个值的概率来表示了，因为此时的概率都为0.为了描述人的身高的分布，我们会用概率密度函数来描述。由正态分布的定义可以知道，身高的概率密度函数为：</p>
