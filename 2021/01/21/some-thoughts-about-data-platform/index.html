@@ -1,0 +1,1394 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="数据,数据平台,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="我最近接触到不少传统行业的客户，他们都希望构建自己的数据平台。其目的大都是希望通过借鉴互联网公司积累的成熟的技术经验，构建自己的数据能力，最终实现数据驱动型企业。 数据平台早已不是什么新鲜事物，甚至在当前大家都在谈论数据中台的时候，还显得有点过时。在我看来，其实大家对于数据中台的认识还处于探索的阶段，并没有形成让行业信服的一致的观点。但一提到数据平台，大家对其应该包含的内容还相对比较清楚。所以，本">
+<meta name="keywords" content="数据,数据平台">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些企业数据平台建设的思考">
+<meta property="og:url" content="http://brightliao.com/2021/01/21/some-thoughts-about-data-platform/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="我最近接触到不少传统行业的客户，他们都希望构建自己的数据平台。其目的大都是希望通过借鉴互联网公司积累的成熟的技术经验，构建自己的数据能力，最终实现数据驱动型企业。 数据平台早已不是什么新鲜事物，甚至在当前大家都在谈论数据中台的时候，还显得有点过时。在我看来，其实大家对于数据中台的认识还处于探索的阶段，并没有形成让行业信服的一致的观点。但一提到数据平台，大家对其应该包含的内容还相对比较清楚。所以，本">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-01-21-some-thoughts-about-data-platform/data-platform.png">
+<meta property="og:updated_time" content="2021-02-28T12:57:58.763Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些企业数据平台建设的思考">
+<meta name="twitter:description" content="我最近接触到不少传统行业的客户，他们都希望构建自己的数据平台。其目的大都是希望通过借鉴互联网公司积累的成熟的技术经验，构建自己的数据能力，最终实现数据驱动型企业。 数据平台早已不是什么新鲜事物，甚至在当前大家都在谈论数据中台的时候，还显得有点过时。在我看来，其实大家对于数据中台的认识还处于探索的阶段，并没有形成让行业信服的一致的观点。但一提到数据平台，大家对其应该包含的内容还相对比较清楚。所以，本">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-01-21-some-thoughts-about-data-platform/data-platform.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.com/2021/01/21/some-thoughts-about-data-platform/">
+
+
+
+
+
+  <title>一些企业数据平台建设的思考 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/01/21/some-thoughts-about-data-platform/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">一些企业数据平台建设的思考</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-21T20:00:00+08:00">
+                2021-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据/" itemprop="url" rel="index">
+                    <span itemprop="name">数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/01/21/some-thoughts-about-data-platform/" class="leancloud_visitors" data-flag-title="一些企业数据平台建设的思考">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>我最近接触到不少传统行业的客户，他们都希望构建自己的数据平台。其目的大都是希望通过借鉴互联网公司积累的成熟的技术经验，构建自己的数据能力，最终实现数据驱动型企业。</p>
+<p>数据平台早已不是什么新鲜事物，甚至在当前大家都在谈论数据中台的时候，还显得有点过时。在我看来，其实大家对于数据中台的认识还处于探索的阶段，并没有形成让行业信服的一致的观点。但一提到数据平台，大家对其应该包含的内容还相对比较清楚。所以，本文尝试选择“数据平台”这个可能有点过时但是相对务实一点的词语来组织内容。这里我不想在概念上谈论太多，无论这个东西是什么，它要解决的企业中的数据问题是明确而具体的。</p>
+<a id="more"></a>
+<h2 id="什么是企业数据平台"><a class="markdownIt-Anchor" href="#什么是企业数据平台"></a> 什么是企业数据平台</h2>
+<p>企业建设数据平台想要解决什么样的数据问题呢？让我们先来看看是数据如何发挥它的价值的。</p>
+<h3 id="数据在企业中如何应用"><a class="markdownIt-Anchor" href="#数据在企业中如何应用"></a> 数据在企业中如何应用</h3>
+<p>一般企业内部的数据会以两种方式来使用。</p>
+<p>一是支持bi分析，即通常我们所说的各种数据报表应用，它也包括数据的上卷下钻分析。二是支持自助式的探索式的数据分析，通常包括统计分析和建模分析。</p>
+<p>不管是哪种方式，首先是要有数据。一般的做法是将数据从业务系统搜集到一个专门用于分析的数据存储中。再在这个系统中执行数据计算。</p>
+<p>对于报表应用，通常我们需要周期性的将一些数据指标计算出来，并存储为某一张数据库表，供bi系统快速的查询。</p>
+<p>对于探索式的数据分析，我们常常需要提供一个可编程的接口，以便数据分析师可以用于数据处理和分析。考虑到数据分析师的技术背景，这里的编程接口通常是<code>SQL</code>和<code>Python</code>。</p>
+<h3 id="数据平台功能"><a class="markdownIt-Anchor" href="#数据平台功能"></a> 数据平台功能</h3>
+<p>了解了数据应用的流程，我们就可以将数据平台的功能大致梳理出来。</p>
+<ul>
+<li>数据接入支持，需要提供一个接口以便业务团队可以快速的把数据接入到数据平台。</li>
+<li>数据开发支持，需要提供接口用于进行数据计算，以便可以算出数据指标提供给bi工具。</li>
+<li>任务调度支持，需要将上述的计算程序周期性的调度起来，以便可以周期性的计算出数据指标。</li>
+<li>探索式数据分析支持，提供<code>SQL</code>和<code>Python</code>接口给数据分析师使用。</li>
+</ul>
+<p>从更方便的组织和管理数据的角度来看，数据平台还需要具备如下能力：</p>
+<ul>
+<li>数据安全管理。比如数据权限控制，实现无权限读写的数据无法读写，权限申请流程简单等；还比如数据脱敏控制等。</li>
+<li>数据质量管理。比如可以方便的查询数据标准，根据数据标准执行数据检查等。</li>
+<li>数据发现支持，便于平台使用者可以快速的找到数据和理解数据。这里就会包括数据目录，元数据管理，数据血缘管理等一系列数据管理功能。</li>
+</ul>
+<p>从软件架构的角度来说，为了更好的支持数据理解，以便高效的进行指标开发和数据分析，一般我们会进行一定的数据模型设计。为了支持高效的复杂数据计算，一般数据平台中会沉淀大量的可以复用的基础指标。所以，从改进软件开发的角度来看，数据平台还将具备的功能如下：</p>
+<ul>
+<li>数据建模能力支持</li>
+<li>分层的数据架构支持</li>
+<li>维护数据开发规范、设计建议、最佳实践等指导性的文档</li>
+</ul>
+<p>如果用一张图来概括上面的数据平台，就形成了大家常常看到的如下的数据平台架构图。</p>
+<p><img src="/attaches/2021/2021-01-21-some-thoughts-about-data-platform/data-platform.png" alt="data platform"></p>
+<p>其中，如果企业对建模能力有特别强的需求，通常我们还会将机器学习模型相关的功能进一步划分出来，形成一个机器学习平台。</p>
+<h2 id="数据平台建设思路"><a class="markdownIt-Anchor" href="#数据平台建设思路"></a> 数据平台建设思路</h2>
+<p>了解了数据平台是什么，我们来看看企业数据平台建设思路。</p>
+<h3 id="中心化还是非中心化"><a class="markdownIt-Anchor" href="#中心化还是非中心化"></a> 中心化还是非中心化</h3>
+<p>首先我们从组织形式上面来分析一下如何建设企业数据平台。一般而言，数据平台会是一定程度的中心化和集成式的。</p>
+<p>一提到中心化，想必有人会不服，觉得这样的中心化的系统和组织一定不能成功。我曾经就听到有人坚决否定中心化的价值，其举出的反例可能有以项目为单位的小的敏捷团队，去中心化的区块链，去中心化运维团队的devops思想，去中心化测试团队的敏捷实践等等。</p>
+<p>中心化确实有其不足，但是我们也要看到它的很多优点，比如：</p>
+<ol>
+<li>可以避免各个团队重复建设带来的资源浪费</li>
+<li>统一的数据管理可以更好更快的推进企业内部的数据策略的落地，比如数据标准，数据安全等</li>
+<li>实现计算和存储资源共享，节省开支</li>
+<li>更方便的实现跨业务线数据集成</li>
+</ol>
+<p>其实，中心化与非中心化哪种方式更好，与企业的规模，文化，组织结构相关。</p>
+<p>比如，一些规模比较大的业务线，人才资源多技术能力也强，通常完全有能力自建一套数据平台。这样的业务线内部通常业务也特别复杂，数据量特别大，且对定制能力有着很高的要求。这时，企业级别的中心化数据平台带来的成本优势就显得不够有吸引力了。反而会由于需要很多的跨团队沟通协作而降低了效率。</p>
+<p>但是，如果我们把这样的业务线当做一个稍小的独立自治的组织来看，在其内部通常是划分为更小的业务团队，在这些业务团队间建设一个中心化的数据平台同样会带来价值。</p>
+<p>再比如，有一些业务线，虽然也很大，但其内部的组织结构是按照以业务隔离性非常强的项目组为基本单元组织而成的。每个项目组形成一个小的全功能敏捷团队，各自探索式的推动业务发展。这样的情况下，团队间几乎不用数据共享，且对于数据管理要求也不高，他们的第一优先级是快速推动业务发展。于是中心化的数据平台的价值也不那么明显了。他们甚至可能连业务线级别的数据平台都不需要，而是根据团队各自的需要自建一些小的数据平台。</p>
+<p>上面这样的情况可以举出的例子很多，比如华为，其内部的消费者业务线就建设了独立的数据平台为大量的内部项目团队提供中心化数据服务，而运营商业务线则由于其面向企业提供服务的特性，项目间业务相似性低隔离性高，更倾向于每个团队自建小的数据平台。</p>
+<p>再比如，很多的银行或者零售行业企业，其内部业务通常比较成熟，常见的情况是建设一套统一的中心化的数据平台。</p>
+<p>所以，回到最初的数据平台建设思路上，一般而言，数据平台会是一定程度的中心化和集成式的。但究竟是哪种程度的中心化，还要根据具体的企业情况来看。</p>
+<p>对于本文最初提到的传统行业的情况，他们大多数并不是以软件服务为核心，而是以其现有的生产或者信息业务为中心（比如汽车、零售、保险业务）。在这些企业内部，软件常常只是辅助作用，因而软件开发团队的能力也不是特别强。从以上的分析来看，对于这些企业，可能建设中心化集成式的数据平台是更为合适的方式。</p>
+<h3 id="采用精益的思想来逐步构建数据平台"><a class="markdownIt-Anchor" href="#采用精益的思想来逐步构建数据平台"></a> 采用精益的思想来逐步构建数据平台</h3>
+<p>其次，我们从数据平台建设过程来分析一下。一般而言，数据平台建设需要以某一高价值数据分析（包括业务指标或者机器学习模型）需求来拉动，在实现业务价值的同时慢慢的完善平台，最终实现企业级的数据平台。</p>
+<p>与此相对应的，不少企业一上来就直接想要建设一个功能强大而全面的数据平台，他们很多都成为了失败的案例。这一做法的典型思路就是，先对标一个行业标杆的数据平台，组建一个大型团队开始做开发。开发过程中，他们对于数据平台谁来使用，产生了什么价值关注不够。最终的结果就是，项目投资人花了大笔经费却迟迟看不到价值，从而慢慢减少投资导致项目流产。</p>
+<p>采用价值拉动的模式其实就是用精益的思想来指导数据平台建设。它以价值实现为目标，每一个平台功能的实现都对应着立即可见的价值实现。长期下来，通过不断的进行技术重构和架构演进，平台也就慢慢形成。</p>
+<p>有人可能会说这样建设而来的数据平台大家都不一样，将缺乏一个行业统一标准。然而，企业是以实现经济效益为前提的，为什么数据平台非得是行业的标准实现呢？在我看来，由于数据平台具有非常强的技术相关性，其最终形式本身就会根据企业和团队的不同而不同。试想，对于某一个功能的软件实现，如果交给不同的开发人员去做，最后产生的设计和实现的代码会一样吗？然而，其实我们并不是很关心代码是否一样，只要最后的功能实现了，目的也就达到了。所以，数据平台的最终形式很可能不同企业完全不同。</p>
+<p>一个成功的数据平台建设的过程通常会是：</p>
+<ol>
+<li>组建一个数据平台团队</li>
+<li>基于开源技术搭建一个具备基本功能的数据平台</li>
+<li>为了实现某一个业务指标计算，接入某一个系统的数据，从而顺便完成了一定的平台数据接入功能</li>
+<li>为了实现某一个机器学习模型，接入另一个系统的数据，从而顺便增强了之前的平台数据接入功能，且顺便完成了某一些通用的可复用的指标的计算</li>
+<li>为了支持更多的探索性数据分析，根据需要，数据平台支持了自助式的以SQL为接口的数据分析</li>
+<li>为了支持更多的探索性数据分析，根据需要，数据平台支持了自助式的以Python为接口的数据分析</li>
+<li>根据数据安全的需要，数据平台完善了对于数据权限的管理，数据加密脱敏的支持</li>
+<li>随着数据平台功能逐步完善，业务团队更多的自助的进行数据接入和数据分析，数据平台团队则专注在平台功能不断增强及平台稳定性维护上面</li>
+<li>…</li>
+</ol>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总结一下。本文首先讨论了什么是数据平台这个问题，尝试回答了数据平台的定义和功能范围。接着，结合作者本人所经历过的数据项目经验，对建设企业数据平台的思路进行了一定的梳理。</p>
+<p>本文希望能对从事数据工作的同仁有所启发，也希望可以让非数据工作的小伙伴对数据工作有一定的认识。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据/" rel="tag"># 数据</a>
+          
+            <a href="/tags/数据平台/" rel="tag"># 数据平台</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/27/oracle-data-migration/" rel="next" title="Oracle数据迁移实用入门">
+                <i class="fa fa-chevron-left"></i> Oracle数据迁移实用入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="prev" title="基于HDP构建企业数据平台">
+                基于HDP构建企业数据平台 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">118</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是企业数据平台"><span class="nav-number">1.</span> <span class="nav-text"> 什么是企业数据平台</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据在企业中如何应用"><span class="nav-number">1.1.</span> <span class="nav-text"> 数据在企业中如何应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据平台功能"><span class="nav-number">1.2.</span> <span class="nav-text"> 数据平台功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据平台建设思路"><span class="nav-number">2.</span> <span class="nav-text"> 数据平台建设思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#中心化还是非中心化"><span class="nav-number">2.1.</span> <span class="nav-text"> 中心化还是非中心化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采用精益的思想来逐步构建数据平台"><span class="nav-number">2.2.</span> <span class="nav-text"> 采用精益的思想来逐步构建数据平台</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2021/01/21/some-thoughts-about-data-platform/', // optional
+      owner: 'gmlove',
+      title: '一些企业数据平台建设的思考',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
