@@ -1,0 +1,1391 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="效率,工具,编程思想,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="一个故事 最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：  快捷键用得少，缺乏一点去研究快捷键的意识 自动补全功能没有充分利用，基本靠记忆+手敲 使用mac上并不好用的键盘  这带来的结果就是手上的速度跟不上思维的速度。">
+<meta name="keywords" content="效率,工具,编程思想">
+<meta property="og:type" content="article">
+<meta property="og:title" content="成为高效的程序员">
+<meta property="og:url" content="http://brightliao.com/2021/03/27/programmer-efficiency/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="一个故事 最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：  快捷键用得少，缺乏一点去研究快捷键的意识 自动补全功能没有充分利用，基本靠记忆+手敲 使用mac上并不好用的键盘  这带来的结果就是手上的速度跟不上思维的速度。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-27-programmer-efficiency/portal.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-27-programmer-efficiency/typing.png">
+<meta property="og:updated_time" content="2021-03-27T06:29:56.740Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="成为高效的程序员">
+<meta name="twitter:description" content="一个故事 最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：  快捷键用得少，缺乏一点去研究快捷键的意识 自动补全功能没有充分利用，基本靠记忆+手敲 使用mac上并不好用的键盘  这带来的结果就是手上的速度跟不上思维的速度。">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-03-27-programmer-efficiency/portal.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.com/2021/03/27/programmer-efficiency/">
+
+
+
+
+
+  <title>成为高效的程序员 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/03/27/programmer-efficiency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">成为高效的程序员</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-27T20:00:00+08:00">
+                2021-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/心态/" itemprop="url" rel="index">
+                    <span itemprop="name">心态</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/心态/敏捷/" itemprop="url" rel="index">
+                    <span itemprop="name">敏捷</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/03/27/programmer-efficiency/" class="leancloud_visitors" data-flag-title="成为高效的程序员">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><h2 id="一个故事"><a class="markdownIt-Anchor" href="#一个故事"></a> 一个故事</h2>
+<p>最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：</p>
+<ol>
+<li>快捷键用得少，缺乏一点去研究快捷键的意识</li>
+<li>自动补全功能没有充分利用，基本靠记忆+手敲</li>
+<li>使用mac上并不好用的键盘</li>
+</ol>
+<p>这带来的结果就是手上的速度跟不上思维的速度。</p>
+<a id="more"></a>
+<h2 id="高效开发的起点打字速度和快捷键"><a class="markdownIt-Anchor" href="#高效开发的起点打字速度和快捷键"></a> 高效开发的起点：打字速度和快捷键</h2>
+<p>常常记起，与我的buddy在一个项目组时，他常常会提醒我们如何高效的做开发。比如：手速。他推荐并常常组织我们在一个练习打字速度的应用上面练习和比赛。</p>
+<p>快捷键的使用更是ThoughtWorks开发人员的传统强项，与有经验的TWer pair开发就能体会到如何完全不用鼠标而把键盘敲到飞起带来的超高编程效率。TDD、重构、格式调整等等我们日常的开发动作在高效的快捷键使用下更是相得益彰。</p>
+<p>我曾经在一个客户的咨询项目上，有一个客户的开发同学，见面就聊到说他也来参加过ThoughtWorks的面试，但是最后没有进来。这位同学提到这件事显得很不服气，说他了解到没有进来的原因之一居然是快捷键用的不熟，而且很自以为是的补充说：快捷键跟开发能力有什么关系？介于他是客户方的人，我没有当面的跟他争论，但是其实当时我就在心底里暗道：还好没进TW！</p>
+<p>快捷键的确不是衡量一个好的开发人员的唯一标准，但是快捷键的灵活使用是一个高效开发人员的重要标志。作为一个开发人员，虽然不必刻意追求打字速度和快捷键使用，但是至少应当心向往之才是。</p>
+<p>与此相关的，我不禁又想到咱们的老TWer熊节的课程《学会TDD，十倍提升编程效率》。只有TDD可能并不能十倍提升效率，但是TDD结合超快的打字速度和熟练的快捷键使用，就很有可能了。</p>
+<h2 id="高效开发的故事"><a class="markdownIt-Anchor" href="#高效开发的故事"></a> 高效开发的故事</h2>
+<p>高效的开发者是可以快速完成很多事情的。我自认为不算一个特别高效的开发人员，但是我可以列举一下曾经做过的一些个人认为还算高效的事情，可以供大家参考。</p>
+<h3 id="happy-bird-的实现"><a class="markdownIt-Anchor" href="#happy-bird-的实现"></a> Happy Bird 的实现</h3>
+<p>在14年的时候，我想转型做游戏开发。当时的背景是以后端开发为主，也偶尔兼职做一些前端的小功能。于是我找了一个周末，研究了一下iOS的开发。正巧当时有一个小游戏<code>Flappy Bird</code>，挺火的，但是游戏设定又比较难。好吧，那就试试看重新实现一下这个游戏，调整一下难度吧。于是，我花了不到两天的时间做了一个<code>Happy Bird</code>出来，设置难度之后，可以轻松的玩很长时间。</p>
+<p>怎么做的呢？大致有这三个步骤：</p>
+<ol>
+<li>Root一下我手上的iPad，下载安装好<code>Flappy Bird</code>，找到其安装程序路径，把它的资源文件拿出来。</li>
+<li>研究iOS上面的动画开发，看了几个小例子</li>
+<li>编写代码实现<code>Happy Bird</code></li>
+</ol>
+<p>核心的代码在这里，有兴趣的小伙伴可以看看：<a href="https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp" target="_blank" rel="noopener">https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp</a></p>
+<h3 id="项目中的一些实践"><a class="markdownIt-Anchor" href="#项目中的一些实践"></a> 项目中的一些实践</h3>
+<p>最近我觉得也有几个可能值得一提的例子。</p>
+<p>我们项目是为客户构建一个企业内部的数据平台，平台基于Horton Works（已与Cloudera合并）的开源的Hadoop发行版HDP构建。</p>
+<p>由于HDP毕竟是一个完全开源的产品，直接在客户环境上使用，总还是显得有点不够。缺什么呢？一是一个入口的平台Portal页面，通过这个页面可以导航到具备各项功能的应用中。比如，元数据管理要导航到<code>Atlas</code>，权限管理要导航到<code>Ranger</code>，平台运维要导航到<code>Ambari</code>。</p>
+<p>刚开始的时候，项目把优先级安排在了进行数据接入、指标开发等等更具业务价值的地方。于是这个入口页面就一直被搁置了。项目中的dev们由于要经常使用这些工具，大家都需要通过加浏览器书签的方式进行管理。BA PM等角色由于不需要关注这些工具，也没有一个入口可以进入这些工具进行操作，于是项目前期阶段几乎不了解这些工具是干什么和怎么用的。这样一来，由于缺乏这样一个入口界面，数据平台总是没有数据平台的感觉，给人的印象是一堆散落在各个地方的工具，没有体系化。同时，这造成了整个团队信息共享不畅，效率降低。</p>
+<p>我观察了这个现象，感觉得做点什么。</p>
+<p>我开始评估了一下。我们如果把这个页面对应的故事优先级提高，对项目整体安排是不利的，这是其一。其二是，就算把这个优先级调高了，按照我们的敏捷项目管理和实践，要完成这个，需要经历BA的业务分析，UX的界面设计，DEV的估点，最后才能到开发。整个流程下来周期比较长，为了这么简单一个页面，似乎并不值得。</p>
+<p>于是，我找了一张故事卡，感觉这个故事卡做完，和预估的开发时长相比会有一些空间。好吧，说干就干，我利用了这一点空间，使用还算比较熟悉的Ant前端组件库，基于React框架，参考Ant的应用样例设计，做了一个静态的页面。这个页面做完，总用时差不多是3个小时，包括代码库初始化，找图，样式微调，把各个工具的通过菜单组织到一起，编写运维脚本，通过nginx进行静态部署等操作。</p>
+<p>这个portal页面大概长成下面这样:</p>
+<p><img src="/attaches/2021/2021-03-27-programmer-efficiency/portal.png" alt="platform portal"></p>
+<p>完成之后，我把这个页面发到项目组的群里面，让大家体验。最终的效果可能未必能给大家带来多大的效率提升，但是这个MVP的页面在我看来对项目的推进起到了很好的作用。一是辅助进行了ShowCase，让客户看到了我们整个数据平台是一个体系化的平台。二是成为了Portal页面设计的参考原型，为BA设计这个页面提供了参考。三是方便了大家知道和查找相应的工具。</p>
+<p>上面的例子中，产出并不多且不显眼，而内容还稍微有点长，大家读下来可能会觉得有点累。但是项目中的事情总是复杂的，有很多的背景，不仅要考虑客户的感受，还要考虑如何有智慧的与团队其他人员合作，可能未必能有自己独立自由的做一些开发工作来得简单和自在。其中的原因相信大家也可以理解。</p>
+<p>除了上面的例子，还有很多其他例子，比如:</p>
+<ul>
+<li>我们实现了一个自动生成etl代码的工具</li>
+<li>我们用hexo把数据标准的excel文档转换为一个静态网站</li>
+<li>我们用mkdocs来快速制作数据平台的使用文档</li>
+<li>我们利用squid反向代理解决了客户需要访问很多台节点带来的复杂网络配置问题</li>
+<li>我们配置了es搜集了squid日志以便可以进行完整的用户行为分析</li>
+<li>我们将etl的统计数据发送到es以便我们可以更简单的做出一些必要的etl任务报表给大家诊断问题提高效率</li>
+<li>我们用docker来隔离开发人员的Hadoop集群使用环境</li>
+<li>…</li>
+</ul>
+<h2 id="敏捷与高效开发"><a class="markdownIt-Anchor" href="#敏捷与高效开发"></a> 敏捷与高效开发</h2>
+<p>上面这些东西很多看起来并不是直接的具备业务价值的，在做这些事情之前，其实也很难去规划出这么多的故事卡，所以可能难以通过敏捷的项目管理来实现。</p>
+<p>那它们是怎么实现的呢？我认为是另一种敏捷的形式，并不是Scrum敏捷项目管理，而是从开发人员的视角出发的一种敏捷。由高效的开发人员，通过对于效率的不懈追求，充分利用各种可以利用的技术，不断重构，既包括代码的也包括工作方式的重构，自发的构建出的一套系统。</p>
+<p>这并不奇怪，如果我们去翻看敏捷的起源，就会发现敏捷其实是由一些优秀的开发人员，通过思考总结提炼，把高效的习惯沉淀下来而成的。我们从敏捷前辈大师们的大作中就能看出这些，如Martin Fowler的《重构》，Neal Ford的《卓有成效的程序员》、《函数式编程思维》，Eric Evans的《DDD》，Kent Beck的《XP极限编程》等等。大师们对于细节的不苟，对于高效的执著，对于软件艺术的追求，是这些大力推动了软件开发的变革。</p>
+<p>同时，如果我们去看github或者apache下的诸多开源软件，我相信这些软件的雏形或者MVP多是由某些开发人员为提高效率而自发开发的。特别是在前期，这些软件是很难由某一个较为完整的团队组织起来开发而成。</p>
+<p>当然这里并不是否定Scrum的价值，在一个敏捷团队中，Scrum的团队管理思路当然也是很有效的。</p>
+<h2 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h2>
+<p>讲了这么多，作为一个十年从业经验的开发人员，同时作为一个五年的TWer，其实是想给广大开发人员分享一下这些经验。希望我们可以一直保持对高效的软件开发的追求，对不断提升自己的追求，对软件艺术的追求，对用软件技术为客户创造价值的追求。</p>
+<p>最后，还有一个有意思的故事给大家分享。有一次，我们的BA同学给大家做读书分享，提到了一本不赞成敏捷实践的书，里面讲到，他们的工作方式是：1. 提出一个大的愿景 2. 让2-3个开发人员组成一个小组基于这个愿景来做开发 3. 利用1-2个月的时间产出一个可用的产品。在他们看来，这一方式是比当前的我们做的敏捷更为高效的软件开发方式。不知道大家是怎么看的，我印象很深的是另一个经验丰富的项目组成员的话：对于一些经验特别丰富的人，特别厉害的人，任何规则都是无效的，只能降低效率，而提供一个环境让他们独立的以自己的方式做事，就足够让他们做出一些令人惊奇的软件了！</p>
+<h2 id="材料"><a class="markdownIt-Anchor" href="#材料"></a> 材料</h2>
+<p>对于想练习自己的打字速度的同学，可以参考这个工具：<a href="https://dazi.kukuw.com/" target="_blank" rel="noopener">https://dazi.kukuw.com/</a> 我在上面第一次打字速度如下，相信大家可以轻易超越，特别是年轻的小伙子们，大家手速一定不一般。</p>
+<p><img src="/attaches/2021/2021-03-27-programmer-efficiency/typing.png" alt="typing speed"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/效率/" rel="tag"># 效率</a>
+          
+            <a href="/tags/工具/" rel="tag"># 工具</a>
+          
+            <a href="/tags/编程思想/" rel="tag"># 编程思想</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/21/some-thoughts-about-data-platform/" rel="next" title="一些企业数据平台建设的思考">
+                <i class="fa fa-chevron-left"></i> 一些企业数据平台建设的思考
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">117</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个故事"><span class="nav-number">1.</span> <span class="nav-text"> 一个故事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高效开发的起点打字速度和快捷键"><span class="nav-number">2.</span> <span class="nav-text"> 高效开发的起点：打字速度和快捷键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高效开发的故事"><span class="nav-number">3.</span> <span class="nav-text"> 高效开发的故事</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#happy-bird-的实现"><span class="nav-number">3.1.</span> <span class="nav-text"> Happy Bird 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目中的一些实践"><span class="nav-number">3.2.</span> <span class="nav-text"> 项目中的一些实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#敏捷与高效开发"><span class="nav-number">4.</span> <span class="nav-text"> 敏捷与高效开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">5.</span> <span class="nav-text"> 最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#材料"><span class="nav-number">6.</span> <span class="nav-text"> 材料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2021/03/27/programmer-efficiency/', // optional
+      owner: 'gmlove',
+      title: '成为高效的程序员',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
