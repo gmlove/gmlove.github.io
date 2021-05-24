@@ -1,0 +1,1421 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="数据,数据平台,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="数据治理并不是一个新的概念，但由于国内信息化起步较晚，这个话题直到最近几年才在国内各大公司中引起广泛讨论。数据治理具体是什么，我们真的需要数据治理吗？为了更清楚的了解数据治理是什么，我们先参考一下业界都是怎么说的。">
+<meta name="keywords" content="数据,数据平台">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据平台下的数据治理">
+<meta property="og:url" content="http://brightliao.com/2021/02/21/data-governance-based-on-atlas-ranger/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="数据治理并不是一个新的概念，但由于国内信息化起步较晚，这个话题直到最近几年才在国内各大公司中引起广泛讨论。数据治理具体是什么，我们真的需要数据治理吗？为了更清楚的了解数据治理是什么，我们先参考一下业界都是怎么说的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/atlas-search.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/atlas-data-linage.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/atlas-metadata-deletion.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/ranger-hdfs-policy.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/ranger-hive-masking-policy.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/ranger-tag-based-policy.png">
+<meta property="og:updated_time" content="2021-05-24T05:38:30.417Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据平台下的数据治理">
+<meta name="twitter:description" content="数据治理并不是一个新的概念，但由于国内信息化起步较晚，这个话题直到最近几年才在国内各大公司中引起广泛讨论。数据治理具体是什么，我们真的需要数据治理吗？为了更清楚的了解数据治理是什么，我们先参考一下业界都是怎么说的。">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/atlas-search.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.com/2021/02/21/data-governance-based-on-atlas-ranger/">
+
+
+
+
+
+  <title>大数据平台下的数据治理 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/02/21/data-governance-based-on-atlas-ranger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">大数据平台下的数据治理</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-21T20:00:00+08:00">
+                2021-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据/" itemprop="url" rel="index">
+                    <span itemprop="name">数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/02/21/data-governance-based-on-atlas-ranger/" class="leancloud_visitors" data-flag-title="大数据平台下的数据治理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>数据治理并不是一个新的概念，但由于国内信息化起步较晚，这个话题直到最近几年才在国内各大公司中引起广泛讨论。数据治理具体是什么，我们真的需要数据治理吗？为了更清楚的了解数据治理是什么，我们先参考一下业界都是怎么说的。</p>
+<a id="more"></a>
+<h2 id="什么是数据治理"><a class="markdownIt-Anchor" href="#什么是数据治理"></a> 什么是数据治理</h2>
+<p>数据治理研究所（<code>DGI</code>）于2004年推出了<code>DGI</code>数据治理框架，为企业需要根据数据来做决策的复杂活动提供方法。该框架考虑数据战略专家、数据治理专业人员、业务利益相关者及IT领导者共同关注的问题，比如，如何管理数据实现数据价值，如何最小化成本和复杂性，如何管理风险以及如何确保遵守不断增长的法律法规和其他要求。<code>DGI</code>数据治理框架的目标是：</p>
+<ul>
+<li>实现更好的决策</li>
+<li>减少操作摩擦</li>
+<li>保护数据利益相关者的需求</li>
+<li>培训管理层和员工采用共同的数据问题方法</li>
+<li>构建标准、可重复的流程</li>
+<li>通过协调努力降本增效</li>
+<li>确保流程透明度</li>
+</ul>
+<p>高等教育统计局（Higher Education Statistics Agency，简称<code>HESA</code>）是英国收集、分析和传播高等教育定量信息的官方机构，提出了<code>HESA</code>数据治理模型。该模型强调：</p>
+<ul>
+<li>确保数据安全，管理良好，确保组织面临的风险可控;</li>
+<li>防止和纠正数据错误，作为计划持续改进的一部分;</li>
+<li>衡量数据质量并提供检测和评估数据质量的改进框架;</li>
+<li>制定标准记录数据及其在组织内的使用情况;</li>
+<li>作为数据相关问题/变更的升级和决策主体。</li>
+</ul>
+<p>Information Builders是美国一家软件咨询公司，在他们提出的数据治理方法中强调，数据治理的核心价值是创建一个模型确保数据的保密性、质量和完整性。这对于满足内外部要求（如财务报告、合规性和隐私权等）至关重要。数据治理通过加强监督，根除风险，有效地将政策与业务战略相结合。Information Builders数据治理模型建议采取渐进式方法进行数据治理，渐进式的做法是实现业务价值并建立数据治理可持续发展计划的实用方式，从而避免在治理过程中做得太过。</p>
+<p>Information Builders在构建模型的同时，配以7个步骤辅助实施，确保有效的数据治理：</p>
+<ul>
+<li>优先考虑业务改善领域；</li>
+<li>最大化信息资产的可用性；</li>
+<li>创建并分配角色、职责；</li>
+<li>完善和确保信息资产的完整性；</li>
+<li>建立问责制；</li>
+<li>以主数据文化为基础；</li>
+<li>制定流程改进反馈机制。</li>
+</ul>
+<p>上述这些框架中的内容听起来比较散乱，但总结起来，我们可以认为，数据治理可以为给企业积累高质量的数据资产，从而为决策提供高质量数据支持，数据治理还可以帮助企业避免一些合规、隐私等问题。这是数据治理的目的。</p>
+<h2 id="数据治理实施方法"><a class="markdownIt-Anchor" href="#数据治理实施方法"></a> 数据治理实施方法</h2>
+<p>那么数据治理如何实施呢？</p>
+<p>从上面的定义来看，数据治理大部分内容是可以直接通过管理手段来实现的，这也是传统的数据治理的主要方法。一般而言，企业可以先从组织架构的角度建立数据治理的组织支持，比如，设置数据治理委员会，设立数据治理专员职位。然后，数据治理委员会根据公司情况制定数据相关管理规范，由数据治理专员负责监督执行。</p>
+<p>使用管理手段来实现数据治理的目的听起来不错，但是我们知道，企业的很多管理制度通常都难以实施。首先是培训成本很高，其次，依靠人去遵循规章制度很容易影响解决问题的效率。那么，在软件技术迅猛发展的今天，我们是不是可以更多的从技术上来解决这个问题呢？</p>
+<p>下面我们主要来看一下在大数据平台下，我们如何通过技术手段实施数据治理。</p>
+<h2 id="数据平台下实施数据治理"><a class="markdownIt-Anchor" href="#数据平台下实施数据治理"></a> 数据平台下实施数据治理</h2>
+<p>从数据治理的目标来看，我们可以进一步将数据治理划分为：元数据管理、主数据管理、数据标准管理、数据质量管理、数据安全管理。</p>
+<p>其中，主数据管理的做法在当下的业界认识中存在一些争议，且主数据管理通常是属于在业务系统中进行数据治理的范畴，在这里我们先略过。</p>
+<h3 id="数据质量和数据标准"><a class="markdownIt-Anchor" href="#数据质量和数据标准"></a> 数据质量和数据标准</h3>
+<p>数据质量和数据标准的相关性较强。好的数据标准的制定需要经过严谨的讨论，有了标准，数据质量的目标可以认为就是让数据符合标准。如果数据都符合标准，那就是高质量的数据了。数据标准的制定通常更偏重人的参与，信息系统在里面可以提供一定的支持，但是由于标准可能在不同的企业中很不一样，这一部分其实难以有一个统一的方案支持。</p>
+<p>在进行数据标准管理时，可以考虑将确定的数据标准编写成可以针对数据去运行的规则代码。有了这些规则代码之后，至少可以做两件事，一：可以在设计新数据模型的时候执行自动标准检查，以便尽量让新的设计符合标准；二：可以定期针对已有数据自动执行数据标准检查，从而发现数据问题并提醒数据所有者进行优化改进。</p>
+<p>数据质量管理可以采用类似数据标准管理的思路，先定义数据质量规则，然后编写代码落地成可执行的程序。</p>
+<p>通过上面的分析可以知道，数据质量和标准管理可以通过数据开发来实现。在基于<code>HDP</code>的大数据平台上目前还没有直接集成相关的工具，不过我们可以找到一些开源工具做支持，比如<code>apache</code>旗下的<code>Griffin</code>可能就是一个不错的起点。</p>
+<h3 id="元数据管理和数据安全"><a class="markdownIt-Anchor" href="#元数据管理和数据安全"></a> 元数据管理和数据安全</h3>
+<p>除了数据标准和数据质量，数据治理还要求做好元数据管理和数据安全，这两部分内容可能是更为基础的数据需求，特别是数据安全，因为它直接关系到平台能不能在企业中应用的问题。比如，如果数据谁都可以随意访问和下载，可以想象，那将很容易导致企业敏感数据或机密数据外泄。比较起来，数据标准和质量虽然需要尽量做好，但是就算没做好也不至于是一个致命问题。</p>
+<p>在一个分布式环境下做元数据管理和数据安全管理不是一件容易的事。比如，由于运行于<code>Hadoop</code>之上的组件非常多，数据库有<code>Hive</code>，计算引擎有<code>Spark</code>，<code>NoSQL</code>数据库有<code>Hbase</code>，消息系统有<code>Kafka</code>，各个系统都有自己的元数据，统一的元数据管理要如何实施呢？统一的数据安全要如何实施呢？</p>
+<p>基于<code>HDP</code>的大数据平台在这方面的功能相对比较丰富和成熟。<code>HDP</code>集成了<code>Atlas</code>和<code>Ranger</code>，它们分别用于解决分布式环境中的元数据管理和数据安全管理问题。</p>
+<h4 id="利用atlas进行元数据管理"><a class="markdownIt-Anchor" href="#利用atlas进行元数据管理"></a> 利用<code>Atlas</code>进行元数据管理</h4>
+<p>先来看<code>Atlas</code>，<code>Atlas</code>是专门设计为解决<code>Hadoop</code>下的元数据管理问题。<code>Atlas</code>提供了一个通用的元数据管理模型抽象，事实上，使用<code>Atlas</code>我们不仅可以管理<code>Hadoop</code>下的元数据，也可以管理传统的关系型数据库中的元数据。<code>Atlas</code>同时还作为一个基础服务为分布式环境下的数据安全管理提供支持。</p>
+<p>使用<code>Atlas</code>，我们可以自由的去定义元数据模型，因此，即便有来自很多不同组件的元数据要进行管理，也可以通过<code>Atlas</code>实现。<code>Atlas</code>的元数据模型还可以支持继承关系，这就提供了一层抽象来帮助我们在不同的组件间复用一部分元数据管理的功能。举个例子，数据存储的一个最基本的形式是表和字段，不管是<code>Hive</code>还是<code>Hbase</code>，表和字段的概念是通用的，只不过<code>Hive</code>支持的字段类型可能更丰富（比如支持嵌套结构）。</p>
+<p>听起来比较复杂，但是，实际使用<code>Atlas</code>时，我们可以不关心这些模型的细节，因为<code>Atlas</code>早已经预定义好了大部分组件对应的元数据模型了。除非有扩展的需要，否则我们都可以只关注在如何使用元数据上。</p>
+<p><code>Atlas</code>是如何搜集元数据的呢？这点也无需我们操心，经过配置，<code>Atlas</code>可以自动的从各种数据组件中提取同步元数据。</p>
+<p><code>Atlas</code>自动搜集到的元数据可以通过<code>Atlas</code>提供的查询界面进行搜索，如下图，我们可以根据不同的条件搜索<code>Hive</code>中的表或者字段。从搜索结果中，我们还可以进一步导航到关联的元数据中去，比如，字段可以关联到对应的表。</p>
+<p><img src="/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/atlas-search.png" alt="Atlas search"></p>
+<p>元数据搜索功能可以方便我们查找数据，一般的企业数据平台中都会存在大量的数据表和字段，强大的元数据搜索功能因此显得很有必要。总体来看，元数据搜索对于促进企业数据发现有很好的帮助。</p>
+<p>除了强大的元数据搜索功能，<code>Atlas</code>还提供了自动数据血缘分析功能，如果我们的某些<code>Hive</code>表是通过其他的表加工出来的（比如某个产品的销量指标表），为了理解这些加工好的数据，我们会比较关心它们的加工过程。数据血缘分析就可以帮助到我们，通过可视化的数据血缘关系图，可以很容易看到这些数据是通过什么数据加工出来的。</p>
+<p><img src="/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/atlas-data-linage.png" alt="Atlas data linage"></p>
+<p>目前<code>Atlas</code>的自动血缘分析功能还不够完善，比如，如果我们代码使用<code>Spark</code>编写的，<code>Atlas</code>就不能自动获取到数据数据血缘图了。不过，现在已有开源的<code>Atlas</code>的<code>Spark</code>插件出现了。目前在我们安装的<code>HDP</code>版本中的<code>Atlas</code>还未集成这个插件，如果要自行安装，还需要花费一定的精力。</p>
+<p>除了上述搜索和血缘分析功能之外，<code>Atlas</code>还支持对数据进行分类。我们可以创建分类，然后在不同的元数据上打上分类标签。这里的分类非常有用，它不仅可以支持按照数据分类进行搜索，还可以与数据安全组件集成，以便可以根据分类来配置不同的数据安全策略。</p>
+<p>前面提到的<code>Atlas</code>的功能都是基于技术元数据的，事实上，在数据平台建设过程中，我们还会很关心业务元数据。业务元数据是指从业务层面给数据加入的一些注解，比如某个数据应该具备什么样的值，有什么样的业务限制，与其他数据有什么关系，可以如何使用等等。新版本的<code>Atlas</code>加入了业务元数据管理的功能，可以支持用户自定义业务层面的信息，同时这些信息也可以用于搜索。</p>
+<p>那么在实际使用过程中<code>Atlas</code>有什么问题呢？</p>
+<p>我们遇到的一个比较让人烦恼的问题就是数据表的重建问题。比如，由于销售指标计算口径要进行修改，需要加入某个维度，比较方便的方式是直接将原来的表删除，然后新建一张表，但是如果我们这样做，<code>Atlas</code>里面的对应的元数据也会被同步删除，同时被删除的还有该数据表对应的分类信息，业务元数据信息等。这些信息都是人工添加的，一旦删除需要重新添加，这是非常麻烦是一件事。</p>
+<p><img src="/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/atlas-metadata-deletion.png" alt="Atlas data deleted"></p>
+<p>目前，为了保留<code>Atlas</code>中由手工添加的元数据，我们不得不禁止数据表的删除，所有的修改都需要通过修改表来实现。</p>
+<p>总结起来，<code>Atlas</code>为我们提供了很多好用的元数据管理功能。由于<code>Atlas</code>可以免费获得，可以说它为企业数据治理之路做出了很大的贡献，这一切都要感谢开源！</p>
+<h4 id="利用ranger进行数据安全管理"><a class="markdownIt-Anchor" href="#利用ranger进行数据安全管理"></a> 利用<code>Ranger</code>进行数据安全管理</h4>
+<p>除了元数据管理，数据安全也是数据治理的极为重要的一环，基于<code>HDP</code>的大数据平台可以提供什么支持呢？</p>
+<p>一般的数据安全管理通过一系列的安全策略来实现。一个通用的安全模型大概按照以下的方式运行：</p>
+<ul>
+<li>用户按照不同的部门或团队进行分组</li>
+<li>将需要进行安全控制的系统资源（比如一张数据库表，一个文件等）进行id标记</li>
+<li>针对用户或组配置安全策略，指明他们是否具备访问某一资源的权限</li>
+<li>访问资源时根据配置的安全策略进行检查，如果通过即放行访问，否则拒绝访问</li>
+</ul>
+<p>在大数据场景下进行安全管理的挑战在于需要管理很多个不同的组件。<code>HDP</code>大数据平台集成了<code>Ranger</code>进行数据安全管理。</p>
+<p><code>Ranger</code>是专门为了管理基于<code>Hadoop</code>的分布式环境下的数据安全而设计的。<code>Ranger</code>将上面的通用安全模型进行了抽象，这样一来，其他组件就可以很容易进行适配，从而集成到<code>Ranger</code>内部了。<code>Ranger</code>提供了一套插件机制来供其他组件进行集成，目前<code>Ranger</code>提供了广泛的组件支持，比如hdfs yarn <code>Hive</code> <code>Hbase</code> <code>Kafka</code> <code>Atlas</code>等等。几乎所有的<code>Hadoop</code>相关组件都可以在<code>Ranger</code>的web控制台上进行安全策略的配置。</p>
+<p>比如，如果我们要控制hdfs目录<code>/test</code>的访问权限，使之仅可以让名为<code>test</code>的用户去访问。我们可以配置一条hdfs的安全策略如下：</p>
+<p><img src="/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/ranger-hdfs-policy.png" alt="Ranger hdfs policy"></p>
+<p>hdfs在进行安全策略配置时可以使用模糊匹配的方式指定文件或目录位置，每条策略可以支持配置多个模糊路径，从而可以降低配置的难度。</p>
+<p><code>Ranger</code>对<code>Hive</code>的支持更加丰富，不仅可以支持表级权限控制，还可以支持列级、行级权限控制。有时我们会有数据脱敏访问的需求，在<code>Ranger</code>上我们还可以配置脱敏规则，包括使用内置规则或者自定义规则进行配置。如果配置了脱敏规则，用户在访问<code>Hive</code>时，<code>Hive</code>会通过<code>Ranger</code>插件查询这些规则，进而改写用户的查询语句，实现脱敏访问。</p>
+<p>一个典型的脱敏策略及其应用效果如下：</p>
+<p><img src="/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/ranger-hive-masking-policy.png" alt="Ranger Hive masking policy"></p>
+<p>前面提到了<code>Atlas</code>和安全管理的集成，这是怎么回事呢？虽然<code>Ranger</code>已经提供了非常灵活的安全策略配置，但是配置这些策略本身其实是一件很复杂的事情。配置不好还特别容易出错。</p>
+<p>举个例子，假如我们想要对用户的手机号进行脱敏。如果用户的手机号只存在一张表里面，那很简单，麻烦之处就在于手机号常常会分散到很多表里面。比如两个业务系统都保存了用户的手机号，那就至少会在两张表，同时我们常常还会有很多加工出来的表，这些表里面也会带入用户的手机号信息，这就带来更多的表了。如果我们要针对手机号配置脱敏规则，我们就可能需要添加很多个策略，复制粘贴不仅容易出错，而且非常不便于修改。</p>
+<p><code>Ranger</code>可以和<code>Atlas</code>进行集成，从而使得我们在配置安全策略时可以针对数据分类来统一进行。比如，我们可以在<code>Atlas</code>中通过搜索找到所有的手机号字段，然后将这些字段都标记为手机号这个分类。然后，在<code>Ranger</code>里面，我们可以选择基于tag的权限配置，然后对这一类数据配置相同的访问权限或者脱敏规则。这是非常高效的配置安全策略的方式。下图是一个示例。</p>
+<p><img src="/attaches/2021/2021-02-21-data-governance-based-on-atlas-ranger/ranger-tag-based-policy.png" alt="Ranger tag based policy"></p>
+<p>那么<code>Ranger</code>在使用过程中有什么问题呢？我们在实践过程中遇到过几个不太方便使用的问题。</p>
+<p>一是<code>Ranger</code>的用户和组同步频率太低，最快只能配置一小时同步一次（<code>Ranger</code>的用户和组通常是同步至一个外部的企业账号中心，比如<code>Windows</code>平台常用的<code>Active Directory</code>活动目录域账户系统，开源的<code>OpenLDAP</code>轻量级目录服务，同步账号之后才可以对特定账号进行权限配置）。目前控制台上还没有手动同步的功能，如果需要手动同步，需要找到对应的同步类，然后执行<code>Java</code>程序进行调用，这不是很方便了。</p>
+<p>另一个问题是，<code>Ranger</code>的权限配置默认打开了审计日志记录的功能，对于某些范围很广的资源进行权限配置时，如果没有关闭这个日志，将很快导致巨量的日志被系统记录下来，很容易造成磁盘空间被打满的问题。同时，<code>Ranger</code>还会将审计日志写入到<code>Solr</code>（日志搜索引擎），从而导致<code>Solr</code>的oom问题。我们在项目上为此花费了不少时间。</p>
+<p>想要让<code>Ranger</code>可以支持安全管理功能，一个必备的前提是<code>Hadoop</code>集群本身是打开了<code>Kerberos</code>安全的集群。开启<code>Hadoop</code>集群安全可以通过<code>Ambari</code>界面操作进行一定的简化，但是依然可能碰到不少问题，这主要是由于<code>Kerberos</code>本身就是一个比较复杂的安全协议导致的。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总结起来，在基于<code>HDP</code>的大数据平台下，我们可以选择不少功能强大的开源组件进行数据治理。有了这些软件支持，数据治理就可以不仅仅停留在制度上，更是可以通过软件系统来辅助进行治理。</p>
+<p>数据治理是一个重要的数据管理话题，本文简要讨论了数据治理的目标以及实施方法。主要分享了当具体到大数据平台上面时，如何通过技术手段来保障数据治理的顺利进行。有了各种软件系统的辅助，企业数据治理的道路无疑少了很多阻碍。最后，如果大家有更多如何在数据平台上面进行数据治理的问题，欢迎留言交流。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据/" rel="tag"># 数据</a>
+          
+            <a href="/tags/数据平台/" rel="tag"># 数据平台</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="next" title="基于HDP构建企业数据平台">
+                <i class="fa fa-chevron-left"></i> 基于HDP构建企业数据平台
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/22/data-ingestion-from-mongo/" rel="prev" title="MongoDB数据接入实践">
+                MongoDB数据接入实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">120</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是数据治理"><span class="nav-number">1.</span> <span class="nav-text"> 什么是数据治理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据治理实施方法"><span class="nav-number">2.</span> <span class="nav-text"> 数据治理实施方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据平台下实施数据治理"><span class="nav-number">3.</span> <span class="nav-text"> 数据平台下实施数据治理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据质量和数据标准"><span class="nav-number">3.1.</span> <span class="nav-text"> 数据质量和数据标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元数据管理和数据安全"><span class="nav-number">3.2.</span> <span class="nav-text"> 元数据管理和数据安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#利用atlas进行元数据管理"><span class="nav-number">3.2.1.</span> <span class="nav-text"> 利用Atlas进行元数据管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用ranger进行数据安全管理"><span class="nav-number">3.2.2.</span> <span class="nav-text"> 利用Ranger进行数据安全管理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2021/02/21/data-governance-based-on-atlas-ranger/', // optional
+      owner: 'gmlove',
+      title: '大数据平台下的数据治理',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

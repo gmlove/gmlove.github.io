@@ -1,0 +1,1408 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="数据,数据平台,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="把数据导入数据平台是挖掘数据价值的第一步，如果做不好，数据分析将无从开始。所以，快速、高质量、稳定的将数据从业务系统接入到数据平台是至关重要的一环。 数据平台最常见的一个数据源是关系型的数据库，然而随着软件技术的发展，越来越多的业务系统基于非关系型数据库开发，所以，非关系型数据库的数据接入时数据平台必备的能力之一。 我们的数据仓库基于Hive构建，Hive的设计可以很好的兼容关系型数据库，如果数据">
+<meta name="keywords" content="数据,数据平台">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB数据接入实践">
+<meta property="og:url" content="http://brightliao.com/2021/02/22/data-ingestion-from-mongo/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="把数据导入数据平台是挖掘数据价值的第一步，如果做不好，数据分析将无从开始。所以，快速、高质量、稳定的将数据从业务系统接入到数据平台是至关重要的一环。 数据平台最常见的一个数据源是关系型的数据库，然而随着软件技术的发展，越来越多的业务系统基于非关系型数据库开发，所以，非关系型数据库的数据接入时数据平台必备的能力之一。 我们的数据仓库基于Hive构建，Hive的设计可以很好的兼容关系型数据库，如果数据">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-02-22-data-ingestion-from-mongo/mongo.png">
+<meta property="og:updated_time" content="2021-05-24T06:23:03.975Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB数据接入实践">
+<meta name="twitter:description" content="把数据导入数据平台是挖掘数据价值的第一步，如果做不好，数据分析将无从开始。所以，快速、高质量、稳定的将数据从业务系统接入到数据平台是至关重要的一环。 数据平台最常见的一个数据源是关系型的数据库，然而随着软件技术的发展，越来越多的业务系统基于非关系型数据库开发，所以，非关系型数据库的数据接入时数据平台必备的能力之一。 我们的数据仓库基于Hive构建，Hive的设计可以很好的兼容关系型数据库，如果数据">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-02-22-data-ingestion-from-mongo/mongo.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://brightliao.com/2021/02/22/data-ingestion-from-mongo/">
+
+
+
+
+
+  <title>MongoDB数据接入实践 | Bright LGM's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-88944761-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Bright LGM's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Code speaks.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/02/22/data-ingestion-from-mongo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">MongoDB数据接入实践</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-22T20:00:00+08:00">
+                2021-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据/" itemprop="url" rel="index">
+                    <span itemprop="name">数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/02/22/data-ingestion-from-mongo/" class="leancloud_visitors" data-flag-title="MongoDB数据接入实践">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <link rel="stylesheet" type="text/css" href="/attaches/assets/katex/katex.min.css"><p>把数据导入数据平台是挖掘数据价值的第一步，如果做不好，数据分析将无从开始。所以，快速、高质量、稳定的将数据从业务系统接入到数据平台是至关重要的一环。</p>
+<p>数据平台最常见的一个数据源是关系型的数据库，然而随着软件技术的发展，越来越多的业务系统基于非关系型数据库开发，所以，非关系型数据库的数据接入时数据平台必备的能力之一。</p>
+<p>我们的数据仓库基于<code>Hive</code>构建，<code>Hive</code>的设计可以很好的兼容关系型数据库，如果数据源是关系型数据库，数据接入会相对容易。如何从非关系型数据库中接入数据呢？这里面有没有什么经验值得分享呢？</p>
+<a id="more"></a>
+<p>我们项目最近就碰到这种情况，需要接入一个业务数据库的数据，这些数据存储在<code>MongoDB</code>中。本文将就非关系型数据库接入数据平台分享一些我们实践中的一些故事和经验。</p>
+<h2 id="mongodb的特点"><a class="markdownIt-Anchor" href="#mongodb的特点"></a> MongoDB的特点</h2>
+<p><img src="/attaches/2021/2021-02-22-data-ingestion-from-mongo/mongo.png" alt="mongo"></p>
+<p>先了解一下<code>MongoDB</code>的特点。<code>MongoDB</code>是一个流行的文档型数据库，内部的一条数据也称为一个文档。<code>MongoDB</code>是<code>NoSQL</code>数据库的一个典型代表，与关系型数据库相比，有如下特点：</p>
+<ul>
+<li>支持嵌套类型的字段，比如数组类型字段、字典类型字段，其中字典下又可以嵌套其他字典或数组</li>
+<li>非常容易的添加新字段，添加字段时，如果旧数据只需要有一个默认值，则无需数据迁移，在程序中设置默认值即可</li>
+<li>可自动生成带排序特性的<code>ID</code></li>
+<li>通过对<code>ID</code>进行<code>hash</code>，可以很容易的支持分布式扩展</li>
+<li>多文档、多表间的事务一致性不容易保证</li>
+</ul>
+<p>从上面的分析可以看出，作为<code>NoSQL</code>数据库的代表，<code>MongoDB</code>在易用性上有不错的优势，它支持更广泛的数据结构，扩展起来非常方便。这些大概是它得以流行的原因。</p>
+<h2 id="使用spark读取mongodb数据"><a class="markdownIt-Anchor" href="#使用spark读取mongodb数据"></a> 使用Spark读取MongoDB数据</h2>
+<p>如何将<code>MongoDB</code>的数据接入<code>Hive</code>呢？经过上面的分析可知，我们首先要解决的问题就是数据在<code>Hive</code>中要以什么样的结构存储的问题。</p>
+<p>查阅<code>Hive</code>的文档可以知道，<code>Hive</code>其实也可以支持嵌套的数据结构。<code>Hive</code>的某一个字段可以是数组类型或<code>Map</code>类型，<code>Map</code>下也可以嵌套<code>Map</code>或数组。这是一个非常有吸引力的特性，看起来与<code>MongoDB</code>支持的数据结构可以进行无缝转换。</p>
+<p>在项目中，我们也首先进行了这样的尝试，将<code>MongoDB</code>的<a href="https://docs.mongodb.com/spark-connector/current/" target="_blank" rel="noopener">Spark连接器</a><code>jar</code>包加入到<code>Spark</code>的<code>classpath</code>下就可以使用<code>Spark</code>读取<code>MongoDB</code>的数据了。</p>
+<h3 id="数据类型问题"><a class="markdownIt-Anchor" href="#数据类型问题"></a> 数据类型问题</h3>
+<p>我们的数据源中最复杂的一张表有大约100个字段，超过1000w数据量。事实上，在读取这张表时却不尽如人意，程序总是运行到一定的时候就报错<code>java.lang.IllegalArgumentException: Can't parse category at ...</code>，看起来是由于<code>Spark</code>不能正确的将读取到的数据解析到之前预设的结构上。</p>
+<p>经过一番研究之后，我们了解到，如果使用<code>Spark</code>的<code>DataFrame</code> <code>API</code>读取数据，在读之前就需要指定数据类型。<code>MongoDB</code>的数据类型如何确定呢？查阅<code>MongoDB</code>的文档可知，这是通过以下步骤完成的：</p>
+<ul>
+<li><code>Spark</code>连接器会先进行文档抽样</li>
+<li>解析每个抽样文档可以得到一系列的文档结构</li>
+<li>合并所有的结构得到来组合成为一个最终结构</li>
+</ul>
+<p>到这里，上面的错误就很清楚了。抽样结果不会覆盖到所有文档，一旦有某一个文档的结构不能兼容抽样得到的结构，<code>Spark</code>程序就会出错。</p>
+<p>如何修复这个错误呢？我们可以提高抽样比例，但是这样一来，有几个可能的副作用：</p>
+<ul>
+<li>数据读取过程更慢</li>
+<li>给业务系统数据库造成更大的压力</li>
+<li>新数据如果使用了更新的结构依然可能报错</li>
+</ul>
+<p>虽然不是一个好的方案，我们还是进行了尝试，毕竟改个参数没什么成本。然而，在尝试了多组抽样率参数也没有带来很好的效果。</p>
+<h2 id="探索其他方案"><a class="markdownIt-Anchor" href="#探索其他方案"></a> 探索其他方案</h2>
+<p>看起来我们低估了从<code>MongoDB</code>进行数据接入的难度啊。</p>
+<p>如何解决这个问题呢？有两个办法可以继续尝试：</p>
+<ul>
+<li>将错误数据反馈给业务系统，以便从源头解决问题</li>
+<li>读数据时忽略出错的数据</li>
+</ul>
+<p>第一个方案不是一个好的方案，因为会引入额外的人工流程，数据接入没法自动化稳定的完成。这将带来巨大的维护成本，可以想象，我们需要隔三差五的找业务系统的开发团队反馈问题，等他们问题修复了，我们再重新接入数据。不仅人力成本协作成本都很高，而且想要每天稳定的输出指标基本上不可能了，随机的数据接入失败会导致随机的指标输出失败。</p>
+<p>第二个方案我们也调研了一段时间，然而结论是需要修改<code>MongoDB</code>的Spark连接器才能实现。这里并没有一个相关参数可以让我们忽略读取数据过程中的错误！</p>
+<p>这时，<code>MongoDB</code>的数据接入几乎陷入僵局。上面这个问题实际上更为严重，因为被我们捕捉到的只是一个特例，类似的错误可能还很多，比如<code>Spark</code>读取到的结构显示某一个字段应该是数字，但却读取到了一个字符串，或者显示是数组的却读取到了一个字典等等。这样的数据类型不匹配的情况实在太多了，几乎无法穷举。这就让这种方式存在极大的不确定性。</p>
+<h2 id="使用elt的方式读取mongodb数据"><a class="markdownIt-Anchor" href="#使用elt的方式读取mongodb数据"></a> 使用ELT的方式读取MongoDB数据</h2>
+<p>如何解决这个棘手的问题呢？讨论了很久，最后我们转换了一下思路。在大数据下进行数据处理时，除了大家都非常熟悉的<code>ETL</code>，不是还有一种实践是<code>ELT</code>么？我们能不能这样做呢：</p>
+<ul>
+<li>在接入时直接保存原始文档不进行<code>schema</code>解析</li>
+<li>在使用数据时根据需要进行解析</li>
+</ul>
+<p>这正是<code>ELT</code>的数据处理方式，先<code>extract</code>提取数据，然后并不进行<code>transform</code>操作，而是直接通过<code>load</code>将数据存下来，最后在使用数据时执行<code>transform</code>解析数据。</p>
+<p><code>MongoDB</code>作为一款成熟的数据库，数据读取应该不是难事，我们可以使用<code>python</code>将数据读取出来存为<code>json</code>文件（实际上是按行存储的<code>json</code>文件，每行对应一条<code>json</code>格式的数据），然后用<code>Spark</code>读取文件写入到<code>Hive</code>。</p>
+<h3 id="日期数据问题"><a class="markdownIt-Anchor" href="#日期数据问题"></a> 日期数据问题</h3>
+<p>使用<code>pymongo</code>客户端库，可以用<code>python</code>读取<code>MongoDB</code>的数据。我们一开始以为这样的方案应该可以很顺利的完成。没想到还是有一些意外。在读完数百万的数据之后，突然程序报错，日期无法解析，错误消息类似<code>bson.errors.InvalidBSON: year 20215 is out of range</code>。很奇怪的错误，有一个错误的日期成功的写入了<code>MongoDB</code>，但是无法正确读取。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo_client = MongoClient(<span class="string">'mongodb://NAME:PASS@HOST:29017/test.test?authSource=admin'</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> mongo_client[<span class="string">'test'</span>][<span class="string">'test'</span>].find(&#123;<span class="string">'_id'</span>: ObjectId(<span class="string">'xxx'</span>)&#125;):</span><br><span class="line">    print(i)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[<span class="built_in">test</span>@<span class="built_in">test</span> mongo-test]<span class="comment"># python3 test-mongo.py</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"test-mongo1.py"</span>, line 6, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> coll.find(&#123;<span class="string">'_id'</span>: ObjectId(<span class="string">'xxx'</span>)&#125;):</span><br><span class="line">  File <span class="string">"/usr/local/lib/python3.7/site-packages/pymongo/cursor.py"</span>, line 1207, <span class="keyword">in</span> next</span><br><span class="line">    <span class="keyword">if</span> len(self.__data) or self._refresh():</span><br><span class="line">  ...</span><br><span class="line">  File <span class="string">"/usr/local/lib/python3.7/site-packages/bson/__init__.py"</span>, line 1089, <span class="keyword">in</span> _decode_all_selective</span><br><span class="line">    <span class="built_in">return</span> decode_all(data, codec_options)</span><br><span class="line">bson.errors.InvalidBSON: year 20215 is out of range</span><br></pre></td></tr></table></figure>
+<p>我们尝试把出问题的数据找出来看看。使用<code>MongoDB</code>的<code>cli</code>工具连接数据库，可以执行查询。但是由于错误信息很少，我们花费了一番工夫才真正找到出问题的数据。原来是这个字段存储的不是业务合法的日期，而是一个错误日期！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.test.findOne(&#123;<span class="string">"_id"</span>:ObjectId(<span class="string">"xxx"</span>)&#125;)</span><br><span class="line">&#123; <span class="string">"_id"</span> : ObjectId(<span class="string">"xxx"</span>), <span class="string">"someDate"</span> : ISODate(<span class="string">"20215-11-30T23:00:00Z"</span>) &#125;</span><br></pre></td></tr></table></figure>
+<p>经过一番调查，有了结论，原来使用<code>java</code>客户端可以成功将此类日期写入<code>MongoDB</code>，因为在<code>java</code>中这个日期是一个合法的日期。<code>MongoDB</code>使用<code>bson</code>格式进行数据存储，同样可以合法的存储此类日期。但是<code>python</code>无法读取此日期，因为<code>python</code>读取到<code>bson</code>的<code>date</code>之后，会将其转化为<code>python</code>的<code>datetime</code>对象，而<code>python</code>的<code>datetime</code>要求<code>year</code>值必须在1到9999之间。</p>
+<h3 id="尝试解决日期数据问题"><a class="markdownIt-Anchor" href="#尝试解决日期数据问题"></a> 尝试解决日期数据问题</h3>
+<p><code>MongoDB</code>的数据接入之路真是有点曲折。如何解决这个问题呢？我们可以循环读取数据，捕捉这类异常，然后跳过异常数据继续往下读取。</p>
+<p>于是我们编写如下代码，在遇到错误的时候打印对应的错误文档<code>id</code>，然后继续。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">cursor: Cursor = coll.find(query_condition).sort(<span class="string">'_id'</span>, <span class="number">-1</span>)</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        doc: Dict = cursor.next()</span><br><span class="line">        doThingsWith(doc)</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> StopIteration:</span><br><span class="line">        logger.info(<span class="string">'read data finished. %s/%s'</span>, i, count)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">except</span> BSONError <span class="keyword">as</span> e:</span><br><span class="line">        cursor.close()</span><br><span class="line">        <span class="comment"># find out the error doc by read the doc._id only</span></span><br><span class="line">        cursor = coll.find(query_condition, &#123;<span class="string">'_id'</span>: <span class="number">1</span>&#125;).sort(<span class="string">'_id'</span>, <span class="number">-1</span>)</span><br><span class="line">        bad_doc: Dict = cursor.skip(i).next()</span><br><span class="line">        print(bad_doc)</span><br><span class="line">        cursor.close()</span><br><span class="line">        <span class="comment"># skip the error doc and continue reading</span></span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">        <span class="comment"># when a BSONError occurred, the cursor will stop, in this case we should continue read the docs left.</span></span><br><span class="line">        cursor: Cursor = coll.find(query_condition).sort(<span class="string">'_id'</span>, <span class="number">-1</span>).skip(i)</span><br></pre></td></tr></table></figure>
+<p>在满以为可以正常运行的时候，又遇到了新的问题。在<code>MongoDB</code>的客户端里可以根据错误文档的id查询到该文档，可是当我们去查看该文档的时候，却并没有发现错误的数据。该文档对应的数据是正常的！这是为什么？？？</p>
+<h3 id="再次尝试解决日期数据问题"><a class="markdownIt-Anchor" href="#再次尝试解决日期数据问题"></a> 再次尝试解决日期数据问题</h3>
+<p>没办法了，只能研究研究<code>pymongo</code>库的源代码了。仔细读了一下<code>API</code>的参数，发现一个可疑的地方，读取数据的<code>API</code>里面有一个参数<code>batch_size</code>，默认值情况将返回不多于101个文档或1MB的数据大小。这么说来，<code>pymongo</code>在读取数据的时候是批量读取的，这应该可以提升不少性能。在读取到一批数据之后，<code>pymongo</code>会开始进行数据解析，转化为<code>python</code>的数据结构，此时如果这一批数据中某一条数据有问题，则会触发异常。原来如此，所以我们之前打印的错误文档的<code>id</code>并不是真正的错误文档的<code>id</code>，而是该批次文档的第一个文档的<code>id</code>！</p>
+<p>有了这个认识，我们可以使用如下流程来读取数据：</p>
+<ul>
+<li>用较大批次读取数据</li>
+<li>在遇到错误的时候，将批次大小改为1，并跳过错误的文档</li>
+<li>将批次大小改回原来的值继续读取其他文档</li>
+</ul>
+<p>参考代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">batch_size = <span class="number">100</span></span><br><span class="line">cursor: Cursor = coll.find(query_condition).sort(<span class="string">'_id'</span>, <span class="number">-1</span>).batch_size(batch_size)</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        doc: Dict = cursor.next()</span><br><span class="line">        doThingsWith(doc)</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> StopIteration:</span><br><span class="line">        logger.info(<span class="string">'read data finished. %s/%s'</span>, i, count)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">except</span> BSONError <span class="keyword">as</span> e:</span><br><span class="line">        cursor.close()</span><br><span class="line">        <span class="keyword">if</span> batch_size == <span class="number">100</span>:</span><br><span class="line">            <span class="comment"># set batch_size to 1 and continue reading to try find which doc raises error</span></span><br><span class="line">            batch_size = <span class="number">1</span></span><br><span class="line">            cursor: Cursor = coll.find(query_condition).sort(<span class="string">'_id'</span>, <span class="number">-1</span>).skip(i).batch_size(batch_size)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># find out the error doc by read the doc._id only</span></span><br><span class="line">            cursor = coll.find(query_condition, &#123;<span class="string">'_id'</span>: <span class="number">1</span>&#125;).sort(<span class="string">'_id'</span>, <span class="number">-1</span>)</span><br><span class="line">            bad_doc: Dict = cursor.skip(i).next()</span><br><span class="line">            cursor.close()</span><br><span class="line">            print(bad_doc)</span><br><span class="line">            <span class="comment"># skip the error doc and continue reading</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">            <span class="comment"># when a BSONError occurred, the cursor will stop, in this case we should continue read the docs left.</span></span><br><span class="line">            cursor: Cursor = coll.find(query_condition).sort(<span class="string">'_id'</span>, <span class="number">-1</span>).skip(i).batch_size(<span class="number">100</span>)</span><br><span class="line">            batch_size = <span class="number">100</span></span><br></pre></td></tr></table></figure>
+<p>经过了重重困难之后，终于可以比较稳定的读取<code>MongoDB</code>数据接入了。</p>
+<h3 id="其他优化"><a class="markdownIt-Anchor" href="#其他优化"></a> 其他优化</h3>
+<p>后续的工作中，我们将错误的文档记录了下来，这可以反馈给业务系统开发人员进行修复。</p>
+<p>我们还发现了数据读取超时的问题，这个可以通过重试解决，于是代码里面还多了自动重试一定次数的逻辑。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>回顾整个<code>MongoDB</code>的数据接入流程，可以看到，对于数据类型非常灵活的<code>NoSQL</code>数据库，数据接入并不是件容易的事。</p>
+<p>总结起来，有以下经验可能值得大家借鉴：</p>
+<ul>
+<li>数据接入过程需要保证尽可能的稳定，否则可能由于错过数据接入时机而丢失掉部分历史数据，还可能带来更多的耗时的跨团队协作问题（比如，协调业务系统人员补数）</li>
+<li>对于无<code>schema</code>或者<code>schema</code>比较自由的数据库，在接入数据到数据平台时，考虑用<code>json</code>格式存储原始数据，这可以避免在接入数据时进行数据解析带来的问题，使得数据接入过程更稳定</li>
+<li>处理数据接入过程中的错误时，考虑将错误对应的数据<code>id</code>保存下来，以便反馈给客户端修复</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据/" rel="tag"># 数据</a>
+          
+            <a href="/tags/数据平台/" rel="tag"># 数据平台</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/21/data-governance-based-on-atlas-ranger/" rel="next" title="大数据平台下的数据治理">
+                <i class="fa fa-chevron-left"></i> 大数据平台下的数据治理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/27/programmer-efficiency/" rel="prev" title="成为高效的程序员">
+                成为高效的程序员 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/avatar.png" alt="Bright LGM">
+          <p class="site-author-name" itemprop="name">Bright LGM</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">120</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/gmlove" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mongodb的特点"><span class="nav-number">1.</span> <span class="nav-text"> MongoDB的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用spark读取mongodb数据"><span class="nav-number">2.</span> <span class="nav-text"> 使用Spark读取MongoDB数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据类型问题"><span class="nav-number">2.1.</span> <span class="nav-text"> 数据类型问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#探索其他方案"><span class="nav-number">3.</span> <span class="nav-text"> 探索其他方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用elt的方式读取mongodb数据"><span class="nav-number">4.</span> <span class="nav-text"> 使用ELT的方式读取MongoDB数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日期数据问题"><span class="nav-number">4.1.</span> <span class="nav-text"> 日期数据问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尝试解决日期数据问题"><span class="nav-number">4.2.</span> <span class="nav-text"> 尝试解决日期数据问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再次尝试解决日期数据问题"><span class="nav-number">4.3.</span> <span class="nav-text"> 再次尝试解决日期数据问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他优化"><span class="nav-number">4.4.</span> <span class="nav-text"> 其他优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  <!--
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  -->
+  <link rel="stylesheet" href="/attaches/assets/gitment/gitment.css">
+  <script src="/attaches/assets/gitment/gitment.js"></script>
+  <script>
+    const gitment = new Gitment({
+      id: '2021/02/22/data-ingestion-from-mongo/', // optional
+      owner: 'gmlove',
+      title: 'MongoDB数据接入实践',
+      repo: 'gmlove.github.io',
+      oauth: {
+        client_id: '75eb53812430d581cd14',
+        client_secret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      },
+      // ...
+      // For more available options, check out the documentation below
+    })
+
+    gitment.render('comments')
+    // or
+    // gitment.render(document.getElementById('comments'))
+    // or
+    // document.body.appendChild(gitment.render())
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz", "9jxpPRQJh9dxgB6Ndb1HYuKO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
