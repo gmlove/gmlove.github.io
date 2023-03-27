@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一个故事 最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：  快捷键用得少，缺乏一点去研究快捷键的意识 自动补全功能没有充分利用，基本靠记忆+手敲 使用mac笔记本自带的并不好用的键盘  这带来的结果就是手上的速度跟不上思维的速度。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="成为高效的程序员">
+<meta property="og:url" content="http://brightliao.com/2021/03/27/programmer-efficiency/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="一个故事 最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：  快捷键用得少，缺乏一点去研究快捷键的意识 自动补全功能没有充分利用，基本靠记忆+手敲 使用mac笔记本自带的并不好用的键盘  这带来的结果就是手上的速度跟不上思维的速度。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-27-programmer-efficiency/portal.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-27-programmer-efficiency/typing.png">
+<meta property="article:published_time" content="2021-03-27T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-29T08:26:27.298Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="效率">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="编程思想">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-03-27-programmer-efficiency/portal.png">
+
+<link rel="canonical" href="http://brightliao.com/2021/03/27/programmer-efficiency/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>成为高效的程序员 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/03/27/programmer-efficiency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          成为高效的程序员
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-27 20:00:00" itemprop="dateCreated datePublished" datetime="2021-03-27T20:00:00+08:00">2021-03-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-29 16:26:27" itemprop="dateModified" datetime="2022-07-29T16:26:27+08:00">2022-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BF%83%E6%80%81/" itemprop="url" rel="index"><span itemprop="name">心态</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BF%83%E6%80%81/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/03/27/programmer-efficiency/" class="post-meta-item leancloud_visitors" data-flag-title="成为高效的程序员" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="一个故事"><a class="markdownIt-Anchor" href="#一个故事"></a> 一个故事</h2>
+<p>最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：</p>
+<ol>
+<li>快捷键用得少，缺乏一点去研究快捷键的意识</li>
+<li>自动补全功能没有充分利用，基本靠记忆+手敲</li>
+<li>使用mac笔记本自带的并不好用的键盘</li>
+</ol>
+<p>这带来的结果就是手上的速度跟不上思维的速度。</p>
+<span id="more"></span>
+<h2 id="高效开发的起点打字速度和快捷键"><a class="markdownIt-Anchor" href="#高效开发的起点打字速度和快捷键"></a> 高效开发的起点：打字速度和快捷键</h2>
+<p>常常记起，与我的buddy在一个项目组时，他常常会提醒我们如何高效的做开发。比如：手速。他推荐并常常组织我们在一个练习打字速度的应用上面练习和比赛。</p>
+<p>快捷键的使用更是Thoughtworks开发人员的传统强项，与有经验的TWer pair开发就能体会到如何完全不用鼠标而把键盘敲到飞起带来的超高编程效率。TDD、重构、格式调整等等我们日常的开发动作在高效的快捷键使用下更是相得益彰。</p>
+<p>我曾经在一个客户的咨询项目上，有一个客户的开发同学，见面就聊到说他也来参加过Thoughtworks的面试，但是最后没有进来。这位同学提到这件事显得很不服气，说他了解到没有进来的原因之一居然是快捷键用的不熟，而且很自以为是的补充说：快捷键跟开发能力有什么关系？介于他是客户方的人，我没有当面的跟他争论，但是其实当时我就在心底里暗道：还好没进TW！</p>
+<p>快捷键的确不是衡量一个好的开发人员的唯一标准，但是快捷键的灵活使用是一个高效开发人员的重要标志。作为一个开发人员，虽然不必刻意追求打字速度和快捷键使用，但是至少应当心向往之才是。</p>
+<p>与此相关的，我不禁又想到咱们的老TWer熊节的课程《学会TDD，十倍提升编程效率》。只有TDD可能并不能十倍提升效率，但是TDD结合超快的打字速度和熟练的快捷键使用，就很有可能了。</p>
+<h2 id="高效开发的故事"><a class="markdownIt-Anchor" href="#高效开发的故事"></a> 高效开发的故事</h2>
+<p>高效的开发者是可以快速完成很多事情的。我自认为不算一个特别高效的开发人员，但是我可以列举一下曾经做过的一些个人认为还算高效的事情，可以供大家参考。</p>
+<h3 id="happy-bird-的实现"><a class="markdownIt-Anchor" href="#happy-bird-的实现"></a> Happy Bird 的实现</h3>
+<p>在14年的时候，我想转型做游戏开发。当时的背景是以后端开发为主，也偶尔兼职做一些前端的小功能。于是我找了一个周末，研究了一下iOS的开发。正巧当时有一个小游戏<code>Flappy Bird</code>，挺火的，但是游戏设定又比较难。好吧，那就试试看重新实现一下这个游戏，调整一下难度吧。于是，我花了不到两天的时间做了一个<code>Happy Bird</code>出来，设置难度之后，可以轻松的玩很长时间。</p>
+<p>怎么做的呢？大致有这三个步骤：</p>
+<ol>
+<li>Root一下我手上的iPad，下载安装好<code>Flappy Bird</code>，找到其安装程序路径，把它的资源文件拿出来。</li>
+<li>研究iOS上面的动画开发，看了几个小例子</li>
+<li>编写代码实现<code>Happy Bird</code></li>
+</ol>
+<p>核心的代码在这里，有兴趣的小伙伴可以看看：<a target="_blank" rel="noopener" href="https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp">https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp</a></p>
+<h3 id="项目中的一些实践"><a class="markdownIt-Anchor" href="#项目中的一些实践"></a> 项目中的一些实践</h3>
+<p>最近我觉得也有几个可能值得一提的例子。</p>
+<p>我们项目是为客户构建一个企业内部的数据平台，平台基于Horton Works（已与Cloudera合并）的开源的Hadoop发行版HDP构建。</p>
+<p>由于HDP毕竟是一个完全开源的产品，直接在客户环境上使用，总还是显得有点不够。缺什么呢？一是一个入口的平台Portal页面，通过这个页面可以导航到具备各项功能的应用中。比如，元数据管理要导航到<code>Atlas</code>，权限管理要导航到<code>Ranger</code>，平台运维要导航到<code>Ambari</code>。</p>
+<p>刚开始的时候，项目把优先级安排在了进行数据接入、指标开发等等更具业务价值的地方。于是这个入口页面就一直被搁置了。项目中的dev们由于要经常使用这些工具，大家都需要通过加浏览器书签的方式进行管理。BA PM等角色由于不需要关注这些工具，也没有一个入口可以进入这些工具进行操作，于是项目前期阶段几乎不了解这些工具是干什么和怎么用的。这样一来，由于缺乏这样一个入口界面，数据平台总是没有数据平台的感觉，给人的印象是一堆散落在各个地方的工具，没有体系化。同时，这造成了整个团队信息共享不畅，效率降低。</p>
+<p>我观察了这个现象，感觉得做点什么。</p>
+<p>我开始评估了一下。我们如果把这个页面对应的故事优先级提高，对项目整体安排是不利的，这是其一。其二是，就算把这个优先级调高了，按照我们的敏捷项目管理和实践，要完成这个，需要经历BA的业务分析，UX的界面设计，DEV的估点，最后才能到开发。整个流程下来周期比较长，为了这么简单一个页面，似乎并不值得。</p>
+<p>于是，我找了一张故事卡，感觉这个故事卡做完，和预估的开发时长相比会有一些空间。好吧，说干就干，我利用了这一点空间，使用还算比较熟悉的Ant前端组件库，基于React框架，参考Ant的应用样例设计，做了一个静态的页面。这个页面做完，总用时差不多是3个小时，包括代码库初始化，找图，样式微调，把各个工具的通过菜单组织到一起，编写运维脚本，通过nginx进行静态部署等操作。</p>
+<p>这个portal页面大概长成下面这样:</p>
+<p><img data-src="/attaches/2021/2021-03-27-programmer-efficiency/portal.png" alt="platform portal" /></p>
+<p>完成之后，我把这个页面发到项目组的群里面，让大家体验。最终的效果可能未必能给大家带来多大的效率提升，但是这个MVP的页面在我看来对项目的推进起到了很好的作用。一是辅助进行了ShowCase，让客户看到了我们整个数据平台是一个体系化的平台。二是成为了Portal页面设计的参考原型，为BA设计这个页面提供了参考。三是方便了大家知道和查找相应的工具。</p>
+<p>上面的例子中，产出并不多且不显眼，而内容还稍微有点长，大家读下来可能会觉得有点累。但是项目中的事情总是复杂的，有很多的背景，不仅要考虑客户的感受，还要考虑如何有智慧的与团队其他人员合作，可能未必能有自己独立自由的做一些开发工作来得简单和自在。其中的原因相信大家也可以理解。</p>
+<p>除了上面的例子，还有很多其他例子，比如:</p>
+<ul>
+<li>我们实现了一个自动生成etl代码的工具</li>
+<li>我们用hexo把数据标准的excel文档转换为一个静态网站</li>
+<li>我们用mkdocs来快速制作数据平台的使用文档</li>
+<li>我们利用squid反向代理解决了客户需要访问很多台节点带来的复杂网络配置问题</li>
+<li>我们配置了es搜集了squid日志以便可以进行完整的用户行为分析</li>
+<li>我们将etl的统计数据发送到es以便我们可以更简单的做出一些必要的etl任务报表给大家诊断问题提高效率</li>
+<li>我们用docker来隔离开发人员的Hadoop集群使用环境</li>
+<li>…</li>
+</ul>
+<h2 id="敏捷与高效开发"><a class="markdownIt-Anchor" href="#敏捷与高效开发"></a> 敏捷与高效开发</h2>
+<p>上面这些东西很多看起来并不是直接的具备业务价值的，在做这些事情之前，其实也很难去规划出这么多的故事卡，所以可能难以通过敏捷的项目管理来实现。</p>
+<p>那它们是怎么实现的呢？我认为是另一种敏捷的形式，并不是Scrum敏捷项目管理，而是从开发人员的视角出发的一种敏捷。由高效的开发人员，通过对于效率的不懈追求，充分利用各种可以利用的技术，不断重构，既包括代码的也包括工作方式的重构，自发的构建出的一套系统。</p>
+<p>这并不奇怪，如果我们去翻看敏捷的起源，就会发现敏捷其实是由一些优秀的开发人员，通过思考总结提炼，把高效的习惯沉淀下来而成的。我们从敏捷前辈大师们的大作中就能看出这些，如Martin Fowler的《重构》，Neal Ford的《卓有成效的程序员》、《函数式编程思维》，Eric Evans的《DDD》，Kent Beck的《XP极限编程》等等。大师们对于细节的不苟，对于高效的执着，对于软件艺术的追求，是这些大力推动了软件开发的变革。</p>
+<p>同时，如果我们去看github或者apache下的诸多开源软件，我相信这些软件的雏形或者MVP多是由某些开发人员为提高效率而自发开发的。特别是在前期，这些软件是很难由某一个较为完整的团队组织起来开发而成。</p>
+<p>当然这里并不是否定Scrum的价值，在一个敏捷团队中，Scrum的团队管理思路当然也是很有效的。</p>
+<h2 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h2>
+<p>讲了这么多，作为一个十年从业经验的开发人员，同时作为一个五年的TWer，其实是想给广大开发人员分享一下这些经验。希望我们可以一直保持对高效的软件开发的追求，对不断提升自己的追求，对软件艺术的追求，对用软件技术为客户创造价值的追求。</p>
+<p>最后，还有一个有意思的故事给大家分享。有一次，我们的BA同学给大家做读书分享，提到了一本不赞成敏捷实践的书，里面讲到，他们的工作方式是：1. 提出一个大的愿景 2. 让2-3个开发人员组成一个小组基于这个愿景来做开发 3. 利用1-2个月的时间产出一个可用的产品。在他们看来，这一方式是比当前的我们做的敏捷更为高效的软件开发方式。不知道大家是怎么看的，我印象很深的是另一个经验丰富的项目组成员的话：对于一些经验特别丰富的人，特别厉害的人，任何规则都是无效的，只能降低效率，而提供一个环境让他们独立的以自己的方式做事，就足够让他们做出一些令人惊奇的软件了！</p>
+<h2 id="材料"><a class="markdownIt-Anchor" href="#材料"></a> 材料</h2>
+<p>对于想练习自己的打字速度的同学，可以参考这个工具：<a target="_blank" rel="noopener" href="https://dazi.kukuw.com/">https://dazi.kukuw.com/</a> 我在上面第一次打字速度如下，相信大家可以轻易超越，特别是年轻的小伙子们，大家手速一定不一般。</p>
+<p><img data-src="/attaches/2021/2021-03-27-programmer-efficiency/typing.png" alt="typing speed" /></p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/06/01/node-bpm/" rel="bookmark">极速软件发布的实现</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%88%E7%8E%87/" rel="tag"><i class="fa fa-tag"></i> 效率</a>
+              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"><i class="fa fa-tag"></i> 工具</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" rel="tag"><i class="fa fa-tag"></i> 编程思想</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/16/data-modeling-practice/" rel="prev" title="数据仓库建模实践">
+      <i class="fa fa-chevron-left"></i> 数据仓库建模实践
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/01/data-development-language-and-environment/" rel="next" title="数据应用开发语言和环境">
+      数据应用开发语言和环境 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%95%85%E4%BA%8B"><span class="nav-number">1.</span> <span class="nav-text"> 一个故事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E6%95%88%E5%BC%80%E5%8F%91%E7%9A%84%E8%B5%B7%E7%82%B9%E6%89%93%E5%AD%97%E9%80%9F%E5%BA%A6%E5%92%8C%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">2.</span> <span class="nav-text"> 高效开发的起点：打字速度和快捷键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E6%95%88%E5%BC%80%E5%8F%91%E7%9A%84%E6%95%85%E4%BA%8B"><span class="nav-number">3.</span> <span class="nav-text"> 高效开发的故事</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#happy-bird-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.1.</span> <span class="nav-text"> Happy Bird 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.2.</span> <span class="nav-text"> 项目中的一些实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%8F%E6%8D%B7%E4%B8%8E%E9%AB%98%E6%95%88%E5%BC%80%E5%8F%91"><span class="nav-number">4.</span> <span class="nav-text"> 敏捷与高效开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">5.</span> <span class="nav-text"> 最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%90%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text"> 材料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '2cd9f62c6c0e56c2d23fcfe3bddcb975',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

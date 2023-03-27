@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在数据平台建设过程中，测试怎么做是一个值得思考的问题。由于数据应用开发和功能性软件系统开发存在很大的不同，在我们实践过程中，在开发人员和质量保证人员间常常有大量关于测试如何实施的讨论。下文将尝试总结一下数据应用开发的特点，并讨论在这些特点之下，对应的测试策略应该是怎么样的。  功能性软件的测试 先来回顾一下功能性软件系统开发中的测试。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据测试实践">
+<meta property="og:url" content="http://brightliao.com/2021/04/20/data-testing/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="在数据平台建设过程中，测试怎么做是一个值得思考的问题。由于数据应用开发和功能性软件系统开发存在很大的不同，在我们实践过程中，在开发人员和质量保证人员间常常有大量关于测试如何实施的讨论。下文将尝试总结一下数据应用开发的特点，并讨论在这些特点之下，对应的测试策略应该是怎么样的。  功能性软件的测试 先来回顾一下功能性软件系统开发中的测试。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-04-20-data-testing/structure.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-04-20-data-testing/test-pyramid-new.png">
+<meta property="article:published_time" content="2021-04-20T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-11-28T01:24:45.115Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据平台">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-04-20-data-testing/structure.png">
+
+<link rel="canonical" href="http://brightliao.com/2021/04/20/data-testing/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据测试实践 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/04/20/data-testing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据测试实践
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 20:00:00" itemprop="dateCreated datePublished" datetime="2021-04-20T20:00:00+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-28 09:24:45" itemprop="dateModified" datetime="2022-11-28T09:24:45+08:00">2022-11-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/04/20/data-testing/" class="post-meta-item leancloud_visitors" data-flag-title="数据测试实践" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p><img data-src="/attaches/2021/2021-04-20-data-testing/structure.png" alt="data testing" /></p>
+<p>在数据平台建设过程中，测试怎么做是一个值得思考的问题。由于数据应用开发和功能性软件系统开发存在很大的不同，在我们实践过程中，在开发人员和质量保证人员间常常有大量关于测试如何实施的讨论。下文将尝试总结一下数据应用开发的特点，并讨论在这些特点之下，对应的测试策略应该是怎么样的。</p>
+<h2 id="功能性软件的测试"><a class="markdownIt-Anchor" href="#功能性软件的测试"></a> 功能性软件的测试</h2>
+<p>先来回顾一下功能性软件系统开发中的测试。</p>
+<span id="more"></span>
+<p>测试一般分为自动化测试和手工测试。由于手工测试对人工依赖程度很高，如果主要依赖手工测试来保证软件质量，将无法满足软件快速迭代上线的需要。现代软件开发越来越强调自动化测试的作用，这也是敏捷软件开发的基本要求。有了全方位的自动化测试保障，就有可能做到每周上线，每日上线甚至随时上线。</p>
+<p>这里主要讨论自动化测试。</p>
+<h3 id="测试金字塔"><a class="markdownIt-Anchor" href="#测试金字塔"></a> 测试金字塔</h3>
+<p>我们一般会按照如下测试金字塔的原则来组织自动化测试。</p>
+<p><img data-src="/attaches/2021/2021-04-20-data-testing/test-pyramid-new.png" alt="testing pyramid" /></p>
+<p>测试金字塔分为三层，自下而上分别对应单元测试、集成测试、端到端测试。</p>
+<p>单元测试是指函数或类级别的，较小范围代码的测试，一般不依赖外部系统（可通过<code>Mock</code>或测试替身等实现）。单元测试的特点是运行速度非常快（最好全部在内存中运行），所以执行这种测试的成本也就很低。单元测试在测试金字塔的最底端，占的面积最大。这指导我们应该构建大量的这类测试，并以这类测试为主来保证软件质量。</p>
+<p>集成测试是比单元测试集成程度更高的测试，它在运行时执行的代码路径更广，通常会依赖数据库、文件系统等外部环境。由于依赖了外部环境，集成测试的运行速度更慢，执行测试的成本更高。集成测试在测试金字塔的中间，这指导我们应该构建中等数量的这类测试。集成测试在<code>Web</code>应用场景中也常常被称为服务测试（Service Test）或<code>API</code>测试。</p>
+<p>端到端测试是比集成测试更靠后的测试，通常通过直接模拟用户操作来构建这样的测试。由于需要模拟用户操作，所以它常常需要依赖一整套完整集成好的环境，这样一来，其运行速度也是最慢的。端到端测试在<code>Web</code>应用场景中也常常被称为<code>UI</code>测试。端到端测试在测试金字塔的顶端，这指导我们应该构建少量的这类测试。</p>
+<p>测试的范围非常广，实施方法也非常灵活。哪里是重点？我们要在哪里发力？测试金字塔为我们指明了方向。</p>
+<h2 id="一般软件的测试"><a class="markdownIt-Anchor" href="#一般软件的测试"></a> 一般软件的测试</h2>
+<p>为了更深入的理解一般软件的测试要怎么做，我们需要进一步深入分析一下测试金字塔。</p>
+<h3 id="测试带来的信心"><a class="markdownIt-Anchor" href="#测试带来的信心"></a> 测试带来的信心</h3>
+<p>上文中的金字塔图示有一个特点并没有反映出来，那就是，越上层的测试给团队带来的信心越强。这还算好理解，试想，如果没有单元测试，只有端到端测试，我们是不是可以认为程序大部分还是可以正常工作的（可能存在一些边界场景有问题）？但是如果只有单元测试而没有端到端测试，我们连程序能不能运行都不知道！</p>
+<p>端到端测试能带来很强的信心，但这常常构成另一个陷阱。由于端到端测试对团队有很大的吸引力，一些团队可能会选择直接构建大量的端到端测试而忽略单元测试。这些端到端测试运行缓慢，一般也难以修改，很快就会让团队举步维艰。缓慢的测试带来了缓慢的持续集成，高频率的上线就慢慢变得遥不可及。</p>
+<p>单元测试虽然不能直接给人很强的信心，但是常常是更有效的测试手段，因为它可以很容易的覆盖到各种边界场景。</p>
+<p>测试金字塔是敏捷软件开发所推崇的测试原则，它是在测试带来的信心和测试本身的可维护性两者中权衡做出的选择。测试金字塔可以指导我们构建足够的测试，使得团队既对软件质量有足够的信心，又不会有太多的测试维护负担。</p>
+<p>既然是权衡，那么我们是否可以以单元测试和集成测试为主，而根本不构建端到端测试（此时端到端测试的功能通过手工测试完成）呢？</p>
+<h3 id="测试集成度"><a class="markdownIt-Anchor" href="#测试集成度"></a> 测试集成度</h3>
+<p>对于一些没有<code>UI</code>（或者说<code>GUI</code>）的应用，或者一些程序库、框架（如<code>Spring</code>）等，很多时候测试金字塔中的三类测试并不直接适用。我们可以这样理解：测试金字塔并非只是三层，它更多的是帮我们建立了在项目中组织测试的原则。</p>
+<p>事实上，对于通用的软件测试，我们可以理解为存在一个集成度的属性。沿着金字塔往上，测试的集成度越高（依赖外部组件越多）。由于集成度更高，测试过程所要运行的代码就更多更复杂，测试运行时间就越长，测试构建和维护成本就越高。实践过程中，为了提高软件质量和可维护性，我们应当构建更多集成度低的测试。</p>
+<p>有了测试集成度的理解，我们就可以知道，其实金字塔可以不是三层，它完全可以是两层或者四层、五层。这取决于我们怎么划定某一类测试的范围。同时，我们还可以知道，其实单元测试、集成测试与端到端测试其实并没有特别明显的界限。</p>
+<p>下面，我们从测试集成度的角度来看如何构建单元测试。</p>
+<p>上文提到，测试最好通过<code>Mock</code>或测试替身等实现，从而可以不依赖外部系统。但是，如果测试<code>Mock</code>或测试替身难以构造，或者构造之后我们发现测试代码和产品代码耦合非常严重，这时应该怎么办呢？一个可能的选择是考虑使用更高集成度的测试。</p>
+<p><code>Spark</code>程序就是这样的一个例子。一旦使用了<code>Spark</code>的<code>DataFrame</code> <code>API</code>去编写代码，我们就几乎无法通过<code>Mock</code> <code>Spark</code>的<code>API</code>或构造一个<code>Spark</code>测试替身的方式编写测试。这时的测试就只能退一步选择集成度更高一些的测试，比如，启动一个本地的<code>Spark</code>环境，然后在这个环境中运行测试。</p>
+<p>此时，上面的测试属于哪种测试呢？如果我们用三层测试金字塔的测试划分来看待问题，就很难给这样的测试一个准确的定位。不过，通常我们无需考虑这样的分类，而是可以把它当做集成度低的测试，即金字塔靠底端的测试。如果团队成员能达成一致，我们可以称其为单元测试，如果不能，称其为<code>Spark</code>测试也并非不可。</p>
+<h3 id="一般软件的测试-2"><a class="markdownIt-Anchor" href="#一般软件的测试-2"></a> 一般软件的测试</h3>
+<p>所以，对于一般的软件测试，我们可以认为测试策略应当符合一般意义的金字塔。金字塔的细节，比如应该有几层塔，每一层的范围应该是什么样，每一层应该用什么样的测试技术等等，这些问题需要根据具体的情况进行抉择。</p>
+<p>在讨论一般软件的测试时，需要关注软件的测试何时停止，即，如何判断软件测试已经足够了呢？</p>
+<p>在老马的《重构 第二版》中，有对于何时停止测试的观点：</p>
+<blockquote>
+<p>有一些测试规则建议会尝试保证我们测试一切的组合，虽然这些建议值得了解，但是实践中我们需要适可而止，因为测试达到一定程度之后，其边际效用会递减。如果编写太多测试，我们可能因为工作量太大而气馁。我们应该把注意力集中在最容易出错的地方，最没有信心的地方。</p>
+<p>一些测试的指标，如覆盖率，能一定程度上衡量测试是否全面而有效，但是最佳的衡量方式可能来自于主观的感受，如果我们觉得对代码比较有信心，那就说明我们的测试做的不错了。</p>
+</blockquote>
+<p>主观的信心指数可能是衡量测试是否足够的重要参考。如果要问测试是否足够，我们要自问是否有信心软件能正常工作。</p>
+<p>在实践过程中，我们还可以尝试分析每次<code>bug</code>出现的原因，如果是由于大部分<code>bug</code>是由于代码没有测试覆盖而产生的，此时我们可能应该编写更多的测试。但如果是由于其他的原因，比如需求分析不足或场景设计不完备而导致的，则应该在对应的阶段做加强，而不是一味的去添加测试。</p>
+<h2 id="数据应用的测试"><a class="markdownIt-Anchor" href="#数据应用的测试"></a> 数据应用的测试</h2>
+<p>有了前面对测试策略的分析，我们来看看数据应用的测试策略。</p>
+<p>数据应用相比功能性软件有很大的不同，但数据应用也属于一般意义上的软件。数据应用有哪些特点，应该如何针对性的做测试呢？下面我们来探讨一下这几个问题。</p>
+<p>根据<a href="/2021/04/01/data-development-language-and-environment/">前面的文章</a>分析，数据应用中的代码可以大致分为四类：基础框架（如增强<code>SQL</code>执行器）、以<code>SQL</code>为主的<code>ETL</code>脚本、<code>SQL</code>自定义函数（<code>udf</code>）、数据工具（如前文提到的<code>DWD</code>建模工具）。</p>
+<h3 id="基础框架的测试"><a class="markdownIt-Anchor" href="#基础框架的测试"></a> 基础框架的测试</h3>
+<p>基础框架代码是数据应用的核心代码，它不仅逻辑较为复杂，而且需要在生产运行时支持大量的<code>ETL</code>的运行。谁也不想提交了有问题的基础框架代码而导致大规模的<code>ETL</code>运行失败。所以我们应当非常重视基础框架的测试，以保证这部分代码的高质量。</p>
+<p>基础框架的代码通常由<code>Python</code>或<code>Scala</code>编写，由于<code>Python</code>和<code>Scala</code>语言本身都有很好的测试支持，这十分有利于我们做测试。</p>
+<p>基础框架的另一个特点是它通常没有<code>GUI</code>。</p>
+<p>按照测试金字塔原理，我们应当为其建立更多的集成度低的测试（下文称单元测试）以及少量的集成度高的测试（下文称集成测试）。</p>
+<p>比如，在<a href="/2021/04/01/data-development-language-and-environment/">前面的文章</a>中，我们增强了<code>SQL</code>的语法，加入了变量、函数、模板等新的语法元素。在运行时进行变量替换、函数调用等等功能通过基础框架实现。这部分功能逻辑较为复杂，应当建立更多的单元测试及少量的集成测试。</p>
+<h3 id="etl脚本的测试"><a class="markdownIt-Anchor" href="#etl脚本的测试"></a> <code>ETL</code>脚本的测试</h3>
+<p><code>ETL</code>脚本的测试可能是数据应用中的最大难点。</p>
+<h4 id="采用偏集成的测试"><a class="markdownIt-Anchor" href="#采用偏集成的测试"></a> 采用偏集成的测试</h4>
+<p><code>ETL</code>脚本一般基于<code>SQL</code>实现。<code>SQL</code>本身是一个高度定制化的<code>DSL</code>，如同<code>XML</code>配置一样。</p>
+<p><code>XML</code>要如何测试？很多团队可能会直接忽略这类测试。但是用<code>SQL</code>编写的<code>ETL</code>代码有时候还是可以达到几百行的规模，有较多的逻辑，不测试的话难以给人以信心。如何测试呢？</p>
+<p>如果采用基于<code>Mock</code>的方法写测试，我们会发现测试代码跟产品代码是一样的。所以，这样做意义不大。</p>
+<p>如果采用高集成度的测试方式（下文称集成测试），即运行<code>ETL</code>并比对结果，我们将发现测试的编写和维护成本都较高。由于<code>ETL</code>脚本代码本身可能是比较简单且不易出错的，为了不易出错的代码编写测试本身就必要性不高，更何况测试的编写和维护成本还比较高。这就显得集成测试这一做法事倍功半。</p>
+<p>这里可以举一个例子。比如对于一个分组求和并排序输出的<code>SQL</code>，它的代码可能是<code>select a, b, c, count(1) from t group by a, b, c order by a, b, c, count(1)</code>。如果我们去准备输入数据和输出数据，考虑到各种数据的组合场景，我们可能会花费很多的时间，这带来了较高的测试编写成本。并且，当我们要修改<code>SQL</code>时，我们还不得不修改测试，这带来了维护成本。当我们要运行这个测试时，我们不得不完成建表、写数据、运行脚本、比对结果的整个过程。这些过程都需要依赖外部系统，从而导致测试运行缓慢。这也是高维护成本的体现。</p>
+<p>可见这两种测试方式都不是好的测试方式。</p>
+<h4 id="测试构建原则"><a class="markdownIt-Anchor" href="#测试构建原则"></a> 测试构建原则</h4>
+<p>那么有没有什么好的原则呢？我们从实践中总结出了几点比较有价值的思路供大家参考。</p>
+<ul>
+<li>将<code>ETL</code>脚本分为简单<code>ETL</code>和复杂<code>ETL</code>（可以通过代码行数，数据筛选条件多少等进行衡量）。简单的<code>ETL</code>通过代码评审或结对编程来保证代码质量，不做自动化测试。复杂的<code>ETL</code>通过建立集成测试来保证质量。</li>
+<li>由于集成测试运行较慢，可以考虑：
+<ul>
+<li>尽量少点用例数量，将多个用例合并为一个来运行（主要是将数据可以合并成单一的一套数据来运行）</li>
+<li>将测试分级为需要频繁运行的测试和无需频繁运行的测试，比如可将测试分级P0-P5，P3-P5是经常（如每天或每次代码提交）要运行的测试，P0-P2可以低频（如每周）运行</li>
+<li>开发测试支持工具，使得运行时可以尽量脱离缓慢的集群环境。如使用<code>Spark</code>读写本地表</li>
+</ul>
+</li>
+<li>考虑将复杂的逻辑使用自定义函数实现，降低<code>ETL</code>脚本的复杂度。对自定义函数建立完整的单元测试。</li>
+<li>将复杂的<code>ETL</code>脚本拆分为多个简单的<code>ETL</code>脚本实现，从而降低单个<code>ETL</code>脚本的复杂度。</li>
+</ul>
+<h4 id="加深对业务和数据的理解"><a class="markdownIt-Anchor" href="#加深对业务和数据的理解"></a> 加深对业务和数据的理解</h4>
+<p>我们在实践过程中发现，其实大多数时候<code>ETL</code>脚本的问题不在于代码写错了，而在于对业务和数据理解不够。比如，前面文章中的空调销售的例子，如果我们在统计销量的时候不知道存在退货或者他店调货的业务实际情况，那我们就不知道数据中还有一些字段能反映这个业务，也就不能正确的计算销量了。</p>
+<p>想要形成对数据的深入理解需要对长时间的业务知识积累和长时间对数据的探索分析（业务系统通常经历了长时间的发展，在此期间内业务规则复杂性不断增加，导致数据的复杂性不断增加）。对于刚加入团队的新人，他们更容易由于没有考虑到某些业务情况而导致数据计算错误。</p>
+<p>加深对业务和数据的理解是进行高效和高质量<code>ETL</code>脚本开发的必由之路。</p>
+<p>有没有什么好的实践方法可以帮助我们加深理解呢？以下几点是我们在实践中总结的值得参考的建议：</p>
+<ul>
+<li>通过思维导图/流程图来整理复杂的业务流程（或业务知识），形成知识库</li>
+<li>尽量多的进行数据探索，发掘容易忽略的领域业务知识，并通过第一步进行记录</li>
+<li>找业务系统团队沟通，找出更多的领域业务知识，并通过第一步进行记录</li>
+<li>如果有条件，可以更频繁的实地使用业务系统，总结更多的领域业务知识，并通过第一步进行记录</li>
+<li>针对第一步搜集到的这些容易忽略的特定领域业务流程，设计自动化测试用例进行覆盖</li>
+</ul>
+<h3 id="sql自定义函数的测试"><a class="markdownIt-Anchor" href="#sql自定义函数的测试"></a> <code>SQL</code>自定义函数的测试</h3>
+<p>在基于<code>Hadoop</code>的分布式数据平台环境下，<code>SQL</code>自定义函数通常通过<code>Python</code>或<code>Scala</code>编写。由于这些代码通常对外部的依赖很少，通常只是单纯的根据输入数据计算得到输出数据，所以对这些代码建立测试是十分容易的事。事实上，我们很容易实现100%的测试覆盖率。</p>
+<p>在组织测试时，我们可以用单元测试的方式，不依赖计算框架。比如，以下<code>Scala</code>编写的自定义函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> array_join_f = (arr: <span class="type">Seq</span>[<span class="type">Double</span>], item_format: <span class="type">String</span>, sep: <span class="type">String</span>) =&gt; ...</span><br><span class="line"><span class="keyword">val</span> array_join = udf(array_join_f)</span><br></pre></td></tr></table></figure>
+<p>对其建立测试时，可以直接测试内部的转换函数<code>array_join_f</code>，一些示例的测试场景比如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">assertEquals(array_join_f(<span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>), ...)</span><br><span class="line">assertEquals(array_join_f(<span class="type">Array</span>[<span class="type">Double</span>](), <span class="literal">null</span>, <span class="literal">null</span>), ...)</span><br><span class="line">assertEquals(array_join_f(<span class="type">Array</span>[<span class="type">Double</span>](<span class="number">1</span>, <span class="number">2</span>), <span class="string">&quot;%.2f&quot;</span>, <span class="string">&quot;,&quot;</span>), ...)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>在建立了单元测试之后，一般还需要考虑建立少量的集成测试，即通过<code>Spark</code>框架运行<code>SQL</code>来测试此自定义函数，一个示例可以是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assertEquals(spark.sql(<span class="string">&#x27;select array_join(array(), &quot;%.2f&quot;, &quot;,&quot;)&#x27;</span>), ...)</span><br></pre></td></tr></table></figure>
+<p>如果自定义函数本身十分简单，我们也可以直接通过<code>Spark</code>测试来覆盖所有场景。</p>
+<p>从上面的讨论可以看出，<code>SQL</code>自定义函数是很容易测试的。除了好测试之外，<code>SQL</code>自定义函数还有很多好的特性，比如可以很好的降低<code>ETL</code>复杂度，可以很方便的被复用等。所以，我们应该尽量考虑将复杂的业务逻辑通过自定义函数封装起来。这也是业界数据开发所建议的做法（大多数的数据开发框架都对自定义函数提供了很好的支持，如<code>Hive</code> <code>Presto</code> <code>ClickHouse</code>等，大多数<code>ETL</code>开发工具也都支持自定义函数的开发）。</p>
+<h3 id="数据工具的测试"><a class="markdownIt-Anchor" href="#数据工具的测试"></a> 数据工具的测试</h3>
+<p>数据工具的实例可以参考文章<a href="/2021/04/05/dwd-modeling-automation/">《数据仓库建模自动化》</a>和<a href="/2021/04/10/data-development-tools/">《数据开发支持工具》</a>。</p>
+<p>这些工具的一大特点是，它们是用于支持<code>ETL</code>开发的，仅在开发过程中使用。由于它们并不是在产品环境中运行的代码，所以我们可以降低对其的质量要求。</p>
+<p>这些工具通常只是开发人员为了提高开发效率而编写的代码，存在较大的修改和重构的可能，所以，过早的去建立较完善的测试必要性不高。</p>
+<p>在我们的实践过程中，这类代码通常只有很少的测试，我们只对那些特别复杂、没有信心能正确工作的地方建立单元测试。如果这些工具代码是通过<code>TDD</code>的方式编写的，通常其测试会更多一些。</p>
+<h2 id="在持续集成流水线中运行测试"><a class="markdownIt-Anchor" href="#在持续集成流水线中运行测试"></a> 在持续集成流水线中运行测试</h2>
+<p>前面我们讨论了如何针对数据应用编写测试，还有一个关于测试的重要话题，那就是如何在持续交付流水线中运行这些测试。</p>
+<p>在功能性软件项目中，如果我们按照测试金字塔的三层来组织测试，那么在流水线中一般就会对应三个测试过程。</p>
+<p>从上面的讨论可知，数据应用的测试被纵向分为四条线，如何对应到流水线上呢？如果我们采用同一个代码库管理所有的代码，可以考虑直接将流水线分为四条并行的流程，分别对应这四条线。如果是不同的代码库，则可以考虑对不同的代码库建立不同的流水线。在每条流水线内部，就可以按照单元测试、低集成测试、高集成测试这样的方式组织流水线任务。</p>
+<h3 id="独立的etl流水线"><a class="markdownIt-Anchor" href="#独立的etl流水线"></a> 独立的<code>ETL</code>流水线</h3>
+<p>对于<code>ETL</code>代码的测试，有一个值得思考的问题。那就是，<code>ETL</code>脚本之间通常独立性非常强，相互之间没有依赖。这是由于<code>ETL</code>代码常常由完善的领域特定语言<code>SQL</code>开发而成，与<code>Python</code>或<code>Scala</code>等通用编程语言编写的代码不同，<code>SQL</code>文件之间是没有依赖的（如果说有依赖，那也是通过数据库表产生依赖）。</p>
+<p>既然如此，假设我们修改了某一个<code>ETL</code>文件的代码，是不是我们可以不用运行其他的<code>ETL</code>文件的测试呢？其实不仅如此，我们甚至可以单独上线部署此<code>ETL</code>，而不是一次性部署所有的<code>ETL</code>。这在一定程度上还降低了部署代码带来的风险。</p>
+<p>有了上面的发现，我们可能要重新思考数据应用的持续交付流水线组织形式。</p>
+<p>一个可能的办法是为每一个<code>ETL</code>文件建立一个流水线，完成测试、部署的任务。此时每个<code>ETL</code>可以理解为一个独立的小程序。</p>
+<p>这样的想法在实践中不容易落地，因为这将导致大量的流水线存在（常常有上百条），从而给流水线工具带来了很大的压力。常用的流水线工具，如<code>Jenkins</code>，其设计是难以支撑这么大规模的流水线的创建和管理的。</p>
+<p>要如何来支持上面这样的<code>ETL</code>流水线呢？可能需要我们开发新的流水线工具才行。</p>
+<h3 id="云服务中的etl流水线"><a class="markdownIt-Anchor" href="#云服务中的etl流水线"></a> 云服务中的<code>ETL</code>流水线</h3>
+<p>现在的一些云服务厂商在尝试这样做。他们通常会提供一个基于<code>Web</code>的<code>ETL</code>开发工具，同时会提供工具对当前的<code>ETL</code>的编写测试。此时，<code>ETL</code>开发人员可以在一个地方完成开发、测试、上线，这可以提高开发效率。</p>
+<p>这类服务的一个常见缺点在于它尝试用一套<code>Web</code>系统来支持所有的<code>ETL</code>开发过程，这带来了大量繁杂的配置。这其实是将<code>ETL</code>开发过程的复杂性转化为了配置的复杂性。相比编写代码而言，多数开发人员不会喜欢这样的工作方式。（当前软件开发所推崇的是<code>Everthing as Code</code>的做法，尝试将所有开发相关过程中的东西代码化，从而可以更好的利用成熟的代码编辑器、版本管理等功能。而<code>Web</code>配置的方式与<code>Everthing as Code</code>背道而驰。）</p>
+<p>对于这些数据云服务厂商提供的数据开发服务，如果可以同时支持通过代码和<code>Web</code>界面配置来实现数据开发，那将能得到更多开发者的喜爱。这在我看来是一个不错的发展方向。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文讨论了如何在数据平台建设过程中做测试这个话题。由于数据应用开发有很强的独特的特点（比如以<code>SQL</code>为主、有较多的支撑工具等），其测试与功能性软件开发的测试也存在很大的不同。</p>
+<p>本文分析了如何在测试金字塔的指导下制定测试策略。测试金字塔不仅可以很好的指导功能性软件开发，在进行一般意义上的推广之后，可以很容易得到一般软件的测试策略。关于测试金字塔，本文分析了测试带来的质量信心及测试集成度，这两个概念可以帮助我们更深刻的理解测试金字塔背后的指导原则。</p>
+<p>在最后，结合我们的实践经验，给出了一些数据应用中的测试构建实践。将数据应用分为四个不同模块来分别构建测试，可以很好的应对数据应用中的质量要求，同时保证有较好的可维护性。最后，我们讨论了如何在持续集成流水线中设计测试任务，留下了一个有待探索的方向，即如何针对单个<code>ETL</code>构建流水线。</p>
+<p>数据应用的质量保证是不容易做到的，常常需要我们进行很多的权衡取舍才能找到最适合的方式。想要解决这一问题，还要发挥团队中所有人的能动性，多总结和思考才行。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/03/data-capability-building-suggestions/" rel="bookmark">浅谈企业数据能力建设</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/27/oracle-data-migration/" rel="bookmark">Oracle数据迁移实用入门</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/21/some-thoughts-about-data-platform/" rel="bookmark">一些企业数据平台建设的思考</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/02/21/data-governance-based-on-atlas-ranger/" rel="bookmark">基于Hadoop大数据平台的数据治理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/" rel="tag"><i class="fa fa-tag"></i> 数据平台</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/10/data-development-tools/" rel="prev" title="数据开发支持工具">
+      <i class="fa fa-chevron-left"></i> 数据开发支持工具
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/25/data-testing-tool/" rel="next" title="一个ETL自动化测试框架">
+      一个ETL自动化测试框架 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%80%A7%E8%BD%AF%E4%BB%B6%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text"> 功能性软件的测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%87%91%E5%AD%97%E5%A1%94"><span class="nav-number">1.1.</span> <span class="nav-text"> 测试金字塔</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E8%BD%AF%E4%BB%B6%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text"> 一般软件的测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%B8%A6%E6%9D%A5%E7%9A%84%E4%BF%A1%E5%BF%83"><span class="nav-number">2.1.</span> <span class="nav-text"> 测试带来的信心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%9B%86%E6%88%90%E5%BA%A6"><span class="nav-number">2.2.</span> <span class="nav-text"> 测试集成度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E8%BD%AF%E4%BB%B6%E7%9A%84%E6%B5%8B%E8%AF%95-2"><span class="nav-number">2.3.</span> <span class="nav-text"> 一般软件的测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text"> 数据应用的测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">3.1.</span> <span class="nav-text"> 基础框架的测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#etl%E8%84%9A%E6%9C%AC%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">3.2.</span> <span class="nav-text"> ETL脚本的测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%87%E7%94%A8%E5%81%8F%E9%9B%86%E6%88%90%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">3.2.1.</span> <span class="nav-text"> 采用偏集成的测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%9E%84%E5%BB%BA%E5%8E%9F%E5%88%99"><span class="nav-number">3.2.2.</span> <span class="nav-text"> 测试构建原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E6%B7%B1%E5%AF%B9%E4%B8%9A%E5%8A%A1%E5%92%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">3.2.3.</span> <span class="nav-text"> 加深对业务和数据的理解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">3.3.</span> <span class="nav-text"> SQL自定义函数的测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B7%A5%E5%85%B7%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">3.4.</span> <span class="nav-text"> 数据工具的测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%AD%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text"> 在持续集成流水线中运行测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E7%9A%84etl%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">4.1.</span> <span class="nav-text"> 独立的ETL流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E6%9C%8D%E5%8A%A1%E4%B8%AD%E7%9A%84etl%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">4.2.</span> <span class="nav-text"> 云服务中的ETL流水线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '70ed5cc377a1b616b2d3bf6c8ab086f9',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

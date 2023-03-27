@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="随着微服务和DDD的兴起，领域这个词逐渐成为了一个大家每天讨论中的高频词。对于经验稍欠缺的同学们，刚接触领域这个词，总会感觉有点神秘。到底什么算是一个领域呢？我们经常在谈论领域模型、领域服务、领域事件、领域边界等等，如果对领域概念没有一个清晰的认识，在接受这些相关概念上想必也会遇到阻碍。本文将结合我个人的理解以及一些实践经验来谈谈对这个概念的理解，希望能帮助大家更好的认识领域，进而更好的理解和运用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码中的领域">
+<meta property="og:url" content="http://brightliao.com/2019/08/08/domain-concept-in-your-code/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="随着微服务和DDD的兴起，领域这个词逐渐成为了一个大家每天讨论中的高频词。对于经验稍欠缺的同学们，刚接触领域这个词，总会感觉有点神秘。到底什么算是一个领域呢？我们经常在谈论领域模型、领域服务、领域事件、领域边界等等，如果对领域概念没有一个清晰的认识，在接受这些相关概念上想必也会遇到阻碍。本文将结合我个人的理解以及一些实践经验来谈谈对这个概念的理解，希望能帮助大家更好的认识领域，进而更好的理解和运用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-08-08-domain-concept-in-your-code/domain-concept-and-math-collection.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-08-08-domain-concept-in-your-code/complicated-domain-and-simple-domain-boundary.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-08-08-domain-concept-in-your-code/domain-and-subdomain.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-08-08-domain-concept-in-your-code/anticorruption-layer.png">
+<meta property="article:published_time" content="2019-08-08T12:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-04T17:08:51.000Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="架构">
+<meta property="article:tag" content="DDD">
+<meta property="article:tag" content="领域">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2019/2019-08-08-domain-concept-in-your-code/domain-concept-and-math-collection.png">
+
+<link rel="canonical" href="http://brightliao.com/2019/08/08/domain-concept-in-your-code/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>代码中的领域 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/08/08/domain-concept-in-your-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          代码中的领域
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-08 20:00:00" itemprop="dateCreated datePublished" datetime="2019-08-08T20:00:00+08:00">2019-08-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-05 01:08:51" itemprop="dateModified" datetime="2020-02-05T01:08:51+08:00">2020-02-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9E%B6%E6%9E%84/ddd/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/08/08/domain-concept-in-your-code/" class="post-meta-item leancloud_visitors" data-flag-title="代码中的领域" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>随着微服务和DDD的兴起，领域这个词逐渐成为了一个大家每天讨论中的高频词。对于经验稍欠缺的同学们，刚接触领域这个词，总会感觉有点神秘。到底什么算是一个领域呢？我们经常在谈论领域模型、领域服务、领域事件、领域边界等等，如果对领域概念没有一个清晰的认识，在接受这些相关概念上想必也会遇到阻碍。本文将结合我个人的理解以及一些实践经验来谈谈对这个概念的理解，希望能帮助大家更好的认识领域，进而更好的理解和运用相关的概念，最终更好的指导软件开发实践。</p>
+<span id="more"></span>
+<h2 id="概念理解"><a class="markdownIt-Anchor" href="#概念理解"></a> 概念理解</h2>
+<p>什么是领域？跟领域相关的词我们可以想到领土、领地、业务域、业务领域、自然科学领域、动物的领域等等。领域这个词我们平常的中文使用场景非常广泛，可能这也是导致这个词不容易理解的原因。领域这个词的中文解释是：（来源：<a target="_blank" rel="noopener" href="http://cd.hwxnet.com/view/ahecdjginknflmnk.html%EF%BC%89">http://cd.hwxnet.com/view/ahecdjginknflmnk.html）</a></p>
+<pre><code>①犹领土。国家主权管辖下的区域：国家领域神圣不可侵犯。
+②意识形态或社会活动的范围：思想领域｜学术领域｜生活领域｜科学领域。
+</code></pre>
+<p>在我们软件开发中，领域一般对应英文单词Domain，牛津词典解释如下：</p>
+<pre><code>an area of knowledge or activity; especially one that sb is responsible for （知识、活动的）领域，范围，范畴
+例：The care of older people is being placed firmly within the domain of the family. 照顾老人仍然被确认为是家庭范围的事。
+例：Physics used to be very much a male domain. 物理学曾在很大程度上是男人的领域。
+</code></pre>
+<p>似乎很简单嘛！看起来就是一个“范围”的意思。其实“域”这个词本身就是范围的意思，加上“领”字，我们可以认为是一种特殊的范围。既然就是“范围”，那么就容易理解了。我们说自然科学领域，其实就是在自然科学研究范围内；我们说业务领域，其实就是和某项业务相关的范围内；我们说正整数的范围是1到无穷大，也差不多可以理解为1到无穷大这样一个“领域”（这里一般认为只是一个“域”）。</p>
+<p>如果更严格一点，从数学上来认识，我们可以对应到集合这个概念。只不过，我们平常所说的领域可能是一种定义不严格的集合，只存在一个大致的边界。但是这通常不影响我们沟通交流，因为边界在当时可能不太重要。既然是集合，那么我们可以从下面这张图来对应理解领域概念。</p>
+<p><img data-src="/attaches/2019/2019-08-08-domain-concept-in-your-code/domain-concept-and-math-collection.png" alt="domain concept and math collection" /></p>
+<h2 id="代码中的领域"><a class="markdownIt-Anchor" href="#代码中的领域"></a> 代码中的领域</h2>
+<p>有了”领域“就是”范围“这样一个简单的理解，我们回头来看我们代码中的领域，很多问题就会变得清晰起来。</p>
+<p>比如我们有下面这个简单的求和函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sum</span>(<span class="params"><span class="keyword">from</span>, to</span>):</span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="keyword">from</span>, to):</span><br><span class="line">        total += i</span><br><span class="line">    <span class="keyword">return</span> total</span><br></pre></td></tr></table></figure>
+<p>这里有哪些领域或者范围呢？</p>
+<p>最底层的要算<code>for</code>循环体内的一个范围，也就是一个代码块。这里的代码块不仅从逻辑上构成了一个范围，在很多编程语言里面还反映在变量的作用域上，比如在这里定义的变量，代码块外面可能是访问不到的。其次是函数体构成一个范围。再次，如果这里的函数是某一个类的方法，那么该类本身构成了一个范围。再继续，类所在的包构成了一个范围，包所在的库构成了一个范围等等。按照领域来理解，我们可以认为这里的领域按照不同的细节程度和抽象程度构成了一个类似森林的结构。</p>
+<p>再深入细节一些，我们甚至可以认为，我们常常用空格分隔起来的几行代码片段构成了一个范围或者微型的领域。</p>
+<p>了解了范围和领域的概念如何帮助我们理解其他的相关概念呢？（下面的文字很多，但是每一节之间几乎是独立的，大家可以分成多次阅读。）</p>
+<h2 id="内聚和耦合"><a class="markdownIt-Anchor" href="#内聚和耦合"></a> 内聚和耦合</h2>
+<p>先来看一下内聚和耦合。</p>
+<p>从领域的角度来理解，我们可以认为，领域内部的东西是内聚的，一个领域引用别的领域就构成了耦合。我们都说好的代码是高内聚低耦合的，其实反映到代码上，就是说，我们代码里面的任何一个领域尽量别去引用其他领域的东西。如果某一领域引用了极少的其他领域的东西，或者甚至没有引用其他领域的东西，那么我们就可以认为该领域可以独立自治的实现功能，它就是高内聚低耦合的。对于这样的高内聚低耦合的领域，它可能是某个函数或者某个类或者某一模块，甚至是某一个库。不管是什么，他们的理解和使用应该是非常容易的，因为除了这个领域我们很少需要理解其他领域。正是因为高内聚低耦合的代码好理解，易于使用，我们才会认为这是好代码。</p>
+<p>有人可能会说我们几乎不可能不去引用别的领域就实现某个功能，就算是上面的求和函数，我们也引用了系统库里面的<code>range</code>函数。这里我们可以用DDD里面的<code>通用领域</code>概念来辅助理解，标准库即是一个通用领域，我们可以假定使用我们代码的人对于标准库的理解都是不错的，也就是说我们引用标准库领域一般是不会带来理解和使用上的问题。</p>
+<p>在这里，面向对象中的封装思想可以帮我们缓解耦合的问题。通常我们更多的是去使用某一个库（这里的库不仅表示第三方库，而是更宽泛的其他领域的概念），我们也就更关注这个库好不好用，而少于关心这个库的实现是什么。对应到领域概念中，也即我们通常更关心领域的边界，而少于关心领域的内容。为什么说更关心领域边界呢？从代码层面理解，领域边界就是我们对外暴露的API，它包含所有公开函数的函数名、参数及返回值，类的构造器，类的状态变迁等。既然我们更关心接口，那么即便我们的领域比较复杂，引用很多，耦合比较高，但如果其边界比较简单，这样的领域一般也是较好的领域（之所以说它是较好的领域是因为复杂的领域存在不易阅读不易理解的缺点）。而封装就刚好可以实现将领域内部大量的事物隐藏起来，只对外暴露简单接口的作用。这里对于实践的指导就是相比代码实现的复杂度而言，我们要更关心接口的复杂度，通过封装大量细节可以让接口变得更简单。</p>
+<p><img data-src="/attaches/2019/2019-08-08-domain-concept-in-your-code/complicated-domain-and-simple-domain-boundary.png" alt="complicated domain and simple domain boundary" /></p>
+<h2 id="抽象层次"><a class="markdownIt-Anchor" href="#抽象层次"></a> 抽象层次</h2>
+<p>再来看一下抽象层次。</p>
+<p>很多时候，我们说一段代码做的事情应该是同一个抽象层次的事情。什么是同一个抽象层次呢？假设我们要去复印一份文件，要如何描述这个过程呢？大家想一下就可以脱口而出，我们可以通过这样几步来实现：1. 带上资料走到复印机前；2. 复印资料；3. 带走复印好的资料。这样的步骤很清晰，大家看到会很容易理解。实际上我们就可以认为这里的几件事情是同一个抽象层次的事情。</p>
+<p>一个比较极端的反例是什么呢？可以是这样：1. 带上资料；2. 观察当前位置到打印机位置的路线；3. 选择一条路线；4. 走路；5. 绕过障碍；6. 避免跟人交谈；7. 排队； 8. 复印资料；9. 带走复印好的资料。这里的步骤就不是那么容易理解了。第一步到第七步过于细节，我们可以说它们分别和第八步、第九步不是同一个抽象层次的内容。事实上，这里过于细节的步骤会导致我们迷失方向，失去重点，大家可以想想，看了上面这些步骤之后，我们还能清楚的知道我们的目的是要复印资料吗？这里的步骤拆解其实跟代码编写是同样的道理，当我们把本该在另一个独立的函数内实现的功能放到当前代码中实现的时候，这样的问题就凸显出来了。</p>
+<p>领域在这里如何帮助我们理解这个问题呢？上面对于抽象层次的理解其实还是比较模糊的，不同的人对于细节程度会有不同的认识。但如果我们从领域的角度来看问题，情况就会变得清晰起来。我们首先会发现反例里面涉及的内容过多（代码内的概念过多），里面有路线、走路、障碍、人、交谈、排队、复印机、资料等事物，即这是一个复杂的领域（复杂的代码）。复杂的领域难以理解，就像一个集合，里面充满了数量多而没有规律的数。如何让其变得更简单呢？我们将第一步到第七步合并为单独的领域（一个内部函数），即带上资料走到复印机前，这样就可以得到下面这样一个简单的领域（简单的代码）。</p>
+<p><img data-src="/attaches/2019/2019-08-08-domain-concept-in-your-code/domain-and-subdomain.png" alt="domain and subdomain" /></p>
+<p>仔细观察一下上面这个更简单的领域（更简单的代码），事实上“复印资料”和“带走复印好的资料”这两个步骤的复杂度跟“带上资料走到复印机前”是差不多的，只不过我们并没有分析它们的细节而已。从领域的角度来讲，我们可以大致认为上图中的三个小圈的领域复杂度（代码复杂度）相近。这里的分析对于抽象层次的启示就是，通过领域内包含的事物的多少可以在一定程度上量化分析两个领域是否是同一抽象层次的领域。当两个领域复杂度（代码复杂度）相近时，它们就有可能就是同一抽象层次的领域。最理想的代码莫过于代码对应的领域构成了一颗平衡树，每一片枝叶都是简单而独立的存在，每一个节点的子节点都是复杂度相近的子树（复杂度相近的子域，也即同一抽象层次的事情）。这个时候，我们实际上把系统拆分为了几个复杂度差不多的模块，将每一个模块又拆分为了复杂度差不多的类和函数，而每一个类和函数又都比较小巧。</p>
+<p>我们还会发现我们脱口而出的几个步骤通常自然的就形成了好的领域（好的代码）。这是为什么呢？其实这是和我们的思维方式是一致的，我们去理解一个复杂事物的时候，总是会将其拆分为几个小的事物去理解。而我们描述某一个事物的时候，总是自然的就得到了合适的几个部分。在同一个描述里面，通过自然的方式得到的几个事物，一般就是同一个抽象层次的事物。当然这里的自然一定是出自于某一个个体，其他人可能有不认同的地方。但是多数人至少应该容易理解这样的拆分，因为这和我们平时和其他人交谈的时候容易理解其他人的话是同样的道理。到这里，大家是不是认为写代码和说话一样简单了呢？当然可能不止说话，应该说写好的代码应该和写好的文章差不多。</p>
+<h2 id="依赖倒置"><a class="markdownIt-Anchor" href="#依赖倒置"></a> 依赖倒置</h2>
+<p>再来看一下依赖倒置。</p>
+<p>我们说依赖倒置，就是说要依赖于抽象，而不要依赖于实现。这是什么意思？为什么依赖抽象是更好的？这里的抽象我们是指某一个抽象的概念，通常反映在代码中就是接口，或者至少是抽象类。依赖抽象的好处在于我们可以根据需要在运行时将这个依赖替换为任意一个实现。有了这样的特性，我们可以方便的在测试中使用测试替身（test double）来替换掉某个依赖，于是测试就更易于编写。有了这样的特性，我们还能方便的提供多个实现，而在运行时根据需要选择一个，比如当我们抽象了一个repository接口来存储数据时，我们可以基于RDBMS数据库提供一个实现，同时基于NOSQL数据库再提供一个实现，然后根据需要选择任意一个实现而无需改变代码。这里依赖倒置为我们编写代码提供了非常大的灵活性。</p>
+<p>从领域的角度如何理解依赖倒置带来的好处呢？我们还是要回到领域简单与否上面来。一般而言在某一个类里面依赖另一个类时，我们不会依赖另一个类的所有的API，而只是依赖于和当前待实现的功能相关的API。这个时候，如果直接依赖于另一个类，我们需要完全理解另一个类之后才能理解当前这个类。这就是说我们的领域更难以理解了。更好的方式是什么呢？通常我们可以将当前真正需要依赖的API抽象为一个新的概念，新建一个接口，然后依赖于这个接口进行当前类的实现，同时将之前的依赖类添加实现这个接口的声明。这样一来，由于依赖的东西变少了，当前这个类的实现就变得更简单更易于理解了（简单的领域）。这里可能还是有点绕，不太好理解。举例说明一下。假设我们要实现一个类，它将依赖一个队列来实现其功能，我们可以编写代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Queue</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">push</span><span class="params">(<span class="type">int</span> item)</span>;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">pop</span><span class="params">()</span>;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SomeCls</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Queue queue;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SomeCls</span><span class="params">(Queue queue)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.queue = queue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>SomeCls</code>中使用抽象的<code>Queue</code>接口相比于使用某一个库里面的<code>Queue</code>类给我们带来了很明显的好处，它使得我们理解<code>SomeCls</code>更容易了。因为我们明确的知道在<code>SomeCls</code>的实现中只会使用一个仅带有<code>push</code>和<code>pop</code>两个API的<code>Queue</code>，而不会使用可能的<code>Queue</code>的<code>size</code>，<code>isFull</code>这样的方法。而同时我们可以轻易的利用已有的标准库或者第三方库中的<code>Queue</code>实现去实现这里定义的<code>Queue</code>接口，只需要编写极少的额外代码。另一个好处是，通过接口定义，我们的依赖变得更清晰了，它只依赖这样一个<code>Queue</code>，这个<code>Queue</code>无需多一个API，也不会少一个API。也就是说，对于<code>SomeCls</code>这个领域而言，其边界是简单而清晰的，这个领域就是更易于理解的。同时我们可以看到这个类也是低耦合的，因为它引用了更简单的东西。</p>
+<p>这里还可以举一个关于防腐层的例子。在DDD里面我们经常提到防腐层的概念。一个微服务在使用其他的微服务时，其他微服务的数据模型容易侵入当前的微服务代码而造成影响，防腐层就可以很好的解决这个问题。比如在电商的场景下，积分微服务定期访问订单微服务来更新积分（这里的流程仅用于举例）。订单微服务提供了一个API用来查询订单，这个API会返回订单的详情信息，但是积分微服务在查询订单的时候只想得到订单价格。在积分微服务与订单微服务进行集成时，如果我们直接将订单微服务返回的数据模型作为我们积分微服务的领域模型，那就将导致积分微服务的领域腐化。因为积分微服务根本无需关心订单详情，当我们在领域模型中加入了其他无关信息时，我们的理解负担就无形中加重了。而且这可能会带来订单详情信息在积分微服务代码里面滥用的问题。防腐层可以提供一层抽象，做一次映射将从订单微服务拿到的订单信息转化为积分微服务内真正需要的领域模型。这里的防腐层我们可以理解为保护了我们的领域。其实防腐层还可以理解为使我们的领域边界更清晰了，因为在积分微服务的实现里，我们只需要使用防腐层的接口，而无需访问订单API获取数据，也就是我们依赖了一个防腐层的抽象，而不是依赖于某一个REST API的真实实现。这里解决问题的方式是不是和上面的依赖倒置有相似之处呢？大家可以仔细体会一下。</p>
+<p><img data-src="/attaches/2019/2019-08-08-domain-concept-in-your-code/anticorruption-layer.png" alt="anticorruption layer" /></p>
+<h2 id="使用领域语言编写代码"><a class="markdownIt-Anchor" href="#使用领域语言编写代码"></a> 使用领域语言编写代码</h2>
+<p>有了领域这个概念之后，我们就可以延伸到领域语言，领域语言就是用来在领域内部进行沟通的语言。我们说好的代码需要用业务语言来编写，这里可以认为业务语言就是一种领域语言。如果要下一个严格一点的定义，领域语言是仅使用某一个领域内的概念和大家都理解的通用的助词，通过语法规则而构成的语言。如何更好的使用领域语言呢？什么情况下，我们是使用了领域语言写代码呢？</p>
+<p>这里的问题我们可以分层次来理解。通过前面对领域的分析，我们可以将代码按照细节层次不同分为函数或方法领域，类领域，模块领域，服务领域，系统领域等。从函数或方法领域来看，我们要仅使用领域内的概念和通用助词来编写代码，也就是说我们的变量命名，使用到的函数或者类的名字需要是包含于这个领域内的概念。比如上面的求和函数，分析求和过程可以得到这样的几个概念或过程：起始值，结束值，获取迭代范围，迭代过程当前值，当前累加结果值。他们分别对应了代码中的<code>from</code> <code>to</code> <code>range</code> <code>i</code> <code>total</code>。如果我们分析代码发现除了这些领域内的名字，没有使用其他的名字，我们就可以说这是用领域语言在编写代码。如果不用领域语言，试想我们将<code>total</code>这个变量名改为了一个领域外的名字，如<code>multiply_result</code>，大家还能轻易的读懂这段代码吗？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sum</span>(<span class="params"><span class="keyword">from</span>, to</span>):</span><br><span class="line">    multiply_result = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="keyword">from</span>, to):</span><br><span class="line">        multiply_result += i</span><br><span class="line">    <span class="keyword">return</span> multiply_result</span><br></pre></td></tr></table></figure>
+<p>我们可以使用同样的方法去分析类领域，模块领域，服务领域，系统领域等。</p>
+<p>使用领域语言写代码还有这样一些需要注意的地方。</p>
+<ol>
+<li>
+<p>使用领域语言写代码，要求我们尽量多使用业务名词，尽量少使用技术名词。一些典型的技术名词包括<code>socket</code> <code>tcp</code> <code>udp</code> <code>http</code> <code>json</code> <code>mysql</code> <code>rabbitmq</code>等。如何尽量少的使用这些名词呢？一个办法就是用一个短小的类将这些名词的封装成一个领域概念。由于多了一层封装，这些技术名词就不会泄露到其他代码中去了。更进一步我们可以采用上述依赖倒置的手法，将这些概念抽象为接口，让领域代码依赖这个接口去实现功能，而这些技术名词就自然的被放到某个具体的接口实现代码中去了。这通常是合理而有效抽象手法，为了做到这样的抽象，我们在进行设计时可以像下面这样自问一下。当我们需要mysql时，我们是不是只需要一个抽象的RDBMS？当我们需要RDBMS时，我们是不是只需要一个抽象的存储服务？当我们需要RabbitMQ时，我们是不是只需要一个抽象的队列？当我们需要转换为<code>json</code>时，我们是不是只需要一个抽象的序列化过程？</p>
+</li>
+<li>
+<p>使用领域语言写代码，要求我们使用一致的命名。比如，我曾经在一些代码里面发现对于同一个“位置”概念，代码里面有的地方用的命名是<code>position</code>而有的地方又使用<code>location</code>，这就是不一致的表现。不一致的命名将给我们理解代码带来困难，因为我们在看到这两个词时，只能猜测它们是否是同一个意思，而不能肯定的给出答案。而且使用不同的词，看上去给领域增加了新的概念，导致领域变复杂了。这在多个人同时编写代码的时候尤其容易出现，这就需要我们每个人都注意：在新编写代码的时候，使用大家都在谈论的领域字典中的名字；在修改代码的时候，使用和之前代码一致的名字；在重构代码的时候，将不一致的名字修改为领域字典中的名字。</p>
+</li>
+<li>
+<p>使用领域语言写代码，要求我们使用更有意义的名字。很多同学喜欢用类似<code>rule</code> <code>business</code> <code>object</code> <code>context</code>这样的单词，这样的单词由于适用范围过于广泛，其实对于我们阅读代码时理解领域的帮助很少很少。我们几乎可以直接去掉这样的单词来理解代码，这样一来这些单词不仅仅没有给我们理解代码带来方便（可读性不高），反而带来了干扰。</p>
+</li>
+</ol>
+<p>这里可能有人会担心不同的领域（函数）内会有相同的概念（比如多个函数里面都有<code>total</code>这个变量），从而导致混淆，这其实是正常情况。它们确实可能是使用同一个名字的概念，但是它们的内涵往往不同。我们平时交谈中使用的词语其实也常常是多义词，但这几乎不影响我们交谈，因为我们交谈中有上下文。我们阅读代码时也一样，代码对应的领域往往提供了比较明确的上下文，这就让我们区分不同内涵没那么困难了。</p>
+<h2 id="尝试理解更多"><a class="markdownIt-Anchor" href="#尝试理解更多"></a> 尝试理解更多</h2>
+<p>上面的分析有些过于发散，总结起来，通过领域去理解编程原则，我们可以尝试：</p>
+<ol>
+<li>将“领域”对应到“范围”去理解，</li>
+<li>在不同的层次（函数或方法领域，类领域，模块领域，服务领域，系统领域等）去理解某一个编程原则。</li>
+</ol>
+<p>总之，领域还可以用来帮助理解更多的概念和编程原则，大家在遇到一些不容易懂的概念时，可以尝试从领域的角度来尝试理解，看看是不是更容易。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/07/27/smart-domain-and-ddd/" rel="bookmark">我理解的Smart Domain与DDD</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/07/28/modelling-examples/" rel="bookmark">DDD建模案例分享</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/08/06/you-may-need-a-lightweight-zhongtai/" rel="bookmark">你可能需要一个轻量级的中台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/05/22/architecture-designing-practise-for-ml-platform/" rel="bookmark">机器学习平台架构实践--微服务</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/" rel="bookmark">机器学习平台架构实践--配置管理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag"><i class="fa fa-tag"></i> 架构</a>
+              <a href="/tags/ddd/" rel="tag"><i class="fa fa-tag"></i> DDD</a>
+              <a href="/tags/%E9%A2%86%E5%9F%9F/" rel="tag"><i class="fa fa-tag"></i> 领域</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/06/you-may-need-a-lightweight-zhongtai/" rel="prev" title="你可能需要一个轻量级的中台">
+      <i class="fa fa-chevron-left"></i> 你可能需要一个轻量级的中台
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/18/tdd-for-improving-design-2/" rel="next" title="从改善设计的角度理解TDD (2)">
+      从改善设计的角度理解TDD (2) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text"> 概念理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E9%A2%86%E5%9F%9F"><span class="nav-number">2.</span> <span class="nav-text"> 代码中的领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E8%81%9A%E5%92%8C%E8%80%A6%E5%90%88"><span class="nav-number">3.</span> <span class="nav-text"> 内聚和耦合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%B1%82%E6%AC%A1"><span class="nav-number">4.</span> <span class="nav-text"> 抽象层次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE"><span class="nav-number">5.</span> <span class="nav-text"> 依赖倒置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%A2%86%E5%9F%9F%E8%AF%AD%E8%A8%80%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">6.</span> <span class="nav-text"> 使用领域语言编写代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E7%90%86%E8%A7%A3%E6%9B%B4%E5%A4%9A"><span class="nav-number">7.</span> <span class="nav-text"> 尝试理解更多</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'f46caf9d3c613b229800da467853e2b1',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

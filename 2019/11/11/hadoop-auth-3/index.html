@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="系列文章：  Hadoop安全认证机制 (一) Hadoop安全认证机制 (二)  前面的文章中我们分析了Hadoop安全机制中用到的协议及相关源代码实现，这一篇文章我们主要来看看如何搭建一套安全的Hadoop集群。 简单起见，我们这里的集群所有的组件将运行在同一台机器上。对于keytab的配置，我们也从简，只配置一个kerberos的service账号供所有服务使用。  建立测试用例 TDD是敏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop安全认证机制 （三）">
+<meta property="og:url" content="http://brightliao.com/2019/11/11/hadoop-auth-3/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="系列文章：  Hadoop安全认证机制 (一) Hadoop安全认证机制 (二)  前面的文章中我们分析了Hadoop安全机制中用到的协议及相关源代码实现，这一篇文章我们主要来看看如何搭建一套安全的Hadoop集群。 简单起见，我们这里的集群所有的组件将运行在同一台机器上。对于keytab的配置，我们也从简，只配置一个kerberos的service账号供所有服务使用。  建立测试用例 TDD是敏">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-11-11-hadoop-auth-3/firefox-ssh-tunnel-proxy.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-11-11-hadoop-auth-3/app-log.png">
+<meta property="article:published_time" content="2019-11-11T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-06-10T15:29:40.237Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="安全">
+<meta property="article:tag" content="hadoop">
+<meta property="article:tag" content="kerberos">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2019/2019-11-11-hadoop-auth-3/firefox-ssh-tunnel-proxy.png">
+
+<link rel="canonical" href="http://brightliao.com/2019/11/11/hadoop-auth-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Hadoop安全认证机制 （三） | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/11/11/hadoop-auth-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hadoop安全认证机制 （三）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-11 20:00:00" itemprop="dateCreated datePublished" datetime="2019-11-11T20:00:00+08:00">2019-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-10 23:29:40" itemprop="dateModified" datetime="2022-06-10T23:29:40+08:00">2022-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/11/11/hadoop-auth-3/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （三）" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>16k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>26 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>系列文章：</p>
+<ul>
+<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
+<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
+</ul>
+<p>前面的文章中我们分析了Hadoop安全机制中用到的协议及相关源代码实现，这一篇文章我们主要来看看如何搭建一套安全的Hadoop集群。</p>
+<p>简单起见，我们这里的集群所有的组件将运行在同一台机器上。对于keytab的配置，我们也从简，只配置一个kerberos的service账号供所有服务使用。</p>
+<h2 id="建立测试用例"><a class="markdownIt-Anchor" href="#建立测试用例"></a> 建立测试用例</h2>
+<p>TDD是敏捷最重要的实践之一，可以有效的帮助我们确定目标，验证目标，它可以带领我们走得又快又稳。跟随TDD的思想，我们先从测试的角度来看这个问题。有了前面的基础知识，假设我们已经有了一套安全的Hadoop集群，那么我们应当可以从集群读写文件，运行MapReduce任务。我们可以编写读写文件的测试用例如下：</p>
+<span id="more"></span>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HdfsTest</span> &#123;</span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_read_write_files_from_hdfs</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line"></span><br><span class="line">        <span class="type">Configuration</span> <span class="variable">conf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Configuration</span>();</span><br><span class="line">        conf.addResource(<span class="keyword">new</span> <span class="title class_">Path</span>(testConfig.hdfsSiteFilePath()));</span><br><span class="line">        conf.addResource(<span class="keyword">new</span> <span class="title class_">Path</span>(testConfig.coreSiteFilePath()));</span><br><span class="line">        UserGroupInformation.setConfiguration(conf);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line"></span><br><span class="line">        <span class="type">FileSystem</span> <span class="variable">fileSystem</span> <span class="operator">=</span> FileSystem.get(conf);</span><br><span class="line">        <span class="type">Path</span> <span class="variable">path</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Path</span>(<span class="string">&quot;/user/root/input/core-site.xml&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (fileSystem.exists(path)) &#123;</span><br><span class="line">            <span class="type">boolean</span> <span class="variable">deleteSuccess</span> <span class="operator">=</span> fileSystem.delete(path, <span class="literal">false</span>);</span><br><span class="line">            assertTrue(deleteSuccess);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">fileContent</span> <span class="operator">=</span> FileUtils.readFileToString(<span class="keyword">new</span> <span class="title class_">File</span>(testConfig.coreSiteFilePath()));</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">FSDataOutputStream</span> <span class="variable">fileOut</span> <span class="operator">=</span> fileSystem.create(path)) &#123;</span><br><span class="line">            fileOut.write(fileContent.getBytes(<span class="string">&quot;utf-8&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        assertTrue(fileSystem.exists(path));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">FSDataInputStream</span> <span class="variable">in</span> <span class="operator">=</span> fileSystem.open(path)) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">fileContentRead</span> <span class="operator">=</span> IOUtils.toString(in);</span><br><span class="line">            assertEquals(fileContent, fileContentRead);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        fileSystem.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（完整代码请参考<a target="_blank" rel="noopener" href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/HdfsTest.java">这里</a>）</p>
+<p>到这里我们的任务目标就明确了，只要上面的测试能通过，我们的集群就应该搭建好了。</p>
+<p>（如果有条件，下面的内容请大家结合代码及参考文档，一边读文章，一边动手实践，否则可能会遗漏很多细节。）</p>
+<h2 id="建立基本集群"><a class="markdownIt-Anchor" href="#建立基本集群"></a> 建立基本集群</h2>
+<p>我们先跟随<a target="_blank" rel="noopener" href="https://hadoop.apache.org/docs/r2.7.7/hadoop-project-dist/hadoop-common/SingleCluster.html">官网的教程</a>搭建一个非安全的集群。</p>
+<p>这里我选择的Hadoop版本为2.7.7（我这里是为了和实际项目中用到的版本保持一致，大家可以自行尝试其他版本，思路和大部分的脚本都应该是相同的）。我们选择伪分布式模式（Pseudo-Distributed）来进行尝试，这种模式下，每个组件会运行为一个独立的java进程，与真实的分布式环境类似。</p>
+<p>我们还是使用容器来进行试验，启动一个容器，并依次运行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --name shd -h shd centos:7 bash</span><br></pre></td></tr></table></figure>
+<p>在容器中运行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立并切换到我们的工作目录</span></span><br><span class="line"><span class="built_in">mkdir</span> /hd &amp;&amp; <span class="built_in">cd</span> /hd</span><br><span class="line"><span class="comment"># 下载软件、解压、进入根目录</span></span><br><span class="line">yum install wget vim less -y</span><br><span class="line">wget https://archive.apache.org/dist/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz</span><br><span class="line">tar xf hadoop-2.7.7.tar.gz</span><br><span class="line"><span class="built_in">ln</span> -sv hadoop-2.7.7/ hadoop</span><br><span class="line"><span class="built_in">cd</span> hadoop</span><br><span class="line"><span class="comment"># 配置hadoop</span></span><br><span class="line"><span class="built_in">echo</span> shd &gt; etc/hadoop/slaves</span><br><span class="line"><span class="built_in">cat</span> &gt; etc/hadoop/core-site.xml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;configuration&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;hdfs://0.0.0.0:9000&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">&lt;/configuration&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">cat</span> &gt; etc/hadoop/hdfs-site.xml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;configuration&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;dfs.replication&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;1&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;/hd/data/hdfs/namenode&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;/hd/data/hdfs/datanode&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">&lt;/configuration&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="comment"># 配置ssh，测试：是否能通过`ssh localhost`免密登录</span></span><br><span class="line">yum install openssh-clients openssh-server -y</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;root:screencast&#x27;</span> | chpasswd</span><br><span class="line">sed -i <span class="string">&#x27;s/PermitRootLogin prohibit-password/PermitRootLogin yes/&#x27;</span> /etc/ssh/sshd_config</span><br><span class="line">sed <span class="string">&#x27;s@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g&#x27;</span> -i /etc/pam.d/sshd</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export VISIBLE=now&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line">ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -P <span class="string">&#x27;&#x27;</span> &amp;&amp; ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -P <span class="string">&#x27;&#x27;</span></span><br><span class="line">/usr/sbin/sshd</span><br><span class="line">ssh-keygen -t rsa -P <span class="string">&#x27;&#x27;</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br><span class="line"><span class="built_in">chmod</span> 0600 ~/.ssh/authorized_keys</span><br><span class="line"><span class="comment"># 安装jdk,并配置环境变量</span></span><br><span class="line">yum install -y java-1.8.0-openjdk-devel</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export JAVA_HOME=/usr/lib/jvm/java&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java</span><br><span class="line"><span class="comment"># 启动hdfs</span></span><br><span class="line">bin/hdfs namenode -format</span><br><span class="line">sbin/start-dfs.sh</span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">bin/hdfs dfs -<span class="built_in">mkdir</span> /user</span><br><span class="line">bin/hdfs dfs -<span class="built_in">mkdir</span> /user/root</span><br><span class="line">bin/hdfs dfs -put etc/hadoop input</span><br><span class="line">bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.7.jar grep input output <span class="string">&#x27;dfs[a-z.]+&#x27;</span></span><br><span class="line">bin/hdfs dfs -<span class="built_in">cat</span> output/*  <span class="comment"># 这里的结果将显示配置文件里面关于dfs的内容</span></span><br></pre></td></tr></table></figure>
+<p>到这里我们的非安全的单机模式集群应该就能运行起来了。但是在这个集群里面我们还没法运行分布式任务，因为目前仅仅是一个HDFS分布式文件系统。如果用<code>jps</code>查看一下有哪些java进程，将发现我们启动了三个进程<code>NameNode</code> <code>SecondaryNameNode</code> <code>DataNode</code>。</p>
+<p>下一步，我们还需要配置并启动用于管理分布式集群任务的关键组件<code>Yarn</code>。运行如下这些命令，即可启动<code>Yarn</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置Yarn</span></span><br><span class="line"><span class="built_in">cat</span> &gt; etc/hadoop/mapred-site.xml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;configuration&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;yarn&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;0.0.0.0:10020&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;0.0.0.0:19888&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">&lt;/configuration&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">cat</span> &gt; etc/hadoop/yarn-site.xml &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;configuration&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;yarn.log-aggregation-enable&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;true&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">    &lt;!-- fix node unhealthy issue --&gt;</span></span><br><span class="line"><span class="string">    &lt;!-- `yarn node -list -all` report node unhealthy with message indicate no disk space (disk space check failed) --&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">        &lt;name&gt;yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage&lt;/name&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;99.9&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">    &lt;!-- to fix issue: &#x27;Failed while trying to construct...&#x27; (http://blog.51yip.com/hadoop/2066.html) --&gt;</span></span><br><span class="line"><span class="string">    &lt;property&gt;</span></span><br><span class="line"><span class="string">         &lt;name&gt;yarn.log.server.url&lt;/name&gt;</span></span><br><span class="line"><span class="string">         &lt;value&gt;http://shd:19888/jobhistory/logs&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;/property&gt;</span></span><br><span class="line"><span class="string">&lt;/configuration&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="comment"># 启动Yarn：启动之后我们将能通过`./bin/yarn node -list -all`查看到一个RUNNIN的node</span></span><br><span class="line">sbin/start-yarn.sh</span><br><span class="line"><span class="comment"># 启动History server用于查看应用日志</span></span><br><span class="line">sbin/mr-jobhistory-daemon.sh start historyserver</span><br><span class="line"><span class="comment"># 测试：我们将能看到下面的命令从0%到100%按进度完成。</span></span><br><span class="line"><span class="comment"># 验证：运行`./bin/hadoop dfs -cat output/wc/part-r-00000`还将看到计算出来的结果。</span></span><br><span class="line"><span class="comment"># 验证：运行`./bin/yarn application -list -appStates FINISHED`可以看到已运行完成的任务，及其日志的地址。</span></span><br><span class="line">bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.7.jar  wordcount input/* output/wc/</span><br></pre></td></tr></table></figure>
+<p>执行上面的命令启动<code>Yarn</code>及<code>historyserver</code>之后，我们将发现有三个额外的进程<code>ResourceManager</code> <code>NodeManager</code> <code>JobHistoryServer</code>随之启动了。</p>
+<p>如果我们的容器所在主机有一个浏览器可以用，那么我们可以通过访问<code>http://$&#123;SHD_DOCKER_IP&#125;:8088/cluster/apps</code>将能看到上面的<code>wordcount</code>程序运行的状态及日志。这里的<code>SHD_DOCKER_IP</code>可以通过下面的命令查找出来。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect -f &#x27;&#123;&#123;range .NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;&#x27; shd</span><br></pre></td></tr></table></figure>
+<p>如果容器是在一个远端的主机上面启动的，我们可以用<code>ssh tunnel</code>的方式建立一个代理，通过代理来访问我们的集群。运行命令<code>ssh -f -N -D 127.0.0.1:3128 $&#123;USER&#125;@$&#123;REMOTE_DOCKER_HOST_IP&#125;</code>即可建立这样的代理。然后我们运行<code>echo &quot;$&#123;SHD_DOCKER_IP&#125; shd&quot; &gt;&gt; /etc/hosts</code>将容器的主机名加入到我们本地的<code>hosts</code>。再使用<code>firefox</code>浏览器来配置代理（如下图），这样我们就可以通过本地的<code>firefox</code>来访问到远端的集群了。</p>
+<p><img data-src="/attaches/2019/2019-11-11-hadoop-auth-3/firefox-ssh-tunnel-proxy.png" alt="Firefox Proxy" /></p>
+<p>我们将能看到如下的web应用，通过这个web应用，我们实际上还可以查询到更多的集群相关的信息。</p>
+<p><img data-src="/attaches/2019/2019-11-11-hadoop-auth-3/app-log.png" alt="App Log" /></p>
+<p>可以看到，经过多年的优化，即便是一个非常复杂的分布式系统，我们现在也可以快速的上手了。几乎所有的配置都有相对合理的默认值，我们仅仅需要调整很少的配置。</p>
+<p>Hadoop本身内置了很多实用的工具，当我们遇到问题的时候，这些工具可以有效的辅助诊断问题。如果大家经过上面的步骤还是没法通过测试（命令行中的测试）。大家可能可以从以下几个方面去查找问题：</p>
+<ol>
+<li>检查各个组件进程是否都启动起来了</li>
+<li>检查各个组件的日志，比如，如果<code>datanode</code>启动失败，可能我们要查看<code>logs/hadoop-root-datanode-shd.log</code>日志做进一步分析</li>
+<li>使用<code>bin/yarn node -list -all</code>检查<code>node</code>的状态</li>
+<li>检查最终生成的配置<code>http://172.17.0.12:8042/conf</code>是否是我们所希望的，比如我们可能由于拼写错误导致配置不对</li>
+</ol>
+<h2 id="kerberos安全配置"><a class="markdownIt-Anchor" href="#kerberos安全配置"></a> Kerberos安全配置</h2>
+<p>在本系列<a href="/2019/10/27/hadoop-auth/">第一篇文章</a>中，我们尝试了搭建一个kerberos认证服务器，这里我们可以用与之前一致的方式先搭建起一个kerberos认证服务器。需要的执行脚本如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将kdc kdc.hadoop.com加入hosts，以便后续进行基于hosts文件的主机名解析</span></span><br><span class="line">yum install net-tools -y</span><br><span class="line">ip_addr=$(ifconfig eth0 | grep inet | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip_addr</span> kdc-server kdc-server.hadoop.com&quot;</span> &gt;&gt; /etc/hosts</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装相关软件并进行配置</span></span><br><span class="line">yum install krb5-server krb5-libs krb5-workstation -y</span><br><span class="line"><span class="comment"># 创建krb5配置文件，详细配置解释请参考：https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_conf.html</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/krb5.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">#Configuration snippets may be placed in this directory as well</span></span><br><span class="line"><span class="string">includedir /etc/krb5.conf.d/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[logging]</span></span><br><span class="line"><span class="string">  default = FILE:/var/log/krb5.log</span></span><br><span class="line"><span class="string">  kdc = FILE:/var/log/krb5kdc.log</span></span><br><span class="line"><span class="string">  admin_server = FILE:/var/log/kadmind.log</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[libdefaults]</span></span><br><span class="line"><span class="string">  forcetcp = true</span></span><br><span class="line"><span class="string">  default_realm = HADOOP.COM</span></span><br><span class="line"><span class="string">  dns_lookup_realm = false</span></span><br><span class="line"><span class="string">  dns_lookup_kdc = false</span></span><br><span class="line"><span class="string">  ticket_lifetime = 24h</span></span><br><span class="line"><span class="string">  renew_lifetime = 7d</span></span><br><span class="line"><span class="string">  forwardable = true</span></span><br><span class="line"><span class="string">  udp_preference_limit = 1</span></span><br><span class="line"><span class="string">  default_tkt_enctypes = des-cbc-md5 des-cbc-crc des3-cbc-sha1</span></span><br><span class="line"><span class="string">  default_tgs_enctypes = des-cbc-md5 des-cbc-crc des3-cbc-sha1</span></span><br><span class="line"><span class="string">  permitted_enctypes = des-cbc-md5 des-cbc-crc des3-cbc-sha1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[realms]</span></span><br><span class="line"><span class="string">  HADOOP.COM = &#123;</span></span><br><span class="line"><span class="string">    kdc = kdc-server.hadoop.com:2802</span></span><br><span class="line"><span class="string">    admin_server = kdc-server.hadoop.com:2801</span></span><br><span class="line"><span class="string">    default_domain = hadoop.com</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[domain_realm]</span></span><br><span class="line"><span class="string">  .hadoop.com = HADOOP.COM</span></span><br><span class="line"><span class="string">  hadoop.com = HADOOP.COM</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="comment"># 创建kdc配置文件，详细配置解释请参考：https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/kdc_conf.html</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /var/kerberos/krb5kdc/kdc.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">default_realm = HADOOP.COM</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[kdcdefaults]</span></span><br><span class="line"><span class="string"> kdc_ports = 0</span></span><br><span class="line"><span class="string"> v4_mode = nopreauth</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[realms]</span></span><br><span class="line"><span class="string"> HADOOP.COM = &#123;</span></span><br><span class="line"><span class="string">    kdc_ports = 2800</span></span><br><span class="line"><span class="string">    kdc_tcp_ports = 2802</span></span><br><span class="line"><span class="string">    admin_keytab = /etc/kadm5.keytab</span></span><br><span class="line"><span class="string">    database_name = /var/kerberos/krb5kdc/principal</span></span><br><span class="line"><span class="string">    acl_file = /var/kerberos/krb5kdc/kadm5.acl</span></span><br><span class="line"><span class="string">    key_stash_file = /var/kerberos/krb5kdc/stash</span></span><br><span class="line"><span class="string">    max_life = 10h 0m 0s</span></span><br><span class="line"><span class="string">    max_renewable_life = 7d 0h 0m 0s</span></span><br><span class="line"><span class="string">    master_key_type = des3-hmac-sha1</span></span><br><span class="line"><span class="string">    supported_enctypes = arcfour-hmac:normal des3-hmac-sha1:normal des-cbc-crc:normal des:normal des:v4 des:norealm des:onlyrealm des:afs3</span></span><br><span class="line"><span class="string">    default_principal_flags = +preauth</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&#x27;123456\n123456&#x27;</span> | kdb5_util create -r HADOOP.COM -s  <span class="comment"># 创建一个名为HADOOP.COM的域</span></span><br><span class="line">/usr/sbin/krb5kdc &amp;&amp; /usr/sbin/kadmind                        <span class="comment"># 启动kdc及kadmind服务</span></span><br></pre></td></tr></table></figure>
+<h2 id="配置hadoop安全支持"><a class="markdownIt-Anchor" href="#配置hadoop安全支持"></a> 配置Hadoop安全支持</h2>
+<p>前面我们分析了Kerberos的运行原理，及Hadoop的相关源代码，可以知道，为了启动安全支持，每一个集群节点的每一个hadoop组件都将需要单独的Kerberos账号及其keytab文件，每个组件最好还能用不同的账户启动。这里由于我们使用伪分布式模式来部署集群，所有的组件都运行在同一个节点，简单起见，我们这里将使用root账号来启动集群，并让所有的组件使用同一个kerberos账号。</p>
+<p>首先我们生成账号如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /hd/conf/</span><br><span class="line"><span class="comment"># 生成hadoop集群需要的账号</span></span><br><span class="line">kadmin.local addprinc -randkey root/shd@HADOOP.COM</span><br><span class="line">kadmin.local addprinc -randkey HTTP/shd@HADOOP.COM</span><br><span class="line">kadmin.local xst -k /hd/conf/hadoop.keytab root/shd@HADOOP.COM HTTP/shd@HADOOP.COM</span><br><span class="line"><span class="comment"># 生成测试用的普通账号</span></span><br><span class="line">kadmin.local addprinc -randkey root@HADOOP.COM</span><br><span class="line">kadmin.local xst -k /hd/conf/root.keytab root@HADOOP.COM</span><br></pre></td></tr></table></figure>
+<p>接下来我们来完成hadoop的配置，由于配置文件内容比较多，我统一整理到了github的一个repo中，下面的配置将主要通过copy这些文件来生成，而辅以说明主要修改的地方。如果大家有兴趣知道确切的修改之处，可以备份这些文件，然后用diff来查看修改，或者用git对配置文件进行版本管理，然后查看修改。</p>
+<h3 id="配置集群"><a class="markdownIt-Anchor" href="#配置集群"></a> 配置集群</h3>
+<h4 id="配置core-sitexml"><a class="markdownIt-Anchor" href="#配置core-sitexml"></a> 配置<code>core-site.xml</code></h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hadoop/etc/hadoop/core-site.xml -O etc/hadoop/core-site.xml</span><br><span class="line">sed -i <span class="string">&#x27;s/hd01-7/shd/g&#x27;</span> etc/hadoop/core-site.xml</span><br></pre></td></tr></table></figure>
+<p>这里主要加入的配置项及其解释如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hadoop.proxyuser.root.hosts=*           # 配置root用户（组件启动时认证的kerberos账户）可以以任意客户端认证过的用户（proxy user）来执行操作，详见：https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/Superusers.html</span><br><span class="line">hadoop.proxyuser.root.groups=*</span><br><span class="line">hadoop.proxyuser.HTTP.hosts=*</span><br><span class="line">hadoop.proxyuser.HTTP.groups=*</span><br><span class="line">hadoop.security.authorization=true</span><br><span class="line">hadoop.security.authentication=kerberos</span><br></pre></td></tr></table></figure>
+<h4 id="配置hdfs-sitexml"><a class="markdownIt-Anchor" href="#配置hdfs-sitexml"></a> 配置<code>hdfs-site.xml</code></h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hadoop/etc/hadoop/hdfs-site.xml -O etc/hadoop/hdfs-site.xml</span><br><span class="line">sed -i <span class="string">&#x27;s/hd01-7/shd/g&#x27;</span> etc/hadoop/hdfs-site.xml</span><br></pre></td></tr></table></figure>
+<p>这里主要加入的配置项如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">dfs.block.access.token.enable=true</span><br><span class="line">dfs.namenode.keytab.file=/hd/conf/hadoop.keytab</span><br><span class="line">dfs.namenode.kerberos.principal=root/_HOST@HADOOP.COM</span><br><span class="line">dfs.namenode.kerberos.internal.spnego.principal=HTTP/_HOST@HADOOP.COM</span><br><span class="line">dfs.web.authentication.kerberos.principal=HTTP/_HOST@HADOOP.COM</span><br><span class="line">dfs.web.authentication.kerberos.keytab=/hd/conf/hadoop.keytab</span><br><span class="line">dfs.datanode.keytab.file=/hd/conf/hadoop.keytab</span><br><span class="line">dfs.datanode.kerberos.principal=root/_HOST@HADOOP.COM</span><br><span class="line">dfs.datanode.address=0.0.0.0:1004</span><br><span class="line">dfs.datanode.http.address=0.0.0.0:1006</span><br><span class="line">dfs.journalnode.keytab.file=/hd/conf/hadoop.keytab</span><br><span class="line">dfs.journalnode.kerberos.principal=root/_HOST@HADOOP.COM</span><br><span class="line">dfs.journalnode.kerberos.internal.spnego.principal=HTTP/_HOST@HADOOP.COM</span><br></pre></td></tr></table></figure>
+<h4 id="配置mapred-sitexml"><a class="markdownIt-Anchor" href="#配置mapred-sitexml"></a> 配置<code>mapred-site.xml</code></h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hadoop/etc/hadoop/mapred-site.xml -O etc/hadoop/mapred-site.xml</span><br><span class="line">sed -i <span class="string">&#x27;s/hd01-7/shd/g&#x27;</span> etc/hadoop/mapred-site.xml</span><br></pre></td></tr></table></figure>
+<p>这里主要加入的配置项如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mapreduce.jobhistory.address=shd:10020</span><br><span class="line">mapreduce.jobhistory.webapp.address=shd:19888</span><br><span class="line">mapreduce.jobhistory.principal=root/_HOST@HADOOP.COM</span><br><span class="line">mapreduce.jobhistory.keytab=/hd/conf/hadoop.keytab</span><br></pre></td></tr></table></figure>
+<h4 id="配置yarn-sitexml"><a class="markdownIt-Anchor" href="#配置yarn-sitexml"></a> 配置<code>yarn-site.xml</code></h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hadoop/etc/hadoop/yarn-site.xml -O etc/hadoop/yarn-site.xml</span><br><span class="line">sed -i <span class="string">&#x27;s/hd01-7/shd/g&#x27;</span> etc/hadoop/yarn-site.xml</span><br></pre></td></tr></table></figure>
+<p>这里主要加入的配置项如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yarn.resourcemanager.principal=root/_HOST@HADOOP.COM</span><br><span class="line">yarn.resourcemanager.keytab=/hd/conf/hadoop.keytab</span><br><span class="line">yarn.resourcemanager.webapp.https.address=$&#123;yarn.resourcemanager.hostname&#125;:8090</span><br><span class="line">yarn.nodemanager.principal=root/_HOST@HADOOP.COM</span><br><span class="line">yarn.nodemanager.keytab=/hd/conf/hadoop.keytab</span><br><span class="line">yarn.web-proxy.principal=root/_HOST@HADOOP.COM</span><br><span class="line">yarn.web-proxy.keytab=/hd/conf/hadoop.keytab</span><br></pre></td></tr></table></figure>
+<h4 id="配置hadoop-envsh"><a class="markdownIt-Anchor" href="#配置hadoop-envsh"></a> 配置<code>hadoop-env.sh</code></h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hadoop/etc/hadoop/hadoop-env.sh -O etc/hadoop/hadoop-env.sh</span><br></pre></td></tr></table></figure>
+<p>主要加入的配置项如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JSVC_HOME=/usr/bin             <span class="comment"># 指定jsvc的路径，以便运行安全模式的datanode</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_JAAS_DEBUG=<span class="literal">true</span>         <span class="comment"># 开启Kerberos认证的debug日志</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_OPTS=<span class="string">&quot;-Djava.net.preferIPv4Stack=true -Dsun.security.krb5.debug=true -Dsun.security.spnego.debug&quot;</span>  <span class="comment"># 开启Kerberos认证的debug日志</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_SECURE_DN_USER=root     <span class="comment"># 运行安全模式的datanode组件的用户</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_HDFS_USER=root          <span class="comment"># 运行hdfs组件的用户</span></span><br></pre></td></tr></table></figure>
+<h4 id="修复启动脚本"><a class="markdownIt-Anchor" href="#修复启动脚本"></a> 修复启动脚本</h4>
+<p>由于我们开启了<code>Kerberos</code>的调试日志，原来的脚本需要稍加修改才能使用。执行脚本如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hadoop/sbin/stop-dfs.sh -O sbin/stop-dfs.sh</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hadoop/sbin/start-dfs.sh -O sbin/start-dfs.sh</span><br></pre></td></tr></table></figure>
+<p>主要修改为将通过<code>hdfs getconf SOME_CONFIG</code>命令拿到的配置，修改为通过<code>hdfs getconf SOME_CONFIG &gt;/dev/null | tail -n 1</code>去获取配置。这里的<code>tail -n 1</code>可以去掉命令运行中的<code>Kerberos</code>调试日志。</p>
+<h3 id="启动集群"><a class="markdownIt-Anchor" href="#启动集群"></a> 启动集群</h3>
+<p>启动集群并运行测试如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install -y apache-commons-daemon-jsvc.x86_64     <span class="comment"># 安装jsvc以便可以用安全模式启动datanode，详见：https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SecureMode.html#Secure_DataNode</span></span><br><span class="line">sbin/start-dfs.sh &amp;&amp; ./sbin/start-secure-dns.sh &amp;&amp; sbin/start-yarn.sh &amp;&amp; sbin/mr-jobhistory-daemon.sh start historyserver     <span class="comment"># 依次启动集群的其他组件</span></span><br><span class="line"><span class="comment"># 测试：我们将能看到下面的命令从0%到100%按进度完成。</span></span><br><span class="line"><span class="comment"># 验证：运行`./bin/hadoop dfs -cat output/wc/part-r-00000`还将看到计算出来的结果。</span></span><br><span class="line"><span class="comment"># 验证：运行`./bin/yarn application -list -appStates FINISHED`可以看到已运行完成的任务，及其日志的地址。</span></span><br><span class="line">bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.7.jar  wordcount input/* output/wc/</span><br></pre></td></tr></table></figure>
+<p>如果我们无需再测试了，可以用以下命令停止集群：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sbin/stop-dfs.sh &amp;&amp; ./sbin/stop-secure-dns.sh &amp;&amp; sbin/stop-yarn.sh &amp;&amp; sbin/mr-jobhistory-daemon.sh stop historyserver</span><br></pre></td></tr></table></figure>
+<h3 id="运行最初定义的测试"><a class="markdownIt-Anchor" href="#运行最初定义的测试"></a> 运行最初定义的测试</h3>
+<p>执行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加入相关的hosts</span></span><br><span class="line">SHD_DOCKER_IP=$(docker inspect -f <span class="string">&#x27;&#123;&#123;range .NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;&#x27;</span> shd)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;SHD_DOCKER_IP&#125;</span> shd kdc-server kdc-server.hadoop.com&quot;</span> &gt;&gt; /etc/hosts</span><br><span class="line"><span class="comment"># 下载源代码</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/gmlove/bigdata_conf.git</span><br><span class="line"><span class="comment"># 更新配置文件</span></span><br><span class="line"><span class="built_in">cd</span> bigdata_conf</span><br><span class="line"><span class="built_in">cd</span> <span class="built_in">test</span>/src/test &amp;&amp; <span class="built_in">mv</span> resources resources.1</span><br><span class="line">docker <span class="built_in">cp</span> shd:/hd/hadoop/etc/hadoop/hdfs-site.xml ./resources/</span><br><span class="line">docker <span class="built_in">cp</span> shd:/hd/hadoop/etc/hadoop/core-site.xml ./resources/</span><br><span class="line">docker <span class="built_in">cp</span> shd:/hd/hadoop/etc/hadoop/yarn-site.xml ./resources/</span><br><span class="line">docker <span class="built_in">cp</span> shd:/etc/krb5.conf ./resources/</span><br><span class="line">docker <span class="built_in">cp</span> shd:/hd/conf/root.keytab ./resources/</span><br><span class="line"><span class="built_in">cp</span> ./resources.1/log4j.properties ./resources/</span><br><span class="line"><span class="comment"># 运行测试</span></span><br><span class="line">mvn -Dtest=test.HdfsTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>运行上面的命令，我们将能看到测试成功执行。</p>
+<h3 id="如果容器在一个远端的主机上启动"><a class="markdownIt-Anchor" href="#如果容器在一个远端的主机上启动"></a> 如果容器在一个远端的主机上启动</h3>
+<p>如果容器是在一个远端的主机上面启动的，我们还是可以通过<code>ssh tunnel</code>的方式将远端的端口映射到本地来执行此测试。不过，我们需要对前面步骤中的内容作出一些修改。主要的修改是将涉及到的<code>hostname</code>配置从<code>shd</code>改为<code>localhost</code>。这是由于在做端口映射之后，所有的服务均会通过<code>localhost</code>来访问，如果我们还是用<code>shd</code>，则集群在进行<code>Kerberos</code>认证时，主机名验证会出错。</p>
+<p>这个任务还是挺有意思的，可以有效的检验我们对于网络、Hadoop集群、<code>Kerberos</code>认证机制等的理解。有兴趣的小伙伴可以尝试实验一下，本文就不赘述了。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>搭建一套安全的hadoop集群，确实不容易，即使我们只是一个伪分布式环境，还做了各种配置简化，也需要花费一番功夫，更别提真正在生产环境中搭建一套集群了。如果是生产可用，我们可能还需要关心机架、集群网络情况、稳定性、性能、跨地域高可用、不停机升级等等一系列的问题。在实际企业应用中，这些大数据基础设施运维实际上是一个比较复杂的工作，这些工作更可能是由一个单独的运维团队去完成的。这里我们所完成的例子的主要价值不在于生产可用，而在于它可以帮助我们理解hadoop集群的安全机制，以便指导我们日常的开发工作。另一个价值是，这里的例子实际上完全可以作为我们平时测试用的一套小集群，简单而又功能完整，我们完全可以将这里完成的工作制作为一个docker镜像（后续文章将尝试制作此镜像），随时启动这样一套集群，这对于我们测试一些集群集成问题时将带来很大的便利。</p>
+<p>大家如果有自己实践，相信在这个过程中可能还会碰到其他的问题，欢迎留言交流，一起学习。</p>
+<p>在这篇文章里，我们搭建了一个安全的hadoop集群，那么大数据相关的其他组件应该要如何安全的和hadoop集群进行整合呢？下一篇文章我们将选取几个典型的组件来分析并进行实践，欢迎持续关注。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ul>
+<li>Hadoop官方文档<code>Secure Mode</code>：<a target="_blank" rel="noopener" href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SecureMode.html">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SecureMode.html</a></li>
+<li>Hadoop官方文档<code>Proxy User</code>：<a target="_blank" rel="noopener" href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/Superusers.html">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/Superusers.html</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/27/hadoop-auth/" rel="bookmark">Hadoop安全认证机制 (一)</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/30/hadoop-auth-2/" rel="bookmark">Hadoop安全认证机制 （二）</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/12/02/hadoop-auth-4/" rel="bookmark">Hadoop安全认证机制 （四）</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/01/21/spark-performance-tuning-on-billions-of-data/" rel="bookmark">亿级数据Spark应用调优之旅</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 大数据</a>
+              <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"><i class="fa fa-tag"></i> 安全</a>
+              <a href="/tags/hadoop/" rel="tag"><i class="fa fa-tag"></i> hadoop</a>
+              <a href="/tags/kerberos/" rel="tag"><i class="fa fa-tag"></i> kerberos</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/30/hadoop-auth-2/" rel="prev" title="Hadoop安全认证机制 （二）">
+      <i class="fa fa-chevron-left"></i> Hadoop安全认证机制 （二）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/02/sense-of-ceremony-and-professional-service/" rel="next" title="仪式感与专业服务">
+      仪式感与专业服务 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text"> 建立测试用例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%9F%BA%E6%9C%AC%E9%9B%86%E7%BE%A4"><span class="nav-number">2.</span> <span class="nav-text"> 建立基本集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kerberos%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text"> Kerberos安全配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEhadoop%E5%AE%89%E5%85%A8%E6%94%AF%E6%8C%81"><span class="nav-number">4.</span> <span class="nav-text"> 配置Hadoop安全支持</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E9%9B%86%E7%BE%A4"><span class="nav-number">4.1.</span> <span class="nav-text"> 配置集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEcore-sitexml"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 配置core-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEhdfs-sitexml"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 配置hdfs-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEmapred-sitexml"><span class="nav-number">4.1.3.</span> <span class="nav-text"> 配置mapred-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEyarn-sitexml"><span class="nav-number">4.1.4.</span> <span class="nav-text"> 配置yarn-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEhadoop-envsh"><span class="nav-number">4.1.5.</span> <span class="nav-text"> 配置hadoop-env.sh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC"><span class="nav-number">4.1.6.</span> <span class="nav-text"> 修复启动脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="nav-number">4.2.</span> <span class="nav-text"> 启动集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%9C%80%E5%88%9D%E5%AE%9A%E4%B9%89%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-number">4.3.</span> <span class="nav-text"> 运行最初定义的测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E5%AE%B9%E5%99%A8%E5%9C%A8%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%AB%AF%E7%9A%84%E4%B8%BB%E6%9C%BA%E4%B8%8A%E5%90%AF%E5%8A%A8"><span class="nav-number">4.4.</span> <span class="nav-text"> 如果容器在一个远端的主机上启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'd2642d364d480ae0c4a65def484d1a3d',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

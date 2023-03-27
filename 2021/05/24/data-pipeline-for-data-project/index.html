@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="数据流水线 在数据平台中进行数据开发时，数据任务流水线是常用于组织各个计算任务的方式。 比如，我们要想完成一个指标计算。第一个数据任务是将数据接入到数据平台，接着，需要一个任务将数据进行初步的数据清洗形成DWD中的数据，然后，下一个任务可能是计算初级汇总数据存入DWB，再然后，需要一个数据任务计算得到最终的指标结果，还有一些后续任务，比如宽表构建，导出到外部数据库中进行大屏展示等。 这一系列的任">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据任务流水线">
+<meta property="og:url" content="http://brightliao.com/2021/05/24/data-pipeline-for-data-project/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="数据流水线 在数据平台中进行数据开发时，数据任务流水线是常用于组织各个计算任务的方式。 比如，我们要想完成一个指标计算。第一个数据任务是将数据接入到数据平台，接着，需要一个任务将数据进行初步的数据清洗形成DWD中的数据，然后，下一个任务可能是计算初级汇总数据存入DWB，再然后，需要一个数据任务计算得到最终的指标结果，还有一些后续任务，比如宽表构建，导出到外部数据库中进行大屏展示等。 这一系列的任">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-24-data-pipeline-for-data-project/data-pipelines.png">
+<meta property="article:published_time" content="2021-05-24T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-30T05:15:34.174Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据平台">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-05-24-data-pipeline-for-data-project/data-pipelines.png">
+
+<link rel="canonical" href="http://brightliao.com/2021/05/24/data-pipeline-for-data-project/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据任务流水线 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/05/24/data-pipeline-for-data-project/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据任务流水线
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-24 20:00:00" itemprop="dateCreated datePublished" datetime="2021-05-24T20:00:00+08:00">2021-05-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-12-30 13:15:34" itemprop="dateModified" datetime="2022-12-30T13:15:34+08:00">2022-12-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/05/24/data-pipeline-for-data-project/" class="post-meta-item leancloud_visitors" data-flag-title="数据任务流水线" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="数据流水线"><a class="markdownIt-Anchor" href="#数据流水线"></a> 数据流水线</h2>
+<p>在数据平台中进行数据开发时，数据任务流水线是常用于组织各个计算任务的方式。</p>
+<p>比如，我们要想完成一个指标计算。第一个数据任务是将数据接入到数据平台，接着，需要一个任务将数据进行初步的数据清洗形成<code>DWD</code>中的数据，然后，下一个任务可能是计算初级汇总数据存入<code>DWB</code>，再然后，需要一个数据任务计算得到最终的指标结果，还有一些后续任务，比如宽表构建，导出到外部数据库中进行大屏展示等。</p>
+<p>这一系列的任务需要按照先后关系一步步的完成，于是它们就构成了数据任务流水线。</p>
+<span id="more"></span>
+<p>实际项目中的流水线通常会非常复杂，因为我们有很多指标需要计算，它们各自会依赖不同的表。最终的数据流水线形态会是一系列有向无环图，这就是我们常说的<code>DAG</code>。</p>
+<p>数据任务流水线看起来和<code>CI/CD</code>流水线有类似的特点。技术人员甚至会觉得可以用持续集成流水线来构建这样的数据任务流水线。事实上，用<code>Jenkins</code>或者<code>GoCD</code>也可以构建这样的流水线，但是由于它们主要被用作持续集成工具，实际使用下来会发现缺乏了很多数据流水线管理需要的功能。</p>
+<h3 id="流水线设计"><a class="markdownIt-Anchor" href="#流水线设计"></a> 流水线设计</h3>
+<p>那么，这样的数据流水线应该如何设计？需要有哪些管理功能呢？</p>
+<p>回顾数据任务的各个步骤，可以发现需要设计以下这些数据流水线：</p>
+<p>一、定期（如每天）自动触发的数据任务流水线，它将完成定期的数据接入，清洗，指标计算，宽表构建，宽表输出这一系列任务。这一流水线通常是端到端可输出指标结果的流水线。</p>
+<p>二、首次全量数据接入任务流水线，用于第一次将全量数据接入到数据平台。它应该是手动触发的。</p>
+<p>三、与定期自动运行的流水线相同的，但只能手动触发运行的一条流水线。这一流水线的引入是必要的，因为它可以很好的应对日常数据开发运维工作。</p>
+<p>第一条流水线是比较好理解的。在实践中，一般我们会设计一个名为<code>data_date</code>（数据时间）的流水线参数，所有数据任务都需要计算这个参数指定的时间的数据。</p>
+<p>第二条流水线也是必要的，因为第一次全量数据接入任务难以通过自动流水线来支持。如果强行通过参数来支持，将导致流水线的复杂度上升，同时也不便于团队理解。从单一职责原则来讲，也不建议用定期执行的流水线来支持需要手动执行的、运行次数很少的流水线。</p>
+<p>第三条流水线的引入可能不太好理解。前面提到它是为了解决日常的数据开发运维工作，具体是指哪些呢？请看下面这些场景。</p>
+<p>第一个场景是，当我们新开发了一个指标，除了需要计算指标上线之后的数据之外，还需要计算历史的数据的时候。此时，我们往往无法在自动触发运行的流水线中完成这样的任务，因为历史数据的时间跨度可能很长（比如一年），而自动运行的流水线一般只能计算某个固定时间点（如某一天）的数据，这将导致大量的历史任务需要调度运行，从而带来性能问题。</p>
+<p>这里的性能问题可以简单分析一下。在执行分布式计算任务时，第一步是需要分配并启动计算资源。这一步常常比较耗时，如果使用流水线来调度，则每一个任务都需要重复这一过程，从而产生了大量的无必要的时间消耗。一个直接的优化方式是只启动一个任务，分配一次资源，将一系列的同类任务一次性执行完。不仅如此，如果多个时间点的数据计算可以通过分组聚合（<code>group by</code> + <code>aggregation</code>）来实现（比如，每日订单数量指标就可能可以通过分组聚合一次性计算一个长时间范围的数据），那将可以直接一次性计算一段时间的指标数据，这显然是性能更好的优化方式。不过，这样一来，就可能无法和自动运行的流水线共享同一套代码了。</p>
+<p>通过一条独立的手动运行的流水线将很容易做到上述这些优化，所以，单独设计这样的流水线是值得的。</p>
+<p>另一个类似的场景是在需要修改已有的指标的计算口径时。此时也常常需要重新计算一个很长时间段的数据任务。</p>
+<p>除了上面的场景，还有一些其他的场景，比如某一天在<code>ODS</code>层执行了必要的数据修改，需要重跑某一些数据任务。</p>
+<p>总之，设计一条与自动运行的流水线相同的手动运行的流水线好处多多。从我们的实践来看，是非常值得推荐的做法。</p>
+<p>从上面的分析来看，这个手动运行的流水线还需要很好的支持只运行流水线中的部分任务。这一特性可以通过设计流水线参数来实现。比如，在我们的流水线中设计了两个参数，即<code>include</code>和<code>exclude</code>，分别表示需要包含的和需要排除的数据任务。</p>
+<p>一个示例的数据任务流水线如下：</p>
+<p><img data-src="/attaches/2021/2021-05-24-data-pipeline-for-data-project/data-pipelines.png" alt="data pipelines" /></p>
+<h3 id="任务间依赖的实现"><a class="markdownIt-Anchor" href="#任务间依赖的实现"></a> 任务间依赖的实现</h3>
+<p>通过数据流水线可以较好的管理数据任务间的依赖，同一条流水线中的任务总是会按照流水线中的先后顺序运行。</p>
+<p>在实践过程中，我们会发现还存在一类跨流水线的任务依赖。比如，一般而言，我们会为每一个业务系统设计一条数据流水线（如售前系统流水线、售后系统流水线），但某些指标的计算会同时依赖多个业务系统的数据（比如售前到售后的转化率就需要依赖售前系统和售后系统数据）。这类指标的计算任务就会产生跨流水线的任务依赖（对于售前到售后转化率指标，它将同时依赖售前系统和售后系统流水线中的<code>DWD</code>数据层构建任务）。</p>
+<p>如何解决跨流水线的任务依赖呢？一些流水线工具为这种场景提供了支持，比如，<code>Airflow</code>提供了一个虚拟的<code>ExternalTaskSensor</code>任务，它将等待其它流水线中的某一个任务完成，然后才会完成。</p>
+<p>依赖流水线工具完成依赖任务检查是一个简单可行的方案。但是在实践中，仅使用工具进行依赖管理还显得不太够。比如，处于某种维护目的，我们需要将某一个数据分区删除重建。手动删除该分区之后，在数据流水线中，该任务的后续任务不会失败，而是会继续运行，这就可能导致其计算的结果不对。</p>
+<p>所以，我们更推荐的做法是，除了使用工具来管理任务依赖，最好还能在任务的<code>ETL</code>代码中先对依赖的数据执行严格的检查再执行计算。</p>
+<p>使用我们前面提到的<code>SQL</code>增强语法，一个简单的依赖检查示例如下。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 销量指标的计算依赖当天的`DWD`数据层中的订单表构建完成，强制检查对应的数据分区是否存在</span></span><br><span class="line"><span class="comment">-- target=check.ensure_partition_exists(dwd_sales.sales_order_h, $&#123;DATA_DATE&#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- target=...</span></span><br></pre></td></tr></table></figure>
+<p>上面的检查实际上是一个双保险，可以更进一步确认前置步骤是完成了的。</p>
+<p>对于跨流水线的任务依赖，用这种方式有更好的效果。因为如果使用流水线工具来实现，则会导致流水线难以理解。试想，如果有两条以不同频率运行的流水线，我们能简单的推断出有跨流水线依赖的任务会什么时候运行吗？</p>
+<p>但是，如果通过<code>ETL</code>代码检查来保证这种依赖关系，情况就会更简单了。代码里面明确的指定了<code>ETL</code>的输入依赖。</p>
+<p>我们甚至可以摈弃掉复杂的跨流水线依赖配置，仅通过<code>ETL</code>代码来保证依赖关系。此时，我们可能需要配置好该检查的重试次数及超时时间（根据数据任务启动及运行时间进行设置）。</p>
+<h2 id="流水线管理及工具选择"><a class="markdownIt-Anchor" href="#流水线管理及工具选择"></a> 流水线管理及工具选择</h2>
+<p>前面分析了数据任务流水线的设计，可以看到，这样的设计对流水线工具提出了一些要求。持续集成工具如<code>Jenkins</code>或<code>GoCD</code>在这一领域提供的功能比较有限，在工具选择上，我们还需要更为专业的特定工具。</p>
+<p>由于这类流水线工具的核心的功能是辅助进行<code>ETL</code>任务调度，我们也常常将其称作调度系统。常用的此类调度系统有<code>Oozie</code> <code>Airflow</code> <code>Azkaban</code>等。</p>
+<p>这类调度系统通常提供了非常丰富的任务调度功能，其中有些是必要的，而另一些在数据流水线管理中则使用较少。下面，我们从任务调度需求出发，来分析一下一些基本的功能需求。</p>
+<h3 id="流水线创建和编辑"><a class="markdownIt-Anchor" href="#流水线创建和编辑"></a> 流水线创建和编辑</h3>
+<p>最基本的调度系统功能是需要支持以上流水线设计。如果流水线的配置人员更习惯使用界面化的配置，那应该提供一套基于web的配置界面，可以让用户可视化的编辑流水线，实现如添加节点，修改节点，配置节点任务，配置节点参数的功能。</p>
+<p>可视化流水线配置可以很好的提升易用性，但其功能实现会较为复杂，且对于流水线的变更不易进行版本控制。</p>
+<p>另一类流水线配置工具仅提供了基于配置文件的配置方式。比如<code>Oozie</code>支持使用<code>XML</code>进行配置，<code>Airflow</code>支持使用<code>Python</code>代码进行配置。它们虽然没有提供可视化的流水线编辑，但是大都提供了可视化的查看。这类工具对于习惯编写代码的开发人员其实更为友好，因为流水线配置文件代码可以很好的用版本管理工具管理起来，且可以通过代码实现配置的复用。</p>
+<h3 id="任务调度"><a class="markdownIt-Anchor" href="#任务调度"></a> 任务调度</h3>
+<p>除了流水线的创建和编辑，流水线的任务调度管理是另一个核心的功能。需要支持哪些调度管理功能呢？一般而言，下列功能是需要具备的：</p>
+<ul>
+<li>周期性流水线调度运行。</li>
+<li>手动触发任务重新运行。在一些任务运行失败时，常常需要手动恢复运行，此时，常常还需要支持同时运行该任务的所有下级任务。</li>
+<li>查看任务运行日志。任务日志是分析任务执行失败、时间过长等原因的重要手段。</li>
+<li>控制并发任务数量。由于计算资源限制，常常需要控制可以并行运行的任务数量。还有一些任务，虽然任务间的执行顺序没有要求，但是多个任务不能并行运行，这也可以通过控制并发任务数量来实现。</li>
+<li>周期调度的任务可以依赖前一个调度时点的任务。很多复合指标的计算会依赖上一个时点的数据，如今日销量比昨日的增量，这就需要调度系统可以支持设置这样的依赖。</li>
+<li>支持跨<code>DAG</code>的任务依赖。在一些场景中，我们需要实现跨流水线的集成指标计算，此时就可能需要支持跨<code>DAG</code>的任务依赖。</li>
+</ul>
+<p><code>Airflow</code>和<code>Azkaban</code>可以较好的支持上述功能。它们实际上提供了一个任务状态的抽象，任务可以处于未开始运行、调度中、运行中、重试中、成功、失败等状态。对于上面提到的功能，比如按照依赖关系重新运行一组任务，可以通过将这组任务的状态重置到某一个状态来实现。</p>
+<p>一个完善的任务调度系统的实现是很复杂的，如果有兴趣深入了解，大家可以参考对应的文档，或者阅读对应的开源代码。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文结合我们的项目实践，分析了如何在数据平台中设计数据流水线。一般情况下，三条流水线的设计可以较好的支持大部分的数据应用场景。</p>
+<p>同时，本文分析了如何使用调度系统来支持流水线的实现，提到了一些重要的流水线调度功能。一个完善的数据平台最好能提供一站式的功能，而非使用各类设计风格各异的开源工具组合。我们在平台建设阶段虽然可以更多的使用这些工具，但是最好能划清任务调度系统在数据平台中的功能边界，即，有限制的使用这些工具。这可以为后续可能的自研调度系统铺平道路。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/03/data-capability-building-suggestions/" rel="bookmark">浅谈企业数据能力建设</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/27/oracle-data-migration/" rel="bookmark">Oracle数据迁移实用入门</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/21/some-thoughts-about-data-platform/" rel="bookmark">一些企业数据平台建设的思考</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/02/21/data-governance-based-on-atlas-ranger/" rel="bookmark">基于Hadoop大数据平台的数据治理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/" rel="tag"><i class="fa fa-tag"></i> 数据平台</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/10/data-browser-for-point-analysis/" rel="prev" title="基于点的数据分析与数据浏览器">
+      <i class="fa fa-chevron-left"></i> 基于点的数据分析与数据浏览器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/26/data-indicator-calculation-practice/" rel="next" title="指标计算实践">
+      指标计算实践 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">1.</span> <span class="nav-text"> 数据流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.1.</span> <span class="nav-text"> 流水线设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E9%97%B4%E4%BE%9D%E8%B5%96%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text"> 任务间依赖的实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%AE%A1%E7%90%86%E5%8F%8A%E5%B7%A5%E5%85%B7%E9%80%89%E6%8B%A9"><span class="nav-number">2.</span> <span class="nav-text"> 流水线管理及工具选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%88%9B%E5%BB%BA%E5%92%8C%E7%BC%96%E8%BE%91"><span class="nav-number">2.1.</span> <span class="nav-text"> 流水线创建和编辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="nav-number">2.2.</span> <span class="nav-text"> 任务调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '4c96d5ea927bce138444adc6a51a2cd1',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="新的一期技术雷达如期发布，仔细阅读了这一期的所有条目，CUPID这一条尤其让我产生共鸣。 CUPID出自Daniel的一篇名为《CUPID—for joyful coding》的博文，即《CUPID-为了快乐编程》。CUPID是Composable&#x2F;Unix philosophy&#x2F;Predictable&#x2F;Idiomatic&#x2F;Domain based几个单词的缩写，有经验的同学一看就知道这是好代码的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="好代码的五个特质-CUPID">
+<meta property="og:url" content="http://brightliao.com/2022/05/24/5-properties-of-good-code-cupid/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="新的一期技术雷达如期发布，仔细阅读了这一期的所有条目，CUPID这一条尤其让我产生共鸣。 CUPID出自Daniel的一篇名为《CUPID—for joyful coding》的博文，即《CUPID-为了快乐编程》。CUPID是Composable&#x2F;Unix philosophy&#x2F;Predictable&#x2F;Idiomatic&#x2F;Domain based几个单词的缩写，有经验的同学一看就知道这是好代码的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-05-24-5-properties-of-good-code-cupid/cupid.png">
+<meta property="article:published_time" content="2022-05-24T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-28T03:17:23.373Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="领域">
+<meta property="article:tag" content="编程范式">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="SOLID">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2022/2022-05-24-5-properties-of-good-code-cupid/cupid.png">
+
+<link rel="canonical" href="http://brightliao.com/2022/05/24/5-properties-of-good-code-cupid/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>好代码的五个特质-CUPID | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/05/24/5-properties-of-good-code-cupid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          好代码的五个特质-CUPID
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-24 20:00:00" itemprop="dateCreated datePublished" datetime="2022-05-24T20:00:00+08:00">2022-05-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-28 11:17:23" itemprop="dateModified" datetime="2022-08-28T11:17:23+08:00">2022-08-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3/" itemprop="url" rel="index"><span itemprop="name">编程思想</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/05/24/5-properties-of-good-code-cupid/" class="post-meta-item leancloud_visitors" data-flag-title="好代码的五个特质-CUPID" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>15 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>新的一期技术雷达如期发布，仔细阅读了这一期的所有条目，CUPID这一条尤其让我产生共鸣。</p>
+<p>CUPID出自Daniel的一篇名为<a target="_blank" rel="noopener" href="https://dannorth.net/2022/02/10/cupid-for-joyful-coding/">《CUPID—for joyful coding》</a>的博文，即《CUPID-为了快乐编程》。CUPID是Composable/Unix philosophy/Predictable/Idiomatic/Domain based几个单词的缩写，有经验的同学一看就知道这是好代码的一些属性。知道<strong>Cupid</strong>这个单词的同学还能感受到这一组属性所蕴含的对于软件工程的热情。Cupid的中文是丘比特，是指古罗马的爱神，其意象是一个长有翅膀的小孩，拿着弓箭射向人们，以便人们可以相互爱上对方。</p>
+<p><img data-src="/attaches/2022/2022-05-24-5-properties-of-good-code-cupid/cupid.png" alt="CUPID for joyful coding" /></p>
+<span id="more"></span>
+<h2 id="特质"><a class="markdownIt-Anchor" href="#特质"></a> 特质</h2>
+<p>Daniel老爷子回忆了自己三十多年的编程经历，他发现在修改代码时，好的代码会给人一种非常愉悦的感觉。你可以轻松找到需要修改的地方，而且，那个地方的代码是如此的易于理解，以至于一眼就能看出来代码在干什么。你可以很自信的完成修改，并且确信不会引入额外的副作用。代码是那么的鲜活，它会主动的指引你去你想去的地方，并且热情的欢迎你四处游览，就像在你熟悉的家里一样！</p>
+<p>为什么好的代码能有这样的魅力？什么样的代码才是好代码？提到这个问题，我们常常会想到SOLID（Single Responsibility/Open-close/Liskov Substitution/Interface Segregation/Dependency Injection）原则，Daniel老爷子认为应该存在比SOLID更好用的东西。</p>
+<p>如何衡量代码好坏？SOLID采用了一组原则来定义好的代码，但是原则更像是规则，要么符合，要么不符合。而软件开发过程非常复杂，其间充满了平衡和妥协，事实上并没有一种非黑即白的规则可以适用。有没有比原则更好的选择？它可能是特质（Properties/Characteristics）。</p>
+<p>特质是事物本身所具备的，而不是靠一组规则去定义的；特质吸引我们去深度挖掘，而不是信任已有的总结；特质通常不是简单的0或1的判断，而是一种从低到高的程度；特质是从观察者的角度给出的，更关注观察者的体验，而更少关注与体验无关的其他方面。</p>
+<p>之所以我们会觉得某样东西是好的，常常是因为某样东西具备了一些好的特质。比如蓝天白云图，它具备了干净、纯粹的特质。比如勾股定理和质能方程，它们具备简洁、优雅的特质。</p>
+<p>如果说好的代码是一个中心点，特质就像是定义了一些方向，通过这些方向的指引，就可以不断向这个中心点靠拢。</p>
+<p>CUPID就是从特质的角度来定义的，它尝试用一组助记词来指示好代码所具备的一组特质，并希望这组特质是最重要的特质。</p>
+<p>CUPID所指出的方向与SOLID定义的原则并不冲突，只是角度不同，CUPID更多站在代码的用户–将来修改代码的人–的视角来看待代码，并指出了好的代码应该具备的特质。从这个角度来讲，CUPID比SOLID的适用性更广（SOLID事实上只是针对面向对象设计提出的）。比如，给出一段代码，用SOLID可能并不能判断好坏，因为这段代码可能根本不涉及SOLID中提到的几个原则（比如函数式风格的代码）。但是很大可能可以从CUPID指明的几个方向来得到一些结论。</p>
+<p>CUPID是完备的吗，很遗憾，也不是。但CUPID所指出的五种特质可能是按照重要程度排序之后取前五的特质。</p>
+<h2 id="理解cupid"><a class="markdownIt-Anchor" href="#理解cupid"></a> 理解CUPID</h2>
+<p>下面我们一起看看CUPID到底是什么，以及，如何用CUPID来帮助我们写出好的代码。</p>
+<p>下面的内容，部分来自Daniel老爷子的<a target="_blank" rel="noopener" href="https://dannorth.net/2022/02/10/cupid-for-joyful-coding/">原文</a>，部分结合了个人的心得体会，分享给大家。</p>
+<h3 id="可组合特质c"><a class="markdownIt-Anchor" href="#可组合特质c"></a> 可组合特质（C）</h3>
+<p>CUPID的第一个字母C是指Composable，即可组合特质。</p>
+<p>近两年，我们在讨论面向对象程序设计的时候，越来越关注到“组合优于继承”这样的原则。作为面向对象程序设计的三大特征之一的“继承”，似乎正越来越受到挑战，这一部分原因是很多继承的设计是不合理的，比如不符合SOLID所指出的里氏代换原则。另一部分原因在于，过深的继承树带来了代码的可理解性问题，因为我们总是需要理解了基类才能理解子类。其实继承也是很有用的，但其前提是设计合理的继承。“组合优于继承”就是告诉我们优先考虑用组合模式来进行设计。</p>
+<p>可组合还体现在以下三个方面：</p>
+<p><strong>精巧的接口</strong></p>
+<p>接口太多时，读者需要知道如何组合这些接口去完成某个功能，而接口较少时，读者可以更容易学习并更少犯错。只对外公开一个模块来提供接口，比对外公开多个模块提供接口更好。只对外公开一个类来提供接口，比对外公开多个类提供接口更好。</p>
+<p>正确的接口粒度设计比较困难，最佳的粒度是接口既不显得臃肿也不碎片化。</p>
+<p>设计模式中有一种常见的模式Facade，即门面模式，其意图正是将对外公开的接口放到一个类中去提供，以便减少接口面，从而让接口更容易使用。</p>
+<p><strong>可体现意图的代码</strong></p>
+<p>可体现意图的代码是用业务语言编写且能反映业务过程的代码。可体现意图的代码可以使读者更容易弄清为什么代码要这么写，因此更容易组合使用。代码中的各类命名（比如变量、函数等）都可以用于将意图体现得更为明显。</p>
+<p>比如以下意图不明的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">getTodos</span>(<span class="params">todos, users</span>):</span><br><span class="line">    todos = [todo <span class="keyword">for</span> todo <span class="keyword">in</span> todo <span class="keyword">if</span> <span class="keyword">not</span> todo.completed <span class="keyword">and</span> todo.<span class="built_in">type</span> == ‘HOME’]</span><br><span class="line">    todos = [&#123;‘title’: todo.title, ‘user_name’: users[todo.userId].name&#125; <span class="keyword">for</span> todo <span class="keyword">in</span> todo]</span><br><span class="line">    todos.sort(key=<span class="keyword">lambda</span> todo: todo[’user_name’])</span><br><span class="line"><span class="keyword">return</span> todos</span><br></pre></td></tr></table></figure>
+<p>可以重构为以下意图明确的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_todos</span>(<span class="params">todos, users</span>):</span><br><span class="line">    top_priority_todos = [todo <span class="keyword">for</span> todo <span class="keyword">in</span> todo <span class="keyword">if</span> <span class="keyword">not</span> todo.completed <span class="keyword">and</span> todo.<span class="built_in">type</span> == ‘HOME’]</span><br><span class="line">    todo_view_models = [&#123;‘title’: todo.title, ‘user_name’: users[todo.userId].name&#125; <span class="keyword">for</span> todo <span class="keyword">in</span> top_priority_todos]</span><br><span class="line">    todo_view_models.sort(key=<span class="keyword">lambda</span> todo: todo[’user_name’])</span><br><span class="line"><span class="keyword">return</span> todo_view_models</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_todos</span>(<span class="params">todos, users</span>):</span><br><span class="line">    is_top_priority = <span class="keyword">lambda</span> todo: <span class="keyword">not</span> todo.completed <span class="keyword">and</span> todo.<span class="built_in">type</span> == ‘HOME’</span><br><span class="line">    todos = [todo <span class="keyword">for</span> todo <span class="keyword">in</span> todo <span class="keyword">if</span> is_top_priority(todo)]</span><br><span class="line">    to_view_model = <span class="keyword">lambda</span> todo: &#123;‘title’: todo.title, ‘user_name’: users[todo.userId].name&#125;</span><br><span class="line">    todos = [to_view_model(todo) <span class="keyword">for</span> todo <span class="keyword">in</span> todo]</span><br><span class="line">    user_name = <span class="keyword">lambda</span> todo: todo[’user_name’]</span><br><span class="line">    todos.sort(key=user_name)</span><br><span class="line"><span class="keyword">return</span> todos</span><br></pre></td></tr></table></figure>
+<p><strong>最小依赖</strong></p>
+<p>拥有最小依赖的代码是容易组合使用的。</p>
+<p>当一个库有大量的依赖时，一旦使用了这个库就会间接引入这些依赖。这不仅使我们发布的二进制制品变得臃肿，也很容易引起一些依赖库的版本冲突问题。大家如果做过Hadoop的MapReduce任务开发，应该对这个问题深有体会，因为Hadoop本身有大量的Java依赖，如果我们在MapReduce任务中不小心引入了一个和Hadoop本身的依赖不兼容的版本，在任务运行时就会出错。</p>
+<p>一个拥有最小依赖的库是很容易使用的，上述包冲突问题会更少发生。</p>
+<p>我常常在项目中见到有人为了实现一些很简单的功能而引入没必要的依赖。比如，当我们面对的问题只是简单的查询ElasticSearch服务中的数据时，就要评估一下是否有必要引入ElasticSearch的客户端库依赖，因为我们可以很容易的使用通用的HTTP工具库来发送一个请求来实现数据查询。</p>
+<p>面向对象程序设计有一个重要的原则，即迪米特法则（Law of Demeter），又被称为最小知识原则、不要和陌生人说话原则。其指导意义在于一个类不应该和与其不相关的类产生（依赖）关系。</p>
+<h3 id="unix哲学u"><a class="markdownIt-Anchor" href="#unix哲学u"></a> Unix哲学（U）</h3>
+<p>CUPID的第二个特质U即是指Unix哲学。</p>
+<p>Unix可以说是当今应用最广泛的操作系统，不管是云服务器还是个人电脑抑或智能手机、IoT设备，都有Unix的影子。Unix广泛的以Linux、MacOS、iOS、Android等等操作系统的形式存在着。为什么Unix可以如此成功？这得益于Unix的简单而一致的设计哲学。</p>
+<p>CUPID中的Unix哲学主要指其最重要的一个观点：一个程序应该做一件事，并将其做好。Unix中的大量程序都很好的提现了这一特质，比如<code>ls</code>程序只做列举文件的事，而要查看文件详情，则需要使用<code>lstat</code>，查看文件内容使用<code>cat</code>，搜索文件内容使用<code>grep</code>等等。如果我们查看这些程序的使用手册（Manual Page），将发现每一个程序都提供了很多的参数供选择，事实上每个程序的功能都很强大，并处理了大量的异常情况。这就是把一件事做好的体现。</p>
+<p>Unix操作系统中定义了一个强大的管道（Pipe）概念，一个程序的输出可以通过管道传输给另一个程序，从而简单而一致的实现了多个程序的组合使用。比如<code>ls</code>命令可以列举出文件列表，然后将结果传输给<code>wc</code>程序统计数量，就可以简单的计算出目录中的文件数量。</p>
+<p>只做好一件事与SOLID中的单一职责原则很像。但是Unix哲学的出发点是读者，从读者角度来看程序，得出程序应该只做好一件事的结论。单一职责原则则是从代码的角度出发进行描述的。Unix哲学更多描述的是程序的目的，并指明一个程序应该只有一个目的。</p>
+<p>与Unix原则描述很相似的还有关注点分离的原则。关注点分离是指不同的模块应该关注不同的事情。比如分层设计，每一层的关注点应该不一样：<code>MVC</code>中的<code>M</code>关注业务模型和业务逻辑，<code>V</code>关注展示，<code>C</code>关注交互逻辑；<code>TCP/IP</code>四层网络模型中物理层关注物理链路，网络层关心节点链路如何建立，传输层关注数据发送的可靠性，应用层关注在具体的应用协议。</p>
+<h3 id="可预测性p"><a class="markdownIt-Anchor" href="#可预测性p"></a> 可预测性（P）</h3>
+<p>CUPID的第三个特质P是指Predictable，可预测性。</p>
+<p>程序的可预测性是指它应该做它看起来要做的事情，一致且可靠，不隐藏任何出乎意料的行为。</p>
+<p>可预测性包括三个方面：1. 与期望一致的行为；2. 输出确定的结果；3. 内部行为可观测。</p>
+<p><strong>与期望一致的行为</strong></p>
+<p>我们可以通过测试来定义所期望的程序的行为，但是并不是一定需要用测试来让程序与期望的行为一致。精心的挑选名字，克制的编写逻辑，正确的处理异常这些都能使得程序与期望的行为一致。</p>
+<p>读操作和写操作常常被分开对待。读操作不会对程序状态产生影响，我们可以安全的调用，不用顾忌太多后果。写操作用于修改程序状态，因此，在使用时需要特别小心，比如如果有多线程访问就需要考虑线程安全，同时操作多个状态就需要考虑事务一致性。</p>
+<p>如何在读操作和写操作中保持与期望一致的行为？那就是读操作中不应该隐藏某些让人意外的写操作。</p>
+<p><strong>输出确定性的结果</strong></p>
+<p>具备确定性的程序很容易让人理解和使用，因为它在任何一次调用都会返回同样的结果，我们可以明确的知道它将返回什么。</p>
+<p>我们常说易于推理的代码是好代码，具备确定性的就具备易于推理的特性。</p>
+<p>大概是由于Web前端技术的飞速发展，近些年函数式编程范式得到广大开发者的亲睐。函数式编程范式中最重要的一个概念就是纯函数。纯函数是指没有任何副作用且可以输出确定的结果的函数。</p>
+<p>纯函数是更容易测试的，我们对使用它的信心也更强。但是，在函数式编程范式中，对纯函数的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Pure_function">规范定义</a>显得学院化，并加入了场景限定。事实上，我们主要需要的是程序的确定性。用面向对象范式编程，可以考虑把一个对象设计成<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Value_object">值对象</a>，这样也可以增强程序的确定性。由于不确定性常常来自复杂且不确定的依赖（比如，某个依赖自己管理了复杂的状态，就也会间接的使你的代码充满不确定性），在设计类时，严格控制其依赖的外部模块，尽量做到无依赖，也可以增强程序的确定性。</p>
+<p>具备确定性的代码通常是健壮、可靠而具备弹性的。</p>
+<p><strong>内部行为可观测</strong></p>
+<p>如何预测程序的行为？观察它的运行时输出是一个很好的方法。如果程序可以在运行时打印关键的内部状态或行为就可以让我们推测其当前状态。</p>
+<p>观察程序内部状态可以分为以下几个级别：</p>
+<ul>
+<li><strong>信息仪表（Instrumentation）</strong>: 程序告诉我们它正在干什么</li>
+<li><strong>遥测（Telemetry）</strong>: 将程序告诉我们的信息以一种接口暴露出来，使其可以被远程访问</li>
+<li><strong>监控（Monitoring）</strong>: 将程序告诉我们的信息可视化出来</li>
+<li><strong>告警（Alerting）</strong>: 从监控信息中识别异常，发出通知</li>
+<li><strong>预测（Predicting）</strong>: 利用监控信息来预测即将发生的事件</li>
+<li><strong>自适应（Adapting）</strong>: 通过告警的或者预测的信息动态调整系统以适应变化</li>
+</ul>
+<p>有一些工具可以自动提取程序运行时信息供分析，但是最佳的提升程序的可观测性的方式还是通过有意识的设计来在关键处输出程序的状态或行为。</p>
+<h3 id="符合惯例的i"><a class="markdownIt-Anchor" href="#符合惯例的i"></a> 符合惯例的（I）</h3>
+<p>CUPID的第四个特质I是指Idiomatic，符合惯例的。</p>
+<p>大家都有自己的编码习惯，这些习惯包括空格和制表符的使用，变量命名规则，括号放置位置，代码结构，提交的粒度和注释等等。这些不一样的习惯将显著的增加不熟悉代码库的读者的认知负载。读者不仅需要理解问题空间和解空间，还需要不断进行翻译，以便识别当前的代码是有意编写的，还是无意的，或者只是作者的习惯而已。</p>
+<p>编写代码时的最伟大的特质是同情心：对你的代码的用户的同情；对提供支持服务的同事的同情；对将来修改代码的开发者的同情。事实上，他们中任意一个可能就是将来的你。编写“人类可读的代码”意味着为别人编写代码。这正是“符合惯例”的意义。</p>
+<p>编写代码时，可以假定你的用户具备以下背景：</p>
+<ul>
+<li>熟悉所使用的编程语言，及该语言对应的库、工具链和生态</li>
+<li>懂软件开发的有经验的开发者</li>
+</ul>
+<p>还有一条，他们正努力的完成某件事情。</p>
+<p><strong>语言惯例</strong></p>
+<p>代码应该遵循编程语言的惯例。有些编程语言在代码风格上态度鲜明，我们会更容易判断代码是否符合语言惯例。另一些编程语言则可以兼容多种不同风格，此时我们应该选择一种风格，并始终坚持它。</p>
+<p>Python是一门在代码风格上态度鲜明的语言。当我们在Python的交互式命令行中输入<code>import this</code>，或者运行命令<code>python -m this</code>时，就会发现输出了Python所推荐的编程风格。这些编程风格组合成了”Python之禅”（The Zen of Python）。比如“应该有一种显然的实现方式，而且最好只有一种”（There should be one-- and preferably only one --obvious way to do it）。</p>
+<p>Go语言内置了一个代码格式化工具<code>gofmt</code>，它会处理缩进、括号位置等问题，可以使所有代码变得风格一致。除此之外，还有一篇专门说明Go语言风格的文档<a target="_blank" rel="noopener" href="https://go.dev/doc/effective_go">Effective Go</a>来指导大家写出风格一致的代码。</p>
+<p>语言惯例出现在各个级别的代码中，函数名、类型、参数、模块、代码组织结构、模块组织结构、工具链选择、依赖选择、管理依赖的方式等。如果你的代码符合这些语言惯例，将会读起来更让人愉悦。</p>
+<p>如何让代码遵循这些语言惯例？可能没有什么更好的办法，只有让自己多去学习这些惯例。</p>
+<p><strong>团队惯例</strong></p>
+<p>当编程语言本身没有风格倾向，或者有多种风格可选的时候，用什么风格来写代码就由我们自己或者我们的团队来决定了。通常团队会自己定义一些惯例，比如用什么工具，如何缩进等。借助各种语言的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Lint_(software)">代码检查</a>工具，可以自动化的让代码保持一致的风格。</p>
+<p>对于某些无法用工具覆盖的惯例，利用<a target="_blank" rel="noopener" href="https://www.thoughtworks.com/zh-cn/radar/techniques/lightweight-architecture-decision-records"><strong>架构设计决策记录</strong></a>来文档化这些惯例是一种好的实践。这些惯例的重要性并不比其他的架构设计决策更低。</p>
+<h3 id="基于领域的d"><a class="markdownIt-Anchor" href="#基于领域的d"></a> 基于领域的（D）</h3>
+<p>CUPID的最后一个特质D是指Domain based，基于领域的。</p>
+<p>近几年，微服务的兴起使得<strong>领域驱动设计</strong>（Domain Driven Design, 简称DDD）以新的面貌受到大家的广泛关注。相对于其对于微服务设计的指导意义，DDD提出的以领域为中心的软件开发思想或许具有更重大的意义。</p>
+<p><strong>基于领域的语言</strong></p>
+<p>由于代码的读者通常对问题是清楚的，所以，代码应该用问题空间的语言来写，这样就能让代码的读者更容易的理解。问题空间语言即领域语言。</p>
+<p>编程语言和库里面充满了计算机技术术语。比如常用的数据结构，如数组、链表、哈希表、树结构等。还比如数据库表、网络连接等。甚至基础数据类型，如整型数值、浮点型数值、字符串等也都是技术术语。直接在代码中使用这些术语不会告诉你的读者你要解决什么问题，他们需要根据对问题的理解进行翻译。</p>
+<p>TDD可以用于帮助我们更多的用领域语言编写代码。TDD要求在还没有实现代码的时候写出测试代码。如何做到呢？其实，TDD是希望我们可以在看到问题后，先用自然语言描述测试过程，然后再将自然语言的测试过程翻译为编程语言。由于描述测试过程时，会站在用户的角度进行描述，所以将更多的使用领域语言。并且测试过程的描述将反映出程序应该有的公开接口，所以接口也会变成用领域语言描述的接口，这就很大程度上促进了用领域语言编写代码。</p>
+<p>举个例子，在电商场景中，如果要实现购物车的功能，则分析购物车的业务需求之后，可以将测试过程描述如下：</p>
+<p>－ 准备一个空的购物车<br />
+－ 向购物车添加商品1，数量1<br />
+－ 向购物车添加商品2，数量2<br />
+－ 购物车中应该有两种商品，其中有1个商品1及2个商品2<br />
+－ 向购物车添加商品1，数量1<br />
+－ 购物车中应该有两种商品，其中有2个商品1及2个商品2<br />
+－ 从购物车取出商品1，数量2<br />
+－ 购物车中应该有一种商品，即2个商品2</p>
+<p>翻译为Java语言的测试代码示例如下（部分）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">void</span> <span class="title function_">testCart</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">var</span> <span class="variable">cart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Cart</span>();</span><br><span class="line">    <span class="type">var</span> <span class="variable">product1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Product</span>();</span><br><span class="line">    <span class="type">var</span> <span class="variable">product2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Product</span>();</span><br><span class="line"></span><br><span class="line">    cart.add(product1, <span class="number">1</span>);</span><br><span class="line">    cart.add(product2, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    assertTrue(cart.contains(product1));</span><br><span class="line">    assertEquals(<span class="number">1</span>, cart.productCount(product1));</span><br><span class="line">    assertTrue(cart.contains(product2));</span><br><span class="line">    assertEquals(<span class="number">2</span>, cart.productCount(product2));</span><br><span class="line"></span><br><span class="line">    cart.add(product1, <span class="number">1</span>);</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>可以看到，通过编写测试，我们用领域语言设计了<code>Cart</code>类，<code>Product</code>类，并且对<code>Cart</code>类设计了<code>add</code> <code>contains</code> <code>productCount</code>三个方法。除了促进使用领域语言编写代码，TDD还可以让我们提供的接口刚刚够用，不多不少，从而实现可组合性特质中的“精巧的接口”。</p>
+<p>使用领域语言编写代码的最佳状态是，我们的代码可以让没有技术背景的业务人员也能轻松看懂，整个代码读起来就像业务分析师在讲解业务逻辑一样。</p>
+<p><strong>基于领域的结构</strong></p>
+<p>除了使用领域语言编写代码，在模块的设计、代码目录结构（或包结构）也应该优先使用领域语言命名。</p>
+<p>很多使用Spring框架的Java程序员有个偏好，他们按照框架提供的概念来组织代码，并且将不同的文件按照框架概念进行分类存放。一个可能的结构可能是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app</span><br><span class="line">|----controllers</span><br><span class="line">|----assets</span><br><span class="line">|----models</span><br><span class="line">|----events</span><br><span class="line">|----repositories</span><br><span class="line">|----requests</span><br><span class="line">|----responses</span><br><span class="line">|----dtos</span><br><span class="line">|----configurations</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>这带来的问题是，当要修改一个API时，不得不在多个目录中去查找和修改代码。这不仅增加了认知负载，使代码耦合在一起，还增加了修改代码的负担。</p>
+<p>使用基于领域的结构，建议尽量将目录按照领域进行划分，而不是框架概念。比如，如果是一个电商的场景，目录结构应该是<code>user</code> <code>product</code> <code>order</code> <code>payment</code> <code>shipment</code>等。</p>
+<p>当前一个流行的架构模式是分层架构，如果按照分层架构进行设计，则顶层目录可以是不同的分层名称，分层以下，就应该是由领域概念组成的目录。并且分层之间应该有严格的依赖顺序，不应产生两个分层循环依赖的情况。虽然看起来这是一个例外，但是这种拆分是有缺陷的。近两年微服务架构非常流行，而微服务的拆分是按照业务领域进行拆分的，这可以理解为微服务是整体产品这个根目录下的基于领域的子目录。这个现象可以理解为大家对于分层架构的目录划分并不满意，还是希望在更上层基于领域来划分目录。</p>
+<p><strong>基于领域的边界</strong></p>
+<p>无论我们如何组织代码结构，目录（或模块）的边界变成了事实上的领域边界。一打开代码库就能看到目录结构，目录的层级和名字逐渐变成了大家最熟系的信息。所以，在设计上，一个重要的原则就是将领域划分和目录划分保持一致。这将有效降低团队的认知负载，开发者将因此而更不容易犯错，团队效率最终将得到提高。</p>
+<p>这并不意味着需要组织成一个平坦（flat）的目录结构。领域以下可以有子领域，目录以下可以有子目录，模块以下可以有子模块。重要的是这一个一个层级需要能对应上。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>到这里，我们应该了解了CUPID所指出的五种特质的内涵。可以明显的看到，相比不符合CUPID特性的代码，符合CUPID的代码可以让人更加愉悦地进行阅读和修改。事实上，CUPID中的五个特质并不是相互独立的，它们常常可以互相促进。</p>
+<p>可组合并符合Unix风格的代码（做一件事，并把它做好）让人感觉就像是一个可靠的老朋友。符合惯例的代码让从未看过此代码的人也觉得非常熟悉。可预测的代码将我们从一系列“惊喜”中解脱出来。基于领域的代码减少了从需求到方案之间的认知距离。</p>
+<p>在每次修改代码时，如果每个人都能将代码向这几个方向所指向的中心点靠近一点，那就可以让代码越来越好。</p>
+<p>参考：</p>
+<ul>
+<li>关于Facade模式，可以参考<a target="_blank" rel="noopener" href="https://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/facade.html">这里</a></li>
+<li>关于迪米特法则，可以参考<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/2107000">这里</a></li>
+<li>关于Unix哲学，可以参考<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unix_philosophy">Wiki</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/08/08/domain-concept-in-your-code/" rel="bookmark">代码中的领域</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/07/27/smart-domain-and-ddd/" rel="bookmark">我理解的Smart Domain与DDD</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/07/28/modelling-examples/" rel="bookmark">DDD建模案例分享</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/08/26/the-functional-programming-you-understand-may-not-be-what-we-recommended/" rel="bookmark">你所理解的函数式可能不是我们所推崇的函数式</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/09/05/programmers-tolerance/" rel="bookmark">技术人员的耐心和包容心</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E9%A2%86%E5%9F%9F/" rel="tag"><i class="fa fa-tag"></i> 领域</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 编程范式</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 编程</a>
+              <a href="/tags/solid/" rel="tag"><i class="fa fa-tag"></i> SOLID</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/16/a-guide-to-write-elegant-etl/" rel="prev" title="A Guide to Write Elegant ETL">
+      <i class="fa fa-chevron-left"></i> A Guide to Write Elegant ETL
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/25/neat-syntax-design-of-an-etl-language/" rel="next" title="Neat Syntax Design of an ETL Language (Part 1)">
+      Neat Syntax Design of an ETL Language (Part 1) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E8%B4%A8"><span class="nav-number">1.</span> <span class="nav-text"> 特质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3cupid"><span class="nav-number">2.</span> <span class="nav-text"> 理解CUPID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%BB%84%E5%90%88%E7%89%B9%E8%B4%A8c"><span class="nav-number">2.1.</span> <span class="nav-text"> 可组合特质（C）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unix%E5%93%B2%E5%AD%A6u"><span class="nav-number">2.2.</span> <span class="nav-text"> Unix哲学（U）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%A2%84%E6%B5%8B%E6%80%A7p"><span class="nav-number">2.3.</span> <span class="nav-text"> 可预测性（P）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%A6%E5%90%88%E6%83%AF%E4%BE%8B%E7%9A%84i"><span class="nav-number">2.4.</span> <span class="nav-text"> 符合惯例的（I）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E9%A2%86%E5%9F%9F%E7%9A%84d"><span class="nav-number">2.5.</span> <span class="nav-text"> 基于领域的（D）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '66ffc5bc0f0cf5295791601fff5ee15d',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

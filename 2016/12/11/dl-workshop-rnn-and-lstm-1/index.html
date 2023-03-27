@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。 上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。  我们的问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RNN和LSTM从理论到实践二：RNN和LSTM模型">
+<meta property="og:url" content="http://brightliao.com/2016/12/11/dl-workshop-rnn-and-lstm-1/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。 上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。  我们的问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/n-gram-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-model.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/ht-and-yt-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/perplexity-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-to-lstm.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-functionality.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-reset-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-new-memory-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-update-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-feature-equation.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-equations.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-application.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-beam-search.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/batch-update.png">
+<meta property="article:published_time" content="2016-12-11T02:12:51.000Z">
+<meta property="article:modified_time" content="2016-12-16T05:08:31.000Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="tensorflow">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="RNN">
+<meta property="article:tag" content="LSTM">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/n-gram-equation.png">
+
+<link rel="canonical" href="http://brightliao.com/2016/12/11/dl-workshop-rnn-and-lstm-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>RNN和LSTM从理论到实践二：RNN和LSTM模型 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/12/11/dl-workshop-rnn-and-lstm-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RNN和LSTM从理论到实践二：RNN和LSTM模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-11 10:12:51" itemprop="dateCreated datePublished" datetime="2016-12-11T10:12:51+08:00">2016-12-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2016-12-16 13:08:31" itemprop="dateModified" datetime="2016-12-16T13:08:31+08:00">2016-12-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2016/12/11/dl-workshop-rnn-and-lstm-1/" class="post-meta-item leancloud_visitors" data-flag-title="RNN和LSTM从理论到实践二：RNN和LSTM模型" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>15k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>25 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。</p>
+<p>上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。</p>
+<h2 id="我们的问题"><a class="markdownIt-Anchor" href="#我们的问题"></a> 我们的问题</h2>
+<p>先来看我们的问题，然后让我们带着问题，来学习RNN和LSTM。这次我们要解决的问题是：如何生成一个看起来还不错的句子。</p>
+<p>我们之前介绍过n-gram，那么我们能不能使用n-gram去预测单词，进而生成一个句子呢？我们可以使用频率统计来计算n-gram的语言模型：</p>
+<span id="more"></span>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/n-gram-equation.png" alt="N-gram Equation" /></p>
+<p>如果我们要计算单词w1出现的条件下单词w2出现的概率，我们可以先统计单词w1在我们的训练数据集中一共出现了多少次，即count(w1)，然后再统计w1和w2连续出现，即&quot;w1 w2&quot;出现的次数count(w1, w2)，相除即为w1出现的条件下单词w2出现的概率。同理，我们想要求在w1和w2同时连续出现的情况下，w3出现的概率也可以类似地使用频率统计来求得。</p>
+<p>n-gram看起来很容易实现，但是它能为我们生成一个好的句子吗？</p>
+<p>试想，如果我们有一篇关于西班牙和法国的文章，里面有一句话『这两个国家开始进入战争时代』。那么这两个国家指的是哪两个国家呢？用n-gram模型其实很难回答这个问题，因为西班牙和法国可能是文章刚开始的时候指明的，而n-gram中的N不可能太大，太大通常导致内存不足以及计算太慢，所以n-gram无法获知文章中离得很远的句子的信息。</p>
+<h2 id="rnn"><a class="markdownIt-Anchor" href="#rnn"></a> RNN</h2>
+<p>现在我们知道n-gram的缺点了，那么如何能解决远距离信息问题呢？这就是我们要介绍的模型RNN的发挥价值的地方。</p>
+<p>RNN的模型如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-model.png" alt="RNN Model" /></p>
+<p>在这个模型图中，x表示输入的单词向量，y表示预测的单词向量，在此基础上，我们增加了h矩阵来表示输出特征。t表示时间。观察t时刻的输入单词x和预测单词y的计算过程，我们可以发现y不仅仅是跟输入x相关，还跟t-1时刻的h相关。而t时刻的h，又会贡献到t+1时刻的y预测过程中去。</p>
+<p>具体的算法公式如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/ht-and-yt-equation.png" alt="Ht &amp; Yt equation" /></p>
+<p>我们可以看到我们定义了3个权值矩阵，这些权值矩阵在每次进行计算的时候，都是复用的，内存开销不随训练文本的增加而增加。h的计算使用了sigmoind激活函数，y的计算使用softmax激活函数。这里为了简单，我们省略了偏置向量。</p>
+<p>好了，我们已经有了模型，那么我们的损失函数是什么呢？其实还是跟之前一致，在时刻t，我们使用交叉熵损失函数：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/loss-function-of-rnn.png" alt="Loss function of RNN" /></p>
+<p>那么总的损失函数就是（T表示我们训练时每次迭代只考虑对T个单词进行RNN计算）：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/overall-loss-function-of-rnn.png" alt="Overall loss function of RNN" /></p>
+<p>我们还常常用perplexity来衡量模型的损失，perplexity的定义就是：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/perplexity-equation.png" alt="Perplexity equation" /></p>
+<p>由指数函数的曲线可知，J越小时，perplexity也越小，而且perplexity始终为正。</p>
+<h3 id="反向传播的问题"><a class="markdownIt-Anchor" href="#反向传播的问题"></a> 反向传播的问题</h3>
+<p>直接使用RNN模型有没有什么问题呢？由于权值矩阵是共享的，在反向传播的时候，每一步都会更新一个相同的权值矩阵。梯度下降方法在这种情况下的表现是会有问题的，因为这里的更新会变得不稳定，很容易的就会导致更新太多或太少，从而产生梯度消失或者梯度爆炸的问题。</p>
+<p>例如，假设有两个句子：</p>
+<ul>
+<li>“Jane walked into the room. John walked in too. Jane said hi to ___”</li>
+<li>“Jane walked into the room. John walked in too. It was late in the day, and everyone was walking home after a long day at work. Jane said hi to ___”</li>
+</ul>
+<p>RNN更可能能将第一个句子预测正确，由于梯度下降的梯度消失问题，离得远的信息难以传播到当下，第二个句子将会更难预测准确。</p>
+<p>事实上，可以计算得到，早于当前时刻的某时刻k的单词给当前时刻t的贡献将为β^(t-k)，可以看到它的梯度传播是指数递减的。这就很容易产生梯度爆炸和梯度消失问题。</p>
+<p>针对这个问题，我们的解决方案就是：</p>
+<ul>
+<li>在梯度将要爆炸的时候，将其裁剪为一个较小的值，这可以应对梯度爆炸问题</li>
+<li>使用ReLU激活函数，更仔细的初始化权值矩阵，这可以解决梯度消失的问题</li>
+</ul>
+<p>这些手段可以在一定程度上优化梯度爆炸和梯度消失的问题。但是其实我们有更好的模型来解决这个问题，那就是LSTM。我们后面会一起学习LSTM。</p>
+<h3 id="rnn的扩展"><a class="markdownIt-Anchor" href="#rnn的扩展"></a> RNN的扩展</h3>
+<p>通常在RNN上面还可以继续扩展，比如扩展为双向递归神经网络：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn.png" alt="Bidirectional RNN" /></p>
+<p>相关的公式就变为：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/bidirectional-rnn-equation.png" alt="Bidirectional RNN equation" /></p>
+<p>我们还可以加深这个网络，让每一个时刻t从一个线性层变为多个线性层，如图：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn.png" alt="Deep Bidirectional RNN" /></p>
+<p>相关的公式为：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/deep-bidirectional-rnn-equation.png" alt="Deep Bidirectional RNN Equation" /></p>
+<h2 id="lstm"><a class="markdownIt-Anchor" href="#lstm"></a> LSTM</h2>
+<p>前面我们分析了RNN的问题，并提到了LSTM。那么LSTM是什么东西呢？它是Long Short Term Memory的缩写。从这个全称来看，它可以给RNN引入记忆的功能。事实上他就是以这个为目标来进行设计的。LSTM的思想就是将RNN的网络单元替换为带记忆功能的网络单元。</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/rnn-to-lstm.png" alt="RNN to LSTM" /></p>
+<p>记忆到底是个什么玩意儿呢？听起来似乎很抽象。我们分析一下记忆单元应该有的功能。与人的记忆能力作为对比，一个单元能有记忆，那么它应该可以被写入，即可以被更新，然后应该可以被读取，同时应该可以选择性的忘记，也就是删除数据。</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-functionality.png" alt="LSTM functionality" /></p>
+<h3 id="gated-recurrent-units"><a class="markdownIt-Anchor" href="#gated-recurrent-units"></a> Gated Recurrent Units</h3>
+<p>分析了LSTM的原理，我们先看看GRU，即Gated Recurrent Units，它是基于这个思想的一个比LSTM更简单的模型。它的网络图如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru.png" alt="Gated Recurrent Units" /></p>
+<p>Reset其实用于实现忘记功能的，它可以控制是否将上一时刻的输出特征h即此时刻的输入包含到此时刻的预测过程，或者包含多少，其公式如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-reset-equation.png" alt="GRU Reset Equation" /></p>
+<p>New Memory可以实现写入控制的功能，即决定现在的输入和上一时刻的h到底有多少会影响到当前的预测过程，其公式如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-new-memory-equation.png" alt="GRU New Memory Equation" /></p>
+<p>Update可以实现控制读取的功能，即决定当前的状态有多少可以被下一时刻读取，其公式如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-update-equation.png" alt="GRU Update Equation" /></p>
+<p>最后将以上几个控制单元结合起来就得到当前的特征输出，它也将会被用于预测输出，其公式如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/gru-feature-equation.png" alt="GRU feature equation" /></p>
+<p>可以看到这些单个功能的控制器几乎都是一样的，他们的功能是在构造输出特征时体现出来的。</p>
+<h3 id="lstm-units"><a class="markdownIt-Anchor" href="#lstm-units"></a> LSTM Units</h3>
+<p>我们再看看更复杂一些的LSTM模型，其模型图如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm.png" alt="LSTM" /></p>
+<p>公式如下：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-equations.png" alt="LSTM equations" /></p>
+<p>其中h用于预测，c和h一起传播到下一时刻。</p>
+<h3 id="lstm的应用"><a class="markdownIt-Anchor" href="#lstm的应用"></a> LSTM的应用</h3>
+<p>通过分析RNN和LSTM的特性，可以发现它们可以用于预测一个序列。当训练好了LSTM网络时，得到一个输入之后，就预测下一个输出，然后结合输入和预测到的输出，可以继续预测下下个输出，连续的预测之后，我们就可以得到一个序列了。在我们后面要训练的模型中我们就是采取这样的方式来生成一个序列的。就如同下面这样：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-application.png" alt="LSTM Application" /></p>
+<p>当然我们还可以在每次预测时选择top k个可能的结果，每次都这样选择，然后在预测过一定次数n之后，统计生成的n个词的短序列的概率，并选择概率最大的短序列作为最终的结果。这样可以防止在某一步预测失败之后，导致后面的预测都跟着失败。这个想法就是Beam Search算法的思想。</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/lstm-beam-search.png" alt="LSTM Beam Search" /></p>
+<p>RNN和LSTM还有很多其他方面的应用，由于RNN和LSTM可以生成一个连续的序列，我们可以将其应用于机器翻译、语音识别、以及根据图片生成标题等等。</p>
+<h2 id="训练一个rnn和lstm的模型"><a class="markdownIt-Anchor" href="#训练一个rnn和lstm的模型"></a> 训练一个RNN和LSTM的模型</h2>
+<p>下面我们将跟随udacity上面的习题，一起来实践这个算法。</p>
+<p>下面的内容，请结合<a target="_blank" rel="noopener" href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm.ipynb">这里的代码</a>来阅读。</p>
+<h3 id="示例代码中的模型"><a class="markdownIt-Anchor" href="#示例代码中的模型"></a> 示例代码中的模型</h3>
+<p>在示例中，为了简化模型，我们这里对字符进行建模。于是我们的字符就可以用大小为27（a-z和空格）的一个one-hot的向量来表示。我们的RNN模型中，将按照10个字符进行分组递归处理，并使用变量num_unrollings来表示10这个数值。于是训练数据将被分为每10个字符一组，这一组字符进入RNN之后，不仅相互连接起来，而且和前一组的输出连接，同时提供输出作为后一组的输入。这样分组更新权值的过程中，每次迭代就会将梯度传播10次。</p>
+<p>下面我们看看具体实现过程。</p>
+<p>首先还是通过函数<code>maybe_download</code>和<code>read_data</code>来下载和读取数据，然后选择1000个字符的数据作为验证集。</p>
+<p>然后，我们准备两个工具函数，将字符映射到索引，和将索引映射到字符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vocabulary_size = <span class="built_in">len</span>(string.ascii_lowercase) + <span class="number">1</span> <span class="comment"># [a-z] + &#x27; &#x27;</span></span><br><span class="line">first_letter = <span class="built_in">ord</span>(string.ascii_lowercase[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">char2id</span>(<span class="params">char</span>):</span><br><span class="line">  <span class="keyword">if</span> char <span class="keyword">in</span> string.ascii_lowercase:</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">ord</span>(char) - first_letter + <span class="number">1</span></span><br><span class="line">  <span class="keyword">elif</span> char == <span class="string">&#x27; &#x27;</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Unexpected character: %s&#x27;</span> % char)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">id2char</span>(<span class="params">dictid</span>):</span><br><span class="line">  <span class="keyword">if</span> dictid &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">chr</span>(dictid + first_letter - <span class="number">1</span>)</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27; &#x27;</span></span><br></pre></td></tr></table></figure>
+<p>我们现在来考虑如何进行batch迭代。按照我们前面的分析，由递归的特性可知，字符需要首尾相连，训练集中的后一个字符是依赖前一个字符进行计算的，我们无法打乱这个顺序。我们这里的想法就是把训练文本分为n份，然后n份一起开始训练。如下图所示：</p>
+<p><img data-src="/attaches/2016/2016-12-11-dl-workshop-rnn-and-lstm-1/batch-update.png" alt="Batch update" /></p>
+<p>理解了这个之后，代码中的<code>BatchGenerator</code>就比较容易理解了。需要注意的是batch中的字符组长度为11，并且一个batch和下一个batch之间是有一个字符重叠的，这是由于我们会使用每一个字符的后一个字符作为标签字符，所以在生成batch的时候，就故意多生成了一个字符。在编写BatchGenerator的同时，我们编写了两个辅助函数<code>characters</code>和<code>batches2string</code>，分别实现将一个概率分布（即softmax的输出）映射到一个字符，和将一组batch映射为字符串。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">batch_size=<span class="number">64</span></span><br><span class="line">num_unrollings=<span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BatchGenerator</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, text, batch_size, num_unrollings</span>):</span><br><span class="line">    self._text = text</span><br><span class="line">    self._text_size = <span class="built_in">len</span>(text)</span><br><span class="line">    self._batch_size = batch_size</span><br><span class="line">    self._num_unrollings = num_unrollings</span><br><span class="line">    segment = self._text_size // batch_size</span><br><span class="line">    self._cursor = [ offset * segment <span class="keyword">for</span> offset <span class="keyword">in</span> <span class="built_in">range</span>(batch_size)]</span><br><span class="line">    self._last_batch = self._next_batch()</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">_next_batch</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Generate a single batch from the current cursor position in the data.&quot;&quot;&quot;</span></span><br><span class="line">    batch = np.zeros(shape=(self._batch_size, vocabulary_size), dtype=np.<span class="built_in">float</span>)</span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> <span class="built_in">range</span>(self._batch_size):</span><br><span class="line">      batch[b, char2id(self._text[self._cursor[b]])] = <span class="number">1.0</span></span><br><span class="line">      self._cursor[b] = (self._cursor[b] + <span class="number">1</span>) % self._text_size</span><br><span class="line">    <span class="keyword">return</span> batch</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">next</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Generate the next array of batches from the data. The array consists of</span></span><br><span class="line"><span class="string">    the last batch of the previous array, followed by num_unrollings new ones.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    batches = [self._last_batch]</span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> <span class="built_in">range</span>(self._num_unrollings):</span><br><span class="line">      batches.append(self._next_batch())</span><br><span class="line">    self._last_batch = batches[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">return</span> batches</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">characters</span>(<span class="params">probabilities</span>):</span><br><span class="line">  <span class="string">&quot;&quot;&quot;Turn a 1-hot encoding or a probability distribution over the possible</span></span><br><span class="line"><span class="string">  characters back into its (most likely) character representation.&quot;&quot;&quot;</span></span><br><span class="line">  <span class="keyword">return</span> [id2char(c) <span class="keyword">for</span> c <span class="keyword">in</span> np.argmax(probabilities, <span class="number">1</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">batches2string</span>(<span class="params">batches</span>):</span><br><span class="line">  <span class="string">&quot;&quot;&quot;Convert a sequence of batches back into their (most likely) string</span></span><br><span class="line"><span class="string">  representation.&quot;&quot;&quot;</span></span><br><span class="line">  s = [<span class="string">&#x27;&#x27;</span>] * batches[<span class="number">0</span>].shape[<span class="number">0</span>]</span><br><span class="line">  <span class="keyword">for</span> b <span class="keyword">in</span> batches:</span><br><span class="line">    s = [<span class="string">&#x27;&#x27;</span>.join(x) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">zip</span>(s, characters(b))]</span><br><span class="line">  <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line">train_batches = BatchGenerator(train_text, batch_size, num_unrollings)</span><br><span class="line">valid_batches = BatchGenerator(valid_text, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(batches2string(train_batches.<span class="built_in">next</span>()))</span><br><span class="line"><span class="built_in">print</span>(batches2string(train_batches.<span class="built_in">next</span>()))</span><br><span class="line"><span class="built_in">print</span>(batches2string(valid_batches.<span class="built_in">next</span>()))</span><br><span class="line"><span class="built_in">print</span>(batches2string(valid_batches.<span class="built_in">next</span>()))</span><br></pre></td></tr></table></figure>
+<p>然后为了程序需要我们再准备几个工具函数如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">logprob</span>(<span class="params">predictions, labels</span>):</span><br><span class="line">  <span class="string">&quot;&quot;&quot;Log-probability of the true labels in a predicted batch.&quot;&quot;&quot;</span></span><br><span class="line">  predictions[predictions &lt; <span class="number">1e-10</span>] = <span class="number">1e-10</span></span><br><span class="line">  <span class="keyword">return</span> np.<span class="built_in">sum</span>(np.multiply(labels, -np.log(predictions))) / labels.shape[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sample_distribution</span>(<span class="params">distribution</span>):</span><br><span class="line">  <span class="string">&quot;&quot;&quot;Sample one element from a distribution assumed to be an array of normalized</span></span><br><span class="line"><span class="string">  probabilities.</span></span><br><span class="line"><span class="string">  &quot;&quot;&quot;</span></span><br><span class="line">  r = random.uniform(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">  s = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(distribution)):</span><br><span class="line">    s += distribution[i]</span><br><span class="line">    <span class="keyword">if</span> s &gt;= r:</span><br><span class="line">      <span class="keyword">return</span> i</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">len</span>(distribution) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sample</span>(<span class="params">prediction</span>):</span><br><span class="line">  <span class="string">&quot;&quot;&quot;Turn a (column) prediction into 1-hot encoded samples.&quot;&quot;&quot;</span></span><br><span class="line">  p = np.zeros(shape=[<span class="number">1</span>, vocabulary_size], dtype=np.<span class="built_in">float</span>)</span><br><span class="line">  p[<span class="number">0</span>, sample_distribution(prediction[<span class="number">0</span>])] = <span class="number">1.0</span></span><br><span class="line">  <span class="keyword">return</span> p</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">random_distribution</span>():</span><br><span class="line">  <span class="string">&quot;&quot;&quot;Generate a random column of probabilities.&quot;&quot;&quot;</span></span><br><span class="line">  b = np.random.uniform(<span class="number">0.0</span>, <span class="number">1.0</span>, size=[<span class="number">1</span>, vocabulary_size])</span><br><span class="line">  <span class="keyword">return</span> b/np.<span class="built_in">sum</span>(b, <span class="number">1</span>)[:,<span class="literal">None</span>]</span><br></pre></td></tr></table></figure>
+<p>其中<code>logprob</code>用于计算交叉熵，<code>sample_distribution</code>用于从一个概率分别里面随机选择一个元素，<code>sample</code>在一个概率分布中随机选择一个元素，并将其转换为one-hot编码的向量。<code>random_distribution</code>可以随机生成一个概率分布。</p>
+<p>现在到了我们构建计算图的时候了，参考lstm的模型图，我们依序初始化参数并构造计算图如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">num_nodes = <span class="number">64</span></span><br><span class="line"></span><br><span class="line">graph = tf.Graph()</span><br><span class="line"><span class="keyword">with</span> graph.as_default():</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># Parameters:</span></span><br><span class="line">  <span class="comment"># Input gate: input, previous output, and bias.</span></span><br><span class="line">  ix = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  im = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  ib = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</span><br><span class="line">  <span class="comment"># Forget gate: input, previous output, and bias.</span></span><br><span class="line">  fx = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  fm = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  fb = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</span><br><span class="line">  <span class="comment"># Memory cell: input, state and bias.                             </span></span><br><span class="line">  cx = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  cm = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  cb = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</span><br><span class="line">  <span class="comment"># Output gate: input, previous output, and bias.</span></span><br><span class="line">  ox = tf.Variable(tf.truncated_normal([vocabulary_size, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  om = tf.Variable(tf.truncated_normal([num_nodes, num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  ob = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</span><br><span class="line">  <span class="comment"># Variables saving state across unrollings.</span></span><br><span class="line">  saved_output = tf.Variable(tf.zeros([batch_size, num_nodes]), trainable=<span class="literal">False</span>)</span><br><span class="line">  saved_state = tf.Variable(tf.zeros([batch_size, num_nodes]), trainable=<span class="literal">False</span>)</span><br><span class="line">  <span class="comment"># Classifier weights and biases.</span></span><br><span class="line">  w = tf.Variable(tf.truncated_normal([num_nodes, vocabulary_size], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">  b = tf.Variable(tf.zeros([vocabulary_size]))</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># Definition of the cell computation.</span></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">lstm_cell</span>(<span class="params">i, o, state</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Create a LSTM cell. See e.g.: http://arxiv.org/pdf/1402.1128v1.pdf</span></span><br><span class="line"><span class="string">    Note that in this formulation, we omit the various connections between the</span></span><br><span class="line"><span class="string">    previous state and the gates.&quot;&quot;&quot;</span></span><br><span class="line">    input_gate = tf.sigmoid(tf.matmul(i, ix) + tf.matmul(o, im) + ib)</span><br><span class="line">    forget_gate = tf.sigmoid(tf.matmul(i, fx) + tf.matmul(o, fm) + fb)</span><br><span class="line">    update = tf.matmul(i, cx) + tf.matmul(o, cm) + cb</span><br><span class="line">    state = forget_gate * state + input_gate * tf.tanh(update)</span><br><span class="line">    output_gate = tf.sigmoid(tf.matmul(i, ox) + tf.matmul(o, om) + ob)</span><br><span class="line">    <span class="keyword">return</span> output_gate * tf.tanh(state), state</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Input data.</span></span><br><span class="line">  train_data = <span class="built_in">list</span>()</span><br><span class="line">  <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_unrollings + <span class="number">1</span>):</span><br><span class="line">    train_data.append(</span><br><span class="line">      tf.placeholder(tf.float32, shape=[batch_size,vocabulary_size]))</span><br><span class="line">  train_inputs = train_data[:num_unrollings]</span><br><span class="line">  train_labels = train_data[<span class="number">1</span>:]  <span class="comment"># labels are inputs shifted by one time step.</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># Unrolled LSTM loop.</span></span><br><span class="line">  outputs = <span class="built_in">list</span>()</span><br><span class="line">  output = saved_output</span><br><span class="line">  state = saved_state</span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> train_inputs:</span><br><span class="line">    output, state = lstm_cell(i, output, state)</span><br><span class="line">    outputs.append(output)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># State saving across unrollings.</span></span><br><span class="line">  <span class="keyword">with</span> tf.control_dependencies([saved_output.assign(output),</span><br><span class="line">                                saved_state.assign(state)]):</span><br><span class="line">    <span class="comment"># Classifier.</span></span><br><span class="line">    logits = tf.nn.xw_plus_b(tf.concat(<span class="number">0</span>, outputs), w, b)</span><br><span class="line">    loss = tf.reduce_mean(</span><br><span class="line">      tf.nn.softmax_cross_entropy_with_logits(</span><br><span class="line">        logits, tf.concat(<span class="number">0</span>, train_labels)))</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Optimizer.</span></span><br><span class="line">  global_step = tf.Variable(<span class="number">0</span>)</span><br><span class="line">  learning_rate = tf.train.exponential_decay(</span><br><span class="line">    <span class="number">10.0</span>, global_step, <span class="number">5000</span>, <span class="number">0.1</span>, staircase=<span class="literal">True</span>)</span><br><span class="line">  optimizer = tf.train.GradientDescentOptimizer(learning_rate)</span><br><span class="line">  gradients, v = <span class="built_in">zip</span>(*optimizer.compute_gradients(loss))</span><br><span class="line">  gradients, _ = tf.clip_by_global_norm(gradients, <span class="number">1.25</span>)</span><br><span class="line">  optimizer = optimizer.apply_gradients(</span><br><span class="line">    <span class="built_in">zip</span>(gradients, v), global_step=global_step)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Predictions.</span></span><br><span class="line">  train_prediction = tf.nn.softmax(logits)</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># Sampling and validation eval: batch 1, no unrolling.</span></span><br><span class="line">  sample_input = tf.placeholder(tf.float32, shape=[<span class="number">1</span>, vocabulary_size])</span><br><span class="line">  saved_sample_output = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</span><br><span class="line">  saved_sample_state = tf.Variable(tf.zeros([<span class="number">1</span>, num_nodes]))</span><br><span class="line">  reset_sample_state = tf.group(</span><br><span class="line">    saved_sample_output.assign(tf.zeros([<span class="number">1</span>, num_nodes])),</span><br><span class="line">    saved_sample_state.assign(tf.zeros([<span class="number">1</span>, num_nodes])))</span><br><span class="line">  sample_output, sample_state = lstm_cell(</span><br><span class="line">    sample_input, saved_sample_output, saved_sample_state)</span><br><span class="line">  <span class="keyword">with</span> tf.control_dependencies([saved_sample_output.assign(sample_output),</span><br><span class="line">                                saved_sample_state.assign(sample_state)]):</span><br><span class="line">    sample_prediction = tf.nn.softmax(tf.nn.xw_plus_b(sample_output, w, b))</span><br></pre></td></tr></table></figure>
+<p><code>tf.control_dependencies</code>这个是用于控制执行顺序的，我们想要完成一组字符的首尾连接的计算图之后，再进行loss函数的构建。<code>saved_output.assign(output)</code>和<code>saved_state.assign(state)</code>可以将10个递归的lstm串起来，<code>tf.control_dependencies</code>保证了loss肯定在assign之后构建。这样就可以保证我们的计算图是全部递归的结构构建的。</p>
+<p>接下来是训练的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">num_steps = <span class="number">7001</span></span><br><span class="line">summary_frequency = <span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session(graph=graph) <span class="keyword">as</span> session:</span><br><span class="line">  tf.initialize_all_variables().run()</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;Initialized&#x27;</span>)</span><br><span class="line">  mean_loss = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> step <span class="keyword">in</span> <span class="built_in">range</span>(num_steps):</span><br><span class="line">    batches = train_batches.<span class="built_in">next</span>()</span><br><span class="line">    feed_dict = <span class="built_in">dict</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_unrollings + <span class="number">1</span>):</span><br><span class="line">      feed_dict[train_data[i]] = batches[i]</span><br><span class="line">    _, l, predictions, lr = session.run(</span><br><span class="line">      [optimizer, loss, train_prediction, learning_rate], feed_dict=feed_dict)</span><br><span class="line">    mean_loss += l</span><br><span class="line">    <span class="keyword">if</span> step % summary_frequency == <span class="number">0</span>:</span><br><span class="line">      <span class="keyword">if</span> step &gt; <span class="number">0</span>:</span><br><span class="line">        mean_loss = mean_loss / summary_frequency</span><br><span class="line">      <span class="comment"># The mean loss is an estimate of the loss over the last few batches.</span></span><br><span class="line">      <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">&#x27;Average loss at step %d: %f learning rate: %f&#x27;</span> % (step, mean_loss, lr))</span><br><span class="line">      mean_loss = <span class="number">0</span></span><br><span class="line">      labels = np.concatenate(<span class="built_in">list</span>(batches)[<span class="number">1</span>:])</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;Minibatch perplexity: %.2f&#x27;</span> % <span class="built_in">float</span>(</span><br><span class="line">        np.exp(logprob(predictions, labels))))</span><br><span class="line">      <span class="keyword">if</span> step % (summary_frequency * <span class="number">10</span>) == <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># Generate some samples.</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;=&#x27;</span> * <span class="number">80</span>)</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">          feed = sample(random_distribution())</span><br><span class="line">          sentence = characters(feed)[<span class="number">0</span>]</span><br><span class="line">          reset_sample_state.run()</span><br><span class="line">          <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">79</span>):</span><br><span class="line">            prediction = sample_prediction.<span class="built_in">eval</span>(&#123;sample_input: feed&#125;)</span><br><span class="line">            feed = sample(prediction)</span><br><span class="line">            sentence += characters(feed)[<span class="number">0</span>]</span><br><span class="line">          <span class="built_in">print</span>(sentence)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;=&#x27;</span> * <span class="number">80</span>)</span><br><span class="line">      <span class="comment"># Measure validation set perplexity.</span></span><br><span class="line">      reset_sample_state.run()</span><br><span class="line">      valid_logprob = <span class="number">0</span></span><br><span class="line">      <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(valid_size):</span><br><span class="line">        b = valid_batches.<span class="built_in">next</span>()</span><br><span class="line">        predictions = sample_prediction.<span class="built_in">eval</span>(&#123;sample_input: b[<span class="number">0</span>]&#125;)</span><br><span class="line">        valid_logprob = valid_logprob + logprob(predictions, b[<span class="number">1</span>])</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;Validation set perplexity: %.2f&#x27;</span> % <span class="built_in">float</span>(np.exp(</span><br><span class="line">        valid_logprob / valid_size)))</span><br></pre></td></tr></table></figure>
+<p>迭代训练过程中，将会每100个迭代计算一次训练数据的perplexity，然后打印出来。并且在1000个迭代的时候，尝试随机选择验证集中的数据进行预测，并与真实的数据进行对比计算perplexity。</p>
+<h3 id="问题1"><a class="markdownIt-Anchor" href="#问题1"></a> 问题1</h3>
+<p>现在来看我们的问题1。观察计算图构建过程，看起来是可以优化的，因为各个控制器的代码看起来很类似。试想，如果我们将所有的<code>tf.matmul(o, im) + ib</code>都抽取出来组合为一个大的矩阵之后再做乘积，然后利用矩阵乘法的规则，将乘积之后的结果分配到各个控制器的结果中是不是可以呢？下面我们就用这个思想来优化我们的模型。</p>
+<p>下面的内容，请结合<a target="_blank" rel="noopener" href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem1.ipynb">这里的代码</a>来阅读。</p>
+<p>我们只需要将权值定义代码替换为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Parameters:</span></span><br><span class="line"><span class="comment"># Input gate: input, previous output, and bias.</span></span><br><span class="line">ifcox = tf.Variable(tf.truncated_normal([vocabulary_size, <span class="number">4</span> * num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">ifcom = tf.Variable(tf.truncated_normal([num_nodes, <span class="number">4</span> * num_nodes], -<span class="number">0.1</span>, <span class="number">0.1</span>))</span><br><span class="line">ifcob = tf.Variable(tf.zeros([<span class="number">1</span>, <span class="number">4</span> * num_nodes]))</span><br></pre></td></tr></table></figure>
+<p>并将<code>lstm_cell</code>函数替换为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">lstm_cell</span>(<span class="params">i, o, state</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Create a LSTM cell. See e.g.: http://arxiv.org/pdf/1402.1128v1.pdf</span></span><br><span class="line"><span class="string">    Note that in this formulation, we omit the various connections between the</span></span><br><span class="line"><span class="string">    previous state and the gates.&quot;&quot;&quot;</span></span><br><span class="line">    all_gates = tf.matmul(i, ifcox) + tf.matmul(o, ifcom) + ifcob</span><br><span class="line">    input_gate = tf.sigmoid(all_gates[:, <span class="number">0</span>:num_nodes])</span><br><span class="line">    forget_gate = tf.sigmoid(all_gates[:, num_nodes:<span class="number">2</span>*num_nodes])</span><br><span class="line">    update = all_gates[:, <span class="number">2</span>*num_nodes:<span class="number">3</span>*num_nodes]</span><br><span class="line">    state = forget_gate * state + input_gate * tf.tanh(update)</span><br><span class="line">    output_gate = tf.sigmoid(all_gates[:, <span class="number">3</span>*num_nodes:])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> output_gate * tf.tanh(state), state</span><br></pre></td></tr></table></figure>
+<h3 id="问题2-1"><a class="markdownIt-Anchor" href="#问题2-1"></a> 问题2-1</h3>
+<p>我们在这里会尝试编写一个bi-gram的实现。我们之前是对字符进行建模的，转到bi-gram上，也就是说我们需要在一对一对的字符上进行建模。</p>
+<p>下面的内容，请结合<a target="_blank" rel="noopener" href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-1.ipynb">这里的代码</a>来阅读。</p>
+<p>首先是改写我们的工具函数（此时我们的词库大小为27*27）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">vocabulary_size_base = <span class="built_in">len</span>(string.ascii_lowercase) + <span class="number">1</span> <span class="comment"># [a-z] + &#x27; &#x27;</span></span><br><span class="line">vocabulary_size = vocabulary_size_base ** <span class="number">2</span></span><br><span class="line"></span><br><span class="line">first_letter = <span class="built_in">ord</span>(string.ascii_lowercase[<span class="number">0</span>])</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">char2id0</span>(<span class="params">char</span>):</span><br><span class="line">  <span class="keyword">if</span> char <span class="keyword">in</span> string.ascii_lowercase:</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">ord</span>(char) - first_letter + <span class="number">1</span></span><br><span class="line">  <span class="keyword">elif</span> char == <span class="string">&#x27; &#x27;</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Unexpected character: %s&#x27;</span> % char)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">char2id</span>(<span class="params">char</span>):</span><br><span class="line">  <span class="keyword">return</span> char2id0(char[<span class="number">0</span>]) * vocabulary_size_base + char2id0(char[<span class="number">1</span>])</span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">id2char0</span>(<span class="params">dictid</span>):</span><br><span class="line">  <span class="keyword">if</span> dictid &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">chr</span>(dictid + first_letter - <span class="number">1</span>)</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27; &#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">id2char</span>(<span class="params">dictid</span>):</span><br><span class="line">  <span class="keyword">return</span> id2char0(dictid//vocabulary_size_base) + id2char0(dictid%vocabulary_size_base)</span><br></pre></td></tr></table></figure>
+<p>然后我们还需要修改<code>BatchGenerator</code>来生成batch的训练数据。我们还增加了一个<code>bigramstringtonormal</code>函数来将bi-gram编码的字符串转换为一个可读的字符串。</p>
+<p>之后在训练过程中，我们需要打印预测出来的字符串，这时需要调用我们的工具函数将其转换为可读的字符串再打印出来。</p>
+<p>需要修改的代码请参考<a target="_blank" rel="noopener" href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-1.ipynb">这里的代码</a>。</p>
+<h3 id="问题2-2"><a class="markdownIt-Anchor" href="#问题2-2"></a> 问题2-2</h3>
+<p>我们将会引入embedding来节省内存。</p>
+<p>需要修改的代码请参考<a target="_blank" rel="noopener" href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-2.ipynb">这里的代码</a>。</p>
+<p>主要的思路是，生成batch训练数据时，无须进行one-hot编码了，直接生成一个二维表即可。<code>ifcox</code>权值矩阵在这里充当了embedding的角色。然后在构造lstm单元的时候从embedding查询得出乘积后的值，而无须再进行乘积处理。在最后计算loss的时候，将<code>softmax_cross_entropy_with_logits</code>转换为调用它的稀疏矩阵版本<code>sparse_softmax_cross_entropy_with_logits</code>。</p>
+<h3 id="问题2-3"><a class="markdownIt-Anchor" href="#问题2-3"></a> 问题2-3</h3>
+<p>我们将会引入dropout来提升性能。</p>
+<p>需要修改的代码请参考<a target="_blank" rel="noopener" href="https://github.com/gmlove/dl-workshop-rnn-lstm/blob/master/6_lstm-problem2-3.ipynb">这里的代码</a>。</p>
+<p>需要注意的是向lstm单元添加dropout的时候，只能加到input数据的处理上面，而不能加到递归连接的处理单元上面。</p>
+<h3 id="问题3"><a class="markdownIt-Anchor" href="#问题3"></a> 问题3</h3>
+<p>暂无</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>到这里我们就完成了RNN和LSTM的学习了。结合NN CNN可以看到，深度学习的基础其实很简单，就是线性模型加激活函数，常用的深度学习模型其实就是在这样的基础模型上面进行结构的设计和优化。这跟玩乐高类似，由简单的基础的模块进行组合，就可以得到非常复杂的模型，最后的效果是惊人的。</p>
+<p>我们接触过的基础的模型有：</p>
+<p>线性单元： y=WX+b<br />
+激活函数： sigoid tanh relu softmax(一般用作输出层)<br />
+优化手段：normalization, randomization, l2 regularization, dropout, embedding, gradient clipping</p>
+<p>本文基于google在udacity上面关于深度学习的<a target="_blank" rel="noopener" href="https://classroom.udacity.com/courses/ud730">课程</a>而来。主要参考资料来自于斯坦福大学的自然语言处理课程<a target="_blank" rel="noopener" href="http://cs224d.stanford.edu/syllabus.html">cs224d</a>。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2016/12/02/dl-workshop-rnn-and-lstm/" rel="bookmark">RNN和LSTM从理论到实践一：词向量</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2017/01/16/dl-workshop-massive-network-tips/" rel="bookmark">大规模Tensorflow网络的一些技巧</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2017/03/01/recognize-house-number/" rel="bookmark">识别门牌号的移动应用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/" rel="bookmark">理解Conv2d及其梯度的计算过程</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2017/06/21/dive-into-gan/" rel="bookmark">深入探索生成对抗网络（一）</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/tensorflow/" rel="tag"><i class="fa fa-tag"></i> tensorflow</a>
+              <a href="/tags/ai/" rel="tag"><i class="fa fa-tag"></i> AI</a>
+              <a href="/tags/machine-learning/" rel="tag"><i class="fa fa-tag"></i> Machine Learning</a>
+              <a href="/tags/rnn/" rel="tag"><i class="fa fa-tag"></i> RNN</a>
+              <a href="/tags/lstm/" rel="tag"><i class="fa fa-tag"></i> LSTM</a>
+              <a href="/tags/deep-learning/" rel="tag"><i class="fa fa-tag"></i> Deep Learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/05/let-machine-play-games/" rel="prev" title="让机器自己玩游戏">
+      <i class="fa fa-chevron-left"></i> 让机器自己玩游戏
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/16/dl-workshop-summary/" rel="next" title="深度学习Workshop总结">
+      深度学习Workshop总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text"> 我们的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rnn"><span class="nav-number">2.</span> <span class="nav-text"> RNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text"> 反向传播的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rnn%E7%9A%84%E6%89%A9%E5%B1%95"><span class="nav-number">2.2.</span> <span class="nav-text"> RNN的扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lstm"><span class="nav-number">3.</span> <span class="nav-text"> LSTM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gated-recurrent-units"><span class="nav-number">3.1.</span> <span class="nav-text"> Gated Recurrent Units</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lstm-units"><span class="nav-number">3.2.</span> <span class="nav-text"> LSTM Units</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lstm%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text"> LSTM的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E4%B8%80%E4%B8%AArnn%E5%92%8Clstm%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text"> 训练一个RNN和LSTM的模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81%E4%B8%AD%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text"> 示例代码中的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%981"><span class="nav-number">4.2.</span> <span class="nav-text"> 问题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%982-1"><span class="nav-number">4.3.</span> <span class="nav-text"> 问题2-1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%982-2"><span class="nav-number">4.4.</span> <span class="nav-text"> 问题2-2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%982-3"><span class="nav-number">4.5.</span> <span class="nav-text"> 问题2-3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%983"><span class="nav-number">4.6.</span> <span class="nav-text"> 问题3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '343bcff02b557960bb61fb777e904b73',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第二部分。第一部分在这里 上一篇中介绍了GAN的历史及发展，详细研究了GAN的模型和思想，还用tensorflow做了一个简单的实现。这一部分我们将看看GAN模型在近两年取得的进步以及未来可能的发展方向。同时，我们还会在上一次实现过的GAN例子上面，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入探索生成对抗网络（二）">
+<meta property="og:url" content="http://brightliao.com/2017/06/26/dive-into-gan-continued/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第二部分。第一部分在这里 上一篇中介绍了GAN的历史及发展，详细研究了GAN的模型和思想，还用tensorflow做了一个简单的实现。这一部分我们将看看GAN模型在近两年取得的进步以及未来可能的发展方向。同时，我们还会在上一次实现过的GAN例子上面，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/lp-gan-training.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/lp-gan-generating.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/lp-gan-comparison.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/dc-gan-structure.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/dc-gan-visualize-discriminator.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/dc-gan-with-window-removed.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image-structure.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/skip-thought-vectors-structure.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image-algo.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image-gan-int.png">
+<meta property="article:published_time" content="2017-06-26T11:19:38.000Z">
+<meta property="article:modified_time" content="2017-06-28T03:22:13.000Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="tensorflow">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="GAN">
+<meta property="article:tag" content="生成对抗网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2017/2017-06-26-dive-into-gan-continued/lp-gan-training.png">
+
+<link rel="canonical" href="http://brightliao.com/2017/06/26/dive-into-gan-continued/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深入探索生成对抗网络（二） | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/06/26/dive-into-gan-continued/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入探索生成对抗网络（二）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-26 19:19:38" itemprop="dateCreated datePublished" datetime="2017-06-26T19:19:38+08:00">2017-06-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2017-06-28 11:22:13" itemprop="dateModified" datetime="2017-06-28T11:22:13+08:00">2017-06-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/06/26/dive-into-gan-continued/" class="post-meta-item leancloud_visitors" data-flag-title="深入探索生成对抗网络（二）" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>19 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第二部分。第一部分在<a href="../21/dive-into-gan/">这里</a></p>
+<p>上一篇中介绍了GAN的历史及发展，详细研究了GAN的模型和思想，还用tensorflow做了一个简单的实现。这一部分我们将看看GAN模型在近两年取得的进步以及未来可能的发展方向。同时，我们还会在上一次实现过的GAN例子上面，做一些增强，让GAN可以根据我们的需要来生成图像。</p>
+<span id="more"></span>
+<h2 id="lp-gan与dc-gan"><a class="markdownIt-Anchor" href="#lp-gan与dc-gan"></a> LP GAN与DC GAN</h2>
+<p>自GAN提出以来，对于它的研究就从未中断过，有另外两篇比较有代表性的论文，这两篇论文里面描述的模型基于GAN的基础模型而来，但是都做了很大的改进。这两篇论文提出的模型就是LP GAN和DC GAN，接下来我们一起来看看它们都有那些改进。</p>
+<h3 id="什么是lp-gan"><a class="markdownIt-Anchor" href="#什么是lp-gan"></a> 什么是LP GAN</h3>
+<p>LP GAN的全称是 Laplacian Pyramid of Adversarial Networks 也就是拉普拉斯金字塔对抗网络。它发布于2015年6月，是以 facebook 的AI研究团队为主发布的。论文里面描述了一种递进的结构，看起来很像是金字塔，所以名字里面就有金字塔。使用这个模型， 我们可以用于生成高清晰度的图像。</p>
+<h3 id="lp-gan训练过程"><a class="markdownIt-Anchor" href="#lp-gan训练过程"></a> LP GAN训练过程</h3>
+<p>下面的图像描述了 LP GAN 在训练过程中的结构图。</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/lp-gan-training.png" alt="LP GAN Training" /></p>
+<p>我们可以看到这个模型采用了三个类似的结构，并且他们首尾相连。最后再连接到一个基础GAN结构上。在训练过程中的数据流向采用箭头标示出来。</p>
+<p>先观察左边的第一个结构，我们可以看到他的工作方式如下：</p>
+<ul>
+<li>原图I0，经过一个降采样，将长和宽都缩小到原来的1/2，得到I1</li>
+<li>I1经过一个上采样恢复到原来的长和宽得到l0</li>
+<li>将I0和l0做矩阵差之后得到h0</li>
+<li>h0和l0一起输入D0判别器，判别器此时应当输出为1，表示是真实的图像</li>
+<li>同时，将l0和噪声向量z0一起输入生成器G0，得到h~0</li>
+<li>h~0和l0一起输入D0判别器，判别器此时应当输出为0，表示是生成的图像</li>
+</ul>
+<p>上面的工作方式再循环两次，最后得到的I3和噪声z3一起作为最后一个结构的输入进行训练。</p>
+<p>需要注意的是，这个模型中的每一层金字塔都是单独训练的。只是最后生成图像的时候，会联合一起工作。</p>
+<p>G3和D3都很好理解，然而这里的G0学到了什么呢（由于G1和G2是和G0一致的结构，所以学习到的东西也是一致的）？通过我们上面对训练过程的梳理和分析可以知道，事实上，在G0网络足够强大的时候，h~0的分布应该会接近h0的分布，也就是说G0学到的是，如何生成一个矩阵，该矩阵的数据分布和矩阵 <code>I0 - l0</code> 数据分布一致。也就是说我们使用生成的矩阵和l0相加就应该可以得到原图。也进一步说明它和I1的上采样得到的矩阵相加即可得到原图。通过这里的分析，其实生成图像的过程就呼之欲出了。</p>
+<h3 id="lp-gan图像生成"><a class="markdownIt-Anchor" href="#lp-gan图像生成"></a> LP GAN图像生成</h3>
+<p>下面我们看看LP GAN生成图像的过程。见下图：</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/lp-gan-generating.png" alt="LP GAN Generating" /></p>
+<p>正如我们之前的分析，LP GAN的图像生成过程数据流向是和训练过程相反的。分析上面的图像，可以看到生成图像的过程如下：</p>
+<ul>
+<li>噪声向量输入到G3生成I~3</li>
+<li>将I~3上采样得到l2</li>
+<li>将l2和噪声z2一起输入G2生成h~2</li>
+<li>h<sub>2和l2求和得到I</sub>2</li>
+<li>在经过两个循环最终得到I~0，即生成的图像</li>
+</ul>
+<p>可以看到，LP GAN利用了多个GAN的结构，不停的优化图像的清晰度，也就是这样，这个模型最后能生成一个比基础GAN质量更高，更清晰的图像。</p>
+<h3 id="对比lp-gan和基础gan生成的图像"><a class="markdownIt-Anchor" href="#对比lp-gan和基础gan生成的图像"></a> 对比LP GAN和基础GAN生成的图像</h3>
+<p>以下是LP GAN生成的图像和基础GAN生成的图像的一个对比，可以看到LP GAN有效的降低了生成的图像的噪点，提升了清晰度。</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/lp-gan-comparison.png" alt="LP GAN Comparison" /></p>
+<h3 id="lp-gan的贡献"><a class="markdownIt-Anchor" href="#lp-gan的贡献"></a> LP GAN的贡献</h3>
+<p>LP GAN除了能用于生成更清晰的图片之外，他还给了我们如下两个启示：</p>
+<ul>
+<li>
+<p>有条件的生成对抗网络：</p>
+<p>噪声数据 + 构造的数据 --&gt; 与构造的数据相关的结果</p>
+</li>
+<li>
+<p>将 GAN 的学习过程变成了“序列式”</p>
+<p>学习结构 —&gt; 增加清晰度 —&gt; 进一步增加清晰度</p>
+</li>
+</ul>
+<h3 id="什么是dc-gan"><a class="markdownIt-Anchor" href="#什么是dc-gan"></a> 什么是DC GAN</h3>
+<p>接下来我们看看DC GAN。什么是DC GAN呢？DC GAN的全称是&quot;Deep Convolutional Generative Adversarial Networks&quot;。从这个名字可以看出来，这个网络很强调卷积的作用。这篇论文同样是以Facebook AI研究团队为主发布的，发布时间是2016年1月。这篇论文主要的改进是它引入了CNN在图像识别上面的研究成果，让GAN训练更稳定。同时他们还研究了如何可视化生成器和判别器，让我们可以了解到GAN到底学到了什么。同时GAN还研究了如何控制图像生成，就是如何生成想要的图片。</p>
+<h3 id="dc-gan的生成器网络结构"><a class="markdownIt-Anchor" href="#dc-gan的生成器网络结构"></a> DC GAN的生成器网络结构</h3>
+<p>下图展示了DC GAN在LSUN卧室图片数据集上面进行训练用到的生成器的网络结构图：</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/dc-gan-structure.png" alt="DC GAN Generator Structure" /></p>
+<p>可以发现这个结构基本上就是一个设计良好的卷积神经网络分类器倒过来的结构。</p>
+<p>除了这个图能反映出的部分优化之外，事实上这个网络结构所做出的改进如下：</p>
+<ul>
+<li>没有全连接层</li>
+<li>使用带步长的卷积层代替池化层</li>
+<li>使用batchnorm进行规范化</li>
+<li>在生成器中除输出层使用tanh外使均用ReLU激活函数</li>
+<li>在判别器中使用LeakyReLU</li>
+</ul>
+<p>这些优化方式都是在卷积神经网络取得的最新研究成果，都是被实践证明的非常有效的优化方式，按照这样设计的结构大大提升了GAN网络的稳定性。对比我们之前的代码里面设计的网络来看，事实上我们已经采用了大部分这里提到的优化措施。</p>
+<h3 id="可视化判别器学到的特征"><a class="markdownIt-Anchor" href="#可视化判别器学到的特征"></a> 可视化判别器学到的特征</h3>
+<p>那么关于GAN的可视化又是如何进行的呢？</p>
+<p>我们先来看判别器的可视化。大家应该还记得之前讲过的 Neural Transfer 的内容吧？由于判别器也是一个典型的卷积神经网络，所以我们可以采用同样的方法来进行可视化，就是 guided back propagation：即选择某一些特定的层或者神经元来生成原图。然后观察原图，从侧面来看选定的那一层或者那一个神经元所学到的东西。</p>
+<p>在经过研究之后，可以发现，判别器学到了和分类器中的卷积神经网络类似的层级的结构。如图：</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/dc-gan-visualize-discriminator.png" alt="DC GAN Visualized Discriminator" /></p>
+<h3 id="可视化生成器学到的特征"><a class="markdownIt-Anchor" href="#可视化生成器学到的特征"></a> 可视化生成器学到的特征</h3>
+<p>同时作者的研究团队还做过试验来研究生成器学到的东西。事实上我们可以训练得到一些有趣的过滤器。比如我们可以训练一个过滤器，这个过滤器可以用来去掉生成的卧室图像里面的窗户。训练完成之后，在z向量上加一个全连接层，然后输入特定标注的数据，让生成的图像趋向于无窗户，这样就可以得到一个过滤器了。</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/dc-gan-with-window-removed.png" alt="DC GAN Generated image with window removed" /></p>
+<p>如上图所示，第一排的图像是带窗户的，当应用训练好的去掉窗户的过滤器之后，得到的图像就如第二排所示了。可以看到，原本是窗户的地方，生成器采用其他的元素去替代了，比如门。</p>
+<p>研究团队们还进一步研究了z向量的特点，发现z向量其实是可以进行类似词向量一样的向量运算。比如下图中，找到一个能生成“戴眼镜的男士”图像的z向量z1，再寻找一个“无眼镜的男士”的z向量z2和一个“无眼镜的女士”的z向量z3，当进行<code>z1-z2+z3</code>运算之后得到的z向量可以生成“带眼镜的女士”的图像。</p>
+<h3 id="dc-gan的贡献"><a class="markdownIt-Anchor" href="#dc-gan的贡献"></a> DC GAN的贡献</h3>
+<p>总结起来DC GAN主要的贡献如下：</p>
+<ul>
+<li>优化网络超参数</li>
+<li>对网络学习到的特征进行研究和可视化</li>
+<li>Generator网络进行再训练，可以在生成的图像里面去掉某些物体</li>
+<li>Z向量的进一步研究，发现可以进行类似对词向量的做过的向量加减：<code>vector('King') - vector('Man') + vector('Woman') = vector('Queen')</code></li>
+</ul>
+<h2 id="根据文本生成图像"><a class="markdownIt-Anchor" href="#根据文本生成图像"></a> 根据文本生成图像</h2>
+<p>下面我们来看另一个有意思的问题，这个问题同样具有很强的实用价值。那就是根据文本生成图像。当然要实现一个一般的图像生成任务还是相当有挑战性的。这里的图像仍局限于训练数据的图像类型，比如某种花或者某种鸟。对于更一般的像是ImageNet的数据集，生成的图像质量还是会比较差的。</p>
+<h3 id="文本生成图像模型"><a class="markdownIt-Anchor" href="#文本生成图像模型"></a> 文本生成图像模型</h3>
+<p>在去年6月份的时候，以密歇根大学为主的一个研究团队研究了这个主题，他们发表的论文题目为&quot;Generative Adversarial Text to Image Synthesis&quot;，即使用生成对抗网络来进行文本到图像的合成。</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image.png" alt="Text to Image" /></p>
+<p>从上图中可以看到我们可以从左边的文本描述来生成右边的关于鸟的图像。生成的图像和文本描述里面的鸟的胸，冠还有羽翼颜色等都能较好的匹配起来。</p>
+<p>我们直接来看一下他们用到的模型吧。</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image-structure.png" alt="Structure of Text to Image model" /></p>
+<p>可以看到这个模型充分利用了有条件的GAN图像生成技术。事先将文本转换为一个向量，然后将该向量和噪声向量z一起输入生成器进行图像生成，同时在判别器的输出层的前一层，加入文本向量，之后经过最后一层输出结果。通过这样的方式，我们就可以生成与文本描述的相一致的图像了。</p>
+<h3 id="句子向量模型"><a class="markdownIt-Anchor" href="#句子向量模型"></a> 句子向量模型</h3>
+<p>上面的模型中提到了文本向量，那么这个向量是如何计算出来的呢？事实上我们同样可以采用神经网络进行训练得到一个文本向量模型，让这个模型能根据文本来生成文本向量。这个模型该怎么来实现呢？这里提供一种名为&quot;Skip-Thought Vectors&quot;的模型。采用这个模型需要对两个模型进行分别训练。事实上论文里面还提到一种端到端的模型，但是那个模型训练时间会更长。在这里我们暂时不提那个模型，有兴趣的同学们可以自行参考论文。</p>
+<p>Skip-Thought Vectors 模型的结构如下：</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/skip-thought-vectors-structure.png" alt="Skip-Thought Vectors Structure" /></p>
+<p>这个模型很简单，它的原理就是，使用rnn将句子映射为一个向量，然后尝试使用这个向量来预测与该句子想邻的句子。比如，我们有句子序列s(i-1) s(i)和s(i+1)，将s(i)经过rnn之后编码为一个向量，使用这个向量来分别生成句子s(i-1)和s(i+1)。在训练足够之后，我们就可以根据一个句子的文本得到句子向量了。</p>
+<p>分析过这个模型之后，大家是不是觉得似曾相识？我想应该有人已经猜到了，这个模型不就是跟我们之前讲过的Skip-Gram词向量模型一样的思路吗？是的，答案就是这样。可以看到，使用类比的方法，我们可以创造新的模型用于解决新的问题。</p>
+<h3 id="算法和数据"><a class="markdownIt-Anchor" href="#算法和数据"></a> 算法和数据</h3>
+<p>文本转图像模型还有一个值得一提的是它采用的训练算法和数据，训练算法如下：</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image-algo.png" alt="Training algo of Text to Image Model" /></p>
+<p>注意到算法的第四步，在这里编码了一个不匹配的文本向量，这个向量将同时作为训练数据输入判别器进行训练，如第八步所示。同时需要注意在第10步时，将错误的文本向量得到的loss和生成的图片得到的loss求平均再与正确图片的loss相加得到最后的loss。</p>
+<p>与普通的GAN不同的是，这里其实使用了三种数据：</p>
+<ul>
+<li>真句子向量+真图 —&gt; 真</li>
+<li>假句子向量+真图 —&gt; 假</li>
+<li>真句子向量+假图 —&gt; 假</li>
+</ul>
+<p>其中第二类数据是我们自己构造的。构造这些数据将有效的增加我们的训练数据集。作者将这里的优化方式叫做&quot;Matching-aware&quot;，即感知匹配的GAN模型，并将这个模型称为&quot;GAN-CLS&quot;。这种数据处理技巧，大家可以注意一下，如果以后遇到类似的问题，我们也可以尝试。</p>
+<p>除了感知匹配的优化方式之外，作者还提到一种插值的数据优化方式。其想法是，由于句子向量也是可以进行向量运算的，那么我们可以通过句子向量来合成训练数据里面没有的句子向量，然后使用这些合成的向量进行训练。使用这种方式同样能增加我们的训练数据。使用插值方式时，我们要优化的目标是：</p>
+<p><img data-src="/attaches/2017/2017-06-26-dive-into-gan-continued/text-to-image-gan-int.png" alt="Text to Image GAN-INT" /></p>
+<p>当我们构造好这些插值数据之后，判别器能否正常工作呢？事实上，判别器具有判别图像和文本是否匹配的能力，所以整个模型是可以按照预期的效果进行训练的。</p>
+<h2 id="代码分析和coding"><a class="markdownIt-Anchor" href="#代码分析和coding"></a> 代码分析和Coding</h2>
+<p>下面我们来分析一下文本转图像模型的代码，并尝试在我们之前的代码里面加入代码，使得生成器可以有条件生成的生成我们想要的数据，我们还将加入感知匹配的优化方式。</p>
+<h3 id="文本转图像模型的代码分析"><a class="markdownIt-Anchor" href="#文本转图像模型的代码分析"></a> 文本转图像模型的代码分析</h3>
+<p>这里我们来看一下一个GitHub上面的开源项目，这个项目实现了Text to Image模型，我们来分析一下该项目里面的源代码。代码地址在<a target="_blank" rel="noopener" href="https://github.com/paarthneekhara/text-to-image">这里</a>。该代码使用tensorflow实现，使用<code>flowers</code>数据集和<code>mscoco</code>数据集进行训练。在训练开始之前，需要使用一个脚本来生成文本向量，这个脚本将调用已经训练好的Skip-Thought Vectors 模型来将文本转换为文本向量。</p>
+<p>我们主要关注一下模型相关代码。打开<code>model.py</code>，并定位到<code>build_model</code>函数。这里的代码还是比较清晰易读的，我们可以看到：</p>
+<ul>
+<li>分别定义了用于存储真实图片和错误图片以及真实的文本三个占位tensor。这里的模型实现的是<code>GAN-CLS</code>模型，所以定义了错误图片，这里的错误图片和真实文本之间将形成一个数据组输入到判别器进行训练。</li>
+<li>定义了一个噪声占位向量z，并使用z和生成器一起生成图像</li>
+<li>将三类（真实、错误、生成）数据输入到判别器，得到相应的logits输出</li>
+<li>定义对应的生成器和判别器的loss函数</li>
+<li>将定义的tensor保存到相关字典里面然后返回</li>
+</ul>
+<p>我们再看一下生成器网络和判别器网络，定位到函数<code>generator</code>，可以看到：</p>
+<ul>
+<li>文本向量经过一层全连接层之后和噪声向量组合</li>
+<li>组合之后经过一个全连接层转换为转置卷积需要的维度，再转换为一个4维数据</li>
+<li>经过4层转置卷积</li>
+<li>用tanh作为激活函数输出</li>
+</ul>
+<p>定位到函数<code>discriminator</code>，可以看到：</p>
+<ul>
+<li>图像数据经过四个卷积层</li>
+<li>文本向量经过一个全连接层，再进行维度变换，变换为和卷积层输出一样的维度，再和卷积层输出叠加</li>
+<li>再经过一个卷积层和一个全连接层</li>
+<li>用sigmoid作为激活函数输出</li>
+</ul>
+<p>再打开<code>train.py</code>，我们观察训练过程，训练时，分别对判别器和生成器构造了优化器，分别优化不同的变量，这个过程与我们之前实现的GAN是一致的。迭代训练的过程也与我们之前实现的基本一致。</p>
+<p>有兴趣的同学可以仔细研究一下这个实现，试试运行或者进行调优。相信对动手能力会有较大的提升。</p>
+<h3 id="条件gan实现"><a class="markdownIt-Anchor" href="#条件gan实现"></a> 条件GAN实现</h3>
+<p>下面我们来看如何在我们的模型里面增加功能，使生成器能有条件地进行数据生成。并且我们想要使用感知匹配的优化方式。完成这个功能之后，我们将能指定GAN生成什么数字。</p>
+<p>打开我们之前实现的代码文件<code>main_test.py</code>，我们还是先从测试的角度来分析问题。首先我们要解决的问题是引入条件输入，修改测试<code>test_generate</code>为如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_generate</span>(<span class="params">self</span>):</span><br><span class="line">    model = GANModel()</span><br><span class="line">    <span class="keyword">with</span> self.test_session() <span class="keyword">as</span> session:</span><br><span class="line">        session.run(tf.global_variables_initializer())</span><br><span class="line">        noise = np.random.normal(size=(<span class="number">1</span>, <span class="number">100</span>))</span><br><span class="line">        condition = np.random.randint(<span class="number">0</span>, <span class="number">10</span>, size=(<span class="number">1</span>, ))</span><br><span class="line">        generated = session.run(model.generated_image, feed_dict=&#123;</span><br><span class="line">            model.noise_input: noise,</span><br><span class="line">            model.right_condition_input: condition</span><br><span class="line">        &#125;)</span><br><span class="line">        self.assertTupleEqual(generated.shape, (<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>事实上我们只修改了两行代码，一行是生成condition数据，另一行是将生成的数据喂入模型，期望能根据这些数据生成图像。这里我们生成的数据为0-9的整数，表示数据标签，由于噪声向量长度为1，我们这里就只生成一个数据。</p>
+<p>在实现代码中，我们需要修改的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_normalize_input</span>(<span class="params">input_data</span>):</span><br><span class="line">    <span class="keyword">return</span> tf.one_hot(input_data, depth=<span class="number">10</span>, dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_build_generator</span>(<span class="params">input_data, condition_input, name=<span class="string">&#x27;generator&#x27;</span>, reuse_variables=<span class="literal">False</span></span>):</span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(name, reuse=reuse_variables):</span><br><span class="line">        condition_input = _normalize_input(condition_input)</span><br><span class="line">        condition_input = layers.dense(condition_input, <span class="number">200</span>, activation=tf.nn.relu)</span><br><span class="line">        net = tf.concat([input_data, condition_input], <span class="number">1</span>)</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GANModel</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, noise_len=<span class="number">100</span>, learning_rate=<span class="number">0.0002</span>, save_path=<span class="string">&#x27;saved&#x27;</span></span>):</span><br><span class="line">        ...</span><br><span class="line">        self.noise_input = tf.placeholder(tf.float32, shape=(<span class="literal">None</span>, self.noise_len))</span><br><span class="line">        self.right_condition_input = tf.placeholder(tf.int32, shape=(<span class="literal">None</span>, ))</span><br><span class="line"></span><br><span class="line">        self.generated_image = _build_generator(self.noise_input, self.right_condition_input)</span><br><span class="line">        ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>首先加入<code>right_condition_input</code>的实例变量声明并将其初始化为一个占位向量，然后将其传入函数<code>_build_generator</code>。在<code>_build_generator</code>函数中，我们需要先将条件向量进行正规化，然后在其上构造一个全连接层，全连接层的输出单元我们定义为200，这个值可以根据需要进行调整，这里我们设置为200，即噪声向量的两倍，需要注意的是这里的值不能太小，否则将没法有效的影响到生成的图像，也就是难以生成条件所限制的图像。之后再将变换之后的条件向量和噪声向量进行组合输入到下一个全连接层。</p>
+<p>到这里我们的第一个测试应该可以通过了。</p>
+<p>我们要实现的第二个功能是判别器网络。由于我们要实现匹配感知，所以这里涉及到真实的条件和错误的条件，我们先为真实的条件建立测试如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_discriminate_real_with_right_condition</span>(<span class="params">self</span>):</span><br><span class="line">    model = GANModel()</span><br><span class="line">    images = np.random.normal(size=(<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>))</span><br><span class="line">    condition = np.random.randint(<span class="number">0</span>, <span class="number">10</span>, size=(<span class="number">1</span>, ))</span><br><span class="line">    <span class="keyword">with</span> self.test_session() <span class="keyword">as</span> session:</span><br><span class="line">        session.run(tf.global_variables_initializer())</span><br><span class="line">        discriminate_logits = session.run(model.discriminated_real_right_logits, feed_dict=&#123;</span><br><span class="line">            model.discriminator_input: images,</span><br><span class="line">            model.right_condition_input: condition</span><br><span class="line">        &#125;)</span><br><span class="line">        self.assertTupleEqual(discriminate_logits.shape, (<span class="number">1</span>, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>为了更好的表示其意义，我们期望模型输出重命名为<code>discriminated_real_right_logits</code>。为了让测试能通过，需要修改的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_build_discriminator</span>(<span class="params">input_data, condition_input, reuse_variables=<span class="literal">False</span>, name=<span class="string">&#x27;discriminator&#x27;</span></span>):</span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(name, reuse=reuse_variables):</span><br><span class="line">        condition_input = _normalize_input(condition_input)</span><br><span class="line">        net = layers.conv2d(input_data, <span class="number">16</span>, [<span class="number">3</span>, <span class="number">3</span>], strides=[<span class="number">2</span>, <span class="number">2</span>], activation=tf.nn.relu, padding=<span class="string">&#x27;same&#x27;</span>, name=<span class="string">&#x27;conv2d_1&#x27;</span>)  <span class="comment"># 14x14</span></span><br><span class="line">        net = layers.batch_normalization(net, momentum=<span class="number">0.9</span>, training=<span class="literal">True</span>)</span><br><span class="line">        net = layers.conv2d(net, <span class="number">32</span>, [<span class="number">3</span>, <span class="number">3</span>], strides=[<span class="number">2</span>, <span class="number">2</span>], activation=tf.nn.relu, padding=<span class="string">&#x27;same&#x27;</span>, name=<span class="string">&#x27;conv2d_2&#x27;</span>)  <span class="comment"># 7x7</span></span><br><span class="line">        net = layers.batch_normalization(net, momentum=<span class="number">0.9</span>, training=<span class="literal">True</span>)</span><br><span class="line">        net = layers.conv2d(net, <span class="number">64</span>, [<span class="number">3</span>, <span class="number">3</span>], strides=[<span class="number">2</span>, <span class="number">2</span>], activation=tf.nn.relu, padding=<span class="string">&#x27;same&#x27;</span>, name=<span class="string">&#x27;conv2d_3&#x27;</span>)  <span class="comment"># 4x4</span></span><br><span class="line">        condition_input = layers.dense(condition_input, <span class="number">16</span>)</span><br><span class="line">        condition_input = tf.reshape(condition_input, [-<span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">1</span>])</span><br><span class="line">        net = tf.concat([net, condition_input], <span class="number">3</span>)</span><br><span class="line">        net = layers.conv2d(net, <span class="number">128</span>, [<span class="number">3</span>, <span class="number">3</span>], strides=[<span class="number">2</span>, <span class="number">2</span>], activation=tf.nn.relu, padding=<span class="string">&#x27;same&#x27;</span>, name=<span class="string">&#x27;conv2d_4&#x27;</span>)  <span class="comment"># 2x2</span></span><br><span class="line">        net = contrib_layers.flatten(net)</span><br><span class="line">        net = layers.dense(net, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> net</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GANModel</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, noise_len=<span class="number">100</span>, learning_rate=<span class="number">0.0002</span>, save_path=<span class="string">&#x27;saved&#x27;</span></span>):</span><br><span class="line">        ...</span><br><span class="line">        self.discriminator_input = tf.placeholder(tf.float32, shape=(<span class="literal">None</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>))</span><br><span class="line">        self.discriminated_real_right_logits = _build_discriminator(</span><br><span class="line">            self.discriminator_input, self.right_condition_input)</span><br></pre></td></tr></table></figure>
+<p>与之前分析过的文本转图像模型一样，我们将条件输入进行变换之后，和倒数第二个卷积层的结果进行叠加。这里需要注意分析一下维度，以便能正确的进行叠加。修改完这里的代码之后，我们可以运行测试看看我们的代码是否能工作。</p>
+<p>下一步是要增加错误条件的判别器代码：</p>
+<p>增加测试如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_discriminate_real_with_wrong_condition</span>(<span class="params">self</span>):</span><br><span class="line">    model = GANModel()</span><br><span class="line">    images = np.random.normal(size=(<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>))</span><br><span class="line">    condition = np.random.randint(<span class="number">0</span>, <span class="number">10</span>, size=(<span class="number">1</span>, ))</span><br><span class="line">    <span class="keyword">with</span> self.test_session() <span class="keyword">as</span> session:</span><br><span class="line">        session.run(tf.global_variables_initializer())</span><br><span class="line">        discriminate_logits = session.run(model.discriminated_real_wrong_logits, feed_dict=&#123;</span><br><span class="line">            model.discriminator_input: images,</span><br><span class="line">            model.wrong_condition_input: condition</span><br><span class="line">        &#125;)</span><br><span class="line">        self.assertTupleEqual(discriminate_logits.shape, (<span class="number">1</span>, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>这里的测试代码和前一个测试用例基本一致，只是我们为模型设计了两个新的实例变量，分别用来存储错误条件输入和相应的logits输出。</p>
+<p>这里的实现就比较容易了，直接调用之前实现的<code>_build_discriminator</code>来生成判别器就可以了。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">GANModel</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, noise_len=<span class="number">100</span>, learning_rate=<span class="number">0.0002</span>, save_path=<span class="string">&#x27;saved&#x27;</span></span>):</span><br><span class="line">        ...</span><br><span class="line">        self.wrong_condition_input = tf.placeholder(tf.int32, shape=(<span class="literal">None</span>, ))</span><br><span class="line">        ...</span><br><span class="line">        self.discriminated_real_wrong_logits = _build_discriminator(</span><br><span class="line">            self.discriminator_input, self.wrong_condition_input, reuse_variables=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>采用同样的做法，我们可以为生成的图片建立判别器输出。这里略过代码部分。</p>
+<p>在模型定义好之后，我们就来看如何训练，我们可以同样采用先修改测试代码的方法来完成我们的功能。这里就简要分析一下我们需要修改的功能。</p>
+<ul>
+<li><code>GANDataset</code>类需要修改接口<code>next_batch</code>以便能同时输出真实的image，真实的条件标签和错误的条件标签</li>
+<li>将条件标签数据输入到网络进行训练</li>
+<li>修改loss函数让它可以计算错误标签的loss</li>
+<li>修改我们需要在tensorboard里面显示的数据（比较重要的是p_real，p_fake，p_wrong，即各种数据集计算得到的概率，可以有效帮助我们调试模型）</li>
+<li>增加summary，来根据条件生成图像。</li>
+</ul>
+<p>在完成代码之后，训练到第3000个step的时候，我们就将能从tensorboard上面看到根据输入条件生成的图片了。但是在5000 step之后，生成的图像会逐渐趋于一致，这表明模型已经有一定的过拟合出现了。大家可以自己动手去继续优化这个模型，加入其他的措施来防止过拟合。</p>
+<p>完整的代码请参考<a target="_blank" rel="noopener" href="https://github.com/gmlove/leifeng_course/tree/conditional-gan/week9">这里</a>。完整的代码中还包含了模型的存储和恢复功能，以及一个小的脚本用于读取模型生成图像。</p>
+<h2 id="gan的最新研究及未来"><a class="markdownIt-Anchor" href="#gan的最新研究及未来"></a> GAN的最新研究及未来</h2>
+<p>在上面的分享中，我们研究了GAN的历史和发展，以及几个重要的GAN模型，也深入到代码实现去体验了这个模型的效果。那么近期GAN又有什么新发展呢？我们近期还发现了如下这些论文逐渐发布出来：</p>
+<ul>
+<li>Deep Predictive Coding Networks for Video Prediction and Unsupervised Learning</li>
+<li>Learning Features by Watching Objects Move</li>
+<li>Adversarial-NMT</li>
+<li>Supervision via Competition: Robot Adversaries for Learning Tasks</li>
+</ul>
+<p>第一篇和第二篇论文是关于视频预测的，视频预测也同样是一种生成模型，他们采用了另外的思路去看待如何生成图像。第三篇是微软和中科院一起发布的论文，将对抗的思想引入到了神经翻译模型中去。第四篇论文是google这个月刚发布的，将对抗引入到机械手的抓取学习中去。</p>
+<p>从这些激动人心的进步中我们可以看到对抗模型的潜力很大，将来究竟会发展成什么样，我们拭目以待。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总结起来我们分享了下面这些主题：</p>
+<ul>
+<li>什么是生成对抗网络（GAN）</li>
+<li>GAN的提出和详解</li>
+<li>TensorFlow API与源代码分析</li>
+<li>GAN的实现 （Live coding）</li>
+<li>LP GAN与DC GAN</li>
+<li>根据文本生成图像</li>
+<li>文本到图像的模型代码分析</li>
+<li>GAN的最新研究及未来</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2017/06/21/dive-into-gan/" rel="bookmark">深入探索生成对抗网络（一）</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2016/12/02/dl-workshop-rnn-and-lstm/" rel="bookmark">RNN和LSTM从理论到实践一：词向量</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2016/12/11/dl-workshop-rnn-and-lstm-1/" rel="bookmark">RNN和LSTM从理论到实践二：RNN和LSTM模型</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2017/01/16/dl-workshop-massive-network-tips/" rel="bookmark">大规模Tensorflow网络的一些技巧</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2017/03/01/recognize-house-number/" rel="bookmark">识别门牌号的移动应用</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/tensorflow/" rel="tag"><i class="fa fa-tag"></i> tensorflow</a>
+              <a href="/tags/ai/" rel="tag"><i class="fa fa-tag"></i> AI</a>
+              <a href="/tags/machine-learning/" rel="tag"><i class="fa fa-tag"></i> Machine Learning</a>
+              <a href="/tags/deep-learning/" rel="tag"><i class="fa fa-tag"></i> Deep Learning</a>
+              <a href="/tags/gan/" rel="tag"><i class="fa fa-tag"></i> GAN</a>
+              <a href="/tags/%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 生成对抗网络</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/21/dive-into-gan/" rel="prev" title="深入探索生成对抗网络（一）">
+      <i class="fa fa-chevron-left"></i> 深入探索生成对抗网络（一）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/10/24/local-openshift-cluster-installation-guide/" rel="next" title="本地搭建OpenShift集群指南">
+      本地搭建OpenShift集群指南 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lp-gan%E4%B8%8Edc-gan"><span class="nav-number">1.</span> <span class="nav-text"> LP GAN与DC GAN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFlp-gan"><span class="nav-number">1.1.</span> <span class="nav-text"> 什么是LP GAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lp-gan%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text"> LP GAN训练过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lp-gan%E5%9B%BE%E5%83%8F%E7%94%9F%E6%88%90"><span class="nav-number">1.3.</span> <span class="nav-text"> LP GAN图像生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94lp-gan%E5%92%8C%E5%9F%BA%E7%A1%80gan%E7%94%9F%E6%88%90%E7%9A%84%E5%9B%BE%E5%83%8F"><span class="nav-number">1.4.</span> <span class="nav-text"> 对比LP GAN和基础GAN生成的图像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lp-gan%E7%9A%84%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.5.</span> <span class="nav-text"> LP GAN的贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFdc-gan"><span class="nav-number">1.6.</span> <span class="nav-text"> 什么是DC GAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dc-gan%E7%9A%84%E7%94%9F%E6%88%90%E5%99%A8%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">1.7.</span> <span class="nav-text"> DC GAN的生成器网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E5%88%A4%E5%88%AB%E5%99%A8%E5%AD%A6%E5%88%B0%E7%9A%84%E7%89%B9%E5%BE%81"><span class="nav-number">1.8.</span> <span class="nav-text"> 可视化判别器学到的特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E7%94%9F%E6%88%90%E5%99%A8%E5%AD%A6%E5%88%B0%E7%9A%84%E7%89%B9%E5%BE%81"><span class="nav-number">1.9.</span> <span class="nav-text"> 可视化生成器学到的特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dc-gan%E7%9A%84%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.10.</span> <span class="nav-text"> DC GAN的贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E5%9B%BE%E5%83%8F"><span class="nav-number">2.</span> <span class="nav-text"> 根据文本生成图像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E5%9B%BE%E5%83%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text"> 文本生成图像模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A5%E5%AD%90%E5%90%91%E9%87%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text"> 句子向量模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE"><span class="nav-number">2.3.</span> <span class="nav-text"> 算法和数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%92%8Ccoding"><span class="nav-number">3.</span> <span class="nav-text"> 代码分析和Coding</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E8%BD%AC%E5%9B%BE%E5%83%8F%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">3.1.</span> <span class="nav-text"> 文本转图像模型的代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6gan%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text"> 条件GAN实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gan%E7%9A%84%E6%9C%80%E6%96%B0%E7%A0%94%E7%A9%B6%E5%8F%8A%E6%9C%AA%E6%9D%A5"><span class="nav-number">4.</span> <span class="nav-text"> GAN的最新研究及未来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'bdccdf132f802236cd32b098a12c5a0f',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

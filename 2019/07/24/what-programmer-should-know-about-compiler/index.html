@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="我们每天都在用某种编程语言写代码，但是我们真的了解它们是如何工作的吗？代码是如何转换为计算机可以识别的机器码的呢？ 了解编程语言的工作原理，不仅可以让我们深入理解某一种编程语言，某些时候还可以帮助以一种更优雅的方式实现想要的功能。比如我们平时谈论很多的DSL（Domain Specific Language），在定义了DSL之后，我们如何做更进一步的支持呢？事实上我们还可以实现DSL的自动错误检查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序员需要知道的编译器知识">
+<meta property="og:url" content="http://brightliao.com/2019/07/24/what-programmer-should-know-about-compiler/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="我们每天都在用某种编程语言写代码，但是我们真的了解它们是如何工作的吗？代码是如何转换为计算机可以识别的机器码的呢？ 了解编程语言的工作原理，不仅可以让我们深入理解某一种编程语言，某些时候还可以帮助以一种更优雅的方式实现想要的功能。比如我们平时谈论很多的DSL（Domain Specific Language），在定义了DSL之后，我们如何做更进一步的支持呢？事实上我们还可以实现DSL的自动错误检查">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-07-24T12:00:00.000Z">
+<meta property="article:modified_time" content="2019-08-25T10:27:25.000Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="compiler">
+<meta property="article:tag" content="lex">
+<meta property="article:tag" content="yacc">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://brightliao.com/2019/07/24/what-programmer-should-know-about-compiler/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>程序员需要知道的编译器知识 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/24/what-programmer-should-know-about-compiler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          程序员需要知道的编译器知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-24 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-24T20:00:00+08:00">2019-07-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-08-25 18:27:25" itemprop="dateModified" datetime="2019-08-25T18:27:25+08:00">2019-08-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/compiler/" itemprop="url" rel="index"><span itemprop="name">compiler</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/07/24/what-programmer-should-know-about-compiler/" class="post-meta-item leancloud_visitors" data-flag-title="程序员需要知道的编译器知识" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>我们每天都在用某种编程语言写代码，但是我们真的了解它们是如何工作的吗？代码是如何转换为计算机可以识别的机器码的呢？</p>
+<p>了解编程语言的工作原理，不仅可以让我们深入理解某一种编程语言，某些时候还可以帮助以一种更优雅的方式实现想要的功能。比如我们平时谈论很多的DSL（Domain Specific Language），在定义了DSL之后，我们如何做更进一步的支持呢？事实上我们还可以实现DSL的自动错误检查，还可以将其转化为某种可以执行的程序等等。还比如我们经常遇到的模式识别问题，状态机相关问题等等。对于这些问题，编程语言的实现原理可以给我们很多启示。</p>
+<span id="more"></span>
+<p>那么编程语言是如何工作的呢？详细的理论知识得回到我们大学时代的编译原理课程。下面我将主要从实例出发，辅以必备的几个概念介绍来帮助理解编程语言的工作原理，并介绍一些实用的工具帮助我们日常的开发。</p>
+<h2 id="一个例子"><a class="markdownIt-Anchor" href="#一个例子"></a> 一个例子</h2>
+<p>首先我们来看一个最简单的四则运算的例子。在这里我们想定义一种支持简单的 <strong>正整数四则运算</strong> 的语言。</p>
+<p>首先是语言中的概念和符号：</p>
+<ul>
+<li>正整数： <code>[0-9]+</code> (正则表达式定义)</li>
+<li>运算符号： <code>+</code> <code>-</code> <code>*</code> <code>/</code></li>
+</ul>
+<p>然后我们定义<code>*</code>和<code>/</code>的优先级一样，<code>+</code>和<code>-</code>的优先级一样，<code>*</code> <code>/</code>高于<code>+</code> <code>-</code>，与我们一般的理解一致。</p>
+<p>这个描述我们可以用一种更规范的形式来表示，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tokens:</span><br><span class="line">    NUMBER  : r&#x27;[0-9]&#x27;</span><br><span class="line"></span><br><span class="line">expressions:</span><br><span class="line">    expr    : NUMBER</span><br><span class="line">            | expr + expr</span><br><span class="line">            | expr - expr</span><br><span class="line">            | expr * expr</span><br><span class="line">            | expr / expr</span><br></pre></td></tr></table></figure>
+<p><code>expressions</code>中的语句采用了递归的形式进行定义（<code>|</code>表示或者），这样可以满足任意长度的任意组合了。</p>
+<p>像这样一种更规范的格式就是我们所谓的上下文无关文法了，其中著名的BNF范式就是其中一种。</p>
+<h2 id="几个概念"><a class="markdownIt-Anchor" href="#几个概念"></a> 几个概念</h2>
+<p>什么是上下文无关文法？</p>
+<p>要理解这个概念，我们先得知道形式语言。形式语言是用 <strong>精确的</strong> 数学或机器可处理的 <strong>公式</strong> 定义的语言。这个概念是专门为计算机定义的，但仅仅从这句话来看，其实还是模糊的，什么样的公式才是数学和机器可处理的呢？</p>
+<p>这就牵涉到形式文法的概念，文法用于构成语言，形式文法就是用于构成形式语言的。文法可以类比我们自然语言中的<em>主谓宾</em>、<em>主系表</em>这类语言结构规则。那么形式文法呢？形式文法就是数学和计算机可以处理的一种比较严谨的语言结构规则。事实上形式文法可以表示为一个四元组（非终结符N, 终结符Σ, 产生式规则P, 起始符S），这个四元组里面不仅仅有规则，还包括了规则的作用范围，符号等。这个四元组就是数学上的定义。有了这个定义，我们就可以用数学逻辑推导相关文法理论了。到这里大家应该有一点概念了，本文并不想过多涉及理论，详细的数学分析及示例可以参考<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BD%A2%E5%BC%8F%E6%96%87%E6%B3%95">wiki</a>。</p>
+<p>上下文无关文法，顾名思义，就是上下文无关的一种形式文法，这种文法虽然简单，但是非常重要，因为所有的编程语言都是基于它来设计的。BNF（Backus Normal Form），也就是巴克斯-诺尔范式（由他们最先引入），就是我们经常用来表达上下文无关文法的一种符号集。前面关于 <strong>正整数四则运算</strong> 语言的规范定义就是用BNF格式来定义的。</p>
+<p>我们说某种BNF严格的定义了相应的语言，也可以说某种语言由其对应的BNF来严格定义。比如C语言由C语言的BNF来定义，JAVA语言由JAVA语言的BNF来定义。</p>
+<h2 id="理解语言"><a class="markdownIt-Anchor" href="#理解语言"></a> 理解语言</h2>
+<p>有了语言定义，我们可以做什么呢？一个直接的任务应该就是理解语言并将其转化为计算机可以执行的代码，以便在机器上运行。完成这个任务的东西我们叫编译器。</p>
+<p>有时候其实我们并不一定要让计算机计算出一个结果，而是只要计算机能理解语言，然后在根据这些理解来做一些事情。如何才算理解了语言？对于某一行代码，事实上可以用一棵树结构来描述它，树结构一个节点代表语言定义的一个简单推导。比如<code>1 + 2 + 3</code>可以表示成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">expr   |-- NUMBER(3)</span><br><span class="line">       +</span><br><span class="line">       |-- expr   |-- NUMBER(1)</span><br><span class="line">                  +</span><br><span class="line">                  |-- NUMBER(2)</span><br></pre></td></tr></table></figure>
+<p>这里的树结构被称为语法树，有了这颗语法树，我们就可以说理解语言了。事实上从这颗语法树出发我们可以完成很多和这门语言相关的任务，比如我们可以做语法分析查错，可以做代码优化重构提示，可以做代码编写提示，当然还可以将其翻译为机器码等等。IDE的很多功能就是依赖于语法树来实现的。</p>
+<h2 id="理解四则运算语言"><a class="markdownIt-Anchor" href="#理解四则运算语言"></a> 理解四则运算语言</h2>
+<p>理解语言一般我们可以分为两个步骤，第一是理解词，第二是按照语法规则将词组织成语法树。比如四则运算的例子，我们在构造语法树的时候，输入一个字符串，然后需要依次提取字符串中的词（这里的词是指正整数和<code>+-*/</code>符号），最后根据词和规则来构造语法树。</p>
+<p>在这个简单的例子中，识别词的过程我们可以用简单的正则匹配来实现。但是构造语法树的时候，我们需要构造一个有限状态机（finite-state machine）来实现，这看起来就好像并不是一件简单的事了。</p>
+<p>事实上，关于计算机语言的分析早在上世纪50年代就有了比较系统的研究了，相关工具当然也是非常成熟和丰富。最早的工具莫过于<code>lex(lexical analyser)</code>和<code>yacc(yet another compiler-compiler)</code>了。<code>lex</code>就是用来做词法分析的，<code>yacc</code>可以用<code>lex</code>的词法分析结果来生成语法树。这两个工具可以帮我们生成理解语言的源代码。但是这两个工具是unix系统下的工具，而我们现在用的一般都是GNU的系统。在GNU的系统下的两个类似实现是<code>flex</code>和<code>bison</code>，ubuntu系统下我们可以用<code>sudo apt-get install flex bison</code>来安装。</p>
+<p>由于这两个工具是生成c语言的语法分析器代码。为了简单的在python下做一些实验，我们使用<a target="_blank" rel="noopener" href="https://github.com/dabeaz/ply">ply</a>这个工具，它的全称是<code>python lex-yacc</code>，也就是python版本的lex和yacc。参考<a target="_blank" rel="noopener" href="http://www.dabeaz.com/ply/ply.html">ply的文档</a>，要实现上述四则运算，我们可以编写代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">tokens = (<span class="string">&#x27;NAME&#x27;</span>, <span class="string">&#x27;NUMBER&#x27;</span>, )</span><br><span class="line">literals = <span class="string">&#x27;+-*/&#x27;</span></span><br><span class="line"></span><br><span class="line">t_NAME = <span class="string">r&#x27;[a-zA-Z_][a-zA-Z0-9_]*&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">t_NUMBER</span>(<span class="params">t</span>):</span><br><span class="line">    <span class="string">r&#x27;\d+&#x27;</span></span><br><span class="line">    t.value = <span class="built_in">int</span>(t.value)</span><br><span class="line">    <span class="keyword">return</span> t</span><br><span class="line"></span><br><span class="line">precedence = ((<span class="string">&#x27;left&#x27;</span>, <span class="string">&#x27;+&#x27;</span>, <span class="string">&#x27;-&#x27;</span>), (<span class="string">&#x27;left&#x27;</span>, <span class="string">&#x27;*&#x27;</span>, <span class="string">&#x27;/&#x27;</span>), )</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">p_statement_expr</span>(<span class="params">t</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;statement : expression&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(t[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">p_expression_binop</span>(<span class="params">p</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;expression : expression &#x27;+&#x27; expression</span></span><br><span class="line"><span class="string">                  | expression &#x27;-&#x27; expression</span></span><br><span class="line"><span class="string">                  | expression &#x27;*&#x27; expression</span></span><br><span class="line"><span class="string">                  | expression &#x27;/&#x27; expression</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> p[<span class="number">2</span>] == <span class="string">&#x27;+&#x27;</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] + p[<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">elif</span> p[<span class="number">2</span>] == <span class="string">&#x27;-&#x27;</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] - p[<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">elif</span> p[<span class="number">2</span>] == <span class="string">&#x27;*&#x27;</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] * p[<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">elif</span> p[<span class="number">2</span>] == <span class="string">&#x27;/&#x27;</span>: p[<span class="number">0</span>] = p[<span class="number">1</span>] / p[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">p_expression_number</span>(<span class="params">p</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;expression : NUMBER&quot;&quot;&quot;</span></span><br><span class="line">    p[<span class="number">0</span>] = p[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_lex_yacc</span>():</span><br><span class="line">    <span class="keyword">import</span> ply.lex <span class="keyword">as</span> lex</span><br><span class="line">    <span class="keyword">import</span> ply.yacc <span class="keyword">as</span> yacc</span><br><span class="line">    lexer = lex.lex()</span><br><span class="line">    parser = yacc.yacc()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            s = <span class="built_in">input</span>(<span class="string">&#x27;calc &gt; &#x27;</span>)</span><br><span class="line">            lexer.<span class="built_in">input</span>(s)</span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                tok = lexer.token()</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> tok:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="built_in">print</span>(tok)</span><br><span class="line">            parser.parse(s, lexer=lexer)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_lex_yacc()</span><br></pre></td></tr></table></figure>
+<p>运行这个程序，输入我们的表达式，将能得到正确的结果，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">calc &gt; 1+2*3</span><br><span class="line">LexToken(NUMBER,1,1,0)</span><br><span class="line">LexToken(+,&#x27;+&#x27;,1,1)</span><br><span class="line">LexToken(NUMBER,2,1,2)</span><br><span class="line">LexToken(*,&#x27;*&#x27;,1,3)</span><br><span class="line">LexToken(NUMBER,3,1,4)</span><br><span class="line">7</span><br></pre></td></tr></table></figure>
+<h2 id="一个更复杂的例子"><a class="markdownIt-Anchor" href="#一个更复杂的例子"></a> 一个更复杂的例子</h2>
+<p>正整数四则运算的例子看起来过于简单，实际上我们可以用ply实现非常复杂的语法分析器。比如我们可以实现一个用于识别python的函数定义的语法分析器。有了这个分析器，我们就可以从识别结果中获取函数名，参数名，类型信息等，从而完成一些类似代码质量分析，自动代码格式化等工作。</p>
+<p>初步看这个问题，似乎正则表达式可以解决一定的问题，但是仅仅有正则表达式是不够的，因为python的很多语法规则过于复杂，难以通过正则表达式来表达。</p>
+<p>为识别python的函数定义，我们可以编写测试如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_yacc_for_python_func_def</span>():</span><br><span class="line">    test_code_lines = [</span><br><span class="line">        <span class="string">&#x27;def abc(a,):&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a,):&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a,#xxx()[]\n):&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a: List[int],):&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc() -&gt; int:&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a, b) -&gt; List[int]:&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a, b: Union[int, List[float]],) -&gt; Union[int, float]:&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a,) -&gt; Union[int, List[float]]:&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a,) -&gt; Union[int, List[float], float]:&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;def abc(a,) #xxx()[]\n -&gt; Union[int, List[float], float]:&#x27;</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> test_code_lines:</span><br><span class="line">        yacc.parse(line, lexer=lexer)</span><br></pre></td></tr></table></figure>
+<p>有兴趣的小伙伴可以自己尝试实现，或者参考<a target="_blank" rel="noopener" href="https://github.com/gmlove/experiments/blob/master/python_lex_yacc/py_func_def.py">这里</a>我实现的一个版本。</p>
+<h2 id="实用的工具"><a class="markdownIt-Anchor" href="#实用的工具"></a> 实用的工具</h2>
+<p>上面的工具已经可以帮我们做很多了，看起来甚至自己定义一门编程语言也是可能的。然而这件事的难度在于，对于一门好用的编程语言，语法定义要足够丰富好用，性能要足够高，相关生态要能做得起来。这就不是单纯的技术活了。</p>
+<p>在日常的开发活动中，我们可能接触最多的还是对于当前流行的编程语言的处理。比如，某一天我们可能想要实现一个工具将一个java实现的库，转换为python实现，<a target="_blank" rel="noopener" href="https://github.com/natural/java2python">这里</a>就有一个不错的尝试。又比如，某一天我们想要改进我们的IDE，尝试做更多特殊的自动代码格式化支持。还比如，某一天我们想要自动化生成一些代码，就像IDE里面的重构一样。这个时候有没有什么工具可以帮助我们呢？</p>
+<p>当然是有的，这里想要提一下 <strong>ANTLR</strong>。代码库在<a target="_blank" rel="noopener" href="https://github.com/antlr/antlr4">这里</a>。这是一个java实现的类似工具，支持的语言非常广泛，我们可以在<a target="_blank" rel="noopener" href="https://github.com/antlr/grammars-v4">这里</a>找到一个列表。可以看到这里支持了go python3 java9等等非常多的语言，基本上我们日常用到的语言都有覆盖了。而且这个工具可以生成各种目标语言的语法分析器。比如我们想得到一个python语言实现的go语言分析器，这个工具可以很容易实现。类似的工具还有很多，我们可以参考wiki上面的一个<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators">比较</a>。</p>
+<p>如果我们只想用一种编程语言去分析该语言自身，这个时候更简单的方式是直接用语言本身提供的语法分析器。一般提供了JIT(just in time的缩写, 也就是即时编译编译器)功能的语言，都有相应的接口去做语法分析。比如<a target="_blank" rel="noopener" href="https://docs.python.org/3/library/ast.html">这里</a>有python的<code>ast</code>库，调用<code>ast.parse</code>，输入一段源代码，就得到一颗语法树。javascript有一个第三方库<code>esprima</code>(<a target="_blank" rel="noopener" href="https://esprima.org/">这里</a>)也可以做类似的事情。</p>
+<p>到这里我们是不是对日常使用的编程语言有了更深入的了解呢？编译技术是一门强大的技术，灵活运用将能实现不少平时看起来很难的功能。希望当我们遇到这些问题的时候能有一些新的思路。</p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://dinosaur.compilertools.net/">http://dinosaur.compilertools.net/</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B7%B4%E7%A7%91%E6%96%AF%E8%8C%83%E5%BC%8F">https://zh.wikipedia.org/wiki/巴科斯范式</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BD%A2%E5%BC%8F%E6%96%87%E6%B3%95">https://zh.wikipedia.org/wiki/形式文法</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95">https://zh.wikipedia.org/wiki/上下文无关文法</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators">https://en.wikipedia.org/wiki/Comparison_of_parser_generators</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/07/19/python-json-serializable-lib/" rel="bookmark">如何实现一个优雅的Python的Json序列化库</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/07/25/ways-to-improve-python-perf/" rel="bookmark">Python性能优化二三事</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+              <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
+              <a href="/tags/lex/" rel="tag"><i class="fa fa-tag"></i> lex</a>
+              <a href="/tags/yacc/" rel="tag"><i class="fa fa-tag"></i> yacc</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/20/tdd-for-improving-design/" rel="prev" title="从改善设计的角度理解TDD">
+      <i class="fa fa-chevron-left"></i> 从改善设计的角度理解TDD
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/25/ways-to-improve-python-perf/" rel="next" title="Python性能优化二三事">
+      Python性能优化二三事 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text"> 一个例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text"> 几个概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E8%AF%AD%E8%A8%80"><span class="nav-number">3.</span> <span class="nav-text"> 理解语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E8%AF%AD%E8%A8%80"><span class="nav-number">4.</span> <span class="nav-text"> 理解四则运算语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">5.</span> <span class="nav-text"> 一个更复杂的例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="nav-number">6.</span> <span class="nav-text"> 实用的工具</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '9475714cc74bc5d22af74612f88b4749',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

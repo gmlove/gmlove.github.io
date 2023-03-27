@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="作为我们使用最广泛的CI&#x2F;CD工具Jenkins，它对于Pipeline as Code的支持却并不能算友好。在多个项目中使用之后，我发现它存在的主要问题有：  Groovy语言的学习成本 调试低效 灵活性差  Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用DDD思想来编写Pipeline">
+<meta property="og:url" content="http://brightliao.com/2020/01/05/DDD-in-pipeline-code/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="作为我们使用最广泛的CI&#x2F;CD工具Jenkins，它对于Pipeline as Code的支持却并不能算友好。在多个项目中使用之后，我发现它存在的主要问题有：  Groovy语言的学习成本 调试低效 灵活性差  Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-05T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-06-10T15:30:15.104Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="敏捷">
+<meta property="article:tag" content="DDD">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://brightliao.com/2020/01/05/DDD-in-pipeline-code/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>用DDD思想来编写Pipeline | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/01/05/DDD-in-pipeline-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          用DDD思想来编写Pipeline
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-05 20:00:00" itemprop="dateCreated datePublished" datetime="2020-01-05T20:00:00+08:00">2020-01-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-10 23:30:15" itemprop="dateModified" datetime="2022-06-10T23:30:15+08:00">2022-06-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ddd/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/01/05/DDD-in-pipeline-code/" class="post-meta-item leancloud_visitors" data-flag-title="用DDD思想来编写Pipeline" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为我们使用最广泛的CI/CD工具Jenkins，它对于<code>Pipeline as Code</code>的支持却并不能算友好。在多个项目中使用之后，我发现它存在的主要问题有：</p>
+<ul>
+<li>Groovy语言的学习成本</li>
+<li>调试低效</li>
+<li>灵活性差</li>
+</ul>
+<p>Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略括号和行尾分号，并且如果最后一个参数是一个闭包则可以将其写在函数调用之后，这就导致了相对比较怪异的语法出现。比如，刚接触Groovy的人可能不太能一下子理解下面这段代码的工作原理：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a(<span class="number">1</span>) &#123;</span><br><span class="line">    something(<span class="number">123</span>)</span><br><span class="line">    someother <span class="attr">id:</span> <span class="number">1</span>, <span class="attr">message:</span> <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>看起来似乎是函数定义，但其实这里是一个函数调用，其背后的函数定义为：<code>def a(int i, Closure c);</code> <code>def someother(int id, String message);</code></p>
+<p>注意，这里我并不是要说Groovy语言不是世界上最好的语言，而是想说明对于不常用这门语言的同学而言，由于其不够自然而存在一定的学习门槛。比如我就常常忘记Groovy的语法，而当我要重新开始一个项目时，我不得不又花一定的时间重新学习一下，可气的是这时还得不到多少IDE的辅助。大概也是由于Groovy对于新人入门不算友好，Gradle积极去支持了Kotlin语言。</p>
+<p>至于调试低效，相信写过较复杂的Jenkins <code>pipeline</code>代码同学们已有同感。编写好代码之后，我们很难编写一个针对它的测试。想要测试我们的<code>pipeline</code>代码，我们不得不把<code>pipeline</code>运行起来看看效果，然后为了触发目标代码的执行，我们可能还要在网页上点来点去，花一定的时间操作好几个网页元素。</p>
+<p>说到灵活性差，主要是指对于其他编译工具的集成而言。想要和Jenkins有好的集成，我们不得不编写一个Jenkins插件来实现。所以，我们就看到了大把大把的Jenkins插件。这些插件真的实现了所有原有编译工具提供的特性吗？这些插件质量怎么样，是否存在bug？某一个新的工具是否有插件支持？</p>
+<p>说了这么多，可能有人觉得只是在吐槽而已。这里其实是想给大家分享一下另一种编写<code>pipeline</code>代码的方式，我个人长期使用下来发现更为高效。希望对于有相同困惑的小伙伴们有一定的参考价值。</p>
+<h2 id="适合实现日常编译运维工作的工具与语言"><a class="markdownIt-Anchor" href="#适合实现日常编译运维工作的工具与语言"></a> 适合实现日常编译运维工作的工具与语言</h2>
+<p><code>pipeline</code>完成的工作其实是一些日常的编译运维工作。说到如何支持这些编译运维工作，相信大家最熟悉不过的就是命令行工具了，各种各样的工具几乎都会提供完善的命令行接口。如何组合这些命令行工具来完成这些工作呢？这种场景下，<code>shell</code>应当是比较适合的胶水了。然而<code>shell</code>脚本的功能性却比较弱，比如高级语言里面司空见惯的各种集合功能，在<code>shell</code>里面却没有提供直接的支持。</p>
+<p>这里我经常选用的是一种虽然比较古老，但却能方便的实现大部分编译运维功能的工具：<code>make</code>。其实<code>make</code>工具在<code>c/c++</code>的世界里一直是非常流行的，编译过<code>c/c++</code>项目的同学对于<code>make &amp;&amp; make install</code>命令一定不陌生。<code>make</code>工具支持的<code>Makefile</code>脚本功能是相当丰富的，但作为我们日常使用进行编译运维，通常只需要一个很小的子集就足够了。使用这样的一个功能很小的子集可以有效降低大家的学习成本，让新手亦能迅速上手。</p>
+<p>对于后面要使用的<code>make</code>，我们只需要了解下面几点就够了：</p>
+<ol>
+<li><code>make</code>将一组命令组织成一个<code>task</code>，一个<code>Makefile</code>里面可以存在多个<code>task</code>以支持不同种类的运维工作，<code>task</code>间可以相互依赖。比如:</li>
+</ol>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    mvn clean package <span class="comment"># 注意行首必须为一个或多个tab</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br><span class="line"></span><br><span class="line"><span class="section">build: build-java build-nodejs</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>每一条命令均独立的通过一个子<code>shell</code>去执行，所以命令可以是任意一段合法的<code>shell</code>脚本。</li>
+</ol>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line">modules=a b c</span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    for m in $modules; do \</span><br><span class="line">        cd $$m &amp;&amp; mvn clean package; \</span><br><span class="line">    done  <span class="comment"># 按顺序编译多个模块</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>
+<p><code>make</code>中我们可以定义变量，这些变量可以初始化一个默认值，可以通过调用<code>task</code>时设置值进行覆盖。</p>
+<p>比如上面的<code>Makefile</code>，我们如果调用时使用命令<code>make build-java modules=&quot;a b c d&quot;</code>，那么这个<code>build-java</code>将会去<code>a b c d</code>四个目录下分别执行<code>mvn clean package</code>。</p>
+</li>
+</ol>
+<p>了解了上面这几个<code>make</code>的特性，相信你已经能想象出很多很多的可能了。比如，一个简单的应用部署可以视为编译、打包、上传到目标机器、重启服务的过程。通过覆盖不同的变量，我们就能复用部署脚本，将应用部署到另一个环境。</p>
+<p>我曾经在多个多语言、多工具项目中采用make来进行自动化日常运维工作。几乎在每个项目中，它都给我带来了巨大的效率提升。</p>
+<p>即便我们工作在<code>windows</code>下，也无需担心，因为只要使用git，我们就有了一个随时可用的<code>bash</code>（<code>git-bash</code>），然后配以一个<code>windows</code>下编译的<code>make</code>工具，依赖的环境就搭建好了。这里我会给大家推荐用<a target="_blank" rel="noopener" href="https://github.com/bmatzelle/gow">gow</a>，它是一个相比Cygwin轻量得多的常用<code>gnu</code>工具包，只需要10MB左右的空间就够了。</p>
+<p>当然如果我们有条件使用<code>windows</code>提供的<code>linux</code>子系统，那就更简单了。</p>
+<h2 id="用ddd的思路来编写pipeline"><a class="markdownIt-Anchor" href="#用ddd的思路来编写pipeline"></a> 用DDD的思路来编写pipeline</h2>
+<p>从DDD的角度来看，这里我们所要真正解决的问题是搭建一个CI/CD的<code>pipeline</code>，而Jenkins在这里扮演的是CI/CD的某种具体实现工具。如果条件允许，我们完全可以换用其他的具体实现工具来搭建这个<code>pipeline</code>。</p>
+<p>对于Jenkins这个第三方工具，使用DDD的思想，我们要如何处理呢？这里我们可以将其视为一个独立的领域，仔细思考就会发现，这种场景与我们在项目中去使用某个第三方服务是没什么两样的。</p>
+<p>为了确保我们的核心领域<code>pipeline</code>可以独立健康的发展，不为Jenkins这个第三方工具提供的功能所支配，我们首先需要从核心领域出发来定义业务流程。</p>
+<p>对于一个典型的<code>pipeline</code>，我们可以定义这样几个顺序执行的步骤：构建（编译、单元测试、打包） -&gt; 部署到开发环境 -&gt; 运行集成测试 -&gt; 部署到测试环境 -&gt; 部署到高级测试环境 -&gt; 部署到生产环境。</p>
+<p>这里的顺序其实是一个潜在的变更点，因为我们完全可以定义另一条<code>pipeline</code>以支持直接部署到生产环境：构建（编译、单元测试、打包） -&gt; 部署到生产环境。</p>
+<p>于是这里我们可以抽象这样几个通用的领域能力：构建、运行集成测试、部署到某一环境。</p>
+<p>有了这些分析，我们就可以着手编写实现了。用我们上文提到的<code>Makefile</code>脚本来实现这里的领域能力，可以得到类似下面这样的脚本。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">build:</span></span><br><span class="line">    mvn clean verify package</span><br><span class="line"></span><br><span class="line">TARGET_HOST=1.1.1.1</span><br><span class="line"><span class="section">deploy:</span></span><br><span class="line">    scp target/xxx.jar $&#123;TARGET_HOST&#125;:/app/</span><br><span class="line">    ssh $&#123;TARGET_HOST&#125; <span class="string">&quot;cd /app/ &amp;&amp; sh restart.sh&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">deploy-dev:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.2</span><br><span class="line"></span><br><span class="line"><span class="section">deploy-qa:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.3</span><br><span class="line"></span><br><span class="line"><span class="section">integration-test:</span></span><br><span class="line">    cd src/test/integration &amp;&amp; npm run test</span><br></pre></td></tr></table></figure>
+<p>上述只是一个简单的示例，实际情况可能比这里复杂很多。比如我们可能需要将构建出来的文件发布到一个制品库里面，我们可能需要管理上传制品库的密码。比如我们可能是一个多模块的项目，需要支持多个模块的构建。还比如，我们可能要构建出来的是一个容器镜像。</p>
+<p>但是，无论怎样，通过从核心领域出发来考虑问题，我们定义了几个清晰且相对稳定的接口。</p>
+<p>有了上面实现的领域能力，下一步就是利用Jenkins制作一个的图形化流水线了。到这里再来看需要编写的<code>pipeline</code>代码，我们会发现需要写的<code>pipeline</code>代码已经变得很少了。主要的代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(<span class="string">&quot;build&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make build&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&quot;deploy dev&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make deploy-dev&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&quot;integration test&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make integration-test&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>pipeline</code>代码的变少说明我们对第三方工具的依赖变弱了，这正是想要的效果。我们将主要的投资放在了核心域，而不是与第三方的集成。</p>
+<p>到这里我们的<code>pipeline</code>代码就基本编写完成了。回顾一下编写好的代码，我们可以发现这样一些好处：</p>
+<ul>
+<li>减少了大家不熟悉的Groovy代码的编写</li>
+<li>使用大家更为熟悉的<code>shell</code>命令来组织运维脚本，可维护性变高</li>
+<li>测试这些自动运维脚本的成本变低了，比如，我们只需要本地运行一下<code>make build</code>就可以测试<code>build</code>相关脚本是否正确的编写</li>
+<li>核心领域内的功能可以独立的发展，而不会对实现<code>pipeline</code>的Groovy代码有影响（相对稳定的接口）</li>
+<li>设计变得足够灵活，后续如果需要更换Jenkins为另一种工具，这将是很简单的一件事</li>
+<li>使用变得足够灵活，某一天即使Jenkins服务出故障了，我们也可以很轻松的在一台开发机器上面手动去完成必要的运维工作</li>
+</ul>
+<p>以上这些都是DDD的设计思想带给我们的好处。</p>
+<p>回顾整个应用DDD思想的过程，我们按顺序经历了这样几个步骤：识别核心域 -&gt; 从核心领域出发定义领域能力 -&gt; 和其他周边工具进行集成。这是我在应用DDD时的几个主要步骤，虽然本文只是用于解决<code>pipeline</code>这一特定场景下的问题，但是其实这几个步骤在几乎所有场景下都适用的。</p>
+<p>可能很多人觉得DDD的思想是一种必须在很复杂的业务场景下才有用的思想，进而怀疑在这个简单的场景下谈DDD是否会显得大材小用。这样的质疑是可以理解的，我了解过的很多DDD的资料也都是针对复杂业务场景来讨论问题。</p>
+<p>但是，在我看来，DDD思想中以领域为核心的一些观点，其实是无所谓问题的复杂程度的。因为任何一个简单的业务问题，越往后发展越复杂，最终都可能成为一个复杂的问题。比如上传文件的功能，一开始我们可能可以用几行代码就实现了，但是随着系统的发展，我们可能要进一步跟踪进度、支持多文件、做文件类型限制等等，这个功能很容易就变成需要上千行代码才能实现的功能。</p>
+<p>如果DDD仅限于解决复杂问题，那么它就失去了在问题还比较简单时就去解决它的先机。事实恰恰相反，最好的实践DDD的方式就是从一开始就应用这样的设计思想。</p>
+<p>所以，对于任意复杂程度的问题，只要我们应用DDD的思想来进行思考，我们几乎都能从中获益。</p>
+<p>最后，希望这里的分享的一些经验对大家有所帮助。有任何问题，欢迎留言交流。</p>
+<p>相关文章：<a href="/2019/08/08/domain-concept-in-your-code/">代码中的领域</a></p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2016/08/31/agile-user-story/" rel="bookmark">敏捷方法-用户故事</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/07/20/tdd-for-improving-design/" rel="bookmark">从改善设计的角度理解TDD</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/08/18/tdd-for-improving-design-2/" rel="bookmark">从改善设计的角度理解TDD (2)</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/07/after-reading-of-refactoring-v2/" rel="bookmark">再读重构</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/12/22/its-harder-to-go-downhill/" rel="bookmark">上山容易下山难</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%8F%E6%8D%B7/" rel="tag"><i class="fa fa-tag"></i> 敏捷</a>
+              <a href="/tags/ddd/" rel="tag"><i class="fa fa-tag"></i> DDD</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/22/its-harder-to-go-downhill/" rel="prev" title="上山容易下山难">
+      <i class="fa fa-chevron-left"></i> 上山容易下山难
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/21/spark-performance-tuning-on-billions-of-data/" rel="next" title="亿级数据Spark应用调优之旅">
+      亿级数据Spark应用调优之旅 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%82%E5%90%88%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%B8%B8%E7%BC%96%E8%AF%91%E8%BF%90%E7%BB%B4%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%B7%A5%E5%85%B7%E4%B8%8E%E8%AF%AD%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text"> 适合实现日常编译运维工作的工具与语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8ddd%E7%9A%84%E6%80%9D%E8%B7%AF%E6%9D%A5%E7%BC%96%E5%86%99pipeline"><span class="nav-number">2.</span> <span class="nav-text"> 用DDD的思路来编写pipeline</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '7180a6924eb4ec3b6c3eebe862b20aa6',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

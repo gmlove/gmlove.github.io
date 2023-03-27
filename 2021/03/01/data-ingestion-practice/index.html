@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="快速、高质量、稳定的将数据从业务系统接入到数据平台是至关重要的一环。前面的文章中，我们分别提到了关系型数据库的数据接入和非关系型数据库的数据接入。除了来自技术上的挑战，数据接入还会遇到哪些其他挑战呢？ 本文将尝试基于项目中的实践，给大家分享一下我们的思考。 一般而言，实施数据接入将可能碰到如下问题：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据平台数据接入实践">
+<meta property="og:url" content="http://brightliao.com/2021/03/01/data-ingestion-practice/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="快速、高质量、稳定的将数据从业务系统接入到数据平台是至关重要的一环。前面的文章中，我们分别提到了关系型数据库的数据接入和非关系型数据库的数据接入。除了来自技术上的挑战，数据接入还会遇到哪些其他挑战呢？ 本文将尝试基于项目中的实践，给大家分享一下我们的思考。 一般而言，实施数据接入将可能碰到如下问题：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-01-data-ingestion-practice/sqoop-vs-spark.png">
+<meta property="article:published_time" content="2021-03-01T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-09T02:10:20.158Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据平台">
+<meta property="article:tag" content="数据接入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-03-01-data-ingestion-practice/sqoop-vs-spark.png">
+
+<link rel="canonical" href="http://brightliao.com/2021/03/01/data-ingestion-practice/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据平台数据接入实践 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/03/01/data-ingestion-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据平台数据接入实践
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-01 20:00:00" itemprop="dateCreated datePublished" datetime="2021-03-01T20:00:00+08:00">2021-03-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-09 10:10:20" itemprop="dateModified" datetime="2022-10-09T10:10:20+08:00">2022-10-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/03/01/data-ingestion-practice/" class="post-meta-item leancloud_visitors" data-flag-title="数据平台数据接入实践" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>16 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>快速、高质量、稳定的将数据从业务系统接入到数据平台是至关重要的一环。前面的文章中，我们分别提到了<a href="/2020/12/27/oracle-data-migration/">关系型数据库的数据接入</a>和<a href="/2021/02/22/data-ingestion-from-mongo/">非关系型数据库的数据接入</a>。除了来自技术上的挑战，数据接入还会遇到哪些其他挑战呢？</p>
+<p>本文将尝试基于项目中的实践，给大家分享一下我们的思考。</p>
+<p>一般而言，实施数据接入将可能碰到如下问题：</p>
+<span id="more"></span>
+<ul>
+<li>数据源多种多样，常见的比如：各类关系型数据库、<code>NoSQL</code>数据库、日志数据等。如何处理这么多种类型的数据源？</li>
+<li>数据接入的策略是什么样的？时机如何选择？频率如何确定？</li>
+<li>数据接入不能对业务系统的稳定性产生影响，如何实现？</li>
+<li>数据入库后，如何在数据仓库中进行存储和管理？</li>
+<li>如何保证多张入库表的数据一致性？</li>
+<li>如何和业务系统开发团队分工协作？</li>
+</ul>
+<p>下面将结合我们在项目中的实践，分享一下我们的思考。</p>
+<h2 id="处理多种类型的数据源"><a class="markdownIt-Anchor" href="#处理多种类型的数据源"></a> 处理多种类型的数据源</h2>
+<h3 id="关系型数据库数据接入"><a class="markdownIt-Anchor" href="#关系型数据库数据接入"></a> 关系型数据库数据接入</h3>
+<p>我们先来看基于关系型数据库的数据源。关系型数据库类型多种多样，常见的如<code>MySQL</code> <code>Oracle</code> <code>SQL Server</code> <code>PostgreSQL</code>等等，如何支持这些数据库呢？</p>
+<p>在大数据平台下，我们可以选择<code>Sqoop</code>或<code>Spark</code>的方案。得益于<code>Java</code>丰富的周边生态（<code>Java</code>语言提供了对于数据库访问的统一抽象<code>JDBC</code>，通过实现<code>JDBC</code>驱动器就实现使用统一的<code>JDBC</code> <code>API</code>访问数据，目前市面上几乎所有数据库都提供了驱动器实现），<code>Sqoop</code>和<code>Spark</code>都提供了完善的数据库类型支持。</p>
+<p><code>Spark</code>和<code>Sqoop</code>起步都很早，但<code>Spark</code>定位是通用的计算引擎，比起<code>Sqoop</code>只是定位于<code>Hadoop</code>下的数据导入导出工具而言，<code>Spark</code>的功能要复杂和丰富得多。在技术选择上，<code>Sqoop</code>基于<code>MapReduce</code>计算引擎实现，<code>Spark</code>的数据导入导出功能基于自身计算引擎实现。近几年，<code>Spark</code>由于其灵活性、高性能及成熟稳定的功能，越来越成为大家首选的数据项目框架。</p>
+<p>如果查看<code>Spark</code>和<code>Sqoop</code>的代码提交频率，即可看到在活跃度上<code>Spark</code>优于<code>Sqoop</code>很多。</p>
+<p><img data-src="/attaches/2021/2021-03-01-data-ingestion-practice/sqoop-vs-spark.png" alt="spark-vs-sqoop" /></p>
+<p>在功能性上，基于<code>Spark</code>的方案也不弱于<code>Sqoop</code>。</p>
+<p><code>Sqoop</code>支持了常见的数据接入需要的功能，如根据查询条件进行数据选择、并发数量控制、读数据时的事务级别、数据类型转换、增量数据导入等。在导入目的地上，可以支持<code>Hive</code>、<code>HBase</code>、文件等。</p>
+<p><code>Spark</code>同样可以支持这些功能，不过使用了<code>Spark</code>特有的术语，如：</p>
+<ul>
+<li>需要根据查询条件进行数据选择时，不仅可以在读取数据时，指定<code>query</code>参数，还可以在调用<code>load</code>得到<code>DataFrame</code>之后，使用<code>DataFrame</code>灵活的<code>API</code>进行数据筛选（<code>Spark</code>将在执行时可以通过谓词下推将查询条件放在数据库端执行）。</li>
+<li>需要并发进行数据导入时，可以按照某个字段进行分区，并控制分区数量。</li>
+<li>需要进行数据转换时，使用<code>DataFrame</code>灵活的<code>API</code>做起来更是得心应手。</li>
+<li>进行增量数据导入时，可以根据元数据的特点灵活选择参考字段（如数据更新时间、<code>ID</code>等），通过编程方式指定查询条件来实现。</li>
+<li>导入目的地的支持更是广泛，不仅拥有良好的<code>Hive</code>兼容性以便可以轻易将数据导入到<code>Hive</code>，还可以保存各类支持的文件。</li>
+</ul>
+<p>根据上面的分析及我们的实践经验，相比<code>Sqoop</code>，我们会更推荐<code>Spark</code>来完成数据接入。</p>
+<h3 id="其他数据源数据接入"><a class="markdownIt-Anchor" href="#其他数据源数据接入"></a> 其他数据源数据接入</h3>
+<p>对于非关系型数据库的数据接入，在前一篇文章（<a href="http://brightliao.com/2021/02/22/data-ingestion-from-mongo/">非关系型数据库的数据接入</a>）中我们进行了很多的讨论。</p>
+<p>总结一下，对于无<code>schema</code>或者<code>schema</code>比较自由的数据库，有如下经验可能值得借鉴：</p>
+<ul>
+<li>考虑使用数据库自身提供的库来进行数据读取，避免直接使用<code>Spark</code>进行读取数据。这将很大程度上避免数据读取过程中的异常。</li>
+<li>接入数据到数据平台时，考虑用<code>json</code>格式存储原始数据，这可以避免在接入数据时进行数据解析带来的问题，使得数据接入过程更稳定。</li>
+</ul>
+<p>对于其他基于文件的数据源，可以考虑的做法是先将文件复制到数据平台<code>HDFS</code>，然后用<code>Spark</code>读取<code>HDFS</code>中的文件，然后再写入<code>Hive</code>（或其他）数据仓库。</p>
+<h2 id="数据接入策略"><a class="markdownIt-Anchor" href="#数据接入策略"></a> 数据接入策略</h2>
+<p>数据接入可以简单的分为全量数据接入和增量数据接入。全量数据接入是指每天都将所有数据从业务系统复制到数据仓库，适合数据量比较小或者没有数据更新时间字段的数据表。增量数据接入是指每天将改变的数据接入到数据仓库，是最常见的数据接入方式。</p>
+<p>一般而言，增量数据接入可以分为两个步骤完成：</p>
+<ul>
+<li>第一次全量数据接入。通过此步骤一次性将所有历史业务数据导入到数据平台。</li>
+<li>增量数据接入。在第一次全量数据接入之后，每天业务系统的增量数据（新增或修改）导入到数据平台。</li>
+</ul>
+<p>听起来很简单，但是仔细分析一下，就会发现很多问题。</p>
+<p>第一次全量数据接入需要应对所有历史数据，因此可能需要应对大数据量的问题。</p>
+<p>后续增量数据接入需要注意数据接入的范围，通常是前一天所有的新增或修改的数据。这里面存在以下几个问题：</p>
+<ul>
+<li>如果数据接入的时间是凌晨1点，那么从0点到1点间可能有数据更新，这些数据如何入库呢？一般而言，可以选择<code>创建时间在昨天</code>或<code>更新时间在昨天</code>的数据进行接入，这样就可以包括从0点到1点间的所有更新。但同时这也有一个副作用，就是有可能包含第二天的某些更新的数据。比如，昨天创建了一条数据，今天0点30分做了数据更新，这条数据会同时存在于昨天和今天的接入数据中（数据重复入库）。</li>
+<li>如果业务系统的数据里面没有标识创建时间的字段，但有标识更新时间的字段，此时可以选择<code>更新时间在昨天</code>的数据范围进行数据接入，同时避免了数据重复入库问题。</li>
+<li>如果业务系统的数据里面既没有标识创建时间的字段也没有标识更新时间的字段，此时我们无法针对数据进行增量接入。此时应该考虑让业务系统做改进加入相关字段（针对大表），或者退化为每天做全量数据接入。</li>
+<li>数据最好不要有删除的情况，这需要跟业务系统开发团队确认。如果存在数据删除，我们无法快速通过单表来找到被删除的数据（理论上可以实现，比如可以比对数据仓库中的所有数据业务主键与业务系统中的对应所有主键，但是技术实现上存在很大挑战）。此时可以让业务系统做改进，比如，将所有被删除数据的主键保存在另一张数据库表中。也可以考虑退化为使用全量接入的策略。</li>
+</ul>
+<p>除了上面提到的问题之外，还需要注意的问题是如何应对失败。比如，某一天，由于业务系统和数据平台网络断联，此时数据接入随之失败，如何恢复数据导入任务呢？</p>
+<p>如果业务系统允许或者存在从库，则可以随时重新触发任务。越早触发任务，丢失的数据更新越少。如果业务系统只允许在系统闲时进行数据接入，则只能在下一个可接入数据的时段重新触发前一天的数据接入任务。</p>
+<p>从数据接入频率来看，目前多是<code>T+1</code>的方式，即每天定时数据接入。这样的数据接入频率一般可以保证第二天可以看前一天的数据。</p>
+<h2 id="数据接入对业务系统的影响"><a class="markdownIt-Anchor" href="#数据接入对业务系统的影响"></a> 数据接入对业务系统的影响</h2>
+<p>在多数业务相对单一的互联网公司构建数据平台时，这个问题可能并不是一个值得关注的问题。</p>
+<p>但是，对于很多相对传统的企业，他们通常拥有很多业务系统，不少系统可能开发于一二十年前并经过了长时间的逐步迭代，不同的系统可能由不同的供应商开发而成，不同的系统可能需要支持不同的业务线。基于这样的现实情况，谈论数据接入对业务系统的影响就显得很有必要，因为：</p>
+<ul>
+<li>业务系统可能还没实现读写分离，因此没有只读的从数据库</li>
+<li>业务系统可能需要支持某个关键的业务线，需要24小时在线</li>
+</ul>
+<h3 id="仔细设计方案小心导入数据"><a class="markdownIt-Anchor" href="#仔细设计方案小心导入数据"></a> 仔细设计方案，小心导入数据</h3>
+<p>数据接入的一个重要目标是在尽量降低对业务系统影响的情况下完成。对于没有只读从库的业务系统，如何实现这一点呢？下面尝试对不同的数据接入任务进行分析。</p>
+<p>全量数据接入时，由于需要应对所有历史数据，此时的数据量可能会非常大。我们在进行这一步时，通常要面对的是数千万行数亿行，数十到数百GB的数据。进行如此大量的数据传输，需要仔细设计方案。通常可以参考如下步骤完成：</p>
+<ul>
+<li>在业务系统中统计数据量大小，包括数据行数，数据文件大小等。很多数据库都支持统计信息查询，比如<code>Oracle</code>下执行查询<code>SELECT segment_name, bytes/1048576 FROM DBA_SEGMENTS WHERE segment_name='table name' AND segment_type='TABLE'</code>可得到数据大小</li>
+<li>测试数据平台和业务系统之间的网络带宽，根据网络带宽预估两个系统间数据传输的时间</li>
+<li>根据数据传输时间预估，制定数据传输计划，包括每个待接入数据库表的计划接入时间，接入失败的处理方式，超时的处理方式等</li>
+<li>根据数据导入计划，与业务系统开发团队商定一个合适的时间进行数据导入（通常可以安排在周末或者夜间系统闲时）</li>
+<li>按照数据导入计划进行执行，并处理数据导入过程中的各种异常情况</li>
+</ul>
+<p>增量数据接入时，面对的数据量通常比较小，此时和业务系统商定一个合适的时间进行数据导入即可。</p>
+<p>除了以上问题，还需要考虑数据读取的并发数，如果并发太高，可能给业务系统造成很大压力。通常业务系统会控制数据库最大连接数，这也给数据接入时的并发数设置了限制。一般而言，并发数并不会成为数据接入速度的瓶颈，最大的瓶颈常常来自网络带宽。我们通常可以采用较小的并发数读取数据，通过设置<code>Spark</code>的<code>numPartitions</code>参数可以达到控制并发数的目的。</p>
+<h3 id="尝试自建从数据库"><a class="markdownIt-Anchor" href="#尝试自建从数据库"></a> 尝试自建从数据库</h3>
+<p>另一个值得借鉴的做法是，在数据平台搭建一个跟业务系统数据库同样的数据库（可视为帮助业务系统建立了一个只为数据接入使用的从数据库，下文直接称从库），用以辅助进行数据导入。这可以带来以下几个好处：</p>
+<ul>
+<li>数据导入更稳定和高效。可以先使用业务数据库本身提供的数据导入导出工具将业务数据库的数据导入到从库，这一步一般可以非常稳定而高效。</li>
+<li>可以无忧的使用<code>Spark</code>（或其他工具）将数据从从库接入到数据平台。因为是从从库进行数据读取，所以根本无需考虑并发读数据对业务系统的影响，也无需考虑数据读取的时间。</li>
+<li>可以辅助开发数据接入代码。因为对业务系统无影响，所以我们完全可以在这个数据库上面进行参数的调整和测试，无需担心对业务的影响。</li>
+</ul>
+<p>在我们的项目实践中，针对没有从库的<code>Oracle</code>业务系统数据库，我们用docker搭建了一个<code>Oracle</code>数据库用于充当业务系统数据库的从库，大大提高了数据接入的稳定性和开发效率。</p>
+<p>在导入数据到从库时，可以忽略索引，这可以有效减少数据库需要使用的存储空间，也可以加快数据导入的速度。</p>
+<p>在增量数据接入时，我们可以考虑新建一张数据库表来存储数据，并且只存储增量的数据，此时不仅可以大大减小数据量从而加快数据接入的过程，还可以用于应对潜在的数据<code>Schema</code>变更。</p>
+<h2 id="在数据仓库中进行数据存储和管理"><a class="markdownIt-Anchor" href="#在数据仓库中进行数据存储和管理"></a> 在数据仓库中进行数据存储和管理</h2>
+<p>现在我们应该可以顺利把数据导入到数据平台了，那么导入的数据要怎么存储和管理呢？首先要找个地方存，那就是数据仓库（Data Warehouse，简称<code>DW</code>）了，通常以<code>Hive</code>数据库来实现。数据平台可以视为以数据仓库为中心存储的平台。</p>
+<h3 id="设计贴源层"><a class="markdownIt-Anchor" href="#设计贴源层"></a> 设计贴源层</h3>
+<p>很多数据仓库建设的文章中都会建议我们设计一个专门用于存储业务系统数据的层，名为贴源层，或<code>ODS</code>（Operational Data Store）层。贴源层的数据需要保持和业务系统一致，不做任何的加工。</p>
+<p>设计贴源层的好处是：</p>
+<ul>
+<li>这一层的逻辑比较简单，通常稳定性可以得到保证。</li>
+<li>贴源层保存了所有的业务系统数据，因为原始数据始终存在，所以上层可以随时进行数据查询，这带来了很大的灵活性。</li>
+<li>拥有随时可查询的数据，可以很好的支持上层数据开发过程中的代码调试。</li>
+<li>当我们发现上层的数据处理逻辑需要修改时，可以更从容的完成，无需考虑数据任务运行的时间及对业务系统带来的影响。</li>
+</ul>
+<p>我们也同样建议设计一个贴源层用于存储来自业务系统的原始数据。相比多增加一层带来的数据存储成本，其优势非常明显。</p>
+<h3 id="设计分区字段"><a class="markdownIt-Anchor" href="#设计分区字段"></a> 设计分区字段</h3>
+<p>如何存储数据呢？<code>Hive</code>数据库支持分区表，可以为数据存储提供支持。</p>
+<p>简单来说，我们可以为所有业务系统的表增加设计一个分区字段用于存储当次接入的数据。此字段可以为整型或字符串类型，其值为数据更新时间。</p>
+<p>如果按天进行数据接入，则存储数据更新的当天，比如可以存储为<code>20210520</code>。如果更频繁的每小时进行数据接入，可以将此分区字段的值扩展支持小时即可。需要注意的是，这里的分区字段值最好和数据更新时间对齐，这可以大大方便后续团队成员理解数据、查询数据，从而避免潜在出问题的风险。</p>
+<p>分区字段可以很好的应对全量数据接入和增量数据接入的策略。增量的情况下需要注意，<strong>第一个分区为全量数据分区，通常数据量会特别大，而且数据没有历史</strong>。后续所有更上层的数据加工都要基于这个基本认识，比如：</p>
+<ul>
+<li>在进行数据处理时，如果涉及全量分区，可能要配置更多的计算资源。</li>
+<li>处理包含全量分区的数据时，需要考虑数据倾斜的问题，可能会由于第一个分区太大影响整个数据任务执行时间。</li>
+<li>进行表间数据关联时，如果当前数据分区的时间早于关联表的数据分区时间，则应该关联到关联表的全量数据分区中的数据。</li>
+</ul>
+<h2 id="多张表入库时的数据一致性"><a class="markdownIt-Anchor" href="#多张表入库时的数据一致性"></a> 多张表入库时的数据一致性</h2>
+<p>由于数据接入的过程常常会涉及多张数据库表的数据读取，那么一个很自然的问题是，数据一致性如何保证？</p>
+<p>这是一个数据仓库实现的难点，有很多种情况可以影响数据一致性，比如：</p>
+<ul>
+<li>多张数据库表读数据的时间很可能不一样</li>
+<li>大量多表数据读取需要较长的读数据时间，难以在一个数据库事务内完成</li>
+<li>数据库配置的事务隔离级别不够，可能导致读到脏数据</li>
+</ul>
+<h3 id="数据分析对一致性的要求"><a class="markdownIt-Anchor" href="#数据分析对一致性的要求"></a> 数据分析对一致性的要求</h3>
+<p>在实际的数据仓库建设过程中，由于数据一致性难以保证，我们常常会一定程度上忽略数据强一致性。这可能带来轻微的数据不准确问题，一般而言，这不会带来太大的问题。因为数据平台是主要是为了支持数据分析，而分析常常是统计意义上的结果，所以统计上不会由于有很小的偏差而带来大的影响。这些统计结果一般也是为支持公司决策，公司决策自然也不会轻易受到某一个数值的微小变化的影响。比如，公司的产品销量分析，即便有几笔订单由于数据不一致没有统计到最终的销量中，一般也不会带来太大影响。</p>
+<p>虽然多数情况下的数据分析对数据一致性不太敏感，但是还是存在很多对数据准确性要求很高的场景。比如：</p>
+<ul>
+<li>考虑大宗商品的销售，如果少统计了一个订单，可能带来统计值的较大偏差</li>
+<li>考虑零售的场景，如果经销商可以根据销量等级的不同而获得厂家的不同补贴，这时，即便一个订单也不允许统计出错，因为这会影响到经销商的收益</li>
+</ul>
+<h3 id="应对强一致性要求"><a class="markdownIt-Anchor" href="#应对强一致性要求"></a> 应对强一致性要求</h3>
+<p>对于这类对数据一致性很敏感的场景需要如何处理呢？这里有一些建议。</p>
+<p>一是可以尝试在一个数据库事务中读取所有相关表的数据。如果数据源对应的数据量较小，特别是对于增量数据读取，也是具备较高的可行性的。</p>
+<p>二是可以配合业务系统一起实现高一致性的数据入库。如果有来自业务系统的配合，一致性相对更容易实现。比如，如果业务系统允许每晚停止服务（或停止数据修改，只允许读数据的业务）一段时间，则可以在停止服务（或只读）时进行数据接入。</p>
+<p>三是可以提供补数据的机制。比如，如果我们发现某些统计指标与实际的相差几个数，可以提供一个流程来补充没统计到的数据。简单来说，这可以通过：1. 相关人员进行邮件确认；2. 在计算出来的统计值上面进行最终结果调整。当然，如果有比较充足的时间，也可以实现一个支持系统用于辅助实现这个流程。</p>
+<p>总之，要实现更强的数据一致性，所需的成本也是更高的。好的一点在于，在实践过程中，我们常常不需要这样强的数据一致性。当需要保证很强的数据一致性时，可能需要综合具体情况来判断什么样的处理方式是更好的。</p>
+<h2 id="和业务系统开发团队分工协作"><a class="markdownIt-Anchor" href="#和业务系统开发团队分工协作"></a> 和业务系统开发团队分工协作</h2>
+<p>上面谈了很多关于如何接入数据，如何在数据仓库中存储数据的经验，其中很多都是基于一个基本假设，那就是这些工作是由一个独立的数据平台团队来完成。有的同学可能会有一个疑惑，为什么数据接入这件事是数据平台团队来做？是不是可以直接交给业务团队来做？业务团队来做这件事不是更容易吗？</p>
+<h3 id="企业组织结构和团队分工"><a class="markdownIt-Anchor" href="#企业组织结构和团队分工"></a> 企业组织结构和团队分工</h3>
+<p>这涉及到企业组织结构和团队分工的问题，实际情况常常十分复杂，每个企业都可能根据自身实际情况不同而不同。</p>
+<p>一般而言，实际情况常常是由一个独立的数据团队来负责此类工作。原因在于：</p>
+<ul>
+<li>业务系统开发团队会更专注在自身业务功能的开发，对于数据的关注不足</li>
+<li>业务系统开发团队具备的数据相关专业能力（包括工程能力、技术能力等）相对较弱，而数据平台建设需要较强的此类能力</li>
+<li>业务系统开发团队本身可能已经是一个大的团队，如果加入更多的团队角色，将进一步增加团队大小而带来团队管理问题</li>
+</ul>
+<p>如果说企业的数据平台建设已经比较完善，或者企业内部的IT技术能力较强，则情况可能不一样。在一些大型的以软件技术为核心的企业，比如一些大型的商业银行，他们的情况可能是这样：</p>
+<ul>
+<li>可能已经建设了一个独立的数据团队，负责提供各类数据工具给各个业务系统开发团队使用</li>
+<li>软件基础设施可能已经比较完备，数据接入已经有完善的内部系统做支持</li>
+<li>可能有较好的培训体系，可以通过培训来提升业务系统开发团队的数据意识和数据专业能力</li>
+</ul>
+<p>此时，业务系统开发团队可能只需要通过简单的几步操作即可实现数据接入数据平台。如果是这样，通常不仅数据接入可以交给业务系统团队自己完成，甚至上层的数据开发、报表展示等工作也可以由业务系统团队完成。数据团队在此时的工作重点会变为：</p>
+<ul>
+<li>为业务系统团队开发各类数据工具或系统</li>
+<li>提供技术支持和咨询服务</li>
+<li>提供培训服务</li>
+</ul>
+<p>所以，如果我们考虑数据团队的组织和分工，不同企业可能大不一样，但是可能又都是适合企业实际情况的。</p>
+<h3 id="缓解两个团队间的矛盾"><a class="markdownIt-Anchor" href="#缓解两个团队间的矛盾"></a> 缓解两个团队间的矛盾</h3>
+<p>如果是由一个独立的数据团队去完成数据接入以及后续的数据加工处理、指标计算等工作，这常常会带来一个问题，那就是需要和业务系统团队较为紧密的协作。这样的协作常常不够顺畅，为什么呢？究其原因，两个团队没有共享同一个目标。数据团队一般基于各业务系统的数据，计算指标，输出报表，或者建立机器学习模型进行业务分析等。其目标是支持业务分析或支持决策。而业务系统团队的目标是开发新功能，维护系统稳定，支持业务运转。</p>
+<p>目标不一致会带来很多问题。比如，数据团队觉得优先级高的事情，在业务系统团队看来优先级很低。更具体一点的例子是，如果业务系统中没有数据删除，那么数据接入就可以较容易的实现，但要使得业务系统保留所有数据，这给业务系统的开发带来了更多的看起来没必要的麻烦。</p>
+<p>如何缓解两个团队的矛盾呢？一般情况下，可能需要数据团队做出一定让步，因为在数据的价值还没有体现出来时，从企业角度来看，我们需要优先保证业务的正常运转。然后，在此基础上，数据团队可以引导业务系统团队人员进行数据消费，帮助他们认识数据对他们的价值。包括：</p>
+<ul>
+<li>给业务系统团队人员培训数据相关的知识和技能</li>
+<li>将加工出来的数据给到业务系统团队进行分析</li>
+<li>引导业务系统团队进行跟自己业务相关的简单的数据分析，帮忙他们通过数据改进自身业务</li>
+</ul>
+<p>总体上看，要想两个团队能友好的高效的合作，还需要双方求同存异，共同为企业大的目标一起努力才行。这可能需要更多的企业文化建设工作。</p>
+<h2 id="其他问题"><a class="markdownIt-Anchor" href="#其他问题"></a> 其他问题</h2>
+<p>数据接入的过程中常常还会伴随很多其他问题，这里列举一些比较典型的问题，与大家一起讨论。</p>
+<h3 id="业务系统提供专用接口进行数据接入"><a class="markdownIt-Anchor" href="#业务系统提供专用接口进行数据接入"></a> 业务系统提供专用接口进行数据接入</h3>
+<p>我们在进行数据接入的时候，业务系统团队担心他们数据库变更对数据平台造成影响，可能会建议由他们提供<code>API</code>进行数据查询，而不是直接提供数据库访问接口。</p>
+<p>在我们看来，由业务系统开发<code>API</code>进行数据导出并不是一种好的方式。主要理由是：</p>
+<ul>
+<li>会给业务系统团队带来额外的开发和维护成本</li>
+<li>增加了两个团队沟通协作成本（需要讨论<code>API</code>（或数据导出任务）形式，进行联调等）</li>
+<li>数据团队需要等待业务系统团队进行<code>API</code>（或数据导出任务）开发和上线，效率较低</li>
+<li>添加新数据效率低。如果发现之前的<code>API</code>（或数据导出任务）中的数据不能满足分析需要，则需要和业务系统团队重新沟通<code>API</code>（或数据导出任务）设计，然后交由业务系统团队开发、测试、上线，整个周期特别长</li>
+</ul>
+<p>当然，通过开发<code>API</code>（或数据导出任务）的方式进行数据对接也有其好处，那就是两个系统间的接口相对稳定。但是相比其带来的成本而言，这个优势显得不够明显。</p>
+<h3 id="业务系统开发导出数据的任务"><a class="markdownIt-Anchor" href="#业务系统开发导出数据的任务"></a> 业务系统开发导出数据的任务</h3>
+<p>比开发特定<code>API</code>接口进行数据对接要更好一些的是，业务系统可以开发数据导出任务，定期运行此任务导出数据。这会给业务系统团队带来一定的开发成本，但是不失为一种保障业务系统稳定运行的好的方式。</p>
+<p>此时，我们会建议使用强类型的专用的数据导出格式，而不是基于<code>csv</code>。比如，如果业务系统数据库是<code>MySQL</code>，则考虑使用<code>mysqldump</code>工具进行数据导出。如果是<code>Oracle</code>，则考虑使用<code>exp</code>/<code>expdp</code>工具。如果是<code>MongoDB</code>，使用<code>mongodump</code>。</p>
+<p>使用专用的数据导出格式的好处是：</p>
+<ul>
+<li>几乎不需要业务系统团队编写代码就可以实现数据导出</li>
+<li>数据导出速度通常最快且最稳定</li>
+<li>数据可以很容易的导入到跟源系统同样版本的数据库中</li>
+</ul>
+<p>如果使用某种中间格式，比如<code>csv</code>，其问题在于：</p>
+<ul>
+<li>需要增加不少额外的开发成本</li>
+<li><code>csv</code>会丢失数据类型，比如在<code>csv</code>文件中，对于整型数值、浮点型数值和字符串的区分比较困难，这将带来额外的无必要的数据平台数据接入逻辑</li>
+<li><code>csv</code>在处理空字符串、<code>null</code>值、换行符等特殊值时存在问题，在处理一些不可见的二进制特殊字符也会存在问题，需要在数据接入时做更多的容错处理</li>
+<li><code>csv</code>可能带来列错位的问题</li>
+</ul>
+<p>在实际的项目实践过程中，我们耗费了很大的精力在应对<code>csv</code>格式的数据接入这件事上，最后的结果也不尽如人意。所以，一般而言，我们会强烈建议避免使用中间文件格式进行数据接入。</p>
+<p>虽然开发数据导出任务进行数据接入这种方式看起来不错，但是综合起来看，更为推荐的方式还是直接进行数据库对接，比如：</p>
+<ul>
+<li>由业务系统团队建立从数据库用于各类数据同步和分析，数据接入通过从数据库完成。</li>
+<li>以只读账号直接连接业务系统生产数据库，在系统闲时进行数据访问。</li>
+</ul>
+<h3 id="标准化的数据接入工具是否有必要"><a class="markdownIt-Anchor" href="#标准化的数据接入工具是否有必要"></a> 标准化的数据接入工具是否有必要</h3>
+<p>当前很多云服务提供商也发布了很多相关的数据接入软件，使用这些软件，通常只需要简单的配置即可实现数据接入其云上的数据平台。那么我们是否可以从这样的工具或服务中受益呢？</p>
+<p>现在的市场上有大量类似的数据产品存在，但是，事实上通常这种数据产品在很多企业中难以落地实施。经过上面的分析，可以知道，很多情况下，数据接入这个问题并不是技术上可以直接解决的。</p>
+<p>这里面涉及：</p>
+<ul>
+<li>网络传输问题。比如，业务系统可能并不在云上，或者并不在当前云服务提供商的云上。还比如，可能业务系统的数据量太大，传输很慢。</li>
+<li>数据安全问题。很多企业会担心数据上云之后带来更大的数据安全风险。</li>
+<li>沟通协作问题。根据上面的分析，对于数据接入工作，有很多的时间都花在了团队协作上，这是工具不能解决的问题。</li>
+<li>工具灵活性问题。业务系统数据库可能多种多样，这些数据产品是否可以支持这么多类型的数据库？是否支持足够好？如果我们想要定义数据接入的分区字段的值，是否可以很容易的实现？</li>
+</ul>
+<p>综合以上这些因素考虑，我们不应该被一个看起来很好用的数据接入<code>UI</code>界面所迷惑，而是应该立足企业具体情况，根据情况选择更合适的方式。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文从数据接入策略开始，依次讨论了数据接入对业务系统的影响，数据应该如何在数据仓库中存储，接入的数据的一致性，团队组织和分工等问题。其中，分享了很多来自我们的真实项目实践中的经验。</p>
+<p>数据接入到数据平台是数据平台构建的第一步，也是极为关键的一步。在实际项目过程中，我们常常需要花费大量的时间在这一步上。为了应对各种数据接入的挑战，我们需要保持清晰的认知，综合考虑各类因素，以便找出最优的解决办法。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/03/data-capability-building-suggestions/" rel="bookmark">浅谈企业数据能力建设</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/27/oracle-data-migration/" rel="bookmark">Oracle数据迁移实用入门</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/21/some-thoughts-about-data-platform/" rel="bookmark">一些企业数据平台建设的思考</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/02/21/data-governance-based-on-atlas-ranger/" rel="bookmark">基于Hadoop大数据平台的数据治理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/" rel="tag"><i class="fa fa-tag"></i> 数据平台</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5/" rel="tag"><i class="fa fa-tag"></i> 数据接入</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/22/data-ingestion-from-mongo/" rel="prev" title="MongoDB数据接入实践">
+      <i class="fa fa-chevron-left"></i> MongoDB数据接入实践
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/15/data-management-practice/" rel="next" title="数据平台数据管理实践">
+      数据平台数据管理实践 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%A4%9A%E7%A7%8D%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="nav-number">1.</span> <span class="nav-text"> 处理多种类型的数据源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5"><span class="nav-number">1.1.</span> <span class="nav-text"> 关系型数据库数据接入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E6%BA%90%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5"><span class="nav-number">1.2.</span> <span class="nav-text"> 其他数据源数据接入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text"> 数据接入策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%E5%AF%B9%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">3.</span> <span class="nav-text"> 数据接入对业务系统的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%94%E7%BB%86%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88%E5%B0%8F%E5%BF%83%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">3.1.</span> <span class="nav-text"> 仔细设计方案，小心导入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E8%87%AA%E5%BB%BA%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">3.2.</span> <span class="nav-text"> 尝试自建从数据库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%AD%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%92%8C%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text"> 在数据仓库中进行数据存储和管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%B4%B4%E6%BA%90%E5%B1%82"><span class="nav-number">4.1.</span> <span class="nav-text"> 设计贴源层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%88%86%E5%8C%BA%E5%AD%97%E6%AE%B5"><span class="nav-number">4.2.</span> <span class="nav-text"> 设计分区字段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%BC%A0%E8%A1%A8%E5%85%A5%E5%BA%93%E6%97%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.</span> <span class="nav-text"> 多张表入库时的数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AF%B9%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E8%A6%81%E6%B1%82"><span class="nav-number">5.1.</span> <span class="nav-text"> 数据分析对一致性的要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E5%AF%B9%E5%BC%BA%E4%B8%80%E8%87%B4%E6%80%A7%E8%A6%81%E6%B1%82"><span class="nav-number">5.2.</span> <span class="nav-text"> 应对强一致性要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8C%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%8F%91%E5%9B%A2%E9%98%9F%E5%88%86%E5%B7%A5%E5%8D%8F%E4%BD%9C"><span class="nav-number">6.</span> <span class="nav-text"> 和业务系统开发团队分工协作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%81%E4%B8%9A%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84%E5%92%8C%E5%9B%A2%E9%98%9F%E5%88%86%E5%B7%A5"><span class="nav-number">6.1.</span> <span class="nav-text"> 企业组织结构和团队分工</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E8%A7%A3%E4%B8%A4%E4%B8%AA%E5%9B%A2%E9%98%9F%E9%97%B4%E7%9A%84%E7%9F%9B%E7%9B%BE"><span class="nav-number">6.2.</span> <span class="nav-text"> 缓解两个团队间的矛盾</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text"> 其他问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E6%8F%90%E4%BE%9B%E4%B8%93%E7%94%A8%E6%8E%A5%E5%8F%A3%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5"><span class="nav-number">7.1.</span> <span class="nav-text"> 业务系统提供专用接口进行数据接入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%8F%91%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">7.2.</span> <span class="nav-text"> 业务系统开发导出数据的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%8C%96%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%85%A5%E5%B7%A5%E5%85%B7%E6%98%AF%E5%90%A6%E6%9C%89%E5%BF%85%E8%A6%81"><span class="nav-number">7.3.</span> <span class="nav-text"> 标准化的数据接入工具是否有必要</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '73160a5f714fe9d884625bdf325f1e98',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

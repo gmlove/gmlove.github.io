@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="安全无小事，我们常常要为了预防安全问题而付出大量的代价。虽然小区楼道里面的灭火器、消防栓常年没人用，但是我们还是要准备着。我们之所以愿意为了这些小概率事件而付出巨大的成本，是因为安全问题一旦发生，很多时候我们将无法承担它带来的后果。 在软件行业，安全问题尤其突出，因为无法预料的事情实在太多了。软件的复杂性让我们几乎无法完全扫清安全问题，模块A独立运行可能没问题，但是一旦和模块B一起工作也许就产生了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop安全认证机制 (一)">
+<meta property="og:url" content="http://brightliao.com/2019/10/27/hadoop-auth/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="安全无小事，我们常常要为了预防安全问题而付出大量的代价。虽然小区楼道里面的灭火器、消防栓常年没人用，但是我们还是要准备着。我们之所以愿意为了这些小概率事件而付出巨大的成本，是因为安全问题一旦发生，很多时候我们将无法承担它带来的后果。 在软件行业，安全问题尤其突出，因为无法预料的事情实在太多了。软件的复杂性让我们几乎无法完全扫清安全问题，模块A独立运行可能没问题，但是一旦和模块B一起工作也许就产生了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-10-27-hadoop-auth/jwt.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2019/2019-10-27-hadoop-auth/kerberos-auth-sequence.png">
+<meta property="article:published_time" content="2019-10-27T12:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-15T14:36:15.000Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="安全">
+<meta property="article:tag" content="hadoop">
+<meta property="article:tag" content="kerberos">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2019/2019-10-27-hadoop-auth/jwt.png">
+
+<link rel="canonical" href="http://brightliao.com/2019/10/27/hadoop-auth/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Hadoop安全认证机制 (一) | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/10/27/hadoop-auth/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hadoop安全认证机制 (一)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-27 20:00:00" itemprop="dateCreated datePublished" datetime="2019-10-27T20:00:00+08:00">2019-10-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-15 22:36:15" itemprop="dateModified" datetime="2019-12-15T22:36:15+08:00">2019-12-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/10/27/hadoop-auth/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 (一)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>19 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>安全无小事，我们常常要为了预防安全问题而付出大量的代价。虽然小区楼道里面的灭火器、消防栓常年没人用，但是我们还是要准备着。我们之所以愿意为了这些小概率事件而付出巨大的成本，是因为安全问题一旦发生，很多时候我们将无法承担它带来的后果。</p>
+<p>在软件行业，安全问题尤其突出，因为无法预料的事情实在太多了。软件的复杂性让我们几乎无法完全扫清安全问题，模块A独立运行可能没问题，但是一旦和模块B一起工作也许就产生了安全问题。</p>
+<p>不可否认为了让软件更安全，我们引入了很多复杂的机制。不少人开发者也抱怨为了进行安全处理而做了太多额外的事情。在一个复杂的分布式软件Hadoop中，我们为此付出的成本将更大。比如，我们可能可以比较轻松的搭建一个无安全机制的集群，但是一旦需要支持安全机制的时候，我们可能会付出额外几倍的时间来进行各种复杂的配置和调试。</p>
+<p>Hadoop在开始的几个版本中其实并没有安全机制的支持，后来Yahoo在大规模应用Hadoop之后，安全问题也就日益明显起来。大家都在一个平台上面进行操作是很容易引起安全问题的，比如一个人把另一个人的数据删除了，一个人把另一个人正在运行的任务给停掉了，等等。在当今的企业应用里面，一旦我们的数据开始上规模之后，安全机制的引入几乎是必然的选择。所以作为大数据领域的开发者，理解Hadoop的安全机制就显得非常重要。</p>
+<p>Hadoop的安全机制现在已经比较成熟，网上关于它的介绍也很多，但相对较零散，下面我将尝试更系统的，并结合实例代码，给大家分享一下最近一段时间关于Hadoop安全机制的学习所得，抛个砖。</p>
+<p>预计将包括这样几个方面：</p>
+<ol>
+<li>Kerberos协议介绍及实践</li>
+<li>Kerberos协议发展及Hadoop相关源码分析</li>
+<li>Hadoop安全集群搭建及测试</li>
+<li>周边工具的安全支持</li>
+</ol>
+<span id="more"></span>
+<h2 id="安全认证协议"><a class="markdownIt-Anchor" href="#安全认证协议"></a> 安全认证协议</h2>
+<h3 id="kerberos"><a class="markdownIt-Anchor" href="#kerberos"></a> Kerberos</h3>
+<p>做Web开发的同学们可能比较熟悉的认证机制是<code>JWT</code>，近两年<code>JWT</code>的流行几乎让其成为了实现单点登录的一个标准。<code>JWT</code>将认证服务器认证后得到的<code>token</code>及一定的用户信息经过<code>base64</code>编码之后放到HTTP头中发送给服务器端，得益于<code>token</code>的加密机制（一般是非对称加密），服务器端可以在不连接认证服务器就进行<code>token</code>验证（第一次验证时会向认证服务器请求公钥），从而实现高性能的鉴权。这里的<code>token</code>虽然看起来不可读，实际上我们经过简单的解码就能得到<code>token</code>的内容。所以<code>JWT</code>一般是要结合<code>HTTPS</code>一起应用才能带来不错的安全性。</p>
+<p><img data-src="/attaches/2019/2019-10-27-hadoop-auth/jwt.png" alt="JWT认证机制" /></p>
+<p><code>JWT</code>看起来还不错呀，安全模型比较简单，能不能直接用在<code>Hadoop</code>上面呢？可能可以。但是由于<code>Hadoop</code>的出现早于<code>JWT</code>太多，所以当时的设计者们是不可能考虑使用<code>JWT</code>的。实际上<code>JWT</code>主要是针对web的场景设计的，对于分布式场景中，很多问题它是没有给出答案的。一些典型的场景比如服务间的认证该如何实现，如何支持其他的协议，等等。<code>Hadoop</code>的安全认证使用的是<code>Kerberos</code>机制。相比<code>JWT</code>，<code>Kerberos</code>是一个更为完整的认证协议，然而也正是因为其设计可以支持众多的功能，也给其理解和使用带来了困难。</p>
+<p>这里之所以提到<code>JWT</code>，是因为<code>JWT</code>实际上可以看成是<code>Kerberos</code>协议的一个极简版本。<code>JWT</code>实现了一部分<code>Kerberos</code>的功能。如果我们能对于<code>JWT</code>的认证机制比较熟悉，那么对于<code>Kerberos</code>机制的理解应当是有较大帮助的。</p>
+<p><code>Kerberos</code>协议诞生于MIT大学，早在上世纪80年代就被设计出来了，然后经过了多次版本演进才到了现在我们用的V5版本。作为一个久经考验的安全协议，<code>Kerberos</code>的使用其实是非常广泛的，比如<code>Windows</code>操作系统的认证就是基于<code>Kerberos</code>的，而<code>Mac</code> <code>Red Hat Enterprise Linux</code>也都对于<code>Kerberos</code>有完善的支持。各种编程语言也都有内置的实现。对于这样一个重要的安全协议，就算我们不从事大数据相关的开发，也值得好好学习一下。</p>
+<p><code>Kerberos</code>设计的有几个大的原则:</p>
+<ol>
+<li>利用公开的加密算法实现</li>
+<li>密码尽量不在网络上传输</li>
+<li>高安全性和性能</li>
+<li>支持广泛的安全场景，如防止窃听、防止重放攻击、保护数据完整性等</li>
+</ol>
+<p>那么这个协议是如何工作的呢？与<code>JWT</code>类似，<code>Kerberos</code>同样定义了一个中心化的认证服务器，不过对于这个认证服务器，<code>Kerberos</code>按照功能进一步将其拆分为了三个组件：认证服务器（Authentication Server，AS）、密钥分发中心（Key Distribution Center，KDC）、票据授权服务器（Ticket Granting Server，TGS）。在整个工作流程中，还有两个参与者：客户端(Client)和服务提供端(Service Server，SS)。</p>
+<p><code>Kerberos</code>大体上的认证过程与<code>JWT</code>一致：第一步是客户端从认证服务器拿到<code>token</code>（这里的术语是<code>Ticket</code>，下文将不区分这两个词，请根据上下文理解）；第二步是将这个<code>token</code>发往服务提供端去请求相应的服务。</p>
+<p>下图是整个认证过程中各个组件按顺序相互传递的消息内容，在阅读整个流程之前，有几点提需要注意:</p>
+<ol>
+<li>各个组件都有自己独立的秘钥：Client的秘钥由用户提供，AS、TGS、SS需要提前生成自己独立的秘钥</li>
+<li>AS、TGS由于属于认证服务器的一部分，它们可以查询KDC得到用户或其他服务器的秘钥，比如AS可以认为拥有用户的、TGS的以及SS的秘钥</li>
+</ol>
+<p><img data-src="/attaches/2019/2019-10-27-hadoop-auth/kerberos-auth-sequence.png" alt="Kerberos认证流程" /></p>
+<p>看了这个复杂的流程，大家心里应该有很多疑惑。整个通信过程传递了很多的消息，消息被来来回回加密了很多次，真的是有必要的吗？背后的原因是什么呢？事实上，我们结合上面提到的几个设计原则来看，问题就会相对清晰一些。</p>
+<p>虽然整个通信过程涉及到的消息很多，但是我们仔细思考就可以发现这几条规律：</p>
+<ol>
+<li>整个认证过程中，避免了任何地方有明文的密码传输</li>
+<li>与<code>JWT</code>一样，通信过程生成有效时间比较短的会话秘钥用于通信</li>
+<li>与<code>JWT</code>一样，认证服务器无需存储会话秘钥，各个参与方（Client/SS）可以独立进行消息验证，从而实现高性能。这也是虽然消息B和E不能被Client解密，但是还是会发往Client，然后再由Client回发的原因</li>
+<li><code>Kerberos</code>并没有对<code>Client</code>和<code>SS</code>之间的通信协议进行限制，虽然和认证服务器进行通信需要基于<code>TCP/UDP</code>，但<code>Client</code>和<code>SS</code>通信可以用任意协议进行</li>
+</ol>
+<p>理解了上述通信流程之后，可以看到，相比<code>JWT</code>，<code>Kerberos</code>还进行了下面的额外验证：</p>
+<ol>
+<li>认证过程将验证服务提供端的ID，一般会基于hostname进行</li>
+<li>认证过程将验证各个组件的时间，相互不能相差太多，这也是<code>Kerberos</code>要求各个组件进行时间同步的原因</li>
+</ol>
+<p>除了上面这些安全验证，其实<code>Kerberos</code>还支持免密码输入的登录，我们可以将用户的秘钥（并非真正的密码，由真正的密码hash生成）生成到一个<code>keytab</code>格式的文件中，这样在第一步中，就可以由用户提供ID(principal)及<code>keytab</code>文件来完成了。</p>
+<p>虽然<code>Kerberos</code>可以支持多种场景的认证，但是由于其协议设计比较复杂，在使用上会给我们带来不少的困难。比如我们需要提前为各个组件生成独立的秘钥，一般要求每个服务器都不一样，与不同的主机绑定，这就给我们部署服务带来了挑战，特别是在当前微服务、云原生应用、容器、k8s比较流行的时候。</p>
+<h3 id="通信过程演示"><a class="markdownIt-Anchor" href="#通信过程演示"></a> 通信过程演示</h3>
+<p>为了更清晰的看到整个通信的过程，我们可以动手实践一下看看：</p>
+<p>运行下面的命令进入一个<code>centos</code>的容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it centos:7 -p1800:1800 -p1802:1802 bash</span><br></pre></td></tr></table></figure>
+<p>然后安装配置kdc并生成相关的秘钥：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将kdc kdc.hadoop.com加入hosts，以便后续进行基于hosts文件的主机名解析</span></span><br><span class="line">yum install net-tools -y</span><br><span class="line">ip_addr=$(ifconfig eth0 | grep inet | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip_addr</span> kdc-server kdc-server.hadoop.com&quot;</span> &gt;&gt; /etc/hosts</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装相关软件并进行配置</span></span><br><span class="line">yum install krb5-server krb5-libs krb5-workstation -y</span><br><span class="line"><span class="comment"># 创建krb5配置文件，详细配置解释请参考：https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_conf.html</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/krb5.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">#Configuration snippets may be placed in this directory as well</span></span><br><span class="line"><span class="string">includedir /etc/krb5.conf.d/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[logging]</span></span><br><span class="line"><span class="string">  default = FILE:/var/log/krb5.log</span></span><br><span class="line"><span class="string">  kdc = FILE:/var/log/krb5kdc.log</span></span><br><span class="line"><span class="string">  admin_server = FILE:/var/log/kadmind.log</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[libdefaults]</span></span><br><span class="line"><span class="string">  forcetcp = true</span></span><br><span class="line"><span class="string">  default_realm = HADOOP.COM</span></span><br><span class="line"><span class="string">  dns_lookup_realm = false</span></span><br><span class="line"><span class="string">  dns_lookup_kdc = false</span></span><br><span class="line"><span class="string">  ticket_lifetime = 24h</span></span><br><span class="line"><span class="string">  renew_lifetime = 7d</span></span><br><span class="line"><span class="string">  forwardable = true</span></span><br><span class="line"><span class="string">  udp_preference_limit = 1</span></span><br><span class="line"><span class="string">  default_tkt_enctypes = des-cbc-md5 des-cbc-crc des3-cbc-sha1</span></span><br><span class="line"><span class="string">  default_tgs_enctypes = des-cbc-md5 des-cbc-crc des3-cbc-sha1</span></span><br><span class="line"><span class="string">  permitted_enctypes = des-cbc-md5 des-cbc-crc des3-cbc-sha1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[realms]</span></span><br><span class="line"><span class="string">  HADOOP.COM = &#123;</span></span><br><span class="line"><span class="string">    kdc = kdc-server.hadoop.com:2802</span></span><br><span class="line"><span class="string">    admin_server = kdc-server.hadoop.com:2801</span></span><br><span class="line"><span class="string">    default_domain = hadoop.com</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[domain_realm]</span></span><br><span class="line"><span class="string">  .hadoop.com = HADOOP.COM</span></span><br><span class="line"><span class="string">  hadoop.com = HADOOP.COM</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="comment"># 创建kdc配置文件，详细配置解释请参考：https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/kdc_conf.html</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /var/kerberos/krb5kdc/kdc.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">default_realm = HADOOP.COM</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[kdcdefaults]</span></span><br><span class="line"><span class="string"> kdc_ports = 0</span></span><br><span class="line"><span class="string"> v4_mode = nopreauth</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[realms]</span></span><br><span class="line"><span class="string"> HADOOP.COM = &#123;</span></span><br><span class="line"><span class="string">    kdc_ports = 2800</span></span><br><span class="line"><span class="string">    kdc_tcp_ports = 2802</span></span><br><span class="line"><span class="string">    admin_keytab = /etc/kadm5.keytab</span></span><br><span class="line"><span class="string">    database_name = /var/kerberos/krb5kdc/principal</span></span><br><span class="line"><span class="string">    acl_file = /var/kerberos/krb5kdc/kadm5.acl</span></span><br><span class="line"><span class="string">    key_stash_file = /var/kerberos/krb5kdc/stash</span></span><br><span class="line"><span class="string">    max_life = 10h 0m 0s</span></span><br><span class="line"><span class="string">    max_renewable_life = 7d 0h 0m 0s</span></span><br><span class="line"><span class="string">    master_key_type = des3-hmac-sha1</span></span><br><span class="line"><span class="string">    supported_enctypes = arcfour-hmac:normal des3-hmac-sha1:normal des-cbc-crc:normal des:normal des:v4 des:norealm des:onlyrealm des:afs3</span></span><br><span class="line"><span class="string">    default_principal_flags = +preauth</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&#x27;123456\n123456&#x27;</span> | kdb5_util create -r HADOOP.COM -s  <span class="comment"># 创建一个名为HADOOP.COM的域</span></span><br><span class="line">/usr/sbin/krb5kdc &amp;&amp; /usr/sbin/kadmind                        <span class="comment"># 启动kdc及kadmind服务</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&#x27;123456\n123456&#x27;</span> | kadmin.local addprinc gml    <span class="comment"># 创建gml账号</span></span><br><span class="line">kadmin.local xst -k gml.keytab gml@HADOOP.COM           <span class="comment"># 生成gml账号的keytab文件</span></span><br><span class="line"></span><br><span class="line">kadmin.local addprinc -randkey root/localhost@HADOOP.COM       <span class="comment"># 创建名为root并和kdc主机进行绑定的服务账号</span></span><br><span class="line">kadmin.local xst -k server.keytab root/localhost@HADOOP.COM    <span class="comment"># 创建用于服务器的keytab文件</span></span><br></pre></td></tr></table></figure>
+<p>将生成的keytab文件下载到本地，然后就可以进行测试了。编写测试的客户端和服务端代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.ietf.jgss.GSSContext;</span><br><span class="line"><span class="keyword">import</span> org.ietf.jgss.GSSCredential;</span><br><span class="line"><span class="keyword">import</span> org.ietf.jgss.GSSException;</span><br><span class="line"><span class="keyword">import</span> org.ietf.jgss.GSSManager;</span><br><span class="line"><span class="keyword">import</span> org.ietf.jgss.Oid;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.DataInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.DataOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">TestClient</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> String srvPrincal;</span><br><span class="line">        <span class="keyword">private</span> String srvIP;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> srvPort;</span><br><span class="line">        <span class="keyword">private</span> Socket socket;</span><br><span class="line">        <span class="keyword">private</span> DataInputStream inStream;</span><br><span class="line">        <span class="keyword">private</span> DataOutputStream outStream;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">TestClient</span><span class="params">(String srvPrincal, String srvIp, <span class="type">int</span> srvPort)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            <span class="built_in">this</span>.srvPrincal = srvPrincal;</span><br><span class="line">            <span class="built_in">this</span>.srvIP = srvIp;</span><br><span class="line">            <span class="built_in">this</span>.srvPort = srvPort;</span><br><span class="line">            <span class="built_in">this</span>.initSocket();</span><br><span class="line">            <span class="built_in">this</span>.initKerberos();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">initSocket</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">            <span class="built_in">this</span>.socket = <span class="keyword">new</span> <span class="title class_">Socket</span>(srvIP, srvPort);</span><br><span class="line">            <span class="built_in">this</span>.inStream = <span class="keyword">new</span> <span class="title class_">DataInputStream</span>(socket.getInputStream());</span><br><span class="line">            <span class="built_in">this</span>.outStream = <span class="keyword">new</span> <span class="title class_">DataOutputStream</span>(socket.getOutputStream());</span><br><span class="line">            System.out.println(<span class="string">&quot;Connected to server: &quot;</span> + <span class="built_in">this</span>.socket.getInetAddress());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">initKerberos</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            System.setProperty(<span class="string">&quot;java.security.krb5.conf&quot;</span>, <span class="string">&quot;experiment/src/main/krb5.conf&quot;</span>);</span><br><span class="line">            System.setProperty(<span class="string">&quot;java.security.auth.login.config&quot;</span>, <span class="string">&quot;experiment/src/main/client.conf&quot;</span>);</span><br><span class="line">            System.setProperty(<span class="string">&quot;javax.security.auth.useSubjectCredsOnly&quot;</span>, <span class="string">&quot;false&quot;</span>);</span><br><span class="line">            System.setProperty(<span class="string">&quot;sun.security.krb5.debug&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;init kerberos: set up objects as configured&quot;</span>);</span><br><span class="line">            <span class="type">GSSManager</span> <span class="variable">manager</span> <span class="operator">=</span> GSSManager.getInstance();</span><br><span class="line">            <span class="type">Oid</span> <span class="variable">krb5Oid</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Oid</span>(<span class="string">&quot;1.2.840.113554.1.2.2&quot;</span>);</span><br><span class="line">            <span class="type">GSSContext</span> <span class="variable">context</span> <span class="operator">=</span> manager.createContext(</span><br><span class="line">                    manager.createName(srvPrincal, <span class="literal">null</span>),</span><br><span class="line">                    krb5Oid, <span class="literal">null</span>, GSSContext.DEFAULT_LIFETIME);</span><br><span class="line">            context.requestMutualAuth(<span class="literal">true</span>);</span><br><span class="line">            context.requestConf(<span class="literal">true</span>);</span><br><span class="line">            context.requestInteg(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;init kerberos: Do the context establishment loop&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="type">byte</span>[] token = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (!context.isEstablished()) &#123;</span><br><span class="line">                <span class="comment">// token is ignored on the first call</span></span><br><span class="line">                token = context.initSecContext(token, <span class="number">0</span>, token.length);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Send a token to the server if one was generated by initSecContext</span></span><br><span class="line">                <span class="keyword">if</span> (token != <span class="literal">null</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Will send token of size &quot;</span> + token.length + <span class="string">&quot; from initSecContext.&quot;</span>);</span><br><span class="line">                    outStream.writeInt(token.length);</span><br><span class="line">                    outStream.write(token);</span><br><span class="line">                    outStream.flush();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// If the client is done with context establishment then there will be no more tokens to read in this loop</span></span><br><span class="line">                <span class="keyword">if</span> (!context.isEstablished()) &#123;</span><br><span class="line">                    token = <span class="keyword">new</span> <span class="title class_">byte</span>[inStream.readInt()];</span><br><span class="line">                    System.out.println(</span><br><span class="line">                            <span class="string">&quot;Will read input token of size &quot;</span> + token.length + <span class="string">&quot; for processing by initSecContext&quot;</span>);</span><br><span class="line">                    inStream.readFully(token);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;Context Established! &quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;Client is &quot;</span> + context.getSrcName());</span><br><span class="line">            System.out.println(<span class="string">&quot;Server is &quot;</span> + context.getTargName());</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendMessage</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            <span class="comment">// Obtain the command-line arguments and parse the port number</span></span><br><span class="line"></span><br><span class="line">            <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> <span class="string">&quot;Hello Server &quot;</span>;</span><br><span class="line">            <span class="type">byte</span>[] messageBytes = msg.getBytes();</span><br><span class="line">            outStream.writeInt(messageBytes.length);</span><br><span class="line">            outStream.write(messageBytes);</span><br><span class="line">            outStream.flush();</span><br><span class="line"></span><br><span class="line">            <span class="type">byte</span>[] token = <span class="keyword">new</span> <span class="title class_">byte</span>[inStream.readInt()];</span><br><span class="line">            System.out.println(<span class="string">&quot;Will read token of size &quot;</span> + token.length);</span><br><span class="line">            inStream.readFully(token);</span><br><span class="line"></span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(token);</span><br><span class="line">            System.out.println(s);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;Exiting... &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            <span class="type">TestClient</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestClient</span>(<span class="string">&quot;root/localhost@HADOOP.COM&quot;</span>, <span class="string">&quot;localhost&quot;</span>, <span class="number">9111</span>);</span><br><span class="line">            client.sendMessage();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">TestServer</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> localPort;</span><br><span class="line">        <span class="keyword">private</span> ServerSocket ss;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">Socket</span> <span class="variable">socket</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">TestServer</span><span class="params">(<span class="type">int</span> port)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.localPort = port;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">receive</span><span class="params">()</span> <span class="keyword">throws</span> IOException, GSSException &#123;</span><br><span class="line">            <span class="built_in">this</span>.ss = <span class="keyword">new</span> <span class="title class_">ServerSocket</span>(localPort);</span><br><span class="line">            socket = ss.accept();</span><br><span class="line">            <span class="type">DataInputStream</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DataInputStream</span>(socket.getInputStream());</span><br><span class="line">            <span class="type">DataOutputStream</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DataOutputStream</span>(socket.getOutputStream());</span><br><span class="line">            <span class="built_in">this</span>.initKerberos(in, out);</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> <span class="variable">length</span> <span class="operator">=</span> in.readInt();</span><br><span class="line">            <span class="type">byte</span>[] token = <span class="keyword">new</span> <span class="title class_">byte</span>[length];</span><br><span class="line">            System.out.println(<span class="string">&quot;Will read token of size &quot;</span> + token.length);</span><br><span class="line">            in.readFully(token);</span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(token);</span><br><span class="line">            System.out.println(<span class="string">&quot;Receive Client token: &quot;</span> + s);</span><br><span class="line"></span><br><span class="line">            <span class="type">byte</span>[] token1 = <span class="string">&quot;Receive Client Message&quot;</span>.getBytes();</span><br><span class="line">            out.writeInt(token1.length);</span><br><span class="line">            out.write(token1);</span><br><span class="line">            out.flush();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">initKerberos</span><span class="params">(DataInputStream in, DataOutputStream out)</span> <span class="keyword">throws</span> GSSException, IOException &#123;</span><br><span class="line">            <span class="type">GSSManager</span> <span class="variable">manager</span> <span class="operator">=</span> GSSManager.getInstance();</span><br><span class="line">            <span class="type">GSSContext</span> <span class="variable">context</span> <span class="operator">=</span> manager.createContext((GSSCredential) <span class="literal">null</span>);</span><br><span class="line">            <span class="type">byte</span>[] token;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (!context.isEstablished()) &#123;</span><br><span class="line">                token = <span class="keyword">new</span> <span class="title class_">byte</span>[in.readInt()];</span><br><span class="line">                System.out.println(<span class="string">&quot;Will read input token of size &quot;</span> + token.length + <span class="string">&quot; for processing by acceptSecContext&quot;</span>);</span><br><span class="line">                in.readFully(token);</span><br><span class="line"></span><br><span class="line">                token = context.acceptSecContext(token, <span class="number">0</span>, token.length);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Send a token to the peer if one was generated by acceptSecContext</span></span><br><span class="line">                <span class="keyword">if</span> (token != <span class="literal">null</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Will send token of size &quot;</span> + token.length + <span class="string">&quot; from acceptSecContext.&quot;</span>);</span><br><span class="line">                    out.writeInt(token.length);</span><br><span class="line">                    out.write(token);</span><br><span class="line">                    out.flush();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;Context Established! &quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;Client is &quot;</span> + context.getSrcName());</span><br><span class="line">            System.out.println(<span class="string">&quot;Server is &quot;</span> + context.getTargName());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, GSSException &#123;</span><br><span class="line">            System.setProperty(<span class="string">&quot;java.security.krb5.conf&quot;</span>, <span class="string">&quot;experiment/src/main/krb5.conf&quot;</span>);</span><br><span class="line">            System.setProperty(<span class="string">&quot;java.security.auth.login.config&quot;</span>, <span class="string">&quot;experiment/src/main/server.conf&quot;</span>);</span><br><span class="line">            System.setProperty(<span class="string">&quot;javax.security.auth.useSubjectCredsOnly&quot;</span>, <span class="string">&quot;false&quot;</span>);</span><br><span class="line">            System.setProperty(<span class="string">&quot;sun.security.krb5.debug&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="type">TestServer</span> <span class="variable">server</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestServer</span>(<span class="number">9111</span>);</span><br><span class="line">            server.receive();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先运行<code>Server</code>程序，再运行<code>Client</code>程序，我们将能从输出内容中看到整个通信的过程。</p>
+<p>当前web应用成为主流的时候，<code>Kerberos</code>如何在<code>HTTP/HTTPS</code>协议场景下使用呢？我们又要如何配置，才能运行一套支持认证的Hadoop集群呢？请关注后续文章。</p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/13/security/source-code-advanced-security-programming-java-se-authentication-secure-communication-and-single-sig.html">Java官方Demo</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Kerberos">Wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_conf.html">krb5配置</a></li>
+<li><a target="_blank" rel="noopener" href="https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/kdc_conf.html">kdc配置</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/30/hadoop-auth-2/" rel="bookmark">Hadoop安全认证机制 （二）</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/11/11/hadoop-auth-3/" rel="bookmark">Hadoop安全认证机制 （三）</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/12/02/hadoop-auth-4/" rel="bookmark">Hadoop安全认证机制 （四）</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/01/21/spark-performance-tuning-on-billions-of-data/" rel="bookmark">亿级数据Spark应用调优之旅</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 大数据</a>
+              <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"><i class="fa fa-tag"></i> 安全</a>
+              <a href="/tags/hadoop/" rel="tag"><i class="fa fa-tag"></i> hadoop</a>
+              <a href="/tags/kerberos/" rel="tag"><i class="fa fa-tag"></i> kerberos</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/07/after-reading-of-refactoring-v2/" rel="prev" title="再读重构">
+      <i class="fa fa-chevron-left"></i> 再读重构
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/30/hadoop-auth-2/" rel="next" title="Hadoop安全认证机制 （二）">
+      Hadoop安全认证机制 （二） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.</span> <span class="nav-text"> 安全认证协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#kerberos"><span class="nav-number">1.1.</span> <span class="nav-text"> Kerberos</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B%E6%BC%94%E7%A4%BA"><span class="nav-number">1.2.</span> <span class="nav-text"> 通信过程演示</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'f50e8a1e1eff605ddea61f7818e130e9',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

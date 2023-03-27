@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前段时间，咱们CTO八叉在极客时间做了一次关于用Smart Domain实现DDD的分享（点击这里回看）。一个新词Smart Domain进入大家的视野。  Smart Domain解析 Smart Domain是啥？为什么可以用Smart Domain实现DDD？本文尝试结合以往对DDD的学习和实践的经验，跟大家分享一下个人的理解。 八叉在分享中提到Smart Domain这个名字来源于Smar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我理解的Smart Domain与DDD">
+<meta property="og:url" content="http://brightliao.com/2022/07/27/smart-domain-and-ddd/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="前段时间，咱们CTO八叉在极客时间做了一次关于用Smart Domain实现DDD的分享（点击这里回看）。一个新词Smart Domain进入大家的视野。  Smart Domain解析 Smart Domain是啥？为什么可以用Smart Domain实现DDD？本文尝试结合以往对DDD的学习和实践的经验，跟大家分享一下个人的理解。 八叉在分享中提到Smart Domain这个名字来源于Smar">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-07-27-smart-domain-and-ddd/smart-domain-models.jpeg">
+<meta property="article:published_time" content="2022-07-27T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-09T07:39:50.336Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="架构">
+<meta property="article:tag" content="DDD">
+<meta property="article:tag" content="领域">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2022/2022-07-27-smart-domain-and-ddd/smart-domain-models.jpeg">
+
+<link rel="canonical" href="http://brightliao.com/2022/07/27/smart-domain-and-ddd/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>我理解的Smart Domain与DDD | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/07/27/smart-domain-and-ddd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我理解的Smart Domain与DDD
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-27 20:00:00" itemprop="dateCreated datePublished" datetime="2022-07-27T20:00:00+08:00">2022-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-09 15:39:50" itemprop="dateModified" datetime="2022-08-09T15:39:50+08:00">2022-08-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9E%B6%E6%9E%84/ddd/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/07/27/smart-domain-and-ddd/" class="post-meta-item leancloud_visitors" data-flag-title="我理解的Smart Domain与DDD" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>前段时间，咱们CTO八叉在极客时间做了一次关于用Smart Domain实现DDD的分享（点击<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1QT411J7jh">这里</a>回看）。一个新词Smart Domain进入大家的视野。</p>
+<h2 id="smart-domain解析"><a class="markdownIt-Anchor" href="#smart-domain解析"></a> Smart Domain解析</h2>
+<p>Smart Domain是啥？为什么可以用Smart Domain实现DDD？本文尝试结合以往对DDD的学习和实践的经验，跟大家分享一下个人的理解。</p>
+<p>八叉在分享中提到Smart Domain这个名字来源于Smart UI。我们都知道Smart UI是DDD中提到的一种反模式，只能用于解决简单问题。这里的命名略带反讽戏谑的意味。</p>
+<span id="more"></span>
+<p>下面咱们结合示例看看Smart Domain究竟是什么。</p>
+<p>打开Smart Domain的示例工程：<a target="_blank" rel="noopener" href="https://github.com/Re-engineering-Domain-Driven-Design/Accounting">https://github.com/Re-engineering-Domain-Driven-Design/Accounting</a>。可以看到，项目在结构上分为了四个子模块：</p>
+<ul>
+<li><code>main</code>: Web应用入口，负责配置即启动应用</li>
+<li><code>api</code>: 定义Restful API</li>
+<li><code>domain</code>: 核心领域层</li>
+<li><code>persistent</code>: 数据持久化</li>
+</ul>
+<h3 id="模块划分与依赖关系"><a class="markdownIt-Anchor" href="#模块划分与依赖关系"></a> 模块划分与依赖关系</h3>
+<p>深究起来，这四个模块和现在的分层架构有一些相似之处，但却并<strong>没有显示的严格的进行分层</strong>。同时，八叉在分享中明确提到了分层架构对领域建模是有伤害的，容易导致抽象不足。</p>
+<p>值得注意的是，<strong><code>domain</code>模块没有任何依赖</strong>，其他模块则依赖<code>spring</code>及相应的包。通过在<code>domain</code>层定义抽象的接口（但不提供实现，由其他模块提供实现）的方式，将<code>domain</code>层的核心逻辑隔离起来，使得<code>domain</code>层可以非常容易根据领域需要进行灵活的设计及独立的测试。大家如果熟悉依赖倒置的设计原则，应该可以很容易领会这一做法的好处。（<code>domain</code>层本应该依赖数据持久化进行数据的查询与保存，这里通过抽象的接口设计让持久化层反过来依赖<code>domain</code>层的接口。）</p>
+<h3 id="关联对象"><a class="markdownIt-Anchor" href="#关联对象"></a> 关联对象</h3>
+<p>Smart Domain的一个关键设计在于在模型之间<strong>引入了一个中间关联对象</strong>。关联对象由一系列接口来定义（见代码中的<code>HasMany</code> <code>HasOne</code> <code>Many</code>接口），各类跨模型的操作均通过关联对象实现。这一设计避免了直接进行模型引用的诸多问题，比如引用的模型数量太多无法直接放入内存、引用的模型的查询修改通过<code>Repository</code>实现进而引入抽象能力很弱的<code>Service</code>去协调等。</p>
+<p>示例项目中通过关联对象建模出的结果如下：</p>
+<p><img data-src="/attaches/2022/2022-07-27-smart-domain-and-ddd/smart-domain-models.jpeg" alt="Smart Domain Models" /></p>
+<p>无关联对象的实现方式的本质问题在于希望完全用内存模型来抽象数据库访问，而内存模型事实上无法直接建模数据库的复杂性，因而引起了一系列连锁反应。通过引入关联对象，<strong>将数据库访问显示的建模出来</strong>，这些连锁反应就不复存在了，领域层也将更清晰、纯粹和丰满。</p>
+<p>关联对象和传统DDD中的<code>Repository</code>的抽象有一定的相似点，在我看来其最重要的区别在于关联对象接口定义在了引用方代码中。这一做法的隐含建议是<strong>从使用的角度来定义接口</strong>，从而使得接口定义不多不少，刚好满足系统需求。</p>
+<h3 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h3>
+<p>由于在Smart Domain的设计里面，<strong>对象图以统一的关联的形式被创建</strong>出来，所以可以提供一个统一的访问关联对象的方法。这一点很好的符合了Restful API的设计思想，API模块利用这个特点，以很少的代码完成了Restful API的导出。</p>
+<p>纵观Smart Domain的设计，可以发现结构上非常简洁，没有引入传统DDD实践中常用却很难用好的<code>Repository</code> <code>Service</code> <code>Aggregate</code>等模式。然而这恰恰是让开发人员可以<strong>集中精力在对领域的挖掘和思考</strong>上。</p>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>总结起来，Smart Domain主要的创新及价值有以下几点：</p>
+<ul>
+<li>打破了大家习惯用的分层架构，这些分层架构大都是从技术角度进行的抽象，而非领域角度</li>
+<li>摒弃了职责模糊不清的service模式，使得原来service层的逻辑下沉到领域模型中，从而期望得到更丰满的领域模型</li>
+<li>弱化了DDD中引入的聚合、限界上下文等容易引起争议的模式</li>
+<li>尽可能的摒弃了在代码中使用过于技术化的术语，如Controller、DTO等，从而使得我们更专注于领域设计，通过引入更多的抽象来解决问题</li>
+<li>将数据库查询显示的建模出来（通过关联对象），而不是直接在模型中引用关联模型的实例，有利于避免查询性能问题</li>
+</ul>
+<h2 id="为什么说smart-domain实现了ddd"><a class="markdownIt-Anchor" href="#为什么说smart-domain实现了ddd"></a> 为什么说Smart Domain实现了DDD？</h2>
+<p>经过上面对Smart Domain的分析之后，可能有人会问：这跟DDD有啥关系？为什么DDD中的很多设计模式都没用却说实现了DDD？</p>
+<p>要回答这个问题，需要搞清楚什么是DDD，即DDD的定义是什么。</p>
+<h3 id="什么是ddd"><a class="markdownIt-Anchor" href="#什么是ddd"></a> 什么是DDD？</h3>
+<p>要追寻DDD的定义，可以回到这本早期的也是业界公认最权威的Eric的书《领域驱动设计-软件核心复杂性应对之道》中。</p>
+<p>Eric并未直接在书中对DDD进行定义，但是在第一章中，结合示例，总结了有效建模的几个要素：</p>
+<ul>
+<li>模型和实现的绑定</li>
+<li>获得了一种基于模型的语言</li>
+<li>开发一个蕴含丰富知识的模型</li>
+<li>持续进行模型提炼</li>
+<li>头脑风暴进行创新，进行大量实验</li>
+</ul>
+<p>在知识消化章节提到：</p>
+<ul>
+<li>分析员和程序员将自己的知识输入到了模型中，因此模型的组织更严密，抽象也更为整洁</li>
+<li>模型反映业务的深层次知识，模型真正是对业务原理的抽象反映</li>
+</ul>
+<p>在统一语言章节提到：</p>
+<ul>
+<li>如果不把“讲话”与各种沟通方式配合起来使用，那么将是巨大的浪费，因为人类本身就有 讲话的天赋。遗憾的是，当人们讲话时，一般并不使用领域模型的语言。</li>
+<li>当人们谈话时，自然会发现词语解释和意义上的差别，而且自然而然会解决这些差别。他们会发现这种语言中的晦涩之处并消除它们，从而使语言变得顺畅。</li>
+<li>使用模型的元素以及模型中各元素之间的交互来大声描述场景，并且按照模型允许的方式将各种概念结合到一起。找到更简单的表达方式来讲出你要讲的话，然后将这些新的思想应用到图和代码中。</li>
+</ul>
+<p>从这些描述可以看出DDD的指导思想是：<strong>深入研究领域，消化知识，充分沟通，然后用软件模型对问题进行深刻的抽象，最终得到一个富含知识的领域模型。</strong></p>
+<h3 id="smart-domain实现ddd"><a class="markdownIt-Anchor" href="#smart-domain实现ddd"></a> Smart Domain实现DDD</h3>
+<p>从上面的分析来看，DDD的实现不在于用何种方法，而是看最后是否得到了良好的深刻的领域模型。Smart Domain可以促进我们把关注点从研究技术转向研究领域，从而推动开发人员去深入分析理解问题，创新的大胆的进行抽象和建模，最终得到好的领域模型。所以，可以说Smart Domain提供了一种很好的方式来实现DDD，这显然是合理的。</p>
+<h2 id="smart-domain的扩展思考"><a class="markdownIt-Anchor" href="#smart-domain的扩展思考"></a> Smart Domain的扩展思考</h2>
+<p>Smart Domain给我们提供了一个新的DDD实现思路。我们对它有没有什么疑问呢？</p>
+<h3 id="领域层抽象"><a class="markdownIt-Anchor" href="#领域层抽象"></a> 领域层抽象</h3>
+<p>习惯分层架构的同学，看到Smart Domain的思想，可能在直觉上会感觉事情不太对：以往可能有的项目上的代码超过10w行，但领域模型却只有10多个，难道要把这些代码都放入这10多个类？</p>
+<p>事实上，这正好是抽象不足的表现，也正是Smart Domain或者DDD希望解决的问题。正是由于我们不能把太多代码放入同一个类（过大的类是一种明显的反模式）这个原因，才<strong>促使我们想办法通过引入更多的抽象来解决问题</strong>。</p>
+<p>如何引入新的抽象？一个典型的示例是DDD原书中提到的关于策略模式抽象的例子。</p>
+<p>在航运领域建模的过程中，在处理货物超订时，如果没有抽象，可以直接在代码中加入一些条件判断代码来实现。这样的处理方式的结果就是某个模型或类中的代码越来越多，直至难以维护。</p>
+<p>而仔细思考领域之后，可以发现：</p>
+<blockquote>
+<p>超订规则是一个策略。策略其实是一种设计模式，也就是我们所说的STRATEGY模式。</p>
+</blockquote>
+<p>可以看到，用策略模式来抽象可以很好的解决这个问题。这就是深入思考的结果。</p>
+<p>除了可以用策略模式进行抽象，DDD书中提到的大多数常见模式都是可以使用的，比如<code>Factory</code>、<code>Repository</code>等。这些模式还包括设计模式中的组合模式、门面模式、解释器模式、观察者模式等等。</p>
+<p>或许是大家在学习或者讲解DDD时过于关注了DDD引入的几个新的模式（如实体、值对象、聚合等），很多人都忽略了DDD中指出的要深入理解领域这个重点中的重点。</p>
+<p>下面是Eric在书中语重心长的想要提醒大家的文字：</p>
+<blockquote>
+<p>通过像PCB示例这样的模型获得的知识远远不只是“发现名词”，业务活动和规则如同所涉 及的实体一样，都是领域的中心…当我们的建模不再局限于寻找实体和值对象时我们才能充分吸取知识…领域专家往往不会意识到他们的思考过程有多么复杂，协作消化知识的过程使得规则得以澄清和充实，并消除规则矛盾以及删除无用规则。</p>
+</blockquote>
+<h3 id="弱化分层强化领域划分"><a class="markdownIt-Anchor" href="#弱化分层强化领域划分"></a> 弱化分层，强化领域划分</h3>
+<p>有人可能会问，上面例子中的策略模式相关的代码应该放在什么地方？当然是领域层！事实上Smart Domain的设计思想是根本不区分这些分层。这样一来，所有代码都是可以看作领域层代码（尽管有一些代码看作基础设施层可能更为合理），从而把尽量多的代码放在领域层，尽最大可能丰富领域层。</p>
+<p>分层被弱化了，领域中的代码变多了，这正是DDD和Smart Domain所希望的结果。然而，随之而来的问题是如何管理这些代码。</p>
+<p>很容易想到的答案是进行模块划分。事实上，DDD中有单独提到“模块”这一模式。<strong>进行模块划分时，应参考高内聚低耦合的原则</strong>，使得模块内是高内聚，模块间是低耦合的。</p>
+<p>常见的不符合高内聚低耦合模块划分原则的一个反例是按照技术名称进行模块划分。比如，可以回顾一下我们维护过的代码库，是不是还记得里面有一些模块的名称是<code>controller</code> <code>requests</code> <code>responses</code> <code>dtos</code> <code>services</code>等等？当我们打开这些模块时，会发现里面的类其实没什么关系，而模块间的相互引用却非常多。</p>
+<p>事实上，DDD中讲到了更多的关于广义的模块划分的内容。从整个源代码库的角度来看，源代码可以按照从小到大不同粒度划分为函数、类、模块、领域、服务等级别。DDD中讲到了如何在这些不同的层级进行划分。</p>
+<p>在<strong>类级别</strong>，DDD原书中提到了<strong>Standalone Class</strong>模式。Standalone Class即独立的与其他类无关的类。这一模式其实是在说类级别的高内聚低耦合。</p>
+<p>在类级别之上，DDD中提到了<strong>Aggregate</strong>模式。Aggretate即<strong>一组强相关的类</strong>形成的聚合。这一模式其实是在说一组类的高内聚低耦合。</p>
+<p>在<strong>领域级别</strong>，DDD提到了<strong>领域划分</strong>。可以按照领域的职责，将领域划分为核心域、通用域、支撑域等领域。这一模式是在说领域的高内聚低耦合。</p>
+<p>事实上，从完整的代码库的角度来看，可以很容易建立以下认知：</p>
+<p>代码块构成一个范围，函数体构成一个范围，类构成一个范围，类所在的包构成了一个范围，包所在的库构成了一个范围。将范围当做领域来理解，可以认为这些领域按照不同的细节程度和抽象程度构成了一个类似森林的结构。而森林的每一层都应当是高内聚低耦合的。</p>
+<p>关于以上内容的更多描述，欢迎参考我的另一篇博客<a href="/2019/08/08/domain-concept-in-your-code/">《代码中的领域》</a>。</p>
+<h3 id="与传统的聚合相结合"><a class="markdownIt-Anchor" href="#与传统的聚合相结合"></a> 与传统的聚合相结合</h3>
+<p>在Smart Domain的示例代码中，基于内存的抽象也通过关联实现，略显麻烦。比如：</p>
+<ul>
+<li>客户端需要调用好几个api才能把一个页面需要的数据拿到，不太方便</li>
+<li>基于内存访问数据比基于关联对象访问更方便</li>
+</ul>
+<p>传统的DDD实现通过聚合（聚合根直接引用其他实体）来解决此问题。如果可以确定聚合中关联的其他实体数量不多，则也许还是可以考虑通过聚合的方式来实现。此时，直接通过一个Restful API一次性返回此聚合中的所有模型即可。</p>
+<p>对于聚合根之间的引用，则仍然可以采用Smart Domain中的关联对象实现方式。</p>
+<p>如此一来，可以结合两者的优势。这可能是实践过程中值得考虑的选择。</p>
+<p>不过，混合两种模式对架构师可能不太友好。与其引入更多的选择，他们可能更希望推进项目中的架构一致性。实际项目中，可能要结合团队成员的能力来综合考虑如何选择。</p>
+<h2 id="总结-2"><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h2>
+<p>本文分析了Smart Domain的设计，尝试回答了为什么Smart Domain可以用于实现DDD。结合以往对DDD的学习和实践经验，分享了一些扩展的问题。希望对大家了解DDD和Smart Domain有一定帮助。</p>
+<p>虽然Smart Domain作为一种设计范式，可以辅助我们实现DDD。但是具体到真实项目中，建模这个过程还得结合实际的领域问题。有哪些值得参考的案例呢？下一篇文章将做一些分享。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/08/08/domain-concept-in-your-code/" rel="bookmark">代码中的领域</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/07/28/modelling-examples/" rel="bookmark">DDD建模案例分享</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/08/06/you-may-need-a-lightweight-zhongtai/" rel="bookmark">你可能需要一个轻量级的中台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/05/22/architecture-designing-practise-for-ml-platform/" rel="bookmark">机器学习平台架构实践--微服务</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/05/23/architecture-designing-practise-for-ml-platform-configuration/" rel="bookmark">机器学习平台架构实践--配置管理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag"><i class="fa fa-tag"></i> 架构</a>
+              <a href="/tags/ddd/" rel="tag"><i class="fa fa-tag"></i> DDD</a>
+              <a href="/tags/%E9%A2%86%E5%9F%9F/" rel="tag"><i class="fa fa-tag"></i> 领域</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/05/tdd-to-develop-a-long-running-task-system/" rel="prev" title="用TDD开发基于数据库的长时任务系统">
+      <i class="fa fa-chevron-left"></i> 用TDD开发基于数据库的长时任务系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/28/modelling-examples/" rel="next" title="DDD建模案例分享">
+      DDD建模案例分享 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#smart-domain%E8%A7%A3%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text"> Smart Domain解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%88%92%E5%88%86%E4%B8%8E%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB"><span class="nav-number">1.1.</span> <span class="nav-text"> 模块划分与依赖关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.2.</span> <span class="nav-text"> 关联对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.</span> <span class="nav-text"> 其他</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text"> 总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AF%B4smart-domain%E5%AE%9E%E7%8E%B0%E4%BA%86ddd"><span class="nav-number">2.</span> <span class="nav-text"> 为什么说Smart Domain实现了DDD？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFddd"><span class="nav-number">2.1.</span> <span class="nav-text"> 什么是DDD？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smart-domain%E5%AE%9E%E7%8E%B0ddd"><span class="nav-number">2.2.</span> <span class="nav-text"> Smart Domain实现DDD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#smart-domain%E7%9A%84%E6%89%A9%E5%B1%95%E6%80%9D%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text"> Smart Domain的扩展思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E5%B1%82%E6%8A%BD%E8%B1%A1"><span class="nav-number">3.1.</span> <span class="nav-text"> 领域层抽象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B1%E5%8C%96%E5%88%86%E5%B1%82%E5%BC%BA%E5%8C%96%E9%A2%86%E5%9F%9F%E5%88%92%E5%88%86"><span class="nav-number">3.2.</span> <span class="nav-text"> 弱化分层，强化领域划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E4%BC%A0%E7%BB%9F%E7%9A%84%E8%81%9A%E5%90%88%E7%9B%B8%E7%BB%93%E5%90%88"><span class="nav-number">3.3.</span> <span class="nav-text"> 与传统的聚合相结合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-2"><span class="nav-number">4.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '9055229e00527efad20ee6ec66e00661',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="以下是一组某电商应用消费数据，你能从中看出什么？    日期 2019&#x2F;06&#x2F;01 2019&#x2F;06&#x2F;02 2019&#x2F;06&#x2F;03 2019&#x2F;06&#x2F;04 2019&#x2F;06&#x2F;05 2019&#x2F;06&#x2F;06 2019&#x2F;06&#x2F;07     金额（万） 213 181 163 147 152 155 171    我们应该能很容易的注意到：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据分析思维">
+<meta property="og:url" content="http://brightliao.com/2020/08/22/data-analyst-mindset/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="以下是一组某电商应用消费数据，你能从中看出什么？    日期 2019&#x2F;06&#x2F;01 2019&#x2F;06&#x2F;02 2019&#x2F;06&#x2F;03 2019&#x2F;06&#x2F;04 2019&#x2F;06&#x2F;05 2019&#x2F;06&#x2F;06 2019&#x2F;06&#x2F;07     金额（万） 213 181 163 147 152 155 171    我们应该能很容易的注意到：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-08-22-data-analyst-mindset/transaction_total_of_time.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-08-22-data-analyst-mindset/averaged_transaction_total_of_time.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-08-22-data-analyst-mindset/predicted_transaction_total_of_time.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-08-22-data-analyst-mindset/task-split.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/2020-08-22-data-analyst-mindset/mind-set.png">
+<meta property="article:published_time" content="2020-08-22T12:00:00.000Z">
+<meta property="article:modified_time" content="2020-09-06T09:45:30.000Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2020/2020-08-22-data-analyst-mindset/transaction_total_of_time.png">
+
+<link rel="canonical" href="http://brightliao.com/2020/08/22/data-analyst-mindset/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据分析思维 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/08/22/data-analyst-mindset/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据分析思维
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-22 20:00:00" itemprop="dateCreated datePublished" datetime="2020-08-22T20:00:00+08:00">2020-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-06 17:45:30" itemprop="dateModified" datetime="2020-09-06T17:45:30+08:00">2020-09-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/22/data-analyst-mindset/" class="post-meta-item leancloud_visitors" data-flag-title="数据分析思维" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>以下是一组某电商应用消费数据，你能从中看出什么？</p>
+<table>
+<thead>
+<tr>
+<th>日期</th>
+<th>2019/06/01</th>
+<th>2019/06/02</th>
+<th>2019/06/03</th>
+<th>2019/06/04</th>
+<th>2019/06/05</th>
+<th>2019/06/06</th>
+<th>2019/06/07</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>金额（万）</td>
+<td>213</td>
+<td>181</td>
+<td>163</td>
+<td>147</td>
+<td>152</td>
+<td>155</td>
+<td>171</td>
+</tr>
+</tbody>
+</table>
+<p>我们应该能很容易的注意到：</p>
+<span id="more"></span>
+<ol>
+<li>6月1日消费比较多</li>
+<li>6月2日消费也很多，但相对降低</li>
+<li>6月3号到6号消费量持平</li>
+<li>6月7号又开始上涨</li>
+</ol>
+<p>但是这些意味着什么呢？如果是一个数据分析师，他应该能结合数据的周期性规律进行解读：</p>
+<ul>
+<li>6月1日儿童节，大家的购物需求可能会上涨，此时可能会有礼品购买、活动举办等情况发生。同时6月1日恰逢周六，节日与周末叠加，消费需求应该更旺盛。</li>
+<li>6月2日周日，消费大幅降低，但依然保持着较高水平。</li>
+<li>工作日周一和周五，分别对应工作日开始和结束，人们有着较高的消费需求。结合我们平日的工作，周一有可能企业会有集中的办公品采购，周五则可能提前进入周末假期。</li>
+</ul>
+<p>总结起来，电商消费数据可能存在下述周期性规律：</p>
+<ol>
+<li>周末消费量高</li>
+<li>节日消费量高</li>
+<li>工作日周二、周三、周四消费量低</li>
+<li>工作日周一、周五消费量高</li>
+</ol>
+<p>为更好的显示这样的周期性规律，可以绘制消费金额随时间的变化曲线：</p>
+<p><img data-src="/attaches/2020/2020-08-22-data-analyst-mindset/transaction_total_of_time.png" alt="transaction_total_of_time.png" /></p>
+<p>为突出变化趋势，将每一天的消费金额减去平均值，再次绘制曲线如下：</p>
+<p><img data-src="/attaches/2020/2020-08-22-data-analyst-mindset/averaged_transaction_total_of_time.png" alt="averaged_transaction_total_of_time.png" /></p>
+<p>这些观察对企业而言意味着什么呢？分为现状和未来两个方面来看。对于当前现状，可以分析当前业务是否健康。对于未来，可以预测后续消费数据，为仓库备货提供参考。</p>
+<p>为分析业务健康状况，还需要历史数据做支撑。此时可以考虑搜集历史的消费数据进行分析。搜集前两周的数据，并以周为周期计算预测值如下：</p>
+<p><img data-src="/attaches/2020/2020-08-22-data-analyst-mindset/predicted_transaction_total_of_time.png" alt="predicted_transaction_total_of_time.png" /></p>
+<p>其中：</p>
+<ul>
+<li>6月1日预测数据由5月18日和5月25日数据的平均值得到，6月2日预测数据由5月19日和5月26日数据的平均值得到。以此类推。</li>
+<li>节日效应为：6月1日的数据与预测数据之差，即 <code>213 - 187.5 = 25.5</code></li>
+<li>6月8日的数据由5月18日、5月25日、6月1日的数据减去节日效应，并取平均得到，即<code>(185 + 190 + 213 - 25.5) / 3 = 187.5</code></li>
+</ul>
+<p>有了这些分析，可以发现：</p>
+<ol>
+<li>除了节日效应之外，6月1日到7日这一周的数据与预测值相差不大，可以认为业务活动趋于稳定</li>
+<li>下周需备足金额为1153万的货</li>
+</ol>
+<p>如果还想进一步确定哪种货物备多少，那就继续分析每一种货物的出售情况。</p>
+<p>上述分析结论可以有力的支持企业进行决策，这就是数据分析的力量。</p>
+<p>数据分析的过程看上去好像很厉害的样子。但是仔细一想，这些分析的过程中也没用到什么高端的技术啊？作为程序员，这些我也会。事实上，这里主要是数据分析思维在发挥作用。</p>
+<p>那么什么是数据分析思维，在我看来，就是有经验的数据分析师们惯用的思维模式。下面来看看都有哪些思维模式。</p>
+<h2 id="数据分析思维"><a class="markdownIt-Anchor" href="#数据分析思维"></a> 数据分析思维</h2>
+<h3 id="数据分析思维一建立标准的数据分析流程"><a class="markdownIt-Anchor" href="#数据分析思维一建立标准的数据分析流程"></a> 数据分析思维一：建立标准的数据分析流程</h3>
+<p>回顾上述的数据分析过程，可以发现数据分析一般可以分为这样六个步骤：</p>
+<ol>
+<li>定义分析目标：评估当前的业务状况，为库存管理提供支持</li>
+<li>确定分析思路，提出假设：按时间维度进行分析，周末节假日消费高，工作日一五消费高，工作日二三四消费低</li>
+<li>搜集数据：搜集前几周的数据</li>
+<li>数据预处理：对数据进行初步的分析处理，处理空值、异常值等</li>
+<li>分析数据，验证假设：分析数据变化规律，验证之前假设是否正确</li>
+<li>给出结论及建议：当前业务表现正常，下周备货1153万</li>
+</ol>
+<p>在开始真正分析数据之前，先定义分析目标、确定分析思路并提出合理假设，这两个前置步骤对于数据分析非常关键。它们决定了要如何进行后续分析。没有思路，无法进行分析。思路不对，则后续分析都是无用功。</p>
+<p>除此之外，做出分析结论通常也是一件极具挑战的任务。如果分析结论不能论据充分并结合客观业务现状，那么来自业务方的挑战将使你失去信任。比如，在上面的例子中，如果我们发现6月1日销售额上涨，没有进行深入分析，就直接归因于市场部的营销活动做得好。这个时候，市场部的人跳出来说，我们没有做什么活动呀。那是不是很尴尬？</p>
+<h3 id="数据分析思维二业务指导分析过程"><a class="markdownIt-Anchor" href="#数据分析思维二业务指导分析过程"></a> 数据分析思维二：业务指导分析过程</h3>
+<p>先来思考一下，对于这样几个问题，你可以给出答案吗？</p>
+<ul>
+<li>张妈妈的孩子半岁大，喝婴儿奶粉，请问多少天后张妈妈需要买下一罐？</li>
+<li>李妈妈家想换房，一家又老又破旧的小房子却比一个优质的高层小区房单价贵一倍，为什么？</li>
+<li>王女士信用卡额度20000，一个月刷了10000。她老公额度15000刷了7500。王女士和她老公谁对于银行更有营销潜力？</li>
+</ul>
+<p>这里的答案分别是：</p>
+<ul>
+<li>6</li>
+<li>学区房与郊区房</li>
+<li>差不多</li>
+</ul>
+<p>如果我们没能答对这些问题，这说明我们不懂这部分业务。但是，这些业务知识对于一个数据分析师而言却非常重要。</p>
+<p>比如，对于一个卖奶粉的电商业务，我们想统计流失的客户，以便进行客户挽回。应该如何计算客户是否流失呢？有了上面的业务知识，就可以很简单的知道，如果某个客户一周以上都没有再来买奶粉了，那他多半就是流失了。</p>
+<p>比如，对于某一个房产中介，如果要进行线上广告投放，该如何定位目标群体呢？有了上面的业务知识，就可以知道，对于学区房，应该主要投放给有孩的较高收入家庭。对于郊区房，更多是投放给收入不高的青年家庭。</p>
+<p>数据分析的一大误区就是过于专注数据，而忽视业务的指导。</p>
+<p>事实上，丰富的业务知识是数据分析得以有效开展的前提。具备了相应的业务知识，就能具备对于数据的敏感度，不仅可以引导分析思路，还能避免一些明显的业务问题。</p>
+<h3 id="数据分析思维三指标思维"><a class="markdownIt-Anchor" href="#数据分析思维三指标思维"></a> 数据分析思维三：指标思维</h3>
+<p>比如“最近业绩上涨了”这只是说明业绩的一个变化，我们无法知道上涨的时间段或程度。指标思维就是“这个月业绩上涨10%”。这里对应的指标就是“月业绩上涨率”。</p>
+<p>数据分析要避免用模糊的文字描述来衡量变化，而改用清楚的数字。</p>
+<p>有些场景直接量化难以操作，此时就需要将其拆解为几个容易量化的指标。比如，衡量用户对产品的喜爱程度，可以改为衡量用户单次使用应用的平均时长、用户使用频次、分享次数等综合指标。</p>
+<h3 id="数据分析思维四分析模型思维"><a class="markdownIt-Anchor" href="#数据分析思维四分析模型思维"></a> 数据分析思维四：分析模型思维</h3>
+<p>成熟的业界研究多年的分析模型是数据分析师常用的工具包。</p>
+<p>如需要分析行业发展前景时，行业竞争情况时，考虑使用SWOT、PEST、五力模型来进行分析。需要分析企业经营情况时，采用杜邦分析、评分积分卡模型等。需要分析市场营销、渠道运营可以考虑采用4P模型、4C模型、5W1H模型。分析用户时，可以考虑转换漏斗等。</p>
+<p>这些分析模型可以帮助我们建立思维框架。</p>
+<h3 id="数据分析思维五将复杂问题分解为小问题"><a class="markdownIt-Anchor" href="#数据分析思维五将复杂问题分解为小问题"></a> 数据分析思维五：将复杂问题分解为小问题</h3>
+<p>数据分析师的一个关键思维方式就是将复杂问题拆解为小问题。</p>
+<p>常用的分析模型可以帮助我们进行问题分解。但是不是任何地方都适用，很多时候我们需要结合场景进行问题拆解。</p>
+<p>一般的做法就是采用思维导图来辅助进行拆解。比如，如果我们要分析如何短期扩大公司利润，从产品角度来看，可以进一步拆解为：现有产品与新产品，现有产品可以进一步拆解为主力产品和搭配产品，对于主力产品可能可以进一步扩大销售渠道。对于搭配产品，可以考虑停止生产，降低成本。对于新产品，可以考虑分解为设计阶段、研发阶段、试验阶段等。</p>
+<p><img data-src="/attaches/2020/2020-08-22-data-analyst-mindset/task-split.png" alt="task-split.png" /></p>
+<p>注意这里的分解尽量做到MECE，为此可以采用分箱拆解法。比如用户消费能力可以按照消费额分解为五个等级。然后再对每个等级的用户采取不同的措施。</p>
+<h3 id="数据分析思维六提出多种方案并进行对比"><a class="markdownIt-Anchor" href="#数据分析思维六提出多种方案并进行对比"></a> 数据分析思维六：提出多种方案，并进行对比</h3>
+<p>解决问题的办法通常不止一种，如果我们找到一种方案便停止分析，在专业的业务人员看来，结论一般会过于草率，不够专业。</p>
+<p>还是以如何扩大公司利润为例。可以有多种途径可以实现，从<code>利润 = 收入 - 支出</code>的公式来看，可以提高收入，也可以降低支出。而提高收入的方式又有多种，可以上调产品价格，扩大销售渠道，引入新产品等等。支出也可以进一步分为产品生产成本、市场推广成本、销售成本、运营成本、新品研发成本等等。具体采取哪种方式，需要结合公司战略、市场行情等因素综合确定。</p>
+<h3 id="数据分析思维七对数据质量保持怀疑"><a class="markdownIt-Anchor" href="#数据分析思维七对数据质量保持怀疑"></a> 数据分析思维七：对数据质量保持怀疑</h3>
+<p>数据分析师需要对数据质量保持怀疑的态度。因为数据搜集是一件很困难的事情，好的数据不一定有，数据有了不一定对。</p>
+<p>因为涉及隐私问题，用户一般是不愿意提供数据的。我如何知道你会不会拿去卖给其他人？我也不想每天接到无数个贷款、中介的骚扰电话了。就算银行存款业务，在开户的时候也只能确保拿到正确的身份证，也就是只有性别和年龄，开通手机银行才能登记到准确的手机号。</p>
+<p>其次，搜集高质量的数据是更很难的。比如，调查表可能是执行人员随便找人填的。又比如，申请房贷的时候，填的工资证明可能是房屋销售人员为了获取一定的银行回扣，故意让你填的一个数。</p>
+<p>数据质量在企业中是一个永恒的话题，企业里面永远在想办法提升数据质量。常常能看到线下店购物注册会员有优惠或积分，这其实是商家让利以便获取用户的信息。信用卡提额可以通过提供资产证明来实现，银行通过给高额度来搜集客户资产信息。</p>
+<p>既然获取高质量的数据这么困难，我们在分析数据时，就不能轻易相信数据的正确性。需要反复推敲信息来源并提出可能的问题，使用数据清洗，异常值处理等手段来降低数据噪音。</p>
+<h3 id="数据分析思维八在全面深入分析之前不过早下结论"><a class="markdownIt-Anchor" href="#数据分析思维八在全面深入分析之前不过早下结论"></a> 数据分析思维八：在全面深入分析之前，不过早下结论</h3>
+<p>数据分析是一个深入思考并进行数据验证的过程，不过早下结论是数据分析师需要具备的素质。</p>
+<p>如果没有深入分析，我们可能会一看到应用日活上涨，就觉得是应用质量有提升。一提到引入新用户就是做广告。这么直接浅显的结论无法让人信服。</p>
+<p>对于日活上涨，从用户结构的角度分析，我们可以看这些上涨来自哪一部分用户的贡献。来自新用户，还是老用户呢？是新用户增加了？还是老用户使用频率提高了？从营销的角度分析，我们可以看这些用户是来自哪个渠道的，进而分析这个渠道最近是不是有促销等等。</p>
+<p>对于引入新用户，方法也很多。比如可以考虑不同业务线进行交叉销售，让销售人员进行电话营销，投资进行热点软文营销等等。</p>
+<p>通常，对于一个结论的合理性，我们要尽可能的多方面去寻找数据支撑。只有进行过周密分析之后得出的结论才是有说服力的。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>前面讨论的数据分析思维多而杂，但是如果我们将其纳入一般的数据分析流程中，可以得到下图：</p>
+<p><img data-src="/attaches/2020/2020-08-22-data-analyst-mindset/mind-set.png" alt="mind-set.png" /></p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/09/10/easy-statistical-test/" rel="bookmark">统计基础-区间估计</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/09/13/correlation-analysis/" rel="bookmark">你的收入和支出相关吗？</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/11/26/data-work-roles/" rel="bookmark">那些数据工作中的角色</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/03/data-capability-building-suggestions/" rel="bookmark">浅谈企业数据能力建设</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/27/oracle-data-migration/" rel="bookmark">Oracle数据迁移实用入门</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag"><i class="fa fa-tag"></i> 数据分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/07/basic-loan-business/" rel="prev" title="银行贷款业务是怎么一回事？">
+      <i class="fa fa-chevron-left"></i> 银行贷款业务是怎么一回事？
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/10/easy-statistical-test/" rel="next" title="统计基础-区间估计">
+      统计基础-区间估计 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4"><span class="nav-number">1.</span> <span class="nav-text"> 数据分析思维</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E4%B8%80%E5%BB%BA%E7%AB%8B%E6%A0%87%E5%87%86%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 数据分析思维一：建立标准的数据分析流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E4%BA%8C%E4%B8%9A%E5%8A%A1%E6%8C%87%E5%AF%BC%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text"> 数据分析思维二：业务指导分析过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E4%B8%89%E6%8C%87%E6%A0%87%E6%80%9D%E7%BB%B4"><span class="nav-number">1.3.</span> <span class="nav-text"> 数据分析思维三：指标思维</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E5%9B%9B%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E6%80%9D%E7%BB%B4"><span class="nav-number">1.4.</span> <span class="nav-text"> 数据分析思维四：分析模型思维</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E4%BA%94%E5%B0%86%E5%A4%8D%E6%9D%82%E9%97%AE%E9%A2%98%E5%88%86%E8%A7%A3%E4%B8%BA%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="nav-number">1.5.</span> <span class="nav-text"> 数据分析思维五：将复杂问题分解为小问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E5%85%AD%E6%8F%90%E5%87%BA%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%A1%88%E5%B9%B6%E8%BF%9B%E8%A1%8C%E5%AF%B9%E6%AF%94"><span class="nav-number">1.6.</span> <span class="nav-text"> 数据分析思维六：提出多种方案，并进行对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E4%B8%83%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%B4%A8%E9%87%8F%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91"><span class="nav-number">1.7.</span> <span class="nav-text"> 数据分析思维七：对数据质量保持怀疑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%80%9D%E7%BB%B4%E5%85%AB%E5%9C%A8%E5%85%A8%E9%9D%A2%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E4%B9%8B%E5%89%8D%E4%B8%8D%E8%BF%87%E6%97%A9%E4%B8%8B%E7%BB%93%E8%AE%BA"><span class="nav-number">1.8.</span> <span class="nav-text"> 数据分析思维八：在全面深入分析之前，不过早下结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '05d727943a86e6c08de3ca548c816184',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

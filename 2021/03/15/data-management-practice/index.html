@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="我们在前面的文章中讨论了如何将数据接入到数据平台。一般而言，接入到数据平台的数据会来自众多的业务系统，这样一来，我们就拥有了大量不同来源的数据。如何将这些数据有效的管理起来是一个很大的挑战。本文将尝试结合我们的项目实践经验做一些分享。 （数据仓库可以理解为数据平台中所有数据的一个集合，所以，数据平台中的数据管理也可以说是数据仓库中的数据管理。下文中数据平台和数据仓库会经常交替使用，其意义基本一致">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据平台数据管理实践">
+<meta property="og:url" content="http://brightliao.com/2021/03/15/data-management-practice/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="我们在前面的文章中讨论了如何将数据接入到数据平台。一般而言，接入到数据平台的数据会来自众多的业务系统，这样一来，我们就拥有了大量不同来源的数据。如何将这些数据有效的管理起来是一个很大的挑战。本文将尝试结合我们的项目实践经验做一些分享。 （数据仓库可以理解为数据平台中所有数据的一个集合，所以，数据平台中的数据管理也可以说是数据仓库中的数据管理。下文中数据平台和数据仓库会经常交替使用，其意义基本一致">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-15-data-management-practice/mindmap.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-15-data-management-practice/simple-dag.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-15-data-management-practice/indicator-combine.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-03-15-data-management-practice/indicator-combine1.png">
+<meta property="article:published_time" content="2021-03-15T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-16T13:55:32.787Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据平台">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-03-15-data-management-practice/mindmap.png">
+
+<link rel="canonical" href="http://brightliao.com/2021/03/15/data-management-practice/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据平台数据管理实践 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/03/15/data-management-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据平台数据管理实践
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-15 20:00:00" itemprop="dateCreated datePublished" datetime="2021-03-15T20:00:00+08:00">2021-03-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 21:55:32" itemprop="dateModified" datetime="2022-10-16T21:55:32+08:00">2022-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/03/15/data-management-practice/" class="post-meta-item leancloud_visitors" data-flag-title="数据平台数据管理实践" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>15 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p><img data-src="/attaches/2021/2021-03-15-data-management-practice/mindmap.png" alt="Data management in data platform" /></p>
+<p>我们在<a href="http://brightliao.com/2021/03/01/data-ingestion-practice/">前面的文章</a>中讨论了如何将数据接入到数据平台。一般而言，接入到数据平台的数据会来自众多的业务系统，这样一来，我们就拥有了大量不同来源的数据。如何将这些数据有效的管理起来是一个很大的挑战。本文将尝试结合我们的项目实践经验做一些分享。</p>
+<p>（数据仓库可以理解为数据平台中所有数据的一个集合，所以，数据平台中的数据管理也可以说是数据仓库中的数据管理。下文中数据平台和数据仓库会经常交替使用，其意义基本一致。）</p>
+<span id="more"></span>
+<p>将数据管理起来是为了高效的查找和使用数据。我们先来看一下通常是如何使用数据的。</p>
+<h2 id="一个简单的指标计算"><a class="markdownIt-Anchor" href="#一个简单的指标计算"></a> 一个简单的指标计算</h2>
+<p>假设现在有一个大型零售行业的场景，我们的主要产品是空调。作为空调生产商，空调的销售主要是通过各大经销店完成的。现在我们想知道空调的销量情况用以辅助决策，可以开发一个指标来统计销量。</p>
+<h3 id="开始"><a class="markdownIt-Anchor" href="#开始"></a> 开始</h3>
+<p>如何统计销量呢？看起来只需要把销售的订单找出来，做一个加和统计就可以了。但是实际情况会更复杂一些，从业务上讲，以下场景产生的订单不需要统计：</p>
+<ul>
+<li>订单被取消</li>
+<li>订单还在进行中</li>
+<li>订单产生了退货</li>
+<li>内部奖励产生的订单</li>
+<li>翻新的产品产生的订单</li>
+</ul>
+<p>这个时候我们的销量统计逻辑可以用<code>SQL</code>表达为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> sales_count</span><br><span class="line"><span class="keyword">from</span> <span class="keyword">order</span></span><br><span class="line"><span class="keyword">where</span> closed<span class="operator">=</span><span class="literal">true</span> canceled<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> rejected<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> reward_order<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> retread_product<span class="operator">=</span><span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>（实际情况可能更复杂，因为<code>order</code>表可能没有是否翻新产品或者是否是内部奖励的信息，此时需要连接其他表进行查询。）</p>
+<h3 id="考虑取数时间"><a class="markdownIt-Anchor" href="#考虑取数时间"></a> 考虑取数时间</h3>
+<p>上述代码正确吗？我们需要注意，根据每天接入数据平台的数据来看，对于某一个订单，数据仓库里面的数据可能是重复的。比如，订单a在前天创建，同时在昨天被更新，这时，前天和昨天的数据里面都会有这个订单。根据这里的分析，我们需要取当前最新状态的订单来进行计算才行。上述的<code>SQL</code>需要改进为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> sales_count</span><br><span class="line"><span class="keyword">from</span> (</span><br><span class="line">    <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (</span><br><span class="line">        <span class="keyword">select</span> <span class="operator">*</span>,</span><br><span class="line">            <span class="comment">-- 先根据订单id进行分组，然后根据时间排序，得到序号</span></span><br><span class="line">            <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> id <span class="keyword">order</span> <span class="keyword">by</span> update_time <span class="keyword">desc</span>) n</span><br><span class="line">        <span class="keyword">from</span> <span class="keyword">order</span></span><br><span class="line">    ) all_order</span><br><span class="line">    <span class="keyword">where</span> n <span class="operator">=</span> <span class="number">1</span>  <span class="comment">-- 取序号为1的订单，即最新订单</span></span><br><span class="line">) latest_order</span><br><span class="line"><span class="keyword">where</span> closed<span class="operator">=</span><span class="literal">true</span> canceled<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> rejected<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> reward_order<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> retread_product<span class="operator">=</span><span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h3 id="考虑计算历史指标"><a class="markdownIt-Anchor" href="#考虑计算历史指标"></a> 考虑计算历史指标</h3>
+<p>此时，我们还会希望这个指标可以每天定时计算出来，然后通过大屏进行展示。这个需求就要更复杂一些了。我们常常需要一个任务调度系统来支持，以便可以将上述的代码每天跑一次。其实不仅仅是调度系统，为了支持决策，我们还常常有统计历史指标的需要，比如销量指标在上个月是多少，本月是增长了还是下降了？</p>
+<p>这时，代码里面需要加入一个变量，那就是希望计算哪一天的指标。这个参数我们可以命名为<code>data_date</code>。上述代码可以进一步优化为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> sales_count</span><br><span class="line"><span class="keyword">from</span> (</span><br><span class="line">    <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (</span><br><span class="line">        <span class="keyword">select</span> <span class="operator">*</span>,</span><br><span class="line">            <span class="comment">-- 先根据订单id进行分组，然后根据时间排序，得到序号</span></span><br><span class="line">            <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> id <span class="keyword">order</span> <span class="keyword">by</span> update_time <span class="keyword">desc</span>) n</span><br><span class="line">        <span class="keyword">from</span> <span class="keyword">order</span></span><br><span class="line">        <span class="keyword">where</span> ods_insert_date <span class="operator">&lt;=</span> $&#123;data_date&#125;  <span class="comment">-- 筛选出目标数据日期及以前的订单</span></span><br><span class="line">    ) all_order</span><br><span class="line">    <span class="keyword">where</span> n <span class="operator">=</span> <span class="number">1</span>  <span class="comment">-- 取序号为1的订单，即最新订单</span></span><br><span class="line">) latest_order</span><br><span class="line"><span class="keyword">where</span> closed<span class="operator">=</span><span class="literal">true</span> canceled<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> rejected<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> reward_order<span class="operator">=</span><span class="literal">false</span> <span class="keyword">and</span> retread_product<span class="operator">=</span><span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h3 id="考虑计算其他维度"><a class="markdownIt-Anchor" href="#考虑计算其他维度"></a> 考虑计算其他维度</h3>
+<p>这下看起来好像差不多了。但是，通常来讲，还有更多的来自业务方的需求，比如，希望可以根据经销店的维度来查看这个指标，以便对比分析。希望按照省、市、区维度来查看这个指标，以便对比分析。</p>
+<p>此时我们需要考虑指标保存的粒度了。对于经销店粒度的指标而言，因为总的销量与各经销店的销量有汇总关系，所以这里可能没必要保存总销量。当需要总销量时，在展示的时候进行汇总加和即可。</p>
+<p>对于省、市、区这几个维度而言，不难看出，它们存在层级关系：区以上是市，市以上是省。其实经销店与这三个地域维度也存在层级关系：经销店以上是区，区以上是市，市以上是省。所以，事实上，我们只需要保存到经销店粒度的统计数据就可以支持省、市、区维度的统计了。</p>
+<p>于是我们可以修改代码为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> dealer_id, section, city, province, <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> sales_count</span><br><span class="line"><span class="keyword">from</span> (</span><br><span class="line">    ...</span><br><span class="line">) latest_order</span><br><span class="line"><span class="keyword">where</span> ...</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> dealer_id, section, city, province</span><br></pre></td></tr></table></figure>
+<p>（实际情况可能更复杂，因为<code>order</code>表往往没有省、市、区的信息，此时需要连接其他表进行查询。）</p>
+<h3 id="调度运行"><a class="markdownIt-Anchor" href="#调度运行"></a> 调度运行</h3>
+<p>到这里，一个基本的指标计算算是搞定了。实际情况下，由于这个任务需要<code>order</code>等表的数据，需要在数据接入之后才能运行。我们会将这个计算任务和数据接入的任务组成一个数据处理管道（Pipeline），通过调度器调度整个任务管道进行执行。下面是使用<code>Airflow</code>组织的一个简单的任务管道图。</p>
+<p><img data-src="/attaches/2021/2021-03-15-data-management-practice/simple-dag.png" alt="simple dag" /></p>
+<h2 id="对数据管理的启发"><a class="markdownIt-Anchor" href="#对数据管理的启发"></a> 对数据管理的启发</h2>
+<p>上面我们完成了一个简单指标的计算，让我们来回顾一下整个过程，看看从数据平台数据管理的角度我们需要做哪些事才能让整个过程更高效。</p>
+<h3 id="数据清洗"><a class="markdownIt-Anchor" href="#数据清洗"></a> 数据清洗</h3>
+<p>首先是根据需要确定取数范围，并筛选特定的数据出来。这一步常常需要进行一定的数据清洗。数据清洗的例子比如：</p>
+<ul>
+<li>对于业务系统数据库中的是否取消字段<code>canceled</code>，其取值可能是<code>null</code>、<code>true</code>、<code>false</code>。为了便于在上层计算（如行数据分析或指标计算）时的逻辑更简单和一致，最好能将此字段限制为非空，取值为<code>true</code>和<code>false</code>，数据清洗可以将<code>null</code>可以映射为<code>false</code>。</li>
+<li>有一些字符串类型的字段，比如经销商所在城市，在业务数据库中可能存储为类型<code>char(32)</code>，在接入数据平台之后，会发现该字段的值包含了一些用于补位的空白字符。这些多余的空白字符是不便于分析的，一般可以将其去掉。</li>
+<li>还有一些数据，可能是由测试产生的，这些数据一般需要标记出来，或直接排除掉。</li>
+</ul>
+<p>数据清洗是为了让数据更便于分析和加工处理。这一过程也理解为：将某些相同的数据加工逻辑抽象为一个统一的数据清洗过程。</p>
+<h3 id="数据建模"><a class="markdownIt-Anchor" href="#数据建模"></a> 数据建模</h3>
+<p>在进行数据分析或指标开发的时候，我们常常要面对数百张张数据库表，如何找到需要的表呢？一个简单的办法是将数据库表做一下分类。</p>
+<p>一般而言，可以将数据库表分为事实表和维度表。事实表存储的是一些业务事实，比如订单、付款、物流、维修等。维度表则存储不常变化的一些维度数据，比如经销商信息，产品信息，用户信息等。这就是最基本的维度建模的思想。</p>
+<p>这个数据库表分类方法还有一个好处，那就是，一般的统计分析都是以事实表为中心的分析，比如销量、退单量、维修次数等等。维度表一般是用于希望多维度分析数据的情况，比如按照省、市、区、经销店维度进行分析。此类分析的一般模式是从事实表开始查询，然后连接需要的维度所在的表，然后根据维度进行聚合得到结果。</p>
+<p>有的说法认为维度建模绝不止将业务系统的数据库进行分类这么简单，需要从业务角度出发，重新定义一套模型，然后将业务系统数据库的模型映射到新模型中。对于维度建模如何实现的问题，我们可能需要另起一篇文章来讨论。</p>
+<p>从我们的实践经验来看，虽然说业务系统主要是以三范式来建立数据库模型，但是三范式其实与维度模型有一定的相似之处，简单来说，可以建立一一对应关系。比如三范式建模的订单表，其实可以直接对应到维度模型的订单事实表。三范式建模的经销商表，可以直接对应到维度模型的经销商维度表。为了避免过多繁杂的价值不明显的讨论，一个简单的、稳定的维度建模实施方式就是直接对业务系统的数据库表做一下事实维度划分。</p>
+<p>有了事实和维度的划分，数据分析或指标开发就有套路可寻了。一般的套路就是，先找到和计算目标对应的事实表，然后关联到该事实表对应的维度表，选出需要的事实和维度，进行统计即可。比如前面的销量计算，首先可以找到订单事实表，然后通过事实表中的经销商id关联到经销商维度表，把需要的维度数据取出来进行分组统计即可。</p>
+<p>在项目实践过程中，我们一般会将数据清洗和数据建模放在一起完成。此时我们会进行一层基础数据层的抽象，这一个数据层一般称为建模层，也常称为明细数据层或<code>DWD</code>（Data Warehouse Details）层。</p>
+<h3 id="数据主题划分"><a class="markdownIt-Anchor" href="#数据主题划分"></a> 数据主题划分</h3>
+<p>除了事实表和维度表的划分，还可以有一种划分方法，那就是根据主题来进行划分。</p>
+<p>假设我们从5个业务系统分别接入了40张数据库表，此时，我们有200张数据库表。此时，如果所有的数据库表都放在同一个数据库中，在查找时就会碰到麻烦，我们很难在200张数据库表中快速找到想要的那一张表。不仅如此，很多数据工具在展示过多的数据库表时也会遇到性能问题。</p>
+<p>一个简单的应对方法就是，按照主题将数据库表分类放到不同的数据库中。</p>
+<p>那么什么样的主题划分是比较合理的划分呢？事实上，对于同一类业务，我们常常有多种不同的划分方法。比如零售行业，我们可以按照人、货、场这种常用的分析思路来划分，也可以按照售前、售中、售后三个销售阶段进行划分，或者按照不同的渠道进行划分，如划分为线下渠道、网上商店渠道、三方渠道等等。</p>
+<p>这么多种划分方式的选择可能会在团队中引起很多的讨论，这将导致主题划分迟迟没有结论。很多主题划分都将带来较大的成本，因为我们需要将数据映射到这个主题划分上去。为避免过多的前期设计，从我们的经验来看，会更推荐采用一种更为精益的做法。</p>
+<p>首先，我们可以直接简单的按照来源业务系统进行一次划分，每个业务系统对应一个主题。这通常也是合理的。主要的理由是：</p>
+<ul>
+<li>在这些来源业务系统建设之初，通常都经过了广泛讨论，这些业务系统可以认为是高内聚低耦合的。</li>
+<li>一般而言，绝大部分的分析其实是集中在业务系统内部。</li>
+<li>实现上，可以根据不同来源的系统建立数据库，然后将相关的数据库表都置于其中。这在工程上将带来很多好处，因为我们可以把这一条规则当做惯例，而非配置。根据<code>Convention over Configuration</code>的思想，我们可以因此节约很多代码。</li>
+</ul>
+<p>然后，在某一天，我们发现直接根据业务系统进行划分这种方式不便于数据分析，到那时可以根据更好的方式进行划分。在需要用另一种方式划分主题时，我们总是难以避免做一层复杂的数据映射。</p>
+<p>可以考虑的做法是，通过数据库视图（<code>View</code>）这样的技术来实现，此时的主题划分只是对应了一个逻辑上的抽象，我们无需移动数据，也无需复制数据，还可以快速应对设计的变更。使用视图的另一个好处是，我们可以很容易的支持多种主题划分方式。有了这样的灵活性，我们就更不用担心过重的主题设计了，因为我们可以随时应对变更。我们甚至还可以实现一些辅助进行主题划分工具，将这个步骤完全自动化。</p>
+<h3 id="数据逻辑复用"><a class="markdownIt-Anchor" href="#数据逻辑复用"></a> 数据逻辑复用</h3>
+<p>找到数据之后，下一步是组织计算逻辑，比如前面计算销量时，我们会考虑订单的状态，产品的范围等因素。这一步非常关键，因为一旦我们取错数据了，后面的计算就都是错的。</p>
+<p>要梳理出一个合理的正确的取数逻辑常常需要经过大量的讨论、验证及反复工作。比如，刚开始，我们可能选择了所有成功完成的订单。按照这个规则实现之后，我们把数据呈现给业务人员。业务人员说：“这不对呀！为啥把翻新产品的订单也计算进去了？” 没关系，我们来排除掉这些订单。后来，业务人员经过讨论之后，又发现，其实业务上并不太关心内部奖励产生的订单，还需要把这样的订单排除。</p>
+<p>做数据开发时，我们会经常碰到这样的故事。</p>
+<p>如何从技术上缓解这个问题呢？</p>
+<p>我们经过很多轮的验证，才获得了这样一个合理的取数逻辑，这样的经验是非常宝贵的。而且，我们在做其他统计时常常也要做同样考虑，用类似的取数逻辑。比如，当我们要统计某一个用户产生了多少笔订单以确定高价值用户时，这里的订单取数逻辑一般会是相同的。</p>
+<p>将这些经验进行沉淀的一种技术实现方式就是，新建一个数据层，将这些计算过程保存下来。我们常常把这一层称为基础数据层，也有人将其称为轻度汇总层。一般以<code>DWB</code>的缩写来表示，其全称是<code>Data Warehouse Basis</code>。之所以有人将这一层称为轻度汇总层，是因为我们常常还可以在这一层进行数据的轻度汇总，比如按照经销店或者客户维度等比较细粒度的维度进行汇总。上层计算一般可以较容易的复用这样的轻度汇总结果。同时，做了轻度汇总之后，数据量可以进一步减少，对存储的压力也进一步降低了。</p>
+<p>由于我们常常是为了解决逻辑复用的问题而引入的<code>DWB</code>层，所以这一层一般是通过类似软件开发过程中的重构手段而形成的。比如，在开发第一个指标的时候，我们将所有的代码放在了一起。开发第二个指标的时候，我们发现可以和第一个指标有一定的逻辑复用，于是我们抽象了一个<code>DWB</code>层的数据表，将公共的计算逻辑抽取出来用于构建这个表。构建这个表的代码一般还会形成一个独立的数据计算任务，在数据管道的另一个任务中执行。经过几轮重构之后，我们将得到一些比较稳定的公共层数据表，<code>DWB</code>数据层也就慢慢丰富起来了。</p>
+<p>如果团队有较丰富的经验，或者对业务系统的数据本来就理解比较深刻，那么也可以通过自上而下的设计来构建这一层。通过预先设计来构建<code>DWB</code>层的潜在问题是可能引入过度设计，通过重构来实现这一层的潜在问题是可能做了过多的无用功。</p>
+<p>一般而言，<code>DWB</code>层的数据表会与<code>DWD</code>层的事实表相对应。当然，实际情况常常比较复杂，可能有很多合理的例外，只要能体现其价值就可以。</p>
+<p>总结起来，我们通常可以抽象一层<code>DWB</code>来实现计算逻辑的复用。请注意，无论采用什么样的途径构建这个数据层，我们的目标是提高最终指标计算的质量和效率。这个目标才是最重要的，事实上，只要对实现这个目标有益，我们甚至完全可以不构建这一层。当我们遇到分歧时，可以回头来看看这个目标，也许我们就可以很快得到答案了。</p>
+<h3 id="宽表输出"><a class="markdownIt-Anchor" href="#宽表输出"></a> 宽表输出</h3>
+<p>计算出来指标之后，需要向BI应用提供查询服务，有没有什么潜在的问题或者好的实践呢？</p>
+<p>指标的计算通常是具备较强的独立性的，即，一个指标由一个开发人员完成，输出一张数据表。这带来的问题就是，指标表太多了！</p>
+<p>我们可以大概计算一下，在一般的企业中，业务人员希望查看的指标都是数百个，这里可能对应数百张数据表。另外，对于同一个指标，可能存在完全不同的计算维度，此时一个指标也可能产生多张数据库表。比如，对于经销商的管理，在企业组织结构上，可以设立一个业务管理员，分别管理经销店1-5，同时设立一个技术指导员，分别对应经销店2-6。我们希望统计每个管理员对应的空调销量指标。此时，一般我们会视为两个指标分别进行计算，因为它们的统计粒度不一样。这样一来，最终我们会得到两张数据库表。</p>
+<p>所以，我们常常见到的某某数据仓库里面有数千张数据库表的情况，也就不足为怪了。</p>
+<p>这么多数据库表，如果不能很好的管理起来，在维护上也会是一个灾难。比如，通常情况下，为了提高指标的查询效率，我们会将数据同步到一个外部的关系型数据库或者分析型数据库中，如果表数量太多，这里的数据同步就会成为一个很大的问题。</p>
+<p>这么多数据库表，如果不能很好的管理起来，查找的时候也可能会是一个灾难。首先是命名上，很难得到一个较短的又容易理解的表名。其次，就算有一个合理的命名规范，也可能由于相似名字的表太多了而很难找到想要的表。</p>
+<p>在项目实践的时候，有几个值得借鉴的方法可以缓解这个问题。</p>
+<p>第一个方法是，尝试尽量少建数据库表。比如，我们可以将计算逻辑相近的指标放在一起计算，只输出一张数据库表。上面的例子中，针对业务管理员的销量统计和针对技术指导员的销量统计计算逻辑相似，同时输出的维度一般也有很多重合。这两个指标就可以考虑合并为一个指标计算任务进行实现，同时只输出一张表。合并计算带来的一个副作用就是，输出的表中的数据混合了多个指标，不容易理解。但是考虑到通常会由同一个开发人员完成，所以这个问题不会很显著。</p>
+<p>第二个方法是，尝试将最终的数百个指标合并为一张大宽表进行输出。这样一来，对于上层BI系统而言，通常就只需要面对一张数据库表了。合并为一张大宽表输出还可以合并相同维度的指标数据，从而减少数据量。比如，经销商的销量指标包含了省、市、区维度，经销商的售后服务次数指标同样包含了省、市、区维度，这时我们就可以用一行数据来存储这两个指标的结果。</p>
+<p><img data-src="/attaches/2021/2021-03-15-data-management-practice/indicator-combine.png" alt="indicator combine" /></p>
+<p>第二个方法带来的副作用同样是数据查询的问题。比如，合并之后的指标表可能如下：</p>
+<p><img data-src="/attaches/2021/2021-03-15-data-management-practice/indicator-combine1.png" alt="indicator combine" /></p>
+<p>如果要查询经销商的销量指标，我们需要将查询限制为：<code>业务管理员</code>维度为<code>null</code>值 且 <code>技术指导员</code>维度为<code>null</code>值 且 <code>销量指标</code>不为<code>null</code>值。如果要查询业务管理员的销量指标，我们需要将查询限制为：<code>经销商</code>维度为<code>null</code>值 且 <code>技术指导员</code>维度为<code>null</code>值 且 <code>销量指标</code>不为<code>null</code>值。</p>
+<p>虽然带来了一定程度使用上的不便，但是总体上来看，由于我们减少了数据表的管理成本，这个方法还是有效的。最后，如果由于维度和指标太多，实在是查询不便，可以将每个指标的查询逻辑记录下来，或者开发一个指标查询的工具辅助完成查询语句的编写。</p>
+<p>对于这类指标表的存储，我们通常也会在数据仓库中新建一层（一般直接对应一个独立数据库）。这一个数据层常常被称为数据集市层，简称为<code>DM</code>，即Data Market。也有人将其称为数据服务层，简写为<code>DWS</code>，即Data Warehouse Service。最终的指标宽表一般也会对应数据仓库中的一层，常常被称为数据应用层，简写为<code>ADS</code>，即Application Data Service。</p>
+<p>总结起来，对于大量指标的计算，我们可以考虑将其单独存储到<code>DM</code>层中。当输出给其他外部系统时，我们可以考虑将指标合并为一张宽表存储到<code>ADS</code>层，然后进行输出。</p>
+<h3 id="数据分区和命名"><a class="markdownIt-Anchor" href="#数据分区和命名"></a> 数据分区和命名</h3>
+<p>我们上面讲到了数据仓库的分层，按照数据被加工的顺序和深度，依次可以是：<code>ODS</code>层-&gt;<code>DWD</code>层-&gt;<code>DWB</code>层-&gt;<code>DM</code>层-&gt;<code>ADS</code>层。在数据管理时，通常还有一个问题，那就是分区。</p>
+<p>数据一般是按照固定的周期（如每天）定期接入到数据平台的，那么，数据在每张数据库表里面要如何存储呢？</p>
+<p>一般而言，可以按照接入数据的周期进行数据分区存储，比如，如果是每天接入数据，可以建立一个分区字段，其值为接入的数据的时间（一般是接入数据的任务运行时的前一天）。</p>
+<p>从技术上讲，一般的数据仓库技术（如<code>Hive</code>）都会把不同的分区存储为不同的文件。在计算时，如果我们只需要计算某一个分区的数据，则只需要将这个分区的数据查出来做计算即可，这可以大大提升计算的性能。在计算指标时，其实大部分指标都是按接入数据的周期进行统计计算的，这刚好可以利用到数据分区的优势。</p>
+<p>从数据接入策略和数据表的内容来看，我们可以将数据库表分为全量表和增量表。对于全量表，每个分区都是一个全量的数据。对于增量表，每个分区对应的是当期的数据增量。</p>
+<p>在实施时，为了团队可以更容易的统一认知，一般会引入一套命名规范。通过名字可以让大家快速的了解到表的基本设计。</p>
+<p>比如，我们对于全量表会增加一个后缀<code>_f</code>，全称是<code>full</code>，即全量表，对于增量表则增加后缀<code>_h</code>，全称是<code>history</code>，即保存历史的增量表。对于全量表，需要有一个分区字段，该字段名为<code>dt</code>，值为整型存储的日期（如20210505）。增量表的分区字段为<code>di</code>，值与全量表的相同。</p>
+<p>贴源层<code>ODS</code>、明细层<code>DWD</code>及轻度汇总层<code>DWB</code>的数据表都需要符合这一基本规范。<code>DM</code>及<code>ADS</code>层的指标一般没有增量/全量的概念，但是会有一个统计的数据日期字段，这一字段也可以作为分区字段，我们将其命名为<code>data_date</code>，存储字符串类型，如<code>2021-05-05</code>。</p>
+<p>除了数据分区及其命名规范，我们还会规范数据库和数据表的名字。</p>
+<p>在库的命名上，我们一般会反映数据层的名字和当前主题的名字。比如在<code>ODS</code>层，我们会将数据库命名为<code>ods_datasource1</code>、<code>ods_datasource2</code>等，在<code>DWD</code>层将数据库命名为<code>dwd_datasource1</code>、<code>dwd_datasource2</code>等。如果有按照其他方式设计的主题，也是类似，比如如果实施了<code>OneID</code>进行各个系统的<code>ID</code>关联和打通，则可以将对应的数据库命名为<code>dwd_oneid</code>。</p>
+<p>在表的命名上，我们会加上主题的名字和事实维度分类，比如<code>datasource1_dim_customer_f</code>、<code>datasource1_fact_order_h</code>。</p>
+<p>由于<code>DWD</code>层的数据是保留历史数据的，如果我们要查询当前最新的数据，需要做一个开窗选最新数据的操作（<code>row_number() over(partition by id order by update_time desc) n</code>），使用不太方便。<code>DWD</code>的表是使用最频繁的表，而且此类查询最多，对于这类需求，我们可以通过数据库视图来实现。可以为<code>DWD</code>的所有表都创建一个表示该表最新数据的视图，并命名为<code>datasource1_dim_customer_latest_fv</code>。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>最后，我们来简要总结一下。</p>
+<p>为了高效的查找和使用数据，我们需要将数据仓库中的数据有效的管理起来。本文以一个指标的开发过程为例，梳理了整个数据开发过程中的主要步骤。然后，我们分析了这些步骤中可能遇到的问题，以及在数据仓库建设中的一些有效的对策。包含了数据仓库数据清洗、建模、主题划分、逻辑复用、宽表输出及分区和命名。</p>
+<p>数据仓库建设是数据平台建设的核心内容，这个领域其实是一个非常偏工程的领域，很多问题并没有一个是或否的答案。从以上内容中对很多实际问题的分析来看，在实际项目过程中，我们往往需要根据团队的背景、数据的情况、组织分工等进行综合考虑，最终选择一个适合自己团队的方案。</p>
+<p>如何能做好数据仓库甚至数据平台呢？这还需要团队一起努力，保持信息透明，经常思考总结，遇到问题时多方探索，大家都本着精益求精的求索精神，才能做好这件事。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/03/data-capability-building-suggestions/" rel="bookmark">浅谈企业数据能力建设</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/27/oracle-data-migration/" rel="bookmark">Oracle数据迁移实用入门</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/21/some-thoughts-about-data-platform/" rel="bookmark">一些企业数据平台建设的思考</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/02/21/data-governance-based-on-atlas-ranger/" rel="bookmark">基于Hadoop大数据平台的数据治理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/" rel="tag"><i class="fa fa-tag"></i> 数据平台</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/01/data-ingestion-practice/" rel="prev" title="数据平台数据接入实践">
+      <i class="fa fa-chevron-left"></i> 数据平台数据接入实践
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/16/data-modeling-practice/" rel="next" title="数据仓库建模实践">
+      数据仓库建模实践 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%8C%87%E6%A0%87%E8%AE%A1%E7%AE%97"><span class="nav-number">1.</span> <span class="nav-text"> 一个简单的指标计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%83%E8%99%91%E5%8F%96%E6%95%B0%E6%97%B6%E9%97%B4"><span class="nav-number">1.2.</span> <span class="nav-text"> 考虑取数时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%83%E8%99%91%E8%AE%A1%E7%AE%97%E5%8E%86%E5%8F%B2%E6%8C%87%E6%A0%87"><span class="nav-number">1.3.</span> <span class="nav-text"> 考虑计算历史指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%83%E8%99%91%E8%AE%A1%E7%AE%97%E5%85%B6%E4%BB%96%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.4.</span> <span class="nav-text"> 考虑计算其他维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E8%BF%90%E8%A1%8C"><span class="nav-number">1.5.</span> <span class="nav-text"> 调度运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%9A%84%E5%90%AF%E5%8F%91"><span class="nav-number">2.</span> <span class="nav-text"> 对数据管理的启发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97"><span class="nav-number">2.1.</span> <span class="nav-text"> 数据清洗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1"><span class="nav-number">2.2.</span> <span class="nav-text"> 数据建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%BB%E9%A2%98%E5%88%92%E5%88%86"><span class="nav-number">2.3.</span> <span class="nav-text"> 数据主题划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text"> 数据逻辑复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%BD%E8%A1%A8%E8%BE%93%E5%87%BA"><span class="nav-number">2.5.</span> <span class="nav-text"> 宽表输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E5%8C%BA%E5%92%8C%E5%91%BD%E5%90%8D"><span class="nav-number">2.6.</span> <span class="nav-text"> 数据分区和命名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'c40fde235c0bd700bfedd3f3b7b3e140',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

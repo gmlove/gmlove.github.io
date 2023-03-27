@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="基于数据点的数据分析 在进行数据分析时，常常会有基于数据点的分析需求。 比如，当做好一个客户画像应用的时候，我们可以得到某个客户的所有标签。如何验证这些标签的准确性呢？一个常用的方法是找到这个客户所有的相关数据，然后基于这些数据去验证标签的准确性。这就是基于数据点的分析，这里的数据点是前面提到的“某个”客户。 同样，当开发完指标之后，也可以尝试找出当前指标粒度（比如经销店粒度）下的所有事实及维度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于点的数据分析与数据浏览器">
+<meta property="og:url" content="http://brightliao.com/2021/05/10/data-browser-for-point-analysis/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="基于数据点的数据分析 在进行数据分析时，常常会有基于数据点的分析需求。 比如，当做好一个客户画像应用的时候，我们可以得到某个客户的所有标签。如何验证这些标签的准确性呢？一个常用的方法是找到这个客户所有的相关数据，然后基于这些数据去验证标签的准确性。这就是基于数据点的分析，这里的数据点是前面提到的“某个”客户。 同样，当开发完指标之后，也可以尝试找出当前指标粒度（比如经销店粒度）下的所有事实及维度">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser1.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser2.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser3.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser4.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser5.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser6.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser7.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser8.png">
+<meta property="article:published_time" content="2021-05-10T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-16T01:48:08.317Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据平台">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser1.png">
+
+<link rel="canonical" href="http://brightliao.com/2021/05/10/data-browser-for-point-analysis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>基于点的数据分析与数据浏览器 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/05/10/data-browser-for-point-analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于点的数据分析与数据浏览器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-10 20:00:00" itemprop="dateCreated datePublished" datetime="2021-05-10T20:00:00+08:00">2021-05-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-12-16 09:48:08" itemprop="dateModified" datetime="2022-12-16T09:48:08+08:00">2022-12-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/05/10/data-browser-for-point-analysis/" class="post-meta-item leancloud_visitors" data-flag-title="基于点的数据分析与数据浏览器" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="基于数据点的数据分析"><a class="markdownIt-Anchor" href="#基于数据点的数据分析"></a> 基于数据点的数据分析</h2>
+<p>在进行数据分析时，常常会有基于数据点的分析需求。</p>
+<p>比如，当做好一个客户画像应用的时候，我们可以得到某个客户的所有标签。如何验证这些标签的准确性呢？一个常用的方法是找到这个客户所有的相关数据，然后基于这些数据去验证标签的准确性。这就是基于数据点的分析，这里的数据点是前面提到的“某个”客户。</p>
+<p>同样，当开发完指标之后，也可以尝试找出当前指标粒度（比如经销店粒度）下的所有事实及维度数据，从而进行验证。这里的数据点是“某个”经销店。</p>
+<span id="more"></span>
+<p>（下文为了简单，我们将基于数据点的数据分析简称为“点分析”。）</p>
+<h2 id="编写sql实现点分析"><a class="markdownIt-Anchor" href="#编写sql实现点分析"></a> 编写SQL实现点分析</h2>
+<p>想要完成这样的点分析，一般的做法是编写<code>SQL</code>查询相关数据，然后人为分析数据得到结论。</p>
+<p>我们来看一下上面客户画像正确性验证的例子。要验证某一客户的画像，其实是要验证画像中的各种标签。一个典型的标签是客户的价值分级标签，从这个标签可以看出该客户是高价值的，还是低价值的。</p>
+<p>从这个标签的计算口径中可以了解到，这个标签会统计客户在整个生命周期内的所有消费。这里的消费包括购买及后续的维修服务、保养服务等。</p>
+<p>基于前面文章中建立的数据仓库模型，要实现这一分析，我们需要查询当前最新的业务数据，找出相关事实数据。</p>
+<p>以“购买”事实为例，可以编写类似以下代码：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> id <span class="keyword">from</span> (</span><br><span class="line">    <span class="keyword">select</span> <span class="operator">*</span>,</span><br><span class="line">        <span class="comment">-- 先根据订单id进行分组，然后根据时间排序，得到序号</span></span><br><span class="line">        <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> id <span class="keyword">order</span> <span class="keyword">by</span> update_time <span class="keyword">desc</span>) n</span><br><span class="line">    <span class="keyword">from</span> <span class="keyword">order</span></span><br><span class="line">) order_with_sequence</span><br><span class="line"><span class="keyword">where</span> n <span class="operator">=</span> <span class="number">1</span>  <span class="comment">-- 取序号为1的订单，即最新订单</span></span><br><span class="line">    <span class="comment">-- 筛选客户相关的数据。这里的筛选不能放在内部查询order_with_sequence中完成，其语义不同，可能筛选出非预期的数据。</span></span><br><span class="line">    <span class="keyword">and</span> customer_id <span class="operator">=</span> <span class="string">&#x27;&#123;QUERY_CUSTOMER_ID&#125;&#x27;</span>; </span><br></pre></td></tr></table></figure>
+<p>找到所有这些数据之后，需要进一步判断哪些数据是最终产生了有意义的订单的。这一步通常没有看起来那么简单，因为我们可能需要面对的是查询出来的数百个字段，需要从中找出关键的字段，并弄清楚其业务意义。</p>
+<p>指标的计算口径在此时只能作为参考，因为这里的标签验证一定程度上就是为了确认计算口径的正确性。</p>
+<p>最准确的答案应当来自当时直接接待该客户的业务人员，但想要联系当时的业务人员来确认也并非易事，通常要耗费较多的沟通时间。</p>
+<p>总之，如何确认这些数据需要花费大量的时间查看及对比各个维度的数据。</p>
+<h2 id="提高点分析的效率"><a class="markdownIt-Anchor" href="#提高点分析的效率"></a> 提高点分析的效率</h2>
+<p>分析上述基于<code>SQL</code>的点分析过程，除了不可避免的需要人为去查看对比数据进行分析，还有一些可以从技术上提供方法进行优化的。比如：</p>
+<ul>
+<li>简化<code>SQL</code>编写的复杂度</li>
+<li>提高<code>SQL</code>查询性能</li>
+<li>提供工具让分析师更容易的查看数据</li>
+</ul>
+<p>下面主要从上述三点来进行分析。</p>
+<h3 id="简化sql编写复杂度"><a class="markdownIt-Anchor" href="#简化sql编写复杂度"></a> 简化SQL编写复杂度</h3>
+<p>比如上述查询最新订单的查询语句，需要分析人员正确理解如何提取最新数据。这里面涉及了一个不容易让人理解的开窗操作，并使得<code>SQL</code>更复杂了。</p>
+<p>一个直接的解决方案是，对每张表的数据都建立一个最新数据的视图，查询最新数据的时候就无需关心这样的开窗操作。</p>
+<p>对于订单，我们可以创建如下视图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> order_latest_v <span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (</span><br><span class="line">    <span class="keyword">select</span> <span class="operator">*</span>,</span><br><span class="line">        <span class="comment">-- 先根据订单id进行分组，然后根据时间排序，得到序号</span></span><br><span class="line">        <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> id <span class="keyword">order</span> <span class="keyword">by</span> update_time <span class="keyword">desc</span>) n</span><br><span class="line">    <span class="keyword">from</span> <span class="keyword">order</span></span><br><span class="line">) order_with_sequence</span><br><span class="line"><span class="keyword">where</span> n <span class="operator">=</span> <span class="number">1</span> </span><br></pre></td></tr></table></figure>
+<p>这样一来，查询某一客户的订单的<code>SQL</code>就变成：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> order_latest_v <span class="keyword">where</span> customer_id <span class="operator">=</span> <span class="string">&#x27;&#123;QUERY_CUSTOMER_ID&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>这一查询就比之前的查询简单很多了。对于数据分析师而言，他们就可以更高效的完成这类分析工作。</p>
+<h3 id="提高sql查询性能"><a class="markdownIt-Anchor" href="#提高sql查询性能"></a> 提高SQL查询性能</h3>
+<p>上述<code>SQL</code>在实际运行过程中可能会比较慢，主要是开窗和排序操作可能带来较多的数据<code>shuffle</code>（为了完成排序，各个子任务执行器需要相互传递数据）。</p>
+<p>在我们的测试环境（1TB内存，100核）中，使用<code>Hive</code>对于一个大约1亿数据量200个字段的事实表进行查询，其响应时间超过了5分钟。对于数据分析师而言，这样的性能无疑将大大降低数据分析的效率。</p>
+<p>所以很有必要从技术上提供一种高效的主要以业务键（通常是ID）作为查询条件的查询。</p>
+<p>有以下技术方案可以提升这样的查询性能：</p>
+<ul>
+<li>对最新数据的视图进行物化，这样一来，耗时开窗和排序操作就可以预先计算好，而不是在查询时临时计算。这是一种典型的用空间换时间的做法。</li>
+<li>采用更高效的技术方案。比如<code>Presto</code>或<code>Trino</code>，由于特定的计算优化，它们对基于<code>ID</code>类的查询响应更快。还比如<code>ClickHouse</code>，由于查询时大量使用向量计算，在这一场景下，其性能比<code>Hive</code>或<code>Spark</code>高很多。</li>
+</ul>
+<p>在实际情况下，我们常常可以综合考虑这些技术来设计技术方案。</p>
+<h3 id="提供特定分析工具"><a class="markdownIt-Anchor" href="#提供特定分析工具"></a> 提供特定分析工具</h3>
+<p>即便有了上述两点优化，基于<code>SQL</code>的点分析易用性还是不够好，因为分析师总是需要手动编写<code>SQL</code>来实现其查询。</p>
+<p>仔细考察此类分析过程，可以发现以下模式：</p>
+<ul>
+<li>主要基于业务键（如客户ID）进行数据查询</li>
+<li>希望方便的查看更多列的数据</li>
+<li>希望方便的找到关联的其他表的数据</li>
+<li>希望能只查看最新数据</li>
+<li>希望能看到数据变更</li>
+</ul>
+<p>能不能基于这些模式来设计一个数据分析工具呢？</p>
+<p>这个分析工具最好基于当前流行的<code>web</code>技术实现，以便用户直接打开浏览器即可使用。最好有一些便捷易用的功能可以支持上述分析过程，不用手动输入<code>SQL</code>进行查询，只需点击按钮或输入少许信息即可。</p>
+<h2 id="数据浏览器"><a class="markdownIt-Anchor" href="#数据浏览器"></a> 数据浏览器</h2>
+<p>事实上，前面提到的提高点分析效率的另外两点方法也可以受益于一个专用的<code>Web</code>分析工具。</p>
+<p>主要的益处在于，有了分析工具，对于数据分析师而言，就无需关心底层实现机制了。用于获取最新数据的视图或物化视图，以及这些数据的存储位置，对于数据分析师而言都是透明的，他们只需要关注在数据分析这件事情本身上面。从这里的分析可以发现，整个点分析过程将能得到巨大的效率提升，从而更快产生价值。</p>
+<p>如何设计实现这样一个数据工具呢？</p>
+<h3 id="交互设计"><a class="markdownIt-Anchor" href="#交互设计"></a> 交互设计</h3>
+<p>从数据分析师的用户旅程和使用场景进行分析，我们可以据此设计出点分析工具的交互流程。</p>
+<p>对于最简单的数据搜索场景，可以分为以下几个步骤完成，即：</p>
+<ul>
+<li>选择需要分析的数据表</li>
+<li>选择当前分析所关注的字段（有一些数据表的字段非常多）</li>
+<li>输入字段筛选条件</li>
+<li>点击查询，即可在表格中显示数据</li>
+</ul>
+<p>对于查询最新数据的场景，可以在搜索框附近设置搜索属性，这可以通过一个名为“仅显示最新值”复选框来实现。选中此复选框之后，获取的数据将不包括历史数据。</p>
+<p>点分析还会关注某一条数据的变更情况。比如，分析订单状态的变更，可以知道该订单的实际业务流转情况。</p>
+<p>这也可以通过设置搜索属性来实现。同样，可以设计一个名为“高亮变更”这样一个复选框，当分析师选中了这一复选框之后，搜索结果将高亮显示每一条数据的变化了的字段。</p>
+<p>如果字段过多，可能会出现很多分析师不关心的无变化的数据列，此时如果可以有一个功能隐藏这些列就不错了。这一特性同样可以通过复选框来实现。我们可以设计一个“隐藏无变更列”复选框来实现。</p>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser1.png" alt="data browser" /></p>
+<p>从用户体验的角度来看，还有一些可以纳入分析工具的有用的功能。</p>
+<h4 id="通过外键跳转到相关表的数据"><a class="markdownIt-Anchor" href="#通过外键跳转到相关表的数据"></a> 通过外键跳转到相关表的数据。</h4>
+<p>比如，订单表可以关联到用户表，在浏览订单数据时，自然希望可以跳转到当前订单关联的用户的信息。</p>
+<p>这可以通过在数据表格中为对应列的数据加上跳转链接来实现。</p>
+<p>同时，由于我们同时具备代理键和业务键的关联关系，最好可以在这两个字段中都支持链接跳转。</p>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser2.png" alt="data browser" /></p>
+<h4 id="查看所有字段数据"><a class="markdownIt-Anchor" href="#查看所有字段数据"></a> 查看所有字段数据</h4>
+<p>在一个数据表格中展示所有列的数据将带来性能问题，并且显示和浏览都不太方便。</p>
+<p>一个简单的想法是，可以在代理键数据列中支持链接，分析师点击此链接时，可以在页面旁边打开一个界面展示这条数据对应的所有字段值。</p>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser3.png" alt="data browser" /></p>
+<h4 id="初始显示的字段"><a class="markdownIt-Anchor" href="#初始显示的字段"></a> 初始显示的字段</h4>
+<p>当一张表有数百个字段时，给出一个默认的字段选择将是一个很不错的功能。这些默认选中的字段应当是最常用的一些分析字段。</p>
+<p>我们可以统计分析师的使用情况，将最常用的字段提取出来作为这里的默认字段选择。一个简单的统计是从<code>ETL</code>中分析使用到的字段，然后排序取<code>TopN</code>。</p>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser4.png" alt="data browser" /></p>
+<h4 id="高效的选择字段"><a class="markdownIt-Anchor" href="#高效的选择字段"></a> 高效的选择字段</h4>
+<p>为应对表字段太多的问题，最好还可以优化字段选择体验，使得分析师可以高效的选择需要查看的字段。</p>
+<p>这可以通过以下几个功能点来实现：</p>
+<ul>
+<li>在选择字段的区域提供一个搜索框，分析师可以输入字段名来进行字段搜索</li>
+<li>字段搜索可以支持多个字段的搜索，不同字段以逗号分隔</li>
+<li>如果有搜索条件，字段列表将只显示搜索到的字段</li>
+<li>提供“全选”和“清空”复选框，以便分析师可以全选或清空筛选出来的字段</li>
+</ul>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser5.png" alt="data browser" /></p>
+<h4 id="快速选择数据表"><a class="markdownIt-Anchor" href="#快速选择数据表"></a> 快速选择数据表</h4>
+<p>当数据表的数量很大的时候，想找到对应的表并切换过去是不容易的。</p>
+<p>一个好的解决办法就是提供模糊搜索。可以在分析师输入一部分字符的时候就自动触发搜索，快速的过滤出包含这些字符的数据表。这可以提高分析师查找数据表的效率。</p>
+<p>另一个可以增加的功能是，将数据表按照对应的业务系统进行分组。由于组的种类相对表的数量更为有限，这就可以辅助分析师找到想要的数据表。</p>
+<p>我们还可以将数据表按照字母表进行排序，这也可以帮助设计师尽快找出想要的数据表。</p>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser6.png" alt="data browser" /></p>
+<h4 id="提供前进后退的导航"><a class="markdownIt-Anchor" href="#提供前进后退的导航"></a> 提供前进后退的导航</h4>
+<p>前面的功能点有很多是关于跳转的，如果分析师不小心点错了，跳转到了不想浏览的数据，如何恢复到之前的查询结果呢？</p>
+<p>在系统功能设计上可以提供一个前后导航的功能。当分析师点击后退时，界面的搜索及选择条件均切换到之前一次刷新数据的设置。如果分析师没有在此时进行查询条件修改，那么还可以通过点击“前进”按钮恢复到刚刚保存的搜索选项。</p>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser7.png" alt="data browser" /></p>
+<h4 id="对字段的中文展示"><a class="markdownIt-Anchor" href="#对字段的中文展示"></a> 对字段的中文展示</h4>
+<p>对于数据分析师而言，虽然司空见惯在进行查询时使用英文的字段名，但是如果可以用中文的字段名作为辅助，将是一件喜闻乐见的事。</p>
+<p>在设计系统功能时，可以提供一个切换语言的复选框，比如可以称为“显示中文”。当分析师勾选此复选框时，各处的字段名将以中文显示。</p>
+<p><img data-src="/attaches/2021/2021-05-10-data-browser-for-point-analysis/databrowser8.png" alt="data browser" /></p>
+<p>有了上面这些功能，相信这类点分析做起来就会效率很高了。由于此分析工具主要是完成数据浏览式的数据分析，我们可以将这个工具称作“数据浏览器”。要想“数据浏览器”好用，一个关键的技术要求是基于单表的查询要快速完成，一般而言，用户可接受的查询时间是秒级。如何从技术上进行支撑呢？下面来分析一下一些关键的技术设计。</p>
+<h3 id="技术设计"><a class="markdownIt-Anchor" href="#技术设计"></a> 技术设计</h3>
+<h4 id="元数据的获取"><a class="markdownIt-Anchor" href="#元数据的获取"></a> 元数据的获取</h4>
+<p>“数据浏览器”的实现需要完善的元数据支持。回顾文章<a target="_blank" rel="noopener" href="http://bright.com/2021/04/05/dwd-modeling-automation/">《数据仓库建模自动化》</a>中的内容，如果我们采用了基于<code>Excel</code>电子表格来实现自动化的建模，那么电子表格里面就包含了数据浏览器所需的所有元数据了。这些元数据包括数据表的名称，字段的名称、描述，哪些字段是主键（包括业务键和代理键），哪些字段是外键等。</p>
+<p>在实现时，可以直接读取建模电子表格的内容，然后提取所有相关元数据，再在浏览器端加载这些元数据进行网页渲染即可。</p>
+<h4 id="基于clickhouse的方案"><a class="markdownIt-Anchor" href="#基于clickhouse的方案"></a> 基于ClickHouse的方案</h4>
+<p>前面在讨论“提高SQL查询性能”时提到，为了支持高效的单表查询，技术上可以考虑采用基于<code>Presto</code> <code>Trino</code> 或<code>ClickHouse</code>的方案。</p>
+<p>在我们的实践中，选择了<code>ClickHouse</code>的方案。它的主要优势是提供了<a target="_blank" rel="noopener" href="https://clickhouse.tech/docs/en/interfaces/http/">基于<code>Http</code>的查询接口</a>，这样一来，在实现时可以直接访问<code>ClickHouse</code>的查询接口，无需进行任何的服务器端开发工作。此时，<code>SQL</code>的构造直接在客户端中完成，甚至还可以提供一个展示<code>SQL</code>和拷贝<code>SQL</code>的功能，以便分析师可以保留这个查询在其他地方使用。</p>
+<h4 id="安全性"><a class="markdownIt-Anchor" href="#安全性"></a> 安全性</h4>
+<p>有人可能会担心安全性问题，毕竟<code>SQL</code>是从客户端发起的，这是不是给了恶意用户更多的攻击系统的可能？这个问题其实并没有想象的那么严重。我们可以类比<code>BI</code>工具或一些支持<code>SQL</code>的分析工具，它们的实现原理和安全性其实是一致的。</p>
+<p>在客户端实现时，可以考虑提供一个输入框给分析师输入数据库连接信息及用户名密码，而不是直接由系统预置这样的信息。这样一来，数据安全控制就交给数据库来实现了。<code>ClickHouse</code>提供了较为完善的账号及权限控制机制，此时的安全性完全交给了<code>ClickHouse</code>来实现。</p>
+<h4 id="弊端"><a class="markdownIt-Anchor" href="#弊端"></a> 弊端</h4>
+<p>当前<code>ClickHouse</code>的方案也有弊端，一是需要额外多一个数据同步的过程，将数据从大数据平台同步到<code>ClickHouse</code>中，这带来了额外的维护负担和数据存储。另一个问题是，数据安全的控制也需要进行额外的配置。</p>
+<p>对于数据安全，在实践中，一个值得考虑的做法是，将<code>Ranger</code>中的安全规则进行解析，然后将其迁移到<code>ClickHouse</code>中。比如，我们可以根据<code>Ranger</code>中的配置生成<code>ClickHouse</code>中的视图，然后只给分析师授予视图的访问权限，而不是物理表的访问权限。</p>
+<p>这样做可以很好的应对安全规则少、粒度相对粗的场景（即用户共享同样的少数几套安全规则，或者基于少数的组进行授权）。但如果希望每个用户都支持一套独立的安全规则配置，则在实现时可能需要创建很多的视图，在管理上会带来一些不便。不过，由于安全规则配置和管理本身是一件比较麻烦的事情，相信大多数公司都不会将粒度做得太细，所以，这套方案应该可以解决大部分场景下的问题。</p>
+<p>到这里，这个“数据浏览器”工具就跃然纸上了，经过上面的分析，我们应该可以较容易的实现这样一个数据分析工具。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>最后，总结一下全文。本文基于数据验证的场景提出了基于数据点的数据分析方法，接下来分析了如何实现这样的分析过程，以及如何从技术上支持这样的分析过程。接着，从设计专用的数据分析工具的思路出发，我们设计了一个基于<code>Web</code>的“数据浏览器”工具，它提供了丰富的功能，可以很好的支持“点分析”，可以很大程度上提高“点分析”的效率。最后，我们分析了如何从技术上进行“数据浏览器”的实现，对几个关键的问题进行了阐述。</p>
+<p>事实上，还有很多其他的分析场景是可以从“点分析”中受益的，比如刚开始进行探索式数据分析时，“点分析”是一个很好的深入了解某一个业务场景的方法。经过技术分析可以发现，这一数据工具的实现也并不是难事。“数据浏览器”可以认为以较低的成本实现较大的价值的一个不错的案例。</p>
+<p>在数据平台构建的过程中，我们常常需要根据实际需要来开发一些数据工具，以便提高效率。但这些数据工具的开发不能直接产生价值，所以，从精益的角度来看，应当评估其实现难度，不应一次性投入太大。这其中的平衡是不容易把握的，本位旨在以“数据浏览器”的案例与诸君共勉。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/03/data-capability-building-suggestions/" rel="bookmark">浅谈企业数据能力建设</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/27/oracle-data-migration/" rel="bookmark">Oracle数据迁移实用入门</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/21/some-thoughts-about-data-platform/" rel="bookmark">一些企业数据平台建设的思考</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/02/21/data-governance-based-on-atlas-ranger/" rel="bookmark">基于Hadoop大数据平台的数据治理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/" rel="tag"><i class="fa fa-tag"></i> 数据平台</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/25/data-testing-tool/" rel="prev" title="一个ETL自动化测试框架">
+      <i class="fa fa-chevron-left"></i> 一个ETL自动化测试框架
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/24/data-pipeline-for-data-project/" rel="next" title="数据任务流水线">
+      数据任务流水线 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E7%82%B9%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text"> 基于数据点的数据分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99sql%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text"> 编写SQL实现点分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E9%AB%98%E7%82%B9%E5%88%86%E6%9E%90%E7%9A%84%E6%95%88%E7%8E%87"><span class="nav-number">3.</span> <span class="nav-text"> 提高点分析的效率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8C%96sql%E7%BC%96%E5%86%99%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">3.1.</span> <span class="nav-text"> 简化SQL编写复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E9%AB%98sql%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD"><span class="nav-number">3.2.</span> <span class="nav-text"> 提高SQL查询性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E4%BE%9B%E7%89%B9%E5%AE%9A%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-number">3.3.</span> <span class="nav-text"> 提供特定分析工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text"> 数据浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.1.</span> <span class="nav-text"> 交互设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%A4%96%E9%94%AE%E8%B7%B3%E8%BD%AC%E5%88%B0%E7%9B%B8%E5%85%B3%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 通过外键跳转到相关表的数据。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E5%AD%97%E6%AE%B5%E6%95%B0%E6%8D%AE"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 查看所有字段数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E6%98%BE%E7%A4%BA%E7%9A%84%E5%AD%97%E6%AE%B5"><span class="nav-number">4.1.3.</span> <span class="nav-text"> 初始显示的字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E6%95%88%E7%9A%84%E9%80%89%E6%8B%A9%E5%AD%97%E6%AE%B5"><span class="nav-number">4.1.4.</span> <span class="nav-text"> 高效的选择字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="nav-number">4.1.5.</span> <span class="nav-text"> 快速选择数据表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E4%BE%9B%E5%89%8D%E8%BF%9B%E5%90%8E%E9%80%80%E7%9A%84%E5%AF%BC%E8%88%AA"><span class="nav-number">4.1.6.</span> <span class="nav-text"> 提供前进后退的导航</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E5%AD%97%E6%AE%B5%E7%9A%84%E4%B8%AD%E6%96%87%E5%B1%95%E7%A4%BA"><span class="nav-number">4.1.7.</span> <span class="nav-text"> 对字段的中文展示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.2.</span> <span class="nav-text"> 技术设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E7%9A%84%E8%8E%B7%E5%8F%96"><span class="nav-number">4.2.1.</span> <span class="nav-text"> 元数据的获取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Eclickhouse%E7%9A%84%E6%96%B9%E6%A1%88"><span class="nav-number">4.2.2.</span> <span class="nav-text"> 基于ClickHouse的方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">4.2.3.</span> <span class="nav-text"> 安全性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%8A%E7%AB%AF"><span class="nav-number">4.2.4.</span> <span class="nav-text"> 弊端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'd5b4e3a9a3eda229aa79f0866ae58072',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

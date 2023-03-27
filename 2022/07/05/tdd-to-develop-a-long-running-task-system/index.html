@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="背景 在最近的一个项目上，我们再次碰到了需要处理长时任务的场景。事实上，随着要处理的业务问题越来越复杂，要集成的系统越来越多，在Web服务器端开发中，长时任务处理已经成为了一个普遍的问题。 以下场景均可看作长时任务场景：  在GitHub提交了一个PR，要分别向上百个相关用户单独发送邮件 用户上传了一个文件，需要扫描这个文件是不是带病毒 用户想以pdf格式下载某一个文档，需要先将文档转换为pdf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用TDD开发基于数据库的长时任务系统">
+<meta property="og:url" content="http://brightliao.com/2022/07/05/tdd-to-develop-a-long-running-task-system/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="背景 在最近的一个项目上，我们再次碰到了需要处理长时任务的场景。事实上，随着要处理的业务问题越来越复杂，要集成的系统越来越多，在Web服务器端开发中，长时任务处理已经成为了一个普遍的问题。 以下场景均可看作长时任务场景：  在GitHub提交了一个PR，要分别向上百个相关用户单独发送邮件 用户上传了一个文件，需要扫描这个文件是不是带病毒 用户想以pdf格式下载某一个文档，需要先将文档转换为pdf">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-07-05-tdd-to-develop-a-long-running-task-system/long-running-task-basic-model.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-07-05-tdd-to-develop-a-long-running-task-system/long-running-task-problems.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-07-05-tdd-to-develop-a-long-running-task-system/leverage-ide-to-coding.png">
+<meta property="article:published_time" content="2022-07-05T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-06T06:27:30.614Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="agile">
+<meta property="article:tag" content="敏捷">
+<meta property="article:tag" content="tdd">
+<meta property="article:tag" content="测试">
+<meta property="article:tag" content="质量">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2022/2022-07-05-tdd-to-develop-a-long-running-task-system/long-running-task-basic-model.png">
+
+<link rel="canonical" href="http://brightliao.com/2022/07/05/tdd-to-develop-a-long-running-task-system/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>用TDD开发基于数据库的长时任务系统 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/07/05/tdd-to-develop-a-long-running-task-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          用TDD开发基于数据库的长时任务系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-05 20:00:00" itemprop="dateCreated datePublished" datetime="2022-07-05T20:00:00+08:00">2022-07-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-06 14:27:30" itemprop="dateModified" datetime="2022-07-06T14:27:30+08:00">2022-07-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/07/05/tdd-to-develop-a-long-running-task-system/" class="post-meta-item leancloud_visitors" data-flag-title="用TDD开发基于数据库的长时任务系统" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
+<p>在最近的一个项目上，我们再次碰到了需要处理长时任务的场景。事实上，随着要处理的业务问题越来越复杂，要集成的系统越来越多，在<code>Web</code>服务器端开发中，长时任务处理已经成为了一个普遍的问题。</p>
+<p>以下场景均可看作长时任务场景：</p>
+<ul>
+<li>在<code>GitHub</code>提交了一个<code>PR</code>，要分别向上百个相关用户单独发送邮件</li>
+<li>用户上传了一个文件，需要扫描这个文件是不是带病毒</li>
+<li>用户想以<code>pdf</code>格式下载某一个文档，需要先将文档转换为<code>pdf</code>格式</li>
+</ul>
+<span id="more"></span>
+<p>这些问题的一个共同特征是执行时间比较长，不能简单的用<strong>单线程的Web服务请求-响应模型</strong>来实现。</p>
+<h2 id="分析问题识别难点"><a class="markdownIt-Anchor" href="#分析问题识别难点"></a> 分析问题，识别难点</h2>
+<p>在应对这些需求场景时，一个关键的设计是需要用异步API模型进行建模。如下图所示：</p>
+<p><img data-src="/attaches/2022/2022-07-05-tdd-to-develop-a-long-running-task-system/long-running-task-basic-model.png" alt="Event model for long-running task" /></p>
+<p>通常的做法如下：</p>
+<ul>
+<li>采用事件模型（<code>Event Model</code>），将长时任务包装为一个事件，放入事件队列</li>
+<li>将待处理事件从事件队列中推送给事件消费者（或者消费者主动拉取新的事件）</li>
+<li>事件消费者处理事件，并保存事件处理结果</li>
+<li>关注事件结果的客户端查询事件处理状态，并提取事件处理结果</li>
+</ul>
+<p>这看上去并不太难，但是，如果仔细思考一下事件的处理过程，会发现情况不对，这里面还存在以下一系列问题：</p>
+<ul>
+<li>如何尽量避免多个事件消费者同时处理此事件，以便节省计算资源？</li>
+<li>如果恰好同时有多个事件消费者在处理事件，会发生什么问题？</li>
+<li>如果有多个相关事件正在被同时处理，如何处理资源竞争问题？</li>
+<li>如何避免长时任务可能导致的长时数据库事务问题？</li>
+</ul>
+<p><img data-src="/attaches/2022/2022-07-05-tdd-to-develop-a-long-running-task-system/long-running-task-problems.png" alt="Problems related to event model" /></p>
+<p>以下方案可用于应对上述问题：</p>
+<ul>
+<li>在事件分派时，通过并发控制或者资源锁定机制，确保只将事件分派给某一个事件消费者</li>
+<li>保证事件处理器的实现是幂等的，即：即便多次同时执行，其最终结果也是一致的</li>
+<li>将任务处理过程拆分为多个短数据库事务过程，避免长期持有数据库锁引起性能问题</li>
+</ul>
+<p>经过以上分析可以发现，异步任务模型是相对比较复杂的模型，程序实现及上线之后的问题分析、调试成本都比较高。在进行系统设计时，如果发现系统可以接受一定的延迟，并且并发也不高，就应尽量避免引入异步任务模型。</p>
+<p>近年来，<code>CQRS</code>（命令查询分离）+<code>Event Sourcing</code>（事件溯源）设计模式越来越受到大家的关注。这一模式中，所有的写操作均采用异步事件的方式进行处理。准备采用这一模式时，一定要评估是否值得，因为异步任务将带来与上述类似的非预期复杂度。同时，如果事件使用不当还容易导致更复杂的情况。比如，如果在事件处理过程中生成了其他的事件，就可能产生一个由任务序列组成的有向图，甚至图中带环，从而使得处理过程的分析变得异常复杂。</p>
+<h2 id="tdd方法简介"><a class="markdownIt-Anchor" href="#tdd方法简介"></a> TDD方法简介</h2>
+<p><code>TDD</code>可以用于辅助我们进行复杂软件设计。是不是可以用<code>TDD</code>帮助我们实现这一复杂的异步任务处理系统呢？下面来做一下尝试。</p>
+<p>在回答这个问题之前，我们先了解一下<code>TDD</code>的基本思想及其实施过程。</p>
+<p>从驱动设计的角度来看，<code>TDD</code>的基本思想是，在还没有代码的时候，先站在使用代码的<strong>用户的角度</strong>来定义测试（编写测试就是在使用代码，所以可以自然的站在用户角度），由于使用了<strong>用户视角</strong>来定义系统组件及其接口，就可以使得到的组件和接口易于使用。</p>
+<p>很多人无法在没有代码的时候编写测试，或者会由于IDE给出的一系列红色警告（由于组件还未定义）而感到不自然。</p>
+<h3 id="写不出测试"><a class="markdownIt-Anchor" href="#写不出测试"></a> 写不出测试</h3>
+<p>写不出测试一般是由于没有理解问题或不了解现有架构。可以采用<code>Tasking</code>（任务拆解）的方式来验证自己是否理解问题并了解架构。其基本思想是，对于一个问题，如果可以列出解决它所需的一系列清晰而合理的步骤，那就说明对问题和架构都较为清楚了。所以，在实施<code>TDD</code>时，一般需要先进行<code>Tasking</code>任务拆解。</p>
+<h3 id="红色警告让人感到不自然"><a class="markdownIt-Anchor" href="#红色警告让人感到不自然"></a> 红色警告让人感到不自然</h3>
+<p>对IDE给出的红色警告感到不自然的问题一般来自习惯。在编写测试代码时，需要调整视角，以完成设计和验证结果为重心。事实上，先写测试还会带来一个额外的好处，那就是在写完测试之后，可以让IDE帮助我们生成绝大多数代码，从而更快的完成代码编写。</p>
+<h2 id="用tdd辅助开发基于数据库的队列服务"><a class="markdownIt-Anchor" href="#用tdd辅助开发基于数据库的队列服务"></a> 用TDD辅助开发基于数据库的队列服务</h2>
+<p>下面看看如何用<code>TDD</code>来设计一个满足上述需求的异步任务处理系统。</p>
+<p>经过前文的分析，我们大致了解了解决长时任务的关键方案。方案里面有一个核心的组件，那就是队列服务。</p>
+<p>可以找到很多开源软件用来做队列服务，比如<code>RabbitMQ</code>，<code>Apache ActiveMQ</code>，<code>Apache RocketMQ</code>，<code>Kafka</code>，<code>Redis</code>等。甚至很多云端的SaaS服务也可以用来解决这个问题，比如<code>AWS SQS</code>，<code>Azure Service Bus queues</code>, <code>GCP Pubsub</code>等。</p>
+<p>在很多项目的上下文中，可以预期并不会有太多的长时任务。此时，为了保持系统简单，避免引入其他的依赖，可以考虑基于数据库来实现这样的一个队列服务。下面分享一下如何用<code>TDD</code>指导我们开发一个基于数据库的长时任务系统。</p>
+<h3 id="第一个测试"><a class="markdownIt-Anchor" href="#第一个测试"></a> 第一个测试</h3>
+<p>采用<code>TDD</code>的思想，首先我们站在（长时任务）系统的用户（将来使用长时任务API的开发者）的角度思考如何使用长时任务的API完成程序功能。</p>
+<pre><code>假设有一个长时任务，它应该可以被添加到队列中。
+队列应该启动一个后台线程，即消费者线程，从队列中取出任务开始执行。
+由于任务在消费者线程中执行，消费者线程应该需要知道任务所对应的可执行代码是什么。
+所以，在消费者线程开始运行之前，需要注册好任务对应的可执行代码。
+</code></pre>
+<p>基于上面的分析，使用Java进行编码，可写出对应的测试如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TaskQueueTest</span> &#123;</span><br><span class="line">...</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">should_run_task_from_queue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">var</span> <span class="variable">queue</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskQueue</span>();</span><br><span class="line">        <span class="type">var</span> <span class="variable">consumer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskQueueConsumer</span>(queue);</span><br><span class="line">        </span><br><span class="line">        <span class="type">var</span> <span class="variable">task1Runnable</span> <span class="operator">=</span> mock(TaskRunnable.class);</span><br><span class="line">        <span class="type">var</span> <span class="variable">task2Runnable</span> <span class="operator">=</span> mock(TaskRunnable.class);</span><br><span class="line">        consumer.registerTask(<span class="string">&quot;task_type_1&quot;</span>, task1Runnable);</span><br><span class="line">        consumer.registerTask(<span class="string">&quot;task_type_2&quot;</span>, task2Runnable);</span><br><span class="line">        consumer.start();</span><br><span class="line"></span><br><span class="line">        <span class="type">var</span> <span class="variable">task1Arg</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskType1Arg</span>(“some arg”);</span><br><span class="line">        queue.addTask(“task_type_1”, task1Arg);</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        </span><br><span class="line">        verify(task1Runnable, times(<span class="number">1</span>)).run(eq(task1Arg));</span><br><span class="line"></span><br><span class="line">        <span class="type">var</span> <span class="variable">task2Arg</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskType2Arg</span>(“some arg”);</span><br><span class="line">        queue.addTask(“task_type_2”, task2Arg);</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        </span><br><span class="line">        verify(task2Runnable, times(<span class="number">1</span>)).run(eq(task2Arg));</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里，一个基本的测试用例就定义好了。上述代码用到了<code>JUnit</code>及<code>Mockito</code>测试库的一些<code>API</code>。在编写测试的过程中，我们完成了基本的组件拆分及功能设计。值得注意的是，这里用到的类的名字、方法的名字、方法的参数等均是从用户的角度进行设计的。</p>
+<p>因为我们直接写出了这样的测试代码，此时，IDE会显示很多红色警告，因为测试中用到的类和方法都还未被创建。如果使用<code>Idea</code>进行开发的话，可以将光标移动到红色警告处，按下<code>Alt+Enter</code>，<code>Idea</code>将提示创建类或变量，跟随IDE的指引，就可以很容易的完成这些代码的编写。</p>
+<p><img data-src="/attaches/2022/2022-07-05-tdd-to-develop-a-long-running-task-system/leverage-ide-to-coding.png" alt="Leverage IDE to help coding" /></p>
+<p>到这里我们就完成了第一个测试，并生成了对应的代码框架。整个系统设计的第一步已经初步完成。</p>
+<h3 id="引入新的设计改进测试"><a class="markdownIt-Anchor" href="#引入新的设计改进测试"></a> 引入新的设计，改进测试</h3>
+<p>由于我们希望基于数据库来实现任务队列，而数据库访问一般用<code>Repository</code>进行抽象。对应这里的设计，任务队列应该需要把数据读写的职责拆分出去。</p>
+<p>考虑如何在测试中使用<code>Repository</code>，可以在之前的测试基础上增加<code>Repository</code>相关接口设计。有几处需要修改的地方：</p>
+<ul>
+<li>测试开始时，应该构造一个模拟的<code>Repository</code>对象。</li>
+<li>当新任务加入队列时，任务队列应当调用<code>Repository</code>的接口保存新任务。</li>
+<li>当任务队列消费者开始运行时，它应当从任务队列取出新任务，而任务队列使用<code>Repository</code>查询新的任务。</li>
+<li>当任务被取出，将要运行时，其状态应当被修改为开始执行，并保存到数据库中，此时应当采用批量保存的方式。</li>
+<li>在任务执行期间，其状态将有一系列变化：待运行、开始执行、执行中、执行成功/失败。在任务状态变化时，将调用<code>Repository</code>更新数据库的状态。</li>
+<li>在保存任务的时候，任务的参数需要以一种方式序列化为字符串才能在数据库中保存。可以使用常用的json序列化方式。</li>
+</ul>
+<p>修改测试如下（完整代码见<a target="_blank" rel="noopener" href="https://github.com/gmlove/taskqueue-demo/blob/d261bb18d8/src/test/java/com/brightliao/taskqueue/TaskQueueTest.java">这里</a>）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TaskQueueTest</span> &#123;</span><br><span class="line">...</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">should_run_task_from_queue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">var</span> <span class="variable">taskRepository</span> <span class="operator">=</span> mock(TaskRepository.class);</span><br><span class="line">        <span class="keyword">final</span> <span class="type">ObjectMapper</span> <span class="variable">objectMapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line">        <span class="type">var</span> <span class="variable">queue</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskQueue</span>(taskRepository, tt, objectMapper);</span><br><span class="line">        <span class="type">var</span> <span class="variable">consumer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskQueueConsumer</span>(queue, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">var</span> <span class="variable">task1Runnable</span> <span class="operator">=</span> mock(TaskRunnable.class);</span><br><span class="line">        <span class="type">var</span> <span class="variable">task2Runnable</span> <span class="operator">=</span> mock(TaskRunnable.class);</span><br><span class="line">        consumer.registerTask(<span class="string">&quot;task_type_1&quot;</span>, task1Runnable);</span><br><span class="line">        consumer.registerTask(<span class="string">&quot;task_type_2&quot;</span>, task2Runnable);</span><br><span class="line">        consumer.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// run task1 successfully</span></span><br><span class="line">        <span class="type">var</span> <span class="variable">task1Arg</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskType1Arg</span>(<span class="string">&quot;some arg&quot;</span>);</span><br><span class="line">        <span class="keyword">final</span> <span class="type">Task</span> <span class="variable">task1</span> <span class="operator">=</span> someTask(<span class="number">1L</span>, <span class="string">&quot;task_type_1&quot;</span>, <span class="string">&quot;&#123;\&quot;arg\&quot;:\&quot;some arg\&quot;&#125;&quot;</span>);</span><br><span class="line">        when(taskRepository.findNewTasks(eq(<span class="number">1</span>))).thenReturn(List.of(task1)).thenReturn(List.of());</span><br><span class="line">        when(taskRepository.saveAll(anyList())).thenAnswer(answer -&gt; answer.getArgument(<span class="number">0</span>));</span><br><span class="line">        when(taskRepository.save(any())).thenAnswer(answer -&gt; answer.getArgument(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        queue.addTask(<span class="string">&quot;task_type_1&quot;</span>, task1Arg);</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// add -&gt; running -&gt; succeeded</span></span><br><span class="line">        verify(taskRepository, times(<span class="number">3</span>)).save(any(Task.class));</span><br><span class="line">        <span class="comment">// started</span></span><br><span class="line">        verify(taskRepository, times(<span class="number">1</span>)).saveAll(anyList());</span><br><span class="line">        verify(task1Runnable, times(<span class="number">1</span>)).run(eq(<span class="string">&quot;&#123;\&quot;arg\&quot;:\&quot;some arg\&quot;&#125;&quot;</span>));</span><br><span class="line">        assertThat(task1.isSucceeded()).isEqualTo(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述测试中，我们模拟了<code>TaskRepository</code>对象，并基于这个模拟对象进行测试。通过模拟这个对象的接口，我们可以完成整个<code>TaskRepository</code>的<code>API</code>设计。</p>
+<p>同样的，可以利用IDE辅助我们生成大量的模板代码，在实现时，只需要在不同的地方填入代码即可。</p>
+<h3 id="加入数据库事务支持进一步改进测试"><a class="markdownIt-Anchor" href="#加入数据库事务支持进一步改进测试"></a> 加入数据库事务支持，进一步改进测试</h3>
+<p>由于程序需要访问数据库进行数据存取，数据库事务控制是一个需要注意的问题。从性能上考虑，数据库事务应当较短，不适合将长时任务运行过程放入事务过程中。</p>
+<p>数据库事务实现可以基于<code>Spring</code>框架提供的事务抽象，即<code>TransactionTemplate</code>接口。可以对以下可快速完成的过程进行事务控制：</p>
+<ul>
+<li>取出新任务后，将任务标记为开始执行。使用排它锁进行事务控制，防止其他任务消费者取到同一个任务</li>
+<li>任务开始执行时，将任务标记为正在执行状态，使用基于版本的乐观锁进行事务控制</li>
+<li>任务执行完成之后，更新任务状态，使用基于版本的乐观锁进行事务控制</li>
+</ul>
+<p>修改测试如下（完整代码见<a target="_blank" rel="noopener" href="https://github.com/gmlove/taskqueue-demo/blob/47c332f5c9/src/test/java/com/brightliao/taskqueue/TaskQueueTest.java">这里</a>）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TaskQueueTest</span> &#123;</span><br><span class="line">...</span><br><span class="line">    <span class="keyword">private</span> TransactionTemplate <span class="title function_">mockTransactionTemplate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">var</span> <span class="variable">tt</span> <span class="operator">=</span> mock(TransactionTemplate.class);</span><br><span class="line">        when(tt.execute(any())).thenAnswer(answer -&gt; &#123;</span><br><span class="line">            <span class="keyword">final</span> TransactionCallback&lt;?&gt; arg = (TransactionCallback&lt;?&gt;) answer.getArgument(<span class="number">0</span>);</span><br><span class="line">            log.info(<span class="string">&quot;execute in transaction: &#123;&#125;&quot;</span>, arg);</span><br><span class="line">            <span class="keyword">return</span> arg.doInTransaction(<span class="keyword">new</span> <span class="title class_">SimpleTransactionStatus</span>());</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        doAnswer(answer -&gt; &#123;</span><br><span class="line">            ((Consumer&lt;TransactionStatus&gt;) answer.getArgument(<span class="number">0</span>)).accept(<span class="keyword">new</span> <span class="title class_">SimpleTransactionStatus</span>());</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;).when(tt).executeWithoutResult(any());</span><br><span class="line">        <span class="keyword">return</span> tt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">should_run_task_from_queue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">TransactionTemplate</span> <span class="variable">tt</span> <span class="operator">=</span> mockTransactionTemplate();</span><br><span class="line"></span><br><span class="line">        <span class="type">var</span> <span class="variable">taskRepository</span> <span class="operator">=</span> mock(TaskRepository.class);</span><br><span class="line">        <span class="keyword">final</span> <span class="type">ObjectMapper</span> <span class="variable">objectMapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line">        <span class="type">var</span> <span class="variable">queue</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskQueue</span>(taskRepository, tt, objectMapper);</span><br><span class="line">        <span class="type">var</span> <span class="variable">consumer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskQueueConsumer</span>(queue, <span class="number">1</span>);</span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实现现有的接口"><a class="markdownIt-Anchor" href="#实现现有的接口"></a> 实现现有的接口</h3>
+<p>由于目前只是通过IDE生成了一些代码框架，尚未提供实现，上述测试会失败。接下来的一步就是为现在的设计提供一个实现。</p>
+<p>有了前面的分析，及测试的保障，实现起来应该不是什么难事。有兴趣的同学可以自己试着写一写代码。</p>
+<p>一个参考实现见<a target="_blank" rel="noopener" href="https://github.com/gmlove/taskqueue-demo/commit/47c332f5c9652e7484e054d48e03cfb45c5215a8">这里</a>。</p>
+<h3 id="其他的考虑"><a class="markdownIt-Anchor" href="#其他的考虑"></a> 其他的考虑</h3>
+<p>为保证我们的长时任务实现具有较好的易用性，还可以考虑增加以下特性：</p>
+<ul>
+<li>任务消费者异常退出时，任务应该被回收，以便新的任务消费者可以重新处理该任务。</li>
+<li>任务消费者应当被周期性的唤醒，以便可以定时的从队列中取出新任务进行处理。</li>
+<li>当有新任务加入时，任务消费者应该快速被唤醒，以便新任务可以及时得到处理。</li>
+<li>如果执行任务时，任务处理器未被注册，则应该抛出异常，并将任务标记为失败。</li>
+<li>如果任务执行失败，可以进行一定次数的重试。</li>
+<li>可以实现<code>Restful API</code>来完成添加任务、获取任务状态、查询任务列表、重启任务等功能。</li>
+</ul>
+<p>这些特性都可以通过<code>TDD</code>的方式进行实现。</p>
+<p>部分上述特性的详细实现过程及代码可以参考<a target="_blank" rel="noopener" href="https://github.com/gmlove/taskqueue-demo/commits/main">这里</a>的提交记录。</p>
+<p>值得注意的是，除了按照前文进行基本的<code>TDD</code>开发。在设计测试时，还需要考虑整体的测试策略。一般而言，测试应该可以按照集成度的从小到大构成一个金字塔的结构。即，大量集成度小的单元测试，中等数量集成度中等的测试，少量的集成度高的测试。在进行<code>TDD</code>时，需要考虑用哪种集成度的测试更好。</p>
+<p>一般的策略是：</p>
+<ul>
+<li>先写一个简单的高集成度测试，通过这个测试驱动编写面向用户的接口，同时也作为面向用户的功能验收。</li>
+<li>再编写少量中等集成度的测试，通过这些测试驱动完成各个组件及其交互接口的设计，同时验证这些组件确实按照设计工作。</li>
+<li>然后再以类级别或函数级别的测试为主，为类或函数的实现提供正确性保障。</li>
+</ul>
+<p>在<code>TDD</code>的过程中，通常还会结合重构来进行局部代码优化。在上述实现中，也有一些可以参考的地方。比如，任务处理器最初命名为<code>TaskRunnable</code>，后来改为<code>TaskHandler</code>，以便更符合语义。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>编写有效的自动化测试是专业的开发人员的一项基本技能。然而，很多团队一味追求快速写完代码，忽略了锻炼开发人员的自动化测试技能，这对于开发人员的能力提升是不利的。</p>
+<p>很多开发人员或者执着于追求底层技术，或者执着于为实现高并发高性能而引入的技巧，或者执着于某个复杂的算法，或者执着于理解某一框架的实现细节。他们认为这些才是自己技术能力的体现。这些确实可以体现一部分开发人员的能力，但是，别忘了，这些始终只是别人创造的成果。</p>
+<p>真实的日常工作常常只是将一个个特定场景下的需求变成可工作的软件，并应对复杂的业务及将来的变更。针对这些特定的问题给出相对简单的合理的设计的能力，编写优雅且高质量的代码的能力，才是开发人员最重要的能力。自动化测试和<code>TDD</code>在这方面可以给开发人员很大的助力。</p>
+<p>事实上，自动化测试和<code>TDD</code>不仅可以帮助完成高质量软件的开发，对前面提到的技术提升也很有帮助。因为，为了编写有效的测试，需要我们对所使用的框架或库有足够的了解，这就促使我们去了解它们的实现细节，同时，可运行的测试还可以用于确认我们的理解。</p>
+<p>本文展示了在一个相对复杂的场景下，如何用<code>TDD</code>帮助我们开发拥有良好设计的代码。可以发现，<code>TDD</code>不仅为我们提供了测试护航，而且，面向用户的接口设计，领域语言的运用，都可以在<code>TDD</code>的加持下自然的落地。</p>
+<p>最后，只看不练并不能带来能力的提升，要想熟练的掌握<code>TDD</code>还需要在日常工作中抓住每一个机会刻意练习。</p>
+<p><strong>相关文章：</strong></p>
+<ul>
+<li><a href="/2019/07/20/tdd-for-improving-design/">从改善设计的角度理解TDD</a></li>
+<li><a href="/2019/08/18/tdd-for-improving-design-2/">从改善设计的角度理解TDD (2)</a></li>
+<li><a href="/2022/05/24/5-properties-of-good-code-cupid/">好代码的五个特质-CUPID</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/07/20/tdd-for-improving-design/" rel="bookmark">从改善设计的角度理解TDD</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/08/18/tdd-for-improving-design-2/" rel="bookmark">从改善设计的角度理解TDD (2)</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2016/08/31/agile-user-story/" rel="bookmark">敏捷方法-用户故事</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/10/07/after-reading-of-refactoring-v2/" rel="bookmark">再读重构</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2019/12/22/its-harder-to-go-downhill/" rel="bookmark">上山容易下山难</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/agile/" rel="tag"><i class="fa fa-tag"></i> agile</a>
+              <a href="/tags/%E6%95%8F%E6%8D%B7/" rel="tag"><i class="fa fa-tag"></i> 敏捷</a>
+              <a href="/tags/tdd/" rel="tag"><i class="fa fa-tag"></i> tdd</a>
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
+              <a href="/tags/%E8%B4%A8%E9%87%8F/" rel="tag"><i class="fa fa-tag"></i> 质量</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/08/efficient-etl-testing/" rel="prev" title="Efficient ETL Testing">
+      <i class="fa fa-chevron-left"></i> Efficient ETL Testing
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/27/smart-domain-and-ddd/" rel="next" title="我理解的Smart Domain与DDD">
+      我理解的Smart Domain与DDD <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text"> 背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98%E8%AF%86%E5%88%AB%E9%9A%BE%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text"> 分析问题，识别难点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tdd%E6%96%B9%E6%B3%95%E7%AE%80%E4%BB%8B"><span class="nav-number">3.</span> <span class="nav-text"> TDD方法简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E4%B8%8D%E5%87%BA%E6%B5%8B%E8%AF%95"><span class="nav-number">3.1.</span> <span class="nav-text"> 写不出测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%A2%E8%89%B2%E8%AD%A6%E5%91%8A%E8%AE%A9%E4%BA%BA%E6%84%9F%E5%88%B0%E4%B8%8D%E8%87%AA%E7%84%B6"><span class="nav-number">3.2.</span> <span class="nav-text"> 红色警告让人感到不自然</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8tdd%E8%BE%85%E5%8A%A9%E5%BC%80%E5%8F%91%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E9%98%9F%E5%88%97%E6%9C%8D%E5%8A%A1"><span class="nav-number">4.</span> <span class="nav-text"> 用TDD辅助开发基于数据库的队列服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%B5%8B%E8%AF%95"><span class="nav-number">4.1.</span> <span class="nav-text"> 第一个测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E6%96%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%94%B9%E8%BF%9B%E6%B5%8B%E8%AF%95"><span class="nav-number">4.2.</span> <span class="nav-text"> 引入新的设计，改进测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E6%94%AF%E6%8C%81%E8%BF%9B%E4%B8%80%E6%AD%A5%E6%94%B9%E8%BF%9B%E6%B5%8B%E8%AF%95"><span class="nav-number">4.3.</span> <span class="nav-text"> 加入数据库事务支持，进一步改进测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%8E%B0%E6%9C%89%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="nav-number">4.4.</span> <span class="nav-text"> 实现现有的接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%9A%84%E8%80%83%E8%99%91"><span class="nav-number">4.5.</span> <span class="nav-text"> 其他的考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '14c02b3c73018587bbc35995cec765d4',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

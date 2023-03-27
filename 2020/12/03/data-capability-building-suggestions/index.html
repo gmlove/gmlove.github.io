@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="随着市场的逐步成熟，要想保持企业的长期竞争力，运营和产品改进工作需要越来越精细化。 比如，在游戏行业，玩家留存率是一个关键指标，为提升留存率，需要精细化的分析玩家是哪一步流失的，根据游戏进程推进过程，按照先后顺序设置关键节点，分析各个节点流失情况数据，可以形成一个玩家流失漏斗。有了玩家流失漏斗，我们可以选择流失率高的环节进行进一步精细化分析，找到流失原因，比如机器适配问题，引导缺乏吸引力问题，数值">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈企业数据能力建设">
+<meta property="og:url" content="http://brightliao.com/2020/12/03/data-capability-building-suggestions/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="随着市场的逐步成熟，要想保持企业的长期竞争力，运营和产品改进工作需要越来越精细化。 比如，在游戏行业，玩家留存率是一个关键指标，为提升留存率，需要精细化的分析玩家是哪一步流失的，根据游戏进程推进过程，按照先后顺序设置关键节点，分析各个节点流失情况数据，可以形成一个玩家流失漏斗。有了玩家流失漏斗，我们可以选择流失率高的环节进行进一步精细化分析，找到流失原因，比如机器适配问题，引导缺乏吸引力问题，数值">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/data-capability-building-suggestions/game-data-analysis.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/data-capability-building-suggestions/data-work-types.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2020/data-capability-building-suggestions/org-structure.png">
+<meta property="article:published_time" content="2020-12-03T12:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-04T06:47:44.000Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据工作">
+<meta property="article:tag" content="组织架构">
+<meta property="article:tag" content="培训">
+<meta property="article:tag" content="数据平台">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2020/data-capability-building-suggestions/game-data-analysis.png">
+
+<link rel="canonical" href="http://brightliao.com/2020/12/03/data-capability-building-suggestions/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浅谈企业数据能力建设 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">42</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">102</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">132</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/12/03/data-capability-building-suggestions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浅谈企业数据能力建设
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-03 20:00:00" itemprop="dateCreated datePublished" datetime="2020-12-03T20:00:00+08:00">2020-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-04 14:47:44" itemprop="dateModified" datetime="2020-12-04T14:47:44+08:00">2020-12-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/03/data-capability-building-suggestions/" class="post-meta-item leancloud_visitors" data-flag-title="浅谈企业数据能力建设" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>随着市场的逐步成熟，要想保持企业的长期竞争力，运营和产品改进工作需要越来越精细化。</p>
+<p>比如，在游戏行业，玩家留存率是一个关键指标，为提升留存率，需要精细化的分析玩家是哪一步流失的，根据游戏进程推进过程，按照先后顺序设置关键节点，分析各个节点流失情况数据，可以形成一个玩家流失漏斗。有了玩家流失漏斗，我们可以选择流失率高的环节进行进一步精细化分析，找到流失原因，比如机器适配问题，引导缺乏吸引力问题，数值设计问题等，根据这些原因就可以针对性的在产品和运营侧做改进了。</p>
+<span id="more"></span>
+<p><img data-src="/attaches/2020/data-capability-building-suggestions/game-data-analysis.png" alt="game data analysis" /></p>
+<p>又比如保险行业，为了提高销售效率，可以先通过模型预测用户的销售响应率，然后将用户划分为几等，分别交由不同级别的销售人员跟进。我们现在在谈论的用户画像，产品画像，增长黑客，或者个性化推荐等等，其本质上其实都是在实现更精细化的运营或产品改进。</p>
+<p>精细化产品改进和运营对企业应用数据的能力提出了很高的要求，因为这些改进决策的制定<strong>不能全凭经验</strong>，它们很大程度上还需要建立在<strong>坚实的数据分析结果</strong>之上。</p>
+<p>企业应用数据的能力可以简称为企业数据能力。从整体上看，它应该是由企业数据驱动业务的文化、具有特定技能的人及具有特定功能的IT系统共同构成。</p>
+<p>既然市场对于企业的数据能力要求越来越高，那么要如何建设数据能力呢？</p>
+<p>为了尝试回答这个问题，我们先看看主要有哪些数据工作内容。</p>
+<h2 id="数据工作内容"><a class="markdownIt-Anchor" href="#数据工作内容"></a> 数据工作内容</h2>
+<p>回顾上面的玩家留存率分析过程，可以发现主要有三部分工作：</p>
+<ul>
+<li>寻找数据</li>
+<li>加工数据</li>
+<li>分析数据并提出产品改进的建议</li>
+</ul>
+<p>如何支持这三部分工作呢？也可以从三个方面来看：</p>
+<ol>
+<li>数据的日常维护和管理。它将包括数据仓库/数据湖的建设，数据质量、标准、模型、安全等数据治理内容。这将提高寻找数据的效率，保障使用数据的安全。</li>
+<li>针对特定问题的数据分析。包括基于业务的各种指标计算，建模分析等。</li>
+<li>数据管理及分析过程中的相关工具及平台。这将辅助进行数据管理和数据分析。</li>
+</ol>
+<p>为什么是这三个方面呢？事实上，这三个方面分别对应了三个不同的专业领域，它们需要的技能很不一样，企业内部甚至常常需要分成不同的团队来支持。数据的日常维护和管理需要数据工程能力，数据分析需要的是分析和建模的能力，工具平台的开发则需要软件开发能力。</p>
+<p>其中，工具平台研发和前两者的相关性很高。</p>
+<p>数据管理工作除了包含大量的规范文档定义、流程设计、沟通宣导之外，要在企业内部实现落地则是可以通过工具平台内建流程来支持。事实上这种方式越来越成为一个企业数据管理的演进趋势。这样一来，企业内部往往可以只设置少量数据管理专家，然后通过配合一个数据工具平台研发团队来实现数据管理。举个例子。比如对于数据质量管理，数据管理专家可以针对具体的业务数据定义专用的数据质量规则，如空值规则，值域范围规则等。通过数据平台可以将这些规则进行落地（规则脚本化并配置到平台）。然后数据平台定期运行相应的质量检查脚本来生成数据质量报告或发出数据质量告警，从而指导团队进行数据质量改进。</p>
+<p>数据分析工作同样离不开工具平台的支持。即便简单的能通过sql查询实现的分析工作，也至少需要提供一个查询界面，随着分析工作日渐复杂，直接粗放的使用数据库工具来支持会显得越来越吃力和低效。事实上，一般我们会将这里的分析进一步细分为即席查询分析，定期报表，实时报表，建模分析，线上模型推理等内容。想要较完善的支持这些分析工作，没有一个高效的工具平台支撑是很难完成的。甚至业界常常采用数据平台和机器学习平台双平台来进行支持。</p>
+<p>这三方面的工作可以图示如下：</p>
+<p><img data-src="/attaches/2020/data-capability-building-suggestions/data-work-types.png" alt="data work types" /></p>
+<p>从前面的分析来看，企业除了要从需求端发展数据管理能力和数据分析能力，工具平台的建设也是必不可少的，工具平台成熟程度常常与数据管理和数据分析的效率正相关。随着企业的逐渐发展壮大，工具平台往往越来越成为其数据能力的核心内容。这集中体现在工具平台越来越难以满足数据管理和数据分析的需求，大量的工具平台定制化需求被提出。</p>
+<p>不同的企业具体情况不同，这三个方面的工作量及对应的人员需求量也不同。比如，有的企业中，数据相关工具和平台完全来自外部采购，功能相对完善，则可能只需要完成工具平台运维，内部系统集成和管理流程落地，工具平台研发人员也可以尽量减少。而与之相对应，如果工具和平台采用基于开源工具自建，有较多的自定义功能，则往往需要扩大工具平台的研发团队。而有的企业中，如果数据管理人员和数据分析人员拥有较强的软件研发能力（比如大量来自开发人员的角色转型），则工具平台的研发可能直接会合并到数据管理和分析工作中去。</p>
+<h2 id="企业数据能力建设思路"><a class="markdownIt-Anchor" href="#企业数据能力建设思路"></a> 企业数据能力建设思路</h2>
+<p>基于数据工作的拆解和分析，我们可以尝试从以下几个维度来思考如何进行企业数据能力建设。</p>
+<h3 id="第一是数据人才资源建设"><a class="markdownIt-Anchor" href="#第一是数据人才资源建设"></a> 第一是数据人才资源建设。</h3>
+<p>从角色及其能力要求上面划分，可以大致将数据人才资源分为数据工程师/数据架构师，数据分析师/数据科学家。我在<a href="http://brightliao.com/2020/11/26/data-work-roles/">另一篇文章</a>中探讨了这些角色的工作范围和能力要求，可以作为这些角色定义的参考。从这里的角色定义出发，企业就可以根据自身具体情况规划出符合自身文化的数据人才资源体系结构，从而在招聘和培养人才上面有一个整体的思路和规划。</p>
+<h3 id="第二是人员组织和协作"><a class="markdownIt-Anchor" href="#第二是人员组织和协作"></a> 第二是人员组织和协作。</h3>
+<p>有了人，如何才能将大家组织起来，形成合力，做好事情呢？</p>
+<p>企业组织结构一般可以分为职能型、项目型和矩阵型。</p>
+<p>职能型组织将核心的工作划分为不同的功能部门，如产品，运营，销售，财务，审计等，这些部门按照职责范围大小组成从上到下的层级，最终形成金字塔型的结构。职能型组织结构一个典型的例子就是政府部门和一些传统的大型国企。其优势是利于各部门形成自己各自的专业优势，劣势是难以组成项目组以面向问题的方式解决企业问题（部门间常常合作困难，相互推诿和争利）。</p>
+<p>项目型组织以面向项目的方式组成项目组来实现人员组织和协作，其典型的例子是以外包业务为主的服务型公司。其优势是解决问题的效率高，但是不容易积累沉淀组织能力。</p>
+<p>矩阵型组织则希望避免职能型组织带来的部门墙问题，在职能型组织的基础上引入项目组织形式，在项目需要时从各职能部门抽调人员形成项目组，由项目组来统一管理。矩阵型组织常常使得某一个角色存在多位领导，从而给员工晋升及工作安排带来问题。实际企业中往往是各种组织形式并存，其中重要的是要注意由于部门划分带来的部门墙，它对于工作效率常常带来巨大的负面影响。</p>
+<p><img data-src="/attaches/2020/data-capability-building-suggestions/org-structure.png" alt="organization structure" /></p>
+<p>对于刚起步的小型企业，人才资源有限，往往需要一个人当一个团队用，过于清晰的划分将显得过于重量级而无必要。</p>
+<p>对于一个中大型企业而言，可以设立数据部，内部进一步细分为数据管理、数据分析、数据工具平台研发三类角色岗位，形成职能型的垂直组织结构。然后，从各类细分角色抽调一部分人组成项目组以支持业务线数据工作。这样一来，便形成了矩阵型的组织结构。</p>
+<p>以上简要的做了组织结构分析，当然，要想做好数据工作，还涉及很多需要更多智慧的管理工作细节。</p>
+<h3 id="第三是工具平台建设"><a class="markdownIt-Anchor" href="#第三是工具平台建设"></a> 第三是工具平台建设。</h3>
+<p>为什么要单独谈工具平台建设呢？因为工具和平台往往是数据能力的依托和沉淀。数据管理中的标准和流程需要工具平台的支持否则很容易变成空中楼阁。而数据分析的无数脚本也需要有机沉淀，并需要在组织内交流和分享，否则就只是数据分析师自身的能力而已。</p>
+<p>一般而言，工具平台的建设有三种模式：</p>
+<ul>
+<li>外部采购。时间成本可以节省不少，但需要注意采购的产品的功能边界，并注意该产品是否可以和内部系统有效集成，是否可以支持灵活的功能定制。</li>
+<li>自建。一般考虑根据开源的项目进行改造，这样的方式的优势是可定制能力极强，其劣势就是需要大量的相关人才并需要一定的时间周期。</li>
+<li>还有一种中间的方式，那就是采购产品的同时采购定制化服务，或者和第三方技术公司合作在开源产品上联合开发定制所需功能。</li>
+</ul>
+<p>对于这些不同的工具平台建设模式，不同的企业会做出各自的选择，但是长远来看，一个技术驱动的企业一定对可定制能力有很高的要求，所以可定制能力将是一个必选项。</p>
+<p>另一方面，从功能上来看，采购的产品和服务往往难以完整的实现企业特定的数据管理和分析需要，可能要考虑基于这些产品提供的api来进行定制化开发而舍弃掉它们提供的功能界面。</p>
+<p>比如，如果我们用aws的数据服务，数据质量管理如何实施呢？这时可能需要基于aws的api来开发一个质量管理的工具，通过定义质量规则，配合定期执行的质量检测任务来实现。</p>
+<p>所以，开发一个企业自己的数据平台界面可能是企业数据工具和平台建设的关键一环。这个界面相当于定义了企业自己的数据工作接口，而采购的服务是这一接口的某个具体实现。</p>
+<p>接口的定义往往比实现更重要，因为会有太多的企业资产依赖这样的接口去实现，比如大量的etl脚本。接口就如同电脑主板的插槽，接口定义好了，企业就可以按照自己的方式去设计主板布局及开发上层软件，主板布局和上层软件构成了企业的核心资产和竞争力，而某个接口的具体实现，比如摄像头、内存或硬盘，则应该可以较为轻松的替换而不影响企业主要业务。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总结一下，以上内容从数据工作做什么出发简要分析了企业如何进行数据能力建设，结合以往经验从三个方面（人才资源建设、人员组织合作、工具平台建设）分享了一些自己的认识。</p>
+<p>那么，你的企业中是如何建设数据能力的呢？欢迎留言讨论。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/11/26/data-work-roles/" rel="bookmark">那些数据工作中的角色</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2020/12/27/oracle-data-migration/" rel="bookmark">Oracle数据迁移实用入门</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/21/some-thoughts-about-data-platform/" rel="bookmark">一些企业数据平台建设的思考</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/01/22/bigdata-platform-based-on-hdp/" rel="bookmark">基于HDP构建企业数据平台</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2021/02/21/data-governance-based-on-atlas-ranger/" rel="bookmark">基于Hadoop大数据平台的数据治理</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E4%BD%9C/" rel="tag"><i class="fa fa-tag"></i> 数据工作</a>
+              <a href="/tags/%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84/" rel="tag"><i class="fa fa-tag"></i> 组织架构</a>
+              <a href="/tags/%E5%9F%B9%E8%AE%AD/" rel="tag"><i class="fa fa-tag"></i> 培训</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/" rel="tag"><i class="fa fa-tag"></i> 数据平台</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/26/data-work-roles/" rel="prev" title="那些数据工作中的角色">
+      <i class="fa fa-chevron-left"></i> 那些数据工作中的角色
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/27/oracle-data-migration/" rel="next" title="Oracle数据迁移实用入门">
+      Oracle数据迁移实用入门 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B7%A5%E4%BD%9C%E5%86%85%E5%AE%B9"><span class="nav-number">1.</span> <span class="nav-text"> 数据工作内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%81%E4%B8%9A%E6%95%B0%E6%8D%AE%E8%83%BD%E5%8A%9B%E5%BB%BA%E8%AE%BE%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text"> 企业数据能力建设思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%98%AF%E6%95%B0%E6%8D%AE%E4%BA%BA%E6%89%8D%E8%B5%84%E6%BA%90%E5%BB%BA%E8%AE%BE"><span class="nav-number">2.1.</span> <span class="nav-text"> 第一是数据人才资源建设。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%98%AF%E4%BA%BA%E5%91%98%E7%BB%84%E7%BB%87%E5%92%8C%E5%8D%8F%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text"> 第二是人员组织和协作。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%98%AF%E5%B7%A5%E5%85%B7%E5%B9%B3%E5%8F%B0%E5%BB%BA%E8%AE%BE"><span class="nav-number">2.3.</span> <span class="nav-text"> 第三是工具平台建设。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">522k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14:30</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?34.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '5c31d5f8b63ad7d55976bf47afdd54da',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
