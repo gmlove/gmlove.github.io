@@ -49,6 +49,39 @@
   </entry>
   
   <entry>
+    <title>敏捷数据工程实践--以ETL为单位的CI和CD</title>
+    <link href="http://brightliao.com/2023/01/10/ade-ci-cd-per-etl/"/>
+    <id>http://brightliao.com/2023/01/10/ade-ci-cd-per-etl/</id>
+    <published>2023-01-10T12:00:00.000Z</published>
+    <updated>2023-05-16T09:22:34.832Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>前几天，我在跟一位做进口贸易的朋友聊天，发现一个很有意思的事情。</p><p>他们做的是国内的高端仪器进口的进口贸易业务。主要帮助销售国外产品的公司完成竞标、合同签订、物流、海关、进口贸易政策符合、维保等等事务。</p><p>我很疑惑，为什么会有这样的业务形态存在？为什么这些产品销售公司不自己处理这些事务，反而代理出去让其他公司赚钱呢？</p><span id="more"></span><p>我带着这个疑问，向他请教，获得了很多启发。</p><p>众所周知，国内的工业起步较晚，虽然这些年突飞猛进成为了世界工厂，但是核心的生产设备很多还是依赖进口。比如在生产芯片时少不了光刻机，在环境、食品、农业等实验室进行的样本成分分析也少不了可以分析各元素浓度的原子光谱仪。这个市场是一个万亿级的大市场。</p><p>这个业务有什么特点呢？</p><p>一是产品销售数量少。高端仪器一般售价都比较高，普遍在几十万到数百万。所以，一个年营业额在十亿的仪器产品公司其实也只是销售了数百台仪器而已。</p><p>二是销售流程特别复杂。由于是物理设备进口，将涉及很多现实的问题，除了产品推广和销售，还有一系列的事务，比如竞标、合同签订、物流、海关、进口贸易政策符合、维保等等，非常复杂。</p><p>作为一个在国内销售进口设备的企业，要如何组织其业务呢？</p><p>推广和销售是自不必说，否则市场根本不了解产品，就更别谈卖出去了。</p><p>但是，销售之外的其他事务要不要自己来做？这个就值得思考了。因为产品销售数量不会太大，但是销售之外的事务却特别复杂而繁多。如果培养一个专业的团队做这件事，由于产品销量不大，团队工作势必不会饱和。如果减少团队人员数量，这些事务又难以做得专业，容易出纰漏。</p><p>在经过大量的市场尝试和调整之后，专门做对进口贸易易的企业就诞生了。他们负责产品销售之外的大部分事务，涉及竞标、合同签订、物流、海关、进口贸易政策符合、税收、维保方式设计等。他们常常是一个非常专业的团队，可负责各个领域不同产品的进口贸易业务。在某些品类销售淡季时，其他品类可能又到销售旺季了。所以，他们的业务通常也能保持稳定和饱和。</p><p>于是，海外产品研发公司+国内产品销售公司+国内进口贸易公司的模式就在市场上慢慢形成并稳定下来了。总结起来，可以用下图简单地描述这三个企业如何愉快地合作完成整个产品进口销售的过程。</p><p><img data-src="/attaches/2023/2023-01-10-ade-ci-cd-per-etl/import-trade.png" alt="Import trade" /></p><p>进口贸易企业业务的兴起对整个行业效率和质量的提升都起到了正面的效果，这也是进口贸易企业得以存在的理由。</p><p>和这位朋友的交流完之后，我发现进口贸易企业业务的形成给了我不少启发。</p><p>从进口贸易企业的兴起中可以看到业务的重构和演变，即，通过合理的<strong>抽取</strong>和<strong>拆分</strong>提升了整体的效率。</p><h2 id="以etl为单位的持续集成"><a class="markdownIt-Anchor" href="#以etl为单位的持续集成"></a> 以ETL为单位的持续集成</h2><p>我联想到了近几天一直在思考的数据应用开发中的持续集成流水线设计。</p><p>在应用软件开发中，我们常常仅设计一条持续集成流水线，在流水线中运行所有的测试，接着将所有代码打包成一个大的产品包，然后部署到测试或产品环境中。</p><p>在数据应用中，是不是也需要这样做呢？这样做的好处是可以将产品环境的制品与代码仓库中的版本对应。其劣势其实也很多，比如，修改一个局部的代码，就不得不运行所有的测试，然后运行流水线中所有耗时的步骤，可能还需要进入手工测试的环节，最后才能发布到线上。效率非常低下。</p><p>这一问题在数据应用中更是被放大了。因为数据应用通常涉及数百个指标计算ETL，这些ETL的自动化测试只能用缓慢的集成测试来覆盖，这就导致流水线中的测试步骤耗时很长。在我们的项目中，常常需要跑半小时到一小时才能跑完。</p><p>这就如同做进口高端仪器销售的公司，如果自己来做进口贸易相关业务，不仅耗时特别长，而且出纰漏的可能性大（业务质量低）。</p><p>有没有更好的做法？既然只修改了某一个ETL，为什么不能就只部署和测试这个ETL？联想到前面进口贸易业务的抽取和拆分，是不是可以对流水线进行抽取和拆分呢？即，做<strong>以ETL为单位的持续集成流水线</strong>。</p><p>在数据应用开发场景中，这也是具备可行性的。原因在于，相比应用软件代码中的一个一个类或代码文件，ETL间几乎没有依赖。不同的ETL代码通常有不同的入口，存在于一个独立的文件。可以认为一个ETL就是一个独立的数据应用。</p><p>事实上，如果以ETL为单位进行持续集成和部署，还不用担心自己的部署会影响到其他的线上指标计算ETL，这也在一定程度上增强了安全性。</p><p>看起来，在数据应用开发领域，以ETL为单位的持续集是顺理成章的事。</p><p>对比一下微服务实践，还可以发现，这一实践与微服务中推荐的为每一个服务搭建一条持续集成流水线的实践几乎是等同的。</p><h2 id="如何实现"><a class="markdownIt-Anchor" href="#如何实现"></a> 如何实现</h2><p>如何实现以ETL为单位的持续集成呢？</p><p>如果基于Jenkins，可以在流水线上面加一个参数，如“ETL文件路径”，在运行流水线时，可以指定这个参数，让流水线仅针对指定的ETL运行测试与部署。</p><p>如果觉得在Jenkins上面实施以ETL为单位的持续集成较为麻烦，也可以团队自主开发一个专用的数据持续集成流水线。如果仅实现基本的功能，其实也并不复杂。</p><p>需要注意的是，一旦以ETL为单位进行持续集成了，就需要有一种方式记录每一个ETL对应的代码仓库里面的版本号，方便版本追溯。实现方式有多种，比如，可以在部署ETL的时候，在生产环境写入一个该ETL对应的版本文件。</p><h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2><p>如果采用应用软件持续流水线的大包发布方式构建数据应用的持续集成流水线，将降低部署频率，且容易引起安全问题。借鉴进口贸易业务的抽取和拆分模式，在数据应用开发中，将持续集成流水线拆分为以ETL为单位的流水线可以有效解决上述问题。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;前几天，我在跟一位做进口贸易的朋友聊天，发现一个很有意思的事情。&lt;/p&gt;
+&lt;p&gt;他们做的是国内的高端仪器进口的进口贸易业务。主要帮助销售国外产品的公司完成竞标、合同签订、物流、海关、进口贸易政策符合、维保等等事务。&lt;/p&gt;
+&lt;p&gt;我很疑惑，为什么会有这样的业务形态存在？为什么这些产品销售公司不自己处理这些事务，反而代理出去让其他公司赚钱呢？&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="敏捷" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/"/>
+    
+    <category term="数据" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/%E6%95%B0%E6%8D%AE/"/>
+    
+    
+    <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
+    
+    <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
+    
+    <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
     <title>DDD建模案例分享</title>
     <link href="http://brightliao.com/2022/07/28/modelling-examples/"/>
     <id>http://brightliao.com/2022/07/28/modelling-examples/</id>
@@ -180,13 +213,13 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
     <category term="ETL开发" scheme="http://brightliao.com/tags/etl%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
@@ -228,13 +261,13 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
     <category term="ETL开发" scheme="http://brightliao.com/tags/etl%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
@@ -275,13 +308,13 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
     <category term="ETL开发" scheme="http://brightliao.com/tags/etl%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
@@ -346,13 +379,13 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
     <category term="ETL开发" scheme="http://brightliao.com/tags/etl%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
@@ -390,13 +423,13 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
     <category term="ETL开发" scheme="http://brightliao.com/tags/etl%E5%BC%80%E5%8F%91/"/>
-    
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
@@ -619,32 +652,6 @@
     
     <summary type="html">&lt;p&gt;在前面的文章&lt;a href=&quot;http://brightliao.com/2021/04/01/data-development-language-and-environment/&quot;&gt;《数据应用开发语言和环境》&lt;/a&gt;中我们建议使用&lt;code&gt;SQL&lt;/code&gt;来作为主要数据开发语言，并且，通常我们需要对标准的&lt;code&gt;SQL&lt;/code&gt;进行增强，以便可以更好的支持复杂的数据开发。一些典型的需要新增的特性可以是变量、控制语句、模板等。&lt;/p&gt;
 &lt;p&gt;增强&lt;code&gt;SQL&lt;/code&gt;固然是可以解决我们的数据开发问题，但是它也会给我们带来一些其他的不便。第一个烦恼可能就是，标准的&lt;code&gt;SQL&lt;/code&gt;可以在很多数据工具中运行，比如&lt;code&gt;Superset&lt;/code&gt;的&lt;code&gt;SQL&lt;/code&gt;查询器、&lt;code&gt;Hive&lt;/code&gt;的查询控制台等，而使用增强语法的&lt;code&gt;SQL&lt;/code&gt;编写的代码则不行。由于我们将标准的&lt;code&gt;SQL&lt;/code&gt;增强了，而&lt;code&gt;SQL&lt;/code&gt;周边生态工具却无法感知这样的增强，这时各种不便就随之而来了。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
-    
-    
-    <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
-    
-    <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数据仓库建模自动化</title>
-    <link href="http://brightliao.com/2021/04/05/dwd-modeling-automation/"/>
-    <id>http://brightliao.com/2021/04/05/dwd-modeling-automation/</id>
-    <published>2021-04-05T12:00:00.000Z</published>
-    <updated>2022-11-07T02:38:30.299Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>在前文<a href="http://brightliao.com/2021/03/16/data-modeling-practice/">《数据仓库建模实践》</a>中，我们提到了在确定<code>DWD</code>层的构建原则之后，可以通过开发数据建模工具来辅助实现。这样的工具应该设计成什么样子呢？</p><h2 id="建模工具的基本方案"><a class="markdownIt-Anchor" href="#建模工具的基本方案"></a> 建模工具的基本方案</h2><h3 id="建模工具的特点"><a class="markdownIt-Anchor" href="#建模工具的特点"></a> 建模工具的特点</h3><p>一个理想的建模工具应该具备良好的易用性和灵活性。</p><span id="more"></span><p>易用性可以体现在：</p><ul><li>支持数据建模人员方便的查看，快速的编辑</li><li>有错误提示</li><li>有版本控制</li></ul><p>灵活性是指：</p><ul><li>可以很容易的自定义数据转换逻辑而无需修改工具代码</li><li>支持灵活的任务参数定义，以便适应不同量级的数据</li><li>一旦建模人员希望引入新的建模规则，可以很容易的修改这个工具进行支持</li></ul><h3 id="建模工具交互界面"><a class="markdownIt-Anchor" href="#建模工具交互界面"></a> 建模工具交互界面</h3><p>常见的具备良好易用性的工具是一套完善的拥有良好交互体验的<code>Web</code>系统，用户打开浏览器即可使用。但是这样的系统构建成本通常较高，而且一旦有新的建模规则或特性想要支持，也要花费更多的时间去修改系统。</p><p>有没有更简单轻量的工具呢？</p><p>做数据分析最常用的工具当属<code>Excel</code>电子表格了。电子表格有着非常强的灵活性，可以支持大部分数据分析场景。同时，团队成员通常也都具备熟练的使用电子表格的能力。基于此，我们可以考虑使用<code>Excel</code>作为用户交互界面。</p><p>我们可以设计一套电子表格的模板，然后，建模人员通过填表的方式进行模型配置，接着，建模工具通过读取模型配置来运行数据建模任务。</p><p>使用电子表格作为交互界面可以大大降低建模工具开发成本，使得我们可以将主要精力放在建模本身这件更有业务价值的事情上。虽然舍弃了一定的易用性，但是考虑到开发成本的降低及灵活性的提升，这个选择应该是比较合理的。</p><p>很多电子表格还支持协同编辑，此时可以让相关团队成员一起协作完成<code>DWD</code>模型的配置。</p><h3 id="建模工具实现思路"><a class="markdownIt-Anchor" href="#建模工具实现思路"></a> 建模工具实现思路</h3><p>有了电子表格中定义的模型配置，建模工具的核心功能就变成：</p><ol><li>读取模型配置；</li><li>运行数据建模任务。</li></ol><p>分析一下如何实现这两个功能。读取模型配置在实现上没什么问题，运行数据建模任务这个步骤还显得不够清晰。任务是以什么形式在什么环境里面运行呢？</p><p>回顾前面的文章<a href="http://brightliao.com/2021/04/01/data-development-language-and-environment/">《数据应用开发语言和环境》</a>，经过分析，我们建议使用<code>sql</code>来作为主要数据开发语言，使用<code>Spark</code>作为任务执行引擎。那么这里的任务是不是可以以<code>sql</code>代码的形式体现，然后通过<code>Spark</code>来执行呢？</p><p>当然是可以的！前文中，我们还提到了一个可执行增强<code>sql</code>语法的<code>sql</code>驱动器。在这里，事实上，我们可以通过建模工具将模型配置进行转换，生成一个可执行的<code>sql</code>文件，然后通过<code>sql</code>驱动器在<code>Spark</code>中执行。</p><p>生成中间<code>sql</code>文件的方式带来了另一个好处，我们可以有更好的版本管理了。电子表格的版本是不容易维护的，但生成的<code>sql</code>是纯文本的，可以很容易实现版本管理。</p><h2 id="建模工具设计与实现"><a class="markdownIt-Anchor" href="#建模工具设计与实现"></a> 建模工具设计与实现</h2><p>有了前面的分析及基本工作流程设计，我们来看一下如何设计实现这一工具。</p><h3 id="表格模板设计"><a class="markdownIt-Anchor" href="#表格模板设计"></a> 表格模板设计</h3><p>首先来看表格模板的设计，下图展示了一个设计好的电子表格模板：</p><p><img data-src="/attaches/2021/2021-04-05-dwd-modeling-automation/tool.png" alt="tool design" /></p><p>上述表格记录了订单事实表<code>fact_order_h</code>和用户表<code>dim_user_h</code>的模型配置，包括了多个列，其中：</p><ul><li>t_table_name: 目标表名，一般需要带上数据库名，只需要首行数据有值（参考上图示例①）</li><li>t_col_name: 目标表字段名</li><li>t_col_attr: 目标表字段属性，比如主键<code>pk</code>，外键<code>fk</code>，分类字段<code>cate</code>等（参考上图示例②）</li><li>t_col_type: 目标表字段类型</li><li>col_desc: 字段描述</li><li>s_table_name: 源表名，一般需要带上数据库名，只需要首行数据有值</li><li>s_col_name: 源表字段名</li><li>s_col_type: 源表字段类型</li><li>trans_expr: 转换规则<code>sql</code>表达式，这里的表达式可以支持任意的合法转换，比如函数调用，变量引用，码值映射，外键转换等（参考上图示例③）</li><li>comments: 任意的关于这一个转换的注释</li><li>code_gen: 自定义代码</li></ul><h3 id="扩展性分析"><a class="markdownIt-Anchor" href="#扩展性分析"></a> 扩展性分析</h3><p>我们对每一个字段设计了一个属性<code>t_col_attr</code>，用于对特殊字段进行标记。建模工具可以识别这个标记，然后根据标记的不同生成不同的代码。目前我们只关注代理键、自然键、分类字段，以后可以根据情况增加其他需要进行特殊处理的字段类型标记。</p><p>转换表达式<code>trans_expr</code>是一个非常通用的设计，利用这个表达式，可以给<code>DWD</code>的表添加任意可以通过源表计算得出的字段。这里的表达式可以根据不同的字段标记使用不同的语法，比如:</p><ul><li>在示例图<code>3</code>中，通过定义<code>sql</code>表达式实现主键的生成</li><li>在示例图中<code>3.1</code>中，对应的目标字段是分类字段，则<code>trans_expr</code>的值为分类码值映射</li><li>在示例图中<code>3.2</code>中，对应的目标字段是外键字段，则<code>trans_expr</code>的值为外键信息，包括对应的表和表间关联字段</li><li>在示例图中<code>3.3</code>中，表达式为普通<code>sql</code>表达式，其中可以引用变量，因为最后生成的<code>sql</code>将会通过支持增强<code>sql</code>语法的驱动器来执行</li></ul><p><code>code_gen</code>列中可以定义任意代码，建模工具在生成<code>sql</code>代码时，可以根据代码插入点标记将自定义代码插入到生成的<code>sql</code>中。比如，如果在处理第一个分区（全量分区）时，为了加速整个计算过程，可以通过<code>repartition</code>提升并行度，此时<code>code_gen</code>的值可以是：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">after_read_source: -- target=func.repartition(source_table, 100)</span><br></pre></td></tr></table></figure><p>生成的代码会在具有<code>after_read_source</code>标记的地方插入自定义代码。</p><p>有了原表字段类型<code>s_col_type</code>和目标表字段类型<code>t_col_type</code>的设计，建模工具可以判断两个类型是否相同，如不同，则可以生成一条<code>cast(xx as xx)</code>的语句自动将类型转换为<code>t_col_type</code>指定的类型。</p><p><code>col_desc</code>的设计可以鼓励建模人员弄清楚每一个字段的确切含义，然后将数据的相关背景知识记录下来。在这里，<code>col_desc</code>还可以充当元数据的作用。有了<code>col_desc</code>，我们可以根据此生成表的字段注释。</p><h3 id="建模原则支持分析"><a class="markdownIt-Anchor" href="#建模原则支持分析"></a> 建模原则支持分析</h3><p>有了上面的设计，我们来看一下之前定义的建模原则如何在这个设计下进行实现。</p><ul><li>代理键生成：可以使用<code>trans_expr</code>实现</li><li>外键列保留对应的业务键字段：可以通过添加列来实现</li><li>做了码值转换的字段保留原字段，命名为<code>original_&#123;原字段&#125;</code>：通过<code>t_col_attr</code>及<code>trans_expr</code>来实现</li><li>处理<code>date/time</code>的字段，生成外键列：可以使用<code>trans_expr</code>实现</li></ul><p>可以看到，电子表格模板的设计具有非常大的灵活性，可以很好的支持前文定义的建模原则。</p><h3 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h3><p>有了上面的分析和设计，现在要实现这样的一个建模工具就不是难事了。回顾上述设计可以发现，这个设计其实是站在使用者的角度定义了建模工具所应该具备的功能，这正是<code>TDD</code>的基本思想，也就是说，这个设计其实是为建模工具定义的一个测试用例。</p><p>在实现时，按照<code>DDD</code>的思想，可以将电子表格中每一行定义为一个领域对象，可以称作<code>TransitionDefinition</code>。使用<code>Python</code>读取<code>Excel</code>电子表格，然后将表格的每一行转化为一个领域对象。代码的生成可以基于<code>Jinja</code>模板引擎来实现。有了领域对象，我们只需要编写<code>Jinja</code>模板，然后将领域对象渲染为最终的<code>sql</code>即可。</p><p>在实现时需要注意表间依赖问题。比如，上述示例中的订单表和用户表，由于订单表有一个外键指向用户表，我们需要首先构建用户表，再构建订单表。</p><p>这个问题比看起来的还要严重，因为可能产生循环依赖。如何解决呢？其实我们可以分两步完成构建过程，第一步处理非外键字段，第二步处理所有外键字段。由于外键实际上只依赖所引用的表的主键字段（业务键和代理键），只要这些字段有值就可以了。</p><p>还需要注意一个问题，那就是外键构建的任务可能无法并行完成，因为该任务会更新数据表（也可以考虑存储为不同的表，就没有任务并行问题了，不过此时会产生一份拷贝，从而牺牲一定的存储空间）。大多数调度器都提供了控制任务并行度的方法，比如<code>Airflow</code>的<a href="https://airflow.apache.org/docs/apache-airflow/1.10.3/concepts.html#pools"><code>Pool</code></a>机制。</p><p>将构建过程分为两步完成这一设计不仅很好的解决了表间依赖关系问题，还让最后的数据流水线更干净，如下图示例：</p><p><img data-src="/attaches/2021/2021-04-05-dwd-modeling-automation/dwd-dag.png" alt="dwd dag" /></p><p>一个可运行的建模工具的实现应该不难，就不赘述了，可以作为大家的一个小练习。如果有兴趣，大家可以尝试进行实现。</p><h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2><p>本文分享了一个数据仓库建模工具的设计和实现的例子。讨论了建模工具的方案设计，技术选型，交互界面（电子表格模板）设计，扩展性设计等话题。</p><p><code>DWD</code>建模工具的引入，可以帮我们更高效的将<code>DWD</code>层构建好。由于这一层是其他数据应用构建时的最基础的数据来源，如果我们不能快速的完成，则将直接影响上层数据应用的开发。有了建模工具的支持，这一问题就不再是问题了。</p><p>在我们的实践中，得益于<code>DWD</code>建模原则的建立和建模工具的支持，我们将原来需要数周的建模时间缩短到了一周以内，大大提高了团队的效率。</p><p>在帮助我们的客户构建了多个数据相关应用之后，我们发现，数据平台构建过程中有很多工具可以复用，是值得抽象并沉淀下来的。在后续的文章中，我还将分享更多类似的数据工具。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;在前文&lt;a href=&quot;http://brightliao.com/2021/03/16/data-modeling-practice/&quot;&gt;《数据仓库建模实践》&lt;/a&gt;中，我们提到了在确定&lt;code&gt;DWD&lt;/code&gt;层的构建原则之后，可以通过开发数据建模工具来辅助实现。这样的工具应该设计成什么样子呢？&lt;/p&gt;
-&lt;h2 id=&quot;建模工具的基本方案&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#建模工具的基本方案&quot;&gt;&lt;/a&gt; 建模工具的基本方案&lt;/h2&gt;
-&lt;h3 id=&quot;建模工具的特点&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#建模工具的特点&quot;&gt;&lt;/a&gt; 建模工具的特点&lt;/h3&gt;
-&lt;p&gt;一个理想的建模工具应该具备良好的易用性和灵活性。&lt;/p&gt;</summary>
     
     
     
