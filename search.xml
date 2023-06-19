@@ -153,33 +153,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Less -- 诡异的空格</title>
-    <url>/2016/03/08/ghost-space-in-less/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Original:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.a &#123;</span><br><span class="line">    &amp;.a-b &#123;</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            background-color: #5cb85c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.a-c &#123;</span><br><span class="line">    &amp;:extend(.a .a-b:hover);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>Compiled:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ lessc test.less</span><br><span class="line">extend &#x27; .a .a-b:hover&#x27; has no matches</span><br><span class="line">.a.a-b:hover &#123;</span><br><span class="line">  background-color: #5cb85c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Improved:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.a &#123;</span><br><span class="line">    &amp;.a-b &#123;</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            background-color: #5cb85c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.a-c &#123;</span><br><span class="line">    &amp;:extend(.a.a-b:hover);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Compiled:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ lessc test.less</span><br><span class="line">.a.a-b:hover,</span><br><span class="line">.a-c &#123;</span><br><span class="line">  background-color: #5cb85c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>css选择器：</p>
-<ul>
-<li><code>.a.a-b</code>表示同一个元素同时包含两个类，</li>
-<li><code>.a .a-b</code>表示子元素选择器，表示当前有<code>a-b</code>类并且某一级父元素含有<code>a</code>类</li>
-<li><code>.a, .a-b</code>表示多个独立选择器，表示选择当前有<code>a</code>类或者含有<code>a-b</code>类的的元素</li>
-</ul>
-]]></content>
-      <categories>
-        <category>frontend</category>
-      </categories>
-      <tags>
-        <tag>less</tag>
-        <tag>css</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Maven Tips</title>
     <url>/2016/03/04/maven-tips/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
@@ -257,6 +230,33 @@
         <tag>maven</tag>
         <tag>java</tag>
         <tag>pom</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Less -- 诡异的空格</title>
+    <url>/2016/03/08/ghost-space-in-less/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Original:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.a &#123;</span><br><span class="line">    &amp;.a-b &#123;</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            background-color: #5cb85c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.a-c &#123;</span><br><span class="line">    &amp;:extend(.a .a-b:hover);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>Compiled:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ lessc test.less</span><br><span class="line">extend &#x27; .a .a-b:hover&#x27; has no matches</span><br><span class="line">.a.a-b:hover &#123;</span><br><span class="line">  background-color: #5cb85c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Improved:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.a &#123;</span><br><span class="line">    &amp;.a-b &#123;</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            background-color: #5cb85c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.a-c &#123;</span><br><span class="line">    &amp;:extend(.a.a-b:hover);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Compiled:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ lessc test.less</span><br><span class="line">.a.a-b:hover,</span><br><span class="line">.a-c &#123;</span><br><span class="line">  background-color: #5cb85c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>css选择器：</p>
+<ul>
+<li><code>.a.a-b</code>表示同一个元素同时包含两个类，</li>
+<li><code>.a .a-b</code>表示子元素选择器，表示当前有<code>a-b</code>类并且某一级父元素含有<code>a</code>类</li>
+<li><code>.a, .a-b</code>表示多个独立选择器，表示选择当前有<code>a</code>类或者含有<code>a-b</code>类的的元素</li>
+</ul>
+]]></content>
+      <categories>
+        <category>frontend</category>
+      </categories>
+      <tags>
+        <tag>less</tag>
+        <tag>css</tag>
       </tags>
   </entry>
   <entry>
@@ -2656,24 +2656,6 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
       </tags>
   </entry>
   <entry>
-    <title>深度学习模型重现 -- 前奏</title>
-    <url>/2019/07/08/reproduce-ml-models/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为每天和AI模型打交道的开发者，深度学习模型在不同的框架之间转换一直是一个老生常谈的问题。为了让这个问题变得容易，大家做了很多这样的工作，像是微软推出的<a href="https://github.com/microsoft/MMdnn">MMdnn</a>工具，号称可以将模型在几乎所有的流行AI框架中转换，又比如Facebook和微软一起推出的<a href="https://onnx.ai">ONNX</a>不依赖具体框架的中间格式等。</p>
-<span id="more"></span>
-<p>但是，回到我们实际的产品开发过程中，我们总还是感觉现有的这些工具有点使不上劲。比如，当我们某一天发现了一篇论文里面的想法很赞，我们想要参考来优化自己的模型。但是仔细一看，发现论文里面公布的代码和模型是caffe的，而我们自己的模型用kera实现的，咋办呢？类似上面的中间格式或者模型转换工具，这个时候就显得很乏力了，因为我们想要的可能是一段可以直接集成到我们的现有模型中的代码，或者是一个我们可以用来做迁移学习的基础模型。这时，我们可能要回归到原点，从零开始，深入理解论文里面提到的优化，重新实现。</p>
-<p>在我们的模型开发过程中，就遇到了这样的问题。看起来很美好的想法和模型，却无法直接使用。下面我将用几篇文章分享一下我们研究过的几个模型。</p>
-]]></content>
-      <categories>
-        <category>machine-learning</category>
-      </categories>
-      <tags>
-        <tag>tensorflow</tag>
-        <tag>AI</tag>
-        <tag>Machine Learning</tag>
-        <tag>Deep Learning</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习模型重现 -- EfficientNet的keras实现</title>
     <url>/2019/07/12/reproduce-ml-models-efficientnet/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>EfficientNet是谷歌AI科学家们在论文《EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks》中提出的模型。这篇文章不仅提出了这个模型，还系统地研究了模型扩展的问题，大家感兴趣的，可用阅读一下<a href="https://arxiv.org/abs/1905.11946">论文原文</a>。EfficientNet的亮眼之处在于，其在保持领先的性能的同时，将模型的参数数量和预测速度都提升了一个数量级。请看下图的性能对比：</p>
@@ -2758,6 +2740,24 @@ c. <code>drop_connect</code>函数，可以新建一个继承至<code>keras.laye
         <tag>Deep Learning</tag>
         <tag>keras</tag>
         <tag>EfficientNet</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习模型重现 -- 前奏</title>
+    <url>/2019/07/08/reproduce-ml-models/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为每天和AI模型打交道的开发者，深度学习模型在不同的框架之间转换一直是一个老生常谈的问题。为了让这个问题变得容易，大家做了很多这样的工作，像是微软推出的<a href="https://github.com/microsoft/MMdnn">MMdnn</a>工具，号称可以将模型在几乎所有的流行AI框架中转换，又比如Facebook和微软一起推出的<a href="https://onnx.ai">ONNX</a>不依赖具体框架的中间格式等。</p>
+<span id="more"></span>
+<p>但是，回到我们实际的产品开发过程中，我们总还是感觉现有的这些工具有点使不上劲。比如，当我们某一天发现了一篇论文里面的想法很赞，我们想要参考来优化自己的模型。但是仔细一看，发现论文里面公布的代码和模型是caffe的，而我们自己的模型用kera实现的，咋办呢？类似上面的中间格式或者模型转换工具，这个时候就显得很乏力了，因为我们想要的可能是一段可以直接集成到我们的现有模型中的代码，或者是一个我们可以用来做迁移学习的基础模型。这时，我们可能要回归到原点，从零开始，深入理解论文里面提到的优化，重新实现。</p>
+<p>在我们的模型开发过程中，就遇到了这样的问题。看起来很美好的想法和模型，却无法直接使用。下面我将用几篇文章分享一下我们研究过的几个模型。</p>
+]]></content>
+      <categories>
+        <category>machine-learning</category>
+      </categories>
+      <tags>
+        <tag>tensorflow</tag>
+        <tag>AI</tag>
+        <tag>Machine Learning</tag>
+        <tag>Deep Learning</tag>
       </tags>
   </entry>
   <entry>
@@ -6377,6 +6377,81 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
       </tags>
   </entry>
   <entry>
+    <title>成为高效的程序员</title>
+    <url>/2021/03/27/programmer-efficiency/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="一个故事"><a class="markdownIt-Anchor" href="#一个故事"></a> 一个故事</h2>
+<p>最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：</p>
+<ol>
+<li>快捷键用得少，缺乏一点去研究快捷键的意识</li>
+<li>自动补全功能没有充分利用，基本靠记忆+手敲</li>
+<li>使用mac笔记本自带的并不好用的键盘</li>
+</ol>
+<p>这带来的结果就是手上的速度跟不上思维的速度。</p>
+<span id="more"></span>
+<h2 id="高效开发的起点打字速度和快捷键"><a class="markdownIt-Anchor" href="#高效开发的起点打字速度和快捷键"></a> 高效开发的起点：打字速度和快捷键</h2>
+<p>常常记起，与我的buddy在一个项目组时，他常常会提醒我们如何高效的做开发。比如：手速。他推荐并常常组织我们在一个练习打字速度的应用上面练习和比赛。</p>
+<p>快捷键的使用更是Thoughtworks开发人员的传统强项，与有经验的TWer pair开发就能体会到如何完全不用鼠标而把键盘敲到飞起带来的超高编程效率。TDD、重构、格式调整等等我们日常的开发动作在高效的快捷键使用下更是相得益彰。</p>
+<p>我曾经在一个客户的咨询项目上，有一个客户的开发同学，见面就聊到说他也来参加过Thoughtworks的面试，但是最后没有进来。这位同学提到这件事显得很不服气，说他了解到没有进来的原因之一居然是快捷键用的不熟，而且很自以为是的补充说：快捷键跟开发能力有什么关系？介于他是客户方的人，我没有当面的跟他争论，但是其实当时我就在心底里暗道：还好没进TW！</p>
+<p>快捷键的确不是衡量一个好的开发人员的唯一标准，但是快捷键的灵活使用是一个高效开发人员的重要标志。作为一个开发人员，虽然不必刻意追求打字速度和快捷键使用，但是至少应当心向往之才是。</p>
+<p>与此相关的，我不禁又想到咱们的老TWer熊节的课程《学会TDD，十倍提升编程效率》。只有TDD可能并不能十倍提升效率，但是TDD结合超快的打字速度和熟练的快捷键使用，就很有可能了。</p>
+<h2 id="高效开发的故事"><a class="markdownIt-Anchor" href="#高效开发的故事"></a> 高效开发的故事</h2>
+<p>高效的开发者是可以快速完成很多事情的。我自认为不算一个特别高效的开发人员，但是我可以列举一下曾经做过的一些个人认为还算高效的事情，可以供大家参考。</p>
+<h3 id="happy-bird-的实现"><a class="markdownIt-Anchor" href="#happy-bird-的实现"></a> Happy Bird 的实现</h3>
+<p>在14年的时候，我想转型做游戏开发。当时的背景是以后端开发为主，也偶尔兼职做一些前端的小功能。于是我找了一个周末，研究了一下iOS的开发。正巧当时有一个小游戏<code>Flappy Bird</code>，挺火的，但是游戏设定又比较难。好吧，那就试试看重新实现一下这个游戏，调整一下难度吧。于是，我花了不到两天的时间做了一个<code>Happy Bird</code>出来，设置难度之后，可以轻松的玩很长时间。</p>
+<p>怎么做的呢？大致有这三个步骤：</p>
+<ol>
+<li>Root一下我手上的iPad，下载安装好<code>Flappy Bird</code>，找到其安装程序路径，把它的资源文件拿出来。</li>
+<li>研究iOS上面的动画开发，看了几个小例子</li>
+<li>编写代码实现<code>Happy Bird</code></li>
+</ol>
+<p>核心的代码在这里，有兴趣的小伙伴可以看看：<a href="https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp">https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp</a></p>
+<h3 id="项目中的一些实践"><a class="markdownIt-Anchor" href="#项目中的一些实践"></a> 项目中的一些实践</h3>
+<p>最近我觉得也有几个可能值得一提的例子。</p>
+<p>我们项目是为客户构建一个企业内部的数据平台，平台基于Horton Works（已与Cloudera合并）的开源的Hadoop发行版HDP构建。</p>
+<p>由于HDP毕竟是一个完全开源的产品，直接在客户环境上使用，总还是显得有点不够。缺什么呢？一是一个入口的平台Portal页面，通过这个页面可以导航到具备各项功能的应用中。比如，元数据管理要导航到<code>Atlas</code>，权限管理要导航到<code>Ranger</code>，平台运维要导航到<code>Ambari</code>。</p>
+<p>刚开始的时候，项目把优先级安排在了进行数据接入、指标开发等等更具业务价值的地方。于是这个入口页面就一直被搁置了。项目中的dev们由于要经常使用这些工具，大家都需要通过加浏览器书签的方式进行管理。BA PM等角色由于不需要关注这些工具，也没有一个入口可以进入这些工具进行操作，于是项目前期阶段几乎不了解这些工具是干什么和怎么用的。这样一来，由于缺乏这样一个入口界面，数据平台总是没有数据平台的感觉，给人的印象是一堆散落在各个地方的工具，没有体系化。同时，这造成了整个团队信息共享不畅，效率降低。</p>
+<p>我观察了这个现象，感觉得做点什么。</p>
+<p>我开始评估了一下。我们如果把这个页面对应的故事优先级提高，对项目整体安排是不利的，这是其一。其二是，就算把这个优先级调高了，按照我们的敏捷项目管理和实践，要完成这个，需要经历BA的业务分析，UX的界面设计，DEV的估点，最后才能到开发。整个流程下来周期比较长，为了这么简单一个页面，似乎并不值得。</p>
+<p>于是，我找了一张故事卡，感觉这个故事卡做完，和预估的开发时长相比会有一些空间。好吧，说干就干，我利用了这一点空间，使用还算比较熟悉的Ant前端组件库，基于React框架，参考Ant的应用样例设计，做了一个静态的页面。这个页面做完，总用时差不多是3个小时，包括代码库初始化，找图，样式微调，把各个工具的通过菜单组织到一起，编写运维脚本，通过nginx进行静态部署等操作。</p>
+<p>这个portal页面大概长成下面这样:</p>
+<p><img data-src="/attaches/2021/2021-03-27-programmer-efficiency/portal.png" alt="platform portal" /></p>
+<p>完成之后，我把这个页面发到项目组的群里面，让大家体验。最终的效果可能未必能给大家带来多大的效率提升，但是这个MVP的页面在我看来对项目的推进起到了很好的作用。一是辅助进行了ShowCase，让客户看到了我们整个数据平台是一个体系化的平台。二是成为了Portal页面设计的参考原型，为BA设计这个页面提供了参考。三是方便了大家知道和查找相应的工具。</p>
+<p>上面的例子中，产出并不多且不显眼，而内容还稍微有点长，大家读下来可能会觉得有点累。但是项目中的事情总是复杂的，有很多的背景，不仅要考虑客户的感受，还要考虑如何有智慧的与团队其他人员合作，可能未必能有自己独立自由的做一些开发工作来得简单和自在。其中的原因相信大家也可以理解。</p>
+<p>除了上面的例子，还有很多其他例子，比如:</p>
+<ul>
+<li>我们实现了一个自动生成etl代码的工具</li>
+<li>我们用hexo把数据标准的excel文档转换为一个静态网站</li>
+<li>我们用mkdocs来快速制作数据平台的使用文档</li>
+<li>我们利用squid反向代理解决了客户需要访问很多台节点带来的复杂网络配置问题</li>
+<li>我们配置了es搜集了squid日志以便可以进行完整的用户行为分析</li>
+<li>我们将etl的统计数据发送到es以便我们可以更简单的做出一些必要的etl任务报表给大家诊断问题提高效率</li>
+<li>我们用docker来隔离开发人员的Hadoop集群使用环境</li>
+<li>…</li>
+</ul>
+<h2 id="敏捷与高效开发"><a class="markdownIt-Anchor" href="#敏捷与高效开发"></a> 敏捷与高效开发</h2>
+<p>上面这些东西很多看起来并不是直接的具备业务价值的，在做这些事情之前，其实也很难去规划出这么多的故事卡，所以可能难以通过敏捷的项目管理来实现。</p>
+<p>那它们是怎么实现的呢？我认为是另一种敏捷的形式，并不是Scrum敏捷项目管理，而是从开发人员的视角出发的一种敏捷。由高效的开发人员，通过对于效率的不懈追求，充分利用各种可以利用的技术，不断重构，既包括代码的也包括工作方式的重构，自发的构建出的一套系统。</p>
+<p>这并不奇怪，如果我们去翻看敏捷的起源，就会发现敏捷其实是由一些优秀的开发人员，通过思考总结提炼，把高效的习惯沉淀下来而成的。我们从敏捷前辈大师们的大作中就能看出这些，如Martin Fowler的《重构》，Neal Ford的《卓有成效的程序员》、《函数式编程思维》，Eric Evans的《DDD》，Kent Beck的《XP极限编程》等等。大师们对于细节的不苟，对于高效的执着，对于软件艺术的追求，是这些大力推动了软件开发的变革。</p>
+<p>同时，如果我们去看github或者apache下的诸多开源软件，我相信这些软件的雏形或者MVP多是由某些开发人员为提高效率而自发开发的。特别是在前期，这些软件是很难由某一个较为完整的团队组织起来开发而成。</p>
+<p>当然这里并不是否定Scrum的价值，在一个敏捷团队中，Scrum的团队管理思路当然也是很有效的。</p>
+<h2 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h2>
+<p>讲了这么多，作为一个十年从业经验的开发人员，同时作为一个五年的TWer，其实是想给广大开发人员分享一下这些经验。希望我们可以一直保持对高效的软件开发的追求，对不断提升自己的追求，对软件艺术的追求，对用软件技术为客户创造价值的追求。</p>
+<p>最后，还有一个有意思的故事给大家分享。有一次，我们的BA同学给大家做读书分享，提到了一本不赞成敏捷实践的书，里面讲到，他们的工作方式是：1. 提出一个大的愿景 2. 让2-3个开发人员组成一个小组基于这个愿景来做开发 3. 利用1-2个月的时间产出一个可用的产品。在他们看来，这一方式是比当前的我们做的敏捷更为高效的软件开发方式。不知道大家是怎么看的，我印象很深的是另一个经验丰富的项目组成员的话：对于一些经验特别丰富的人，特别厉害的人，任何规则都是无效的，只能降低效率，而提供一个环境让他们独立的以自己的方式做事，就足够让他们做出一些令人惊奇的软件了！</p>
+<h2 id="材料"><a class="markdownIt-Anchor" href="#材料"></a> 材料</h2>
+<p>对于想练习自己的打字速度的同学，可以参考这个工具：<a href="https://dazi.kukuw.com/">https://dazi.kukuw.com/</a> 我在上面第一次打字速度如下，相信大家可以轻易超越，特别是年轻的小伙子们，大家手速一定不一般。</p>
+<p><img data-src="/attaches/2021/2021-03-27-programmer-efficiency/typing.png" alt="typing speed" /></p>
+]]></content>
+      <categories>
+        <category>心态</category>
+        <category>敏捷</category>
+      </categories>
+      <tags>
+        <tag>效率</tag>
+        <tag>工具</tag>
+        <tag>编程思想</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据仓库建模实践</title>
     <url>/2021/03/16/data-modeling-practice/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p><img data-src="/attaches/2021/2021-03-16-data-modeling-practice/data-modeling.png" alt="data modeling practice" /></p>
@@ -6492,81 +6567,6 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
       <tags>
         <tag>数据</tag>
         <tag>数据平台</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>成为高效的程序员</title>
-    <url>/2021/03/27/programmer-efficiency/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="一个故事"><a class="markdownIt-Anchor" href="#一个故事"></a> 一个故事</h2>
-<p>最近有一次我观察项目组中一位经验较浅的小伙伴写代码，发现：</p>
-<ol>
-<li>快捷键用得少，缺乏一点去研究快捷键的意识</li>
-<li>自动补全功能没有充分利用，基本靠记忆+手敲</li>
-<li>使用mac笔记本自带的并不好用的键盘</li>
-</ol>
-<p>这带来的结果就是手上的速度跟不上思维的速度。</p>
-<span id="more"></span>
-<h2 id="高效开发的起点打字速度和快捷键"><a class="markdownIt-Anchor" href="#高效开发的起点打字速度和快捷键"></a> 高效开发的起点：打字速度和快捷键</h2>
-<p>常常记起，与我的buddy在一个项目组时，他常常会提醒我们如何高效的做开发。比如：手速。他推荐并常常组织我们在一个练习打字速度的应用上面练习和比赛。</p>
-<p>快捷键的使用更是Thoughtworks开发人员的传统强项，与有经验的TWer pair开发就能体会到如何完全不用鼠标而把键盘敲到飞起带来的超高编程效率。TDD、重构、格式调整等等我们日常的开发动作在高效的快捷键使用下更是相得益彰。</p>
-<p>我曾经在一个客户的咨询项目上，有一个客户的开发同学，见面就聊到说他也来参加过Thoughtworks的面试，但是最后没有进来。这位同学提到这件事显得很不服气，说他了解到没有进来的原因之一居然是快捷键用的不熟，而且很自以为是的补充说：快捷键跟开发能力有什么关系？介于他是客户方的人，我没有当面的跟他争论，但是其实当时我就在心底里暗道：还好没进TW！</p>
-<p>快捷键的确不是衡量一个好的开发人员的唯一标准，但是快捷键的灵活使用是一个高效开发人员的重要标志。作为一个开发人员，虽然不必刻意追求打字速度和快捷键使用，但是至少应当心向往之才是。</p>
-<p>与此相关的，我不禁又想到咱们的老TWer熊节的课程《学会TDD，十倍提升编程效率》。只有TDD可能并不能十倍提升效率，但是TDD结合超快的打字速度和熟练的快捷键使用，就很有可能了。</p>
-<h2 id="高效开发的故事"><a class="markdownIt-Anchor" href="#高效开发的故事"></a> 高效开发的故事</h2>
-<p>高效的开发者是可以快速完成很多事情的。我自认为不算一个特别高效的开发人员，但是我可以列举一下曾经做过的一些个人认为还算高效的事情，可以供大家参考。</p>
-<h3 id="happy-bird-的实现"><a class="markdownIt-Anchor" href="#happy-bird-的实现"></a> Happy Bird 的实现</h3>
-<p>在14年的时候，我想转型做游戏开发。当时的背景是以后端开发为主，也偶尔兼职做一些前端的小功能。于是我找了一个周末，研究了一下iOS的开发。正巧当时有一个小游戏<code>Flappy Bird</code>，挺火的，但是游戏设定又比较难。好吧，那就试试看重新实现一下这个游戏，调整一下难度吧。于是，我花了不到两天的时间做了一个<code>Happy Bird</code>出来，设置难度之后，可以轻松的玩很长时间。</p>
-<p>怎么做的呢？大致有这三个步骤：</p>
-<ol>
-<li>Root一下我手上的iPad，下载安装好<code>Flappy Bird</code>，找到其安装程序路径，把它的资源文件拿出来。</li>
-<li>研究iOS上面的动画开发，看了几个小例子</li>
-<li>编写代码实现<code>Happy Bird</code></li>
-</ol>
-<p>核心的代码在这里，有兴趣的小伙伴可以看看：<a href="https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp">https://github.com/gmlove/happybird/blob/master/Classes/HelloWorldScene.cpp</a></p>
-<h3 id="项目中的一些实践"><a class="markdownIt-Anchor" href="#项目中的一些实践"></a> 项目中的一些实践</h3>
-<p>最近我觉得也有几个可能值得一提的例子。</p>
-<p>我们项目是为客户构建一个企业内部的数据平台，平台基于Horton Works（已与Cloudera合并）的开源的Hadoop发行版HDP构建。</p>
-<p>由于HDP毕竟是一个完全开源的产品，直接在客户环境上使用，总还是显得有点不够。缺什么呢？一是一个入口的平台Portal页面，通过这个页面可以导航到具备各项功能的应用中。比如，元数据管理要导航到<code>Atlas</code>，权限管理要导航到<code>Ranger</code>，平台运维要导航到<code>Ambari</code>。</p>
-<p>刚开始的时候，项目把优先级安排在了进行数据接入、指标开发等等更具业务价值的地方。于是这个入口页面就一直被搁置了。项目中的dev们由于要经常使用这些工具，大家都需要通过加浏览器书签的方式进行管理。BA PM等角色由于不需要关注这些工具，也没有一个入口可以进入这些工具进行操作，于是项目前期阶段几乎不了解这些工具是干什么和怎么用的。这样一来，由于缺乏这样一个入口界面，数据平台总是没有数据平台的感觉，给人的印象是一堆散落在各个地方的工具，没有体系化。同时，这造成了整个团队信息共享不畅，效率降低。</p>
-<p>我观察了这个现象，感觉得做点什么。</p>
-<p>我开始评估了一下。我们如果把这个页面对应的故事优先级提高，对项目整体安排是不利的，这是其一。其二是，就算把这个优先级调高了，按照我们的敏捷项目管理和实践，要完成这个，需要经历BA的业务分析，UX的界面设计，DEV的估点，最后才能到开发。整个流程下来周期比较长，为了这么简单一个页面，似乎并不值得。</p>
-<p>于是，我找了一张故事卡，感觉这个故事卡做完，和预估的开发时长相比会有一些空间。好吧，说干就干，我利用了这一点空间，使用还算比较熟悉的Ant前端组件库，基于React框架，参考Ant的应用样例设计，做了一个静态的页面。这个页面做完，总用时差不多是3个小时，包括代码库初始化，找图，样式微调，把各个工具的通过菜单组织到一起，编写运维脚本，通过nginx进行静态部署等操作。</p>
-<p>这个portal页面大概长成下面这样:</p>
-<p><img data-src="/attaches/2021/2021-03-27-programmer-efficiency/portal.png" alt="platform portal" /></p>
-<p>完成之后，我把这个页面发到项目组的群里面，让大家体验。最终的效果可能未必能给大家带来多大的效率提升，但是这个MVP的页面在我看来对项目的推进起到了很好的作用。一是辅助进行了ShowCase，让客户看到了我们整个数据平台是一个体系化的平台。二是成为了Portal页面设计的参考原型，为BA设计这个页面提供了参考。三是方便了大家知道和查找相应的工具。</p>
-<p>上面的例子中，产出并不多且不显眼，而内容还稍微有点长，大家读下来可能会觉得有点累。但是项目中的事情总是复杂的，有很多的背景，不仅要考虑客户的感受，还要考虑如何有智慧的与团队其他人员合作，可能未必能有自己独立自由的做一些开发工作来得简单和自在。其中的原因相信大家也可以理解。</p>
-<p>除了上面的例子，还有很多其他例子，比如:</p>
-<ul>
-<li>我们实现了一个自动生成etl代码的工具</li>
-<li>我们用hexo把数据标准的excel文档转换为一个静态网站</li>
-<li>我们用mkdocs来快速制作数据平台的使用文档</li>
-<li>我们利用squid反向代理解决了客户需要访问很多台节点带来的复杂网络配置问题</li>
-<li>我们配置了es搜集了squid日志以便可以进行完整的用户行为分析</li>
-<li>我们将etl的统计数据发送到es以便我们可以更简单的做出一些必要的etl任务报表给大家诊断问题提高效率</li>
-<li>我们用docker来隔离开发人员的Hadoop集群使用环境</li>
-<li>…</li>
-</ul>
-<h2 id="敏捷与高效开发"><a class="markdownIt-Anchor" href="#敏捷与高效开发"></a> 敏捷与高效开发</h2>
-<p>上面这些东西很多看起来并不是直接的具备业务价值的，在做这些事情之前，其实也很难去规划出这么多的故事卡，所以可能难以通过敏捷的项目管理来实现。</p>
-<p>那它们是怎么实现的呢？我认为是另一种敏捷的形式，并不是Scrum敏捷项目管理，而是从开发人员的视角出发的一种敏捷。由高效的开发人员，通过对于效率的不懈追求，充分利用各种可以利用的技术，不断重构，既包括代码的也包括工作方式的重构，自发的构建出的一套系统。</p>
-<p>这并不奇怪，如果我们去翻看敏捷的起源，就会发现敏捷其实是由一些优秀的开发人员，通过思考总结提炼，把高效的习惯沉淀下来而成的。我们从敏捷前辈大师们的大作中就能看出这些，如Martin Fowler的《重构》，Neal Ford的《卓有成效的程序员》、《函数式编程思维》，Eric Evans的《DDD》，Kent Beck的《XP极限编程》等等。大师们对于细节的不苟，对于高效的执着，对于软件艺术的追求，是这些大力推动了软件开发的变革。</p>
-<p>同时，如果我们去看github或者apache下的诸多开源软件，我相信这些软件的雏形或者MVP多是由某些开发人员为提高效率而自发开发的。特别是在前期，这些软件是很难由某一个较为完整的团队组织起来开发而成。</p>
-<p>当然这里并不是否定Scrum的价值，在一个敏捷团队中，Scrum的团队管理思路当然也是很有效的。</p>
-<h2 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h2>
-<p>讲了这么多，作为一个十年从业经验的开发人员，同时作为一个五年的TWer，其实是想给广大开发人员分享一下这些经验。希望我们可以一直保持对高效的软件开发的追求，对不断提升自己的追求，对软件艺术的追求，对用软件技术为客户创造价值的追求。</p>
-<p>最后，还有一个有意思的故事给大家分享。有一次，我们的BA同学给大家做读书分享，提到了一本不赞成敏捷实践的书，里面讲到，他们的工作方式是：1. 提出一个大的愿景 2. 让2-3个开发人员组成一个小组基于这个愿景来做开发 3. 利用1-2个月的时间产出一个可用的产品。在他们看来，这一方式是比当前的我们做的敏捷更为高效的软件开发方式。不知道大家是怎么看的，我印象很深的是另一个经验丰富的项目组成员的话：对于一些经验特别丰富的人，特别厉害的人，任何规则都是无效的，只能降低效率，而提供一个环境让他们独立的以自己的方式做事，就足够让他们做出一些令人惊奇的软件了！</p>
-<h2 id="材料"><a class="markdownIt-Anchor" href="#材料"></a> 材料</h2>
-<p>对于想练习自己的打字速度的同学，可以参考这个工具：<a href="https://dazi.kukuw.com/">https://dazi.kukuw.com/</a> 我在上面第一次打字速度如下，相信大家可以轻易超越，特别是年轻的小伙子们，大家手速一定不一般。</p>
-<p><img data-src="/attaches/2021/2021-03-27-programmer-efficiency/typing.png" alt="typing speed" /></p>
-]]></content>
-      <categories>
-        <category>心态</category>
-        <category>敏捷</category>
-      </categories>
-      <tags>
-        <tag>效率</tag>
-        <tag>工具</tag>
-        <tag>编程思想</tag>
       </tags>
   </entry>
   <entry>
@@ -7165,6 +7165,78 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
       </tags>
   </entry>
   <entry>
+    <title>数据任务流水线</title>
+    <url>/2021/05/24/data-pipeline-for-data-project/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="数据流水线"><a class="markdownIt-Anchor" href="#数据流水线"></a> 数据流水线</h2>
+<p>在数据平台中进行数据开发时，数据任务流水线是常用于组织各个计算任务的方式。</p>
+<p>比如，我们要想完成一个指标计算。第一个数据任务是将数据接入到数据平台，接着，需要一个任务将数据进行初步的数据清洗形成<code>DWD</code>中的数据，然后，下一个任务可能是计算初级汇总数据存入<code>DWB</code>，再然后，需要一个数据任务计算得到最终的指标结果，还有一些后续任务，比如宽表构建，导出到外部数据库中进行大屏展示等。</p>
+<p>这一系列的任务需要按照先后关系一步步的完成，于是它们就构成了数据任务流水线。</p>
+<span id="more"></span>
+<p>实际项目中的流水线通常会非常复杂，因为我们有很多指标需要计算，它们各自会依赖不同的表。最终的数据流水线形态会是一系列有向无环图，这就是我们常说的<code>DAG</code>。</p>
+<p>数据任务流水线看起来和<code>CI/CD</code>流水线有类似的特点。技术人员甚至会觉得可以用持续集成流水线来构建这样的数据任务流水线。事实上，用<code>Jenkins</code>或者<code>GoCD</code>也可以构建这样的流水线，但是由于它们主要被用作持续集成工具，实际使用下来会发现缺乏了很多数据流水线管理需要的功能。</p>
+<h3 id="流水线设计"><a class="markdownIt-Anchor" href="#流水线设计"></a> 流水线设计</h3>
+<p>那么，这样的数据流水线应该如何设计？需要有哪些管理功能呢？</p>
+<p>回顾数据任务的各个步骤，可以发现需要设计以下这些数据流水线：</p>
+<p>一、定期（如每天）自动触发的数据任务流水线，它将完成定期的数据接入，清洗，指标计算，宽表构建，宽表输出这一系列任务。这一流水线通常是端到端可输出指标结果的流水线。</p>
+<p>二、首次全量数据接入任务流水线，用于第一次将全量数据接入到数据平台。它应该是手动触发的。</p>
+<p>三、与定期自动运行的流水线相同的，但只能手动触发运行的一条流水线。这一流水线的引入是必要的，因为它可以很好的应对日常数据开发运维工作。</p>
+<p>第一条流水线是比较好理解的。在实践中，一般我们会设计一个名为<code>data_date</code>（数据时间）的流水线参数，所有数据任务都需要计算这个参数指定的时间的数据。</p>
+<p>第二条流水线也是必要的，因为第一次全量数据接入任务难以通过自动流水线来支持。如果强行通过参数来支持，将导致流水线的复杂度上升，同时也不便于团队理解。从单一职责原则来讲，也不建议用定期执行的流水线来支持需要手动执行的、运行次数很少的流水线。</p>
+<p>第三条流水线的引入可能不太好理解。前面提到它是为了解决日常的数据开发运维工作，具体是指哪些呢？请看下面这些场景。</p>
+<p>第一个场景是，当我们新开发了一个指标，除了需要计算指标上线之后的数据之外，还需要计算历史的数据的时候。此时，我们往往无法在自动触发运行的流水线中完成这样的任务，因为历史数据的时间跨度可能很长（比如一年），而自动运行的流水线一般只能计算某个固定时间点（如某一天）的数据，这将导致大量的历史任务需要调度运行，从而带来性能问题。</p>
+<p>这里的性能问题可以简单分析一下。在执行分布式计算任务时，第一步是需要分配并启动计算资源。这一步常常比较耗时，如果使用流水线来调度，则每一个任务都需要重复这一过程，从而产生了大量的无必要的时间消耗。一个直接的优化方式是只启动一个任务，分配一次资源，将一系列的同类任务一次性执行完。不仅如此，如果多个时间点的数据计算可以通过分组聚合（<code>group by</code> + <code>aggregation</code>）来实现（比如，每日订单数量指标就可能可以通过分组聚合一次性计算一个长时间范围的数据），那将可以直接一次性计算一段时间的指标数据，这显然是性能更好的优化方式。不过，这样一来，就可能无法和自动运行的流水线共享同一套代码了。</p>
+<p>通过一条独立的手动运行的流水线将很容易做到上述这些优化，所以，单独设计这样的流水线是值得的。</p>
+<p>另一个类似的场景是在需要修改已有的指标的计算口径时。此时也常常需要重新计算一个很长时间段的数据任务。</p>
+<p>除了上面的场景，还有一些其他的场景，比如某一天在<code>ODS</code>层执行了必要的数据修改，需要重跑某一些数据任务。</p>
+<p>总之，设计一条与自动运行的流水线相同的手动运行的流水线好处多多。从我们的实践来看，是非常值得推荐的做法。</p>
+<p>从上面的分析来看，这个手动运行的流水线还需要很好的支持只运行流水线中的部分任务。这一特性可以通过设计流水线参数来实现。比如，在我们的流水线中设计了两个参数，即<code>include</code>和<code>exclude</code>，分别表示需要包含的和需要排除的数据任务。</p>
+<p>一个示例的数据任务流水线如下：</p>
+<p><img data-src="/attaches/2021/2021-05-24-data-pipeline-for-data-project/data-pipelines.png" alt="data pipelines" /></p>
+<h3 id="任务间依赖的实现"><a class="markdownIt-Anchor" href="#任务间依赖的实现"></a> 任务间依赖的实现</h3>
+<p>通过数据流水线可以较好的管理数据任务间的依赖，同一条流水线中的任务总是会按照流水线中的先后顺序运行。</p>
+<p>在实践过程中，我们会发现还存在一类跨流水线的任务依赖。比如，一般而言，我们会为每一个业务系统设计一条数据流水线（如售前系统流水线、售后系统流水线），但某些指标的计算会同时依赖多个业务系统的数据（比如售前到售后的转化率就需要依赖售前系统和售后系统数据）。这类指标的计算任务就会产生跨流水线的任务依赖（对于售前到售后转化率指标，它将同时依赖售前系统和售后系统流水线中的<code>DWD</code>数据层构建任务）。</p>
+<p>如何解决跨流水线的任务依赖呢？一些流水线工具为这种场景提供了支持，比如，<code>Airflow</code>提供了一个虚拟的<code>ExternalTaskSensor</code>任务，它将等待其它流水线中的某一个任务完成，然后才会完成。</p>
+<p>依赖流水线工具完成依赖任务检查是一个简单可行的方案。但是在实践中，仅使用工具进行依赖管理还显得不太够。比如，处于某种维护目的，我们需要将某一个数据分区删除重建。手动删除该分区之后，在数据流水线中，该任务的后续任务不会失败，而是会继续运行，这就可能导致其计算的结果不对。</p>
+<p>所以，我们更推荐的做法是，除了使用工具来管理任务依赖，最好还能在任务的<code>ETL</code>代码中先对依赖的数据执行严格的检查再执行计算。</p>
+<p>使用我们前面提到的<code>SQL</code>增强语法，一个简单的依赖检查示例如下。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 销量指标的计算依赖当天的`DWD`数据层中的订单表构建完成，强制检查对应的数据分区是否存在</span></span><br><span class="line"><span class="comment">-- target=check.ensure_partition_exists(dwd_sales.sales_order_h, $&#123;DATA_DATE&#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- target=...</span></span><br></pre></td></tr></table></figure>
+<p>上面的检查实际上是一个双保险，可以更进一步确认前置步骤是完成了的。</p>
+<p>对于跨流水线的任务依赖，用这种方式有更好的效果。因为如果使用流水线工具来实现，则会导致流水线难以理解。试想，如果有两条以不同频率运行的流水线，我们能简单的推断出有跨流水线依赖的任务会什么时候运行吗？</p>
+<p>但是，如果通过<code>ETL</code>代码检查来保证这种依赖关系，情况就会更简单了。代码里面明确的指定了<code>ETL</code>的输入依赖。</p>
+<p>我们甚至可以摈弃掉复杂的跨流水线依赖配置，仅通过<code>ETL</code>代码来保证依赖关系。此时，我们可能需要配置好该检查的重试次数及超时时间（根据数据任务启动及运行时间进行设置）。</p>
+<h2 id="流水线管理及工具选择"><a class="markdownIt-Anchor" href="#流水线管理及工具选择"></a> 流水线管理及工具选择</h2>
+<p>前面分析了数据任务流水线的设计，可以看到，这样的设计对流水线工具提出了一些要求。持续集成工具如<code>Jenkins</code>或<code>GoCD</code>在这一领域提供的功能比较有限，在工具选择上，我们还需要更为专业的特定工具。</p>
+<p>由于这类流水线工具的核心的功能是辅助进行<code>ETL</code>任务调度，我们也常常将其称作调度系统。常用的此类调度系统有<code>Oozie</code> <code>Airflow</code> <code>Azkaban</code>等。</p>
+<p>这类调度系统通常提供了非常丰富的任务调度功能，其中有些是必要的，而另一些在数据流水线管理中则使用较少。下面，我们从任务调度需求出发，来分析一下一些基本的功能需求。</p>
+<h3 id="流水线创建和编辑"><a class="markdownIt-Anchor" href="#流水线创建和编辑"></a> 流水线创建和编辑</h3>
+<p>最基本的调度系统功能是需要支持以上流水线设计。如果流水线的配置人员更习惯使用界面化的配置，那应该提供一套基于web的配置界面，可以让用户可视化的编辑流水线，实现如添加节点，修改节点，配置节点任务，配置节点参数的功能。</p>
+<p>可视化流水线配置可以很好的提升易用性，但其功能实现会较为复杂，且对于流水线的变更不易进行版本控制。</p>
+<p>另一类流水线配置工具仅提供了基于配置文件的配置方式。比如<code>Oozie</code>支持使用<code>XML</code>进行配置，<code>Airflow</code>支持使用<code>Python</code>代码进行配置。它们虽然没有提供可视化的流水线编辑，但是大都提供了可视化的查看。这类工具对于习惯编写代码的开发人员其实更为友好，因为流水线配置文件代码可以很好的用版本管理工具管理起来，且可以通过代码实现配置的复用。</p>
+<h3 id="任务调度"><a class="markdownIt-Anchor" href="#任务调度"></a> 任务调度</h3>
+<p>除了流水线的创建和编辑，流水线的任务调度管理是另一个核心的功能。需要支持哪些调度管理功能呢？一般而言，下列功能是需要具备的：</p>
+<ul>
+<li>周期性流水线调度运行。</li>
+<li>手动触发任务重新运行。在一些任务运行失败时，常常需要手动恢复运行，此时，常常还需要支持同时运行该任务的所有下级任务。</li>
+<li>查看任务运行日志。任务日志是分析任务执行失败、时间过长等原因的重要手段。</li>
+<li>控制并发任务数量。由于计算资源限制，常常需要控制可以并行运行的任务数量。还有一些任务，虽然任务间的执行顺序没有要求，但是多个任务不能并行运行，这也可以通过控制并发任务数量来实现。</li>
+<li>周期调度的任务可以依赖前一个调度时点的任务。很多复合指标的计算会依赖上一个时点的数据，如今日销量比昨日的增量，这就需要调度系统可以支持设置这样的依赖。</li>
+<li>支持跨<code>DAG</code>的任务依赖。在一些场景中，我们需要实现跨流水线的集成指标计算，此时就可能需要支持跨<code>DAG</code>的任务依赖。</li>
+</ul>
+<p><code>Airflow</code>和<code>Azkaban</code>可以较好的支持上述功能。它们实际上提供了一个任务状态的抽象，任务可以处于未开始运行、调度中、运行中、重试中、成功、失败等状态。对于上面提到的功能，比如按照依赖关系重新运行一组任务，可以通过将这组任务的状态重置到某一个状态来实现。</p>
+<p>一个完善的任务调度系统的实现是很复杂的，如果有兴趣深入了解，大家可以参考对应的文档，或者阅读对应的开源代码。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文结合我们的项目实践，分析了如何在数据平台中设计数据流水线。一般情况下，三条流水线的设计可以较好的支持大部分的数据应用场景。</p>
+<p>同时，本文分析了如何使用调度系统来支持流水线的实现，提到了一些重要的流水线调度功能。一个完善的数据平台最好能提供一站式的功能，而非使用各类设计风格各异的开源工具组合。我们在平台建设阶段虽然可以更多的使用这些工具，但是最好能划清任务调度系统在数据平台中的功能边界，即，有限制的使用这些工具。这可以为后续可能的自研调度系统铺平道路。</p>
+]]></content>
+      <categories>
+        <category>数据</category>
+      </categories>
+      <tags>
+        <tag>数据</tag>
+        <tag>数据平台</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于点的数据分析与数据浏览器</title>
     <url>/2021/05/10/data-browser-for-point-analysis/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="基于数据点的数据分析"><a class="markdownIt-Anchor" href="#基于数据点的数据分析"></a> 基于数据点的数据分析</h2>
@@ -7298,78 +7370,6 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <p>最后，总结一下全文。本文基于数据验证的场景提出了基于数据点的数据分析方法，接下来分析了如何实现这样的分析过程，以及如何从技术上支持这样的分析过程。接着，从设计专用的数据分析工具的思路出发，我们设计了一个基于<code>Web</code>的“数据浏览器”工具，它提供了丰富的功能，可以很好的支持“点分析”，可以很大程度上提高“点分析”的效率。最后，我们分析了如何从技术上进行“数据浏览器”的实现，对几个关键的问题进行了阐述。</p>
 <p>事实上，还有很多其他的分析场景是可以从“点分析”中受益的，比如刚开始进行探索式数据分析时，“点分析”是一个很好的深入了解某一个业务场景的方法。经过技术分析可以发现，这一数据工具的实现也并不是难事。“数据浏览器”可以认为以较低的成本实现较大的价值的一个不错的案例。</p>
 <p>在数据平台构建的过程中，我们常常需要根据实际需要来开发一些数据工具，以便提高效率。但这些数据工具的开发不能直接产生价值，所以，从精益的角度来看，应当评估其实现难度，不应一次性投入太大。这其中的平衡是不容易把握的，本位旨在以“数据浏览器”的案例与诸君共勉。</p>
-]]></content>
-      <categories>
-        <category>数据</category>
-      </categories>
-      <tags>
-        <tag>数据</tag>
-        <tag>数据平台</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据任务流水线</title>
-    <url>/2021/05/24/data-pipeline-for-data-project/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="数据流水线"><a class="markdownIt-Anchor" href="#数据流水线"></a> 数据流水线</h2>
-<p>在数据平台中进行数据开发时，数据任务流水线是常用于组织各个计算任务的方式。</p>
-<p>比如，我们要想完成一个指标计算。第一个数据任务是将数据接入到数据平台，接着，需要一个任务将数据进行初步的数据清洗形成<code>DWD</code>中的数据，然后，下一个任务可能是计算初级汇总数据存入<code>DWB</code>，再然后，需要一个数据任务计算得到最终的指标结果，还有一些后续任务，比如宽表构建，导出到外部数据库中进行大屏展示等。</p>
-<p>这一系列的任务需要按照先后关系一步步的完成，于是它们就构成了数据任务流水线。</p>
-<span id="more"></span>
-<p>实际项目中的流水线通常会非常复杂，因为我们有很多指标需要计算，它们各自会依赖不同的表。最终的数据流水线形态会是一系列有向无环图，这就是我们常说的<code>DAG</code>。</p>
-<p>数据任务流水线看起来和<code>CI/CD</code>流水线有类似的特点。技术人员甚至会觉得可以用持续集成流水线来构建这样的数据任务流水线。事实上，用<code>Jenkins</code>或者<code>GoCD</code>也可以构建这样的流水线，但是由于它们主要被用作持续集成工具，实际使用下来会发现缺乏了很多数据流水线管理需要的功能。</p>
-<h3 id="流水线设计"><a class="markdownIt-Anchor" href="#流水线设计"></a> 流水线设计</h3>
-<p>那么，这样的数据流水线应该如何设计？需要有哪些管理功能呢？</p>
-<p>回顾数据任务的各个步骤，可以发现需要设计以下这些数据流水线：</p>
-<p>一、定期（如每天）自动触发的数据任务流水线，它将完成定期的数据接入，清洗，指标计算，宽表构建，宽表输出这一系列任务。这一流水线通常是端到端可输出指标结果的流水线。</p>
-<p>二、首次全量数据接入任务流水线，用于第一次将全量数据接入到数据平台。它应该是手动触发的。</p>
-<p>三、与定期自动运行的流水线相同的，但只能手动触发运行的一条流水线。这一流水线的引入是必要的，因为它可以很好的应对日常数据开发运维工作。</p>
-<p>第一条流水线是比较好理解的。在实践中，一般我们会设计一个名为<code>data_date</code>（数据时间）的流水线参数，所有数据任务都需要计算这个参数指定的时间的数据。</p>
-<p>第二条流水线也是必要的，因为第一次全量数据接入任务难以通过自动流水线来支持。如果强行通过参数来支持，将导致流水线的复杂度上升，同时也不便于团队理解。从单一职责原则来讲，也不建议用定期执行的流水线来支持需要手动执行的、运行次数很少的流水线。</p>
-<p>第三条流水线的引入可能不太好理解。前面提到它是为了解决日常的数据开发运维工作，具体是指哪些呢？请看下面这些场景。</p>
-<p>第一个场景是，当我们新开发了一个指标，除了需要计算指标上线之后的数据之外，还需要计算历史的数据的时候。此时，我们往往无法在自动触发运行的流水线中完成这样的任务，因为历史数据的时间跨度可能很长（比如一年），而自动运行的流水线一般只能计算某个固定时间点（如某一天）的数据，这将导致大量的历史任务需要调度运行，从而带来性能问题。</p>
-<p>这里的性能问题可以简单分析一下。在执行分布式计算任务时，第一步是需要分配并启动计算资源。这一步常常比较耗时，如果使用流水线来调度，则每一个任务都需要重复这一过程，从而产生了大量的无必要的时间消耗。一个直接的优化方式是只启动一个任务，分配一次资源，将一系列的同类任务一次性执行完。不仅如此，如果多个时间点的数据计算可以通过分组聚合（<code>group by</code> + <code>aggregation</code>）来实现（比如，每日订单数量指标就可能可以通过分组聚合一次性计算一个长时间范围的数据），那将可以直接一次性计算一段时间的指标数据，这显然是性能更好的优化方式。不过，这样一来，就可能无法和自动运行的流水线共享同一套代码了。</p>
-<p>通过一条独立的手动运行的流水线将很容易做到上述这些优化，所以，单独设计这样的流水线是值得的。</p>
-<p>另一个类似的场景是在需要修改已有的指标的计算口径时。此时也常常需要重新计算一个很长时间段的数据任务。</p>
-<p>除了上面的场景，还有一些其他的场景，比如某一天在<code>ODS</code>层执行了必要的数据修改，需要重跑某一些数据任务。</p>
-<p>总之，设计一条与自动运行的流水线相同的手动运行的流水线好处多多。从我们的实践来看，是非常值得推荐的做法。</p>
-<p>从上面的分析来看，这个手动运行的流水线还需要很好的支持只运行流水线中的部分任务。这一特性可以通过设计流水线参数来实现。比如，在我们的流水线中设计了两个参数，即<code>include</code>和<code>exclude</code>，分别表示需要包含的和需要排除的数据任务。</p>
-<p>一个示例的数据任务流水线如下：</p>
-<p><img data-src="/attaches/2021/2021-05-24-data-pipeline-for-data-project/data-pipelines.png" alt="data pipelines" /></p>
-<h3 id="任务间依赖的实现"><a class="markdownIt-Anchor" href="#任务间依赖的实现"></a> 任务间依赖的实现</h3>
-<p>通过数据流水线可以较好的管理数据任务间的依赖，同一条流水线中的任务总是会按照流水线中的先后顺序运行。</p>
-<p>在实践过程中，我们会发现还存在一类跨流水线的任务依赖。比如，一般而言，我们会为每一个业务系统设计一条数据流水线（如售前系统流水线、售后系统流水线），但某些指标的计算会同时依赖多个业务系统的数据（比如售前到售后的转化率就需要依赖售前系统和售后系统数据）。这类指标的计算任务就会产生跨流水线的任务依赖（对于售前到售后转化率指标，它将同时依赖售前系统和售后系统流水线中的<code>DWD</code>数据层构建任务）。</p>
-<p>如何解决跨流水线的任务依赖呢？一些流水线工具为这种场景提供了支持，比如，<code>Airflow</code>提供了一个虚拟的<code>ExternalTaskSensor</code>任务，它将等待其它流水线中的某一个任务完成，然后才会完成。</p>
-<p>依赖流水线工具完成依赖任务检查是一个简单可行的方案。但是在实践中，仅使用工具进行依赖管理还显得不太够。比如，处于某种维护目的，我们需要将某一个数据分区删除重建。手动删除该分区之后，在数据流水线中，该任务的后续任务不会失败，而是会继续运行，这就可能导致其计算的结果不对。</p>
-<p>所以，我们更推荐的做法是，除了使用工具来管理任务依赖，最好还能在任务的<code>ETL</code>代码中先对依赖的数据执行严格的检查再执行计算。</p>
-<p>使用我们前面提到的<code>SQL</code>增强语法，一个简单的依赖检查示例如下。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 销量指标的计算依赖当天的`DWD`数据层中的订单表构建完成，强制检查对应的数据分区是否存在</span></span><br><span class="line"><span class="comment">-- target=check.ensure_partition_exists(dwd_sales.sales_order_h, $&#123;DATA_DATE&#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- target=...</span></span><br></pre></td></tr></table></figure>
-<p>上面的检查实际上是一个双保险，可以更进一步确认前置步骤是完成了的。</p>
-<p>对于跨流水线的任务依赖，用这种方式有更好的效果。因为如果使用流水线工具来实现，则会导致流水线难以理解。试想，如果有两条以不同频率运行的流水线，我们能简单的推断出有跨流水线依赖的任务会什么时候运行吗？</p>
-<p>但是，如果通过<code>ETL</code>代码检查来保证这种依赖关系，情况就会更简单了。代码里面明确的指定了<code>ETL</code>的输入依赖。</p>
-<p>我们甚至可以摈弃掉复杂的跨流水线依赖配置，仅通过<code>ETL</code>代码来保证依赖关系。此时，我们可能需要配置好该检查的重试次数及超时时间（根据数据任务启动及运行时间进行设置）。</p>
-<h2 id="流水线管理及工具选择"><a class="markdownIt-Anchor" href="#流水线管理及工具选择"></a> 流水线管理及工具选择</h2>
-<p>前面分析了数据任务流水线的设计，可以看到，这样的设计对流水线工具提出了一些要求。持续集成工具如<code>Jenkins</code>或<code>GoCD</code>在这一领域提供的功能比较有限，在工具选择上，我们还需要更为专业的特定工具。</p>
-<p>由于这类流水线工具的核心的功能是辅助进行<code>ETL</code>任务调度，我们也常常将其称作调度系统。常用的此类调度系统有<code>Oozie</code> <code>Airflow</code> <code>Azkaban</code>等。</p>
-<p>这类调度系统通常提供了非常丰富的任务调度功能，其中有些是必要的，而另一些在数据流水线管理中则使用较少。下面，我们从任务调度需求出发，来分析一下一些基本的功能需求。</p>
-<h3 id="流水线创建和编辑"><a class="markdownIt-Anchor" href="#流水线创建和编辑"></a> 流水线创建和编辑</h3>
-<p>最基本的调度系统功能是需要支持以上流水线设计。如果流水线的配置人员更习惯使用界面化的配置，那应该提供一套基于web的配置界面，可以让用户可视化的编辑流水线，实现如添加节点，修改节点，配置节点任务，配置节点参数的功能。</p>
-<p>可视化流水线配置可以很好的提升易用性，但其功能实现会较为复杂，且对于流水线的变更不易进行版本控制。</p>
-<p>另一类流水线配置工具仅提供了基于配置文件的配置方式。比如<code>Oozie</code>支持使用<code>XML</code>进行配置，<code>Airflow</code>支持使用<code>Python</code>代码进行配置。它们虽然没有提供可视化的流水线编辑，但是大都提供了可视化的查看。这类工具对于习惯编写代码的开发人员其实更为友好，因为流水线配置文件代码可以很好的用版本管理工具管理起来，且可以通过代码实现配置的复用。</p>
-<h3 id="任务调度"><a class="markdownIt-Anchor" href="#任务调度"></a> 任务调度</h3>
-<p>除了流水线的创建和编辑，流水线的任务调度管理是另一个核心的功能。需要支持哪些调度管理功能呢？一般而言，下列功能是需要具备的：</p>
-<ul>
-<li>周期性流水线调度运行。</li>
-<li>手动触发任务重新运行。在一些任务运行失败时，常常需要手动恢复运行，此时，常常还需要支持同时运行该任务的所有下级任务。</li>
-<li>查看任务运行日志。任务日志是分析任务执行失败、时间过长等原因的重要手段。</li>
-<li>控制并发任务数量。由于计算资源限制，常常需要控制可以并行运行的任务数量。还有一些任务，虽然任务间的执行顺序没有要求，但是多个任务不能并行运行，这也可以通过控制并发任务数量来实现。</li>
-<li>周期调度的任务可以依赖前一个调度时点的任务。很多复合指标的计算会依赖上一个时点的数据，如今日销量比昨日的增量，这就需要调度系统可以支持设置这样的依赖。</li>
-<li>支持跨<code>DAG</code>的任务依赖。在一些场景中，我们需要实现跨流水线的集成指标计算，此时就可能需要支持跨<code>DAG</code>的任务依赖。</li>
-</ul>
-<p><code>Airflow</code>和<code>Azkaban</code>可以较好的支持上述功能。它们实际上提供了一个任务状态的抽象，任务可以处于未开始运行、调度中、运行中、重试中、成功、失败等状态。对于上面提到的功能，比如按照依赖关系重新运行一组任务，可以通过将这组任务的状态重置到某一个状态来实现。</p>
-<p>一个完善的任务调度系统的实现是很复杂的，如果有兴趣深入了解，大家可以参考对应的文档，或者阅读对应的开源代码。</p>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
-<p>本文结合我们的项目实践，分析了如何在数据平台中设计数据流水线。一般情况下，三条流水线的设计可以较好的支持大部分的数据应用场景。</p>
-<p>同时，本文分析了如何使用调度系统来支持流水线的实现，提到了一些重要的流水线调度功能。一个完善的数据平台最好能提供一站式的功能，而非使用各类设计风格各异的开源工具组合。我们在平台建设阶段虽然可以更多的使用这些工具，但是最好能划清任务调度系统在数据平台中的功能边界，即，有限制的使用这些工具。这可以为后续可能的自研调度系统铺平道路。</p>
 ]]></content>
       <categories>
         <category>数据</category>
@@ -9270,6 +9270,157 @@ with human feedback）： <a href="https://arxiv.org/pdf/2203.02155.pdf">https:/
       </tags>
   </entry>
   <entry>
+    <title>ChatGPT的模型训练</title>
+    <url>/2023/05/20/chatgpt-training/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
+<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
+<p>这是此系列的第四篇，ChatGPT的模型训练。</p>
+<span id="more"></span>
+<p><a href="https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/">上一篇</a>文章我们深入分析了ChatGPT使用到的Transformer模型。了解了其最核心的模型结构是Transformer结构，本文来聊一聊ChatGPT如何训练。</p>
+<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
+<p>ChatGPT只在论文中有一些原理的解释，并没有公布代码。因此，为了弄清楚ChatGPT是如何训练的，我们只能从开源的类ChatGPT模型入手。目前，我们能看到ChatGPT的开源平替主要是来自斯坦福大学的<a href="https://github.com/tatsu-lab/stanford_alpaca">Alpaca</a>模型及伯克利大学的<a href="https://github.com/lm-sys/FastChat">Vicuna</a>模型。其中，当使用GPT-4来评估模型效果时，Vicuna模型的效果达到了ChatGPT的90%。这说明这些开源平替模型的正确性和有效性。</p>
+<p>Alpaca模型及Vicuna模型都是基于Meta发布的LLaMA模型进行微调的。LLaMA的训练使用了大量的数据，并花费了大量的计算资源。</p>
+<p>因此本文尝试帮助大家弄清楚这些开源模型的训练。当我们了解了这些开源模型的训练时，应该也能对ChatGPT的模型训练有了一个基本的了解了。</p>
+<h2 id="训练过程"><a class="markdownIt-Anchor" href="#训练过程"></a> 训练过程</h2>
+<p>从ChatGPT公布的论文内容来看，有三个训练阶段：1. 无监督预训练 2. 监督微调 3. 指令微调。</p>
+<p><strong>无监督预训练</strong>是指直接使用大规模的文本数据作为输入来构建数据集，其输出就是当前文本中的下一个词。比如，文本“无监督训练”，可以拆分为如下几个训练样本：</p>
+<ul>
+<li>输入“无”，让模型预测“监督”</li>
+<li>输入“无监督”让模型预测“训练”</li>
+</ul>
+<p>通过采集互联网上的大规模文本，可以构造一个超大规模的数据集用于无监督预训练。</p>
+<p><strong>监督微调</strong>是指在输入文本中放入具体的任务信息，让模型尝试预测答案。比如，对于一个中文翻译为英文的任务可以构建训练样本如下（假定要翻译的文本为“无监督训练”）：</p>
+<ul>
+<li>输入“翻译文本为英文：无监督训练。译文：”，让模型输出“Non-supervised”</li>
+<li>输入“翻译文本为英文：无监督训练。译文：Non-supervised”，让模型输出“training”</li>
+</ul>
+<p>监督微调阶段可以使用大量的当前NLP研究中的训练数据集。比如：</p>
+<ul>
+<li>常识推理数据集，如BoolQ、PIQA、SIQA、OpenBookQA等</li>
+<li>闭卷问答数据集，如Natural Questions、TriviaQA等</li>
+</ul>
+<p>监督微调阶段使用了一些自然语言问答的模板，但是如果对话没有使用这样的模板，模型的效果就会大打折扣。于是为了训练一个ChatGPT这样的通用的模型，就需要更普适的问答模板。这就是<strong>指令微调</strong>阶段的作用。</p>
+<p>从OpenAI开放的论文资料来看，指令微调采用了强化学习的方案。分成三个步骤完成：</p>
+<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/instruct-gpt.png" alt="Instruct GPT" /></p>
+<ul>
+<li>第一步：从测试用户提交的问答中随机抽取数据，让专业的标注人员给出高质量的答案，并使用这些数据优化模型。</li>
+<li>第二步：使用前面的模型生成N个不同的回答，让专业的标注人员对回答的质量进行排序，并使用这些数据训练一个奖励模型。</li>
+<li>第三步：利用前面训练好的奖励模型，无需人工标注，通过强化学习的方式自动更新模型参数。</li>
+</ul>
+<p>这一阶段，通过让模型接受更广泛的自然语言回答任务，模型具备了回答通用问题的能力。</p>
+<p>分析上述三个阶段，可以发现第三阶段用到的强化学习训练相对较为复杂，且需要大量人类的参与，目前开源替代并不多，由HPC-AI开源的<a href="https://github.com/hpcaitech/ColossalAI">ColossalChat</a>算是较为完善的一个。</p>
+<p>上述提到的这些开源模型分别完成的阶段如下：</p>
+<ul>
+<li>LLaMA模型：利用开放的数据集完成了第一阶段和第二阶段</li>
+<li>Alpaca、Vicuna模型：基于LLaMA，利用基于ChatGPT生成的指令数据，完成了第三阶段的第一步</li>
+<li>ColossalChat：完成了完整的三个阶段</li>
+</ul>
+<h2 id="模型训练代码"><a class="markdownIt-Anchor" href="#模型训练代码"></a> 模型训练代码</h2>
+<p>下面基于上述提到的三个模型分析一下模型的训练代码。</p>
+<p>LLaMA的官方代码库中只有模型的结构及推理的代码，而没有包含训练的代码。虽然Meta的论文中提到了是如何训练的，但还是没有像可运行的代码这样包含所有细节。</p>
+<p>Alpaca、Vicuna、ColossalChat模型作为开源可训练的模型，有完整的训练代码和脚本，我们主要基于它们来研究一下模型是如何训练的。</p>
+<p>一般的机器学习模型训练主要包括三部分：定义模型结构、定义损失函数、准备训练数据。下面主要围绕这三部分来分析ChatGPT类模型是如何训练的。</p>
+<h3 id="数据生成"><a class="markdownIt-Anchor" href="#数据生成"></a> 数据生成</h3>
+<p>根据前文对训练过程的介绍，训练数据只需要组织成一系列的问答对即可。</p>
+<p>从Alpaca的<a href="https://github.com/tatsu-lab/stanford_alpaca/tree/main">官方Github代码仓库</a>中的文档可以了解到，Alpaca用到了一种名为Self-Instruct的机制来生成数据。其原理是：</p>
+<ol>
+<li>定义一些种子任务</li>
+<li>借助OpenAI发布的模型来生成具备多样性的指令任务</li>
+<li>借助OpenAI的模型生成这些任务的回复</li>
+</ol>
+<p>以下是来自<a href="https://github.com/yizhongw/self-instruct">Self-Instruct的官方代码仓库</a>的数据生成流程图。其中Alpaca简化了分类任务和非分类任务，将其合成了同一类问答任务。</p>
+<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/self-instruct.jpeg" alt="Self Instruct" /></p>
+<p>下面是一些样例数据：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Give three tips for staying healthy.&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.Eat a balanced diet and make sure to include plenty of fruits and vegetables. \n2. Exercise regularly to keep your body active and strong. \n3. Get enough sleep and maintain a consistent sleep schedule.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;What are the three primary colors?&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;The three primary colors are red, blue, and yellow.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    ...</span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<p>Vicuna的模型效果比Alpaca好不少，而且很好的支持了多语言。它的秘诀在于其训练数据与Alpaca通过Self-Instruct的机制生成的数据不一样，质量要高很多。Vicuna的数据来源于 <a href="http://ShareGPT.com">ShareGPT.com</a> 网站上大家分享的与ChatGPT聊天的数据。</p>
+<p>ColossalChat模型的性能也可以与ChatGPT比肩（信息来自代码仓库中的<a href="https://medium.com/pytorch/colossalchat-an-open-source-solution-for-cloning-chatgpt-with-a-complete-rlhf-pipeline-5edf08fb538b">博客</a>），它的训练数据来源于<a href="https://github.com/XueFuzhao/InstructionWild">InstructionWild</a>，这个数据集基于从Twitter获取的700个基础任务，然后采用与Alpaca类似的机制从OpenAI获取更多样性的任务及回复。</p>
+<h3 id="微调部分训练代码"><a class="markdownIt-Anchor" href="#微调部分训练代码"></a> 微调部分训练代码</h3>
+<p>阅读Alpaca和Vicuna的训练代码，可以发现训练代码非常短，主要是调用了transformers库中的Trainer类来完成训练。</p>
+<p>所以，要了解训练过程的代码，我们需要阅读一下transformers代码库中的相应代码。</p>
+<p><a href="https://github.com/huggingface/transformers">Transformers</a> 是 Huggingface 打造的一个开源库。提供了数以千计的预训练模型，支持 100 多种语言的文本分类、信息抽取、问答、摘要、翻译、文本生成。其宗旨是为最先进的 NLP 技术提供易用性。 Transformers 提供了便于快速下载和使用的API，让你可以把预训练模型用在给定文本、在你的数据集上微调然后通过 model hub 与社区共享。同时，每个定义的 Python 模块均完全独立，方便修改和快速研究实验。（来自官方介绍）</p>
+<p>由于Alpaca和Vicuna采用LLaMA作为基础模型，我们主要关注LLaMA相关的代码。源代码在<a href="https://github.com/huggingface/transformers/tree/main/src/transformers/models/llama">这个目录</a>下。</p>
+<p>模型的核心代码在<a href="https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py">这里</a>，虽然Transformers库中的实现与Meta发布的源代码有所区别，但都是基于PyTorch库，并且模型结构是一致的，就不赘述了（想了解细节的请回顾<a href="%5B%E4%B8%8A%E4%B8%80%E7%AF%87%5D(https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/)">上一篇</a>）。 下面分析一下与模型训练相关的核心代码。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaForCausalLM</span>(<span class="title class_ inherited__">LlamaPreTrainedModel</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, config</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(config)</span><br><span class="line">        <span class="comment"># 根据配置初始化LLaMA模型，此模型的结构与Meta发布的LLaMA一致，除了不包含最后一层</span></span><br><span class="line">        self.model = LlamaModel(config)</span><br><span class="line">        <span class="comment"># 定义最后一层全连接层</span></span><br><span class="line">        self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=<span class="literal">False</span>)</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">...</span>):</span><br><span class="line">        <span class="comment"># 从LLaMA的模型获取预测的结果，并取最后一个Transformer块的计算结果</span></span><br><span class="line">        outputs = self.model(...)</span><br><span class="line">        hidden_states = outputs[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算模型输出</span></span><br><span class="line">        logits = self.lm_head(hidden_states)</span><br><span class="line"></span><br><span class="line">        loss = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> labels <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 取预测结果的前N-1个，使预测的下一个词与标签词对应。</span></span><br><span class="line">            shift_logits = logits[..., :-<span class="number">1</span>, :].contiguous()</span><br><span class="line">            <span class="comment"># 取标签数据的后N-1个，使预测的下一个词与标签词对应。</span></span><br><span class="line">            shift_labels = labels[..., <span class="number">1</span>:].contiguous()</span><br><span class="line">            <span class="comment"># 创建交叉熵损失，用于计算模型预测结果与标签之间的差异。</span></span><br><span class="line">            loss_fct = CrossEntropyLoss()</span><br><span class="line">            <span class="comment"># 将预测结果和标签进行形状变换，展平为二维张量。第一个维度为样本的数量，第二个维度为词汇表的大小。</span></span><br><span class="line">            shift_logits = shift_logits.view(-<span class="number">1</span>, self.config.vocab_size)</span><br><span class="line">            shift_labels = shift_labels.view(-<span class="number">1</span>)</span><br><span class="line">            <span class="comment"># 计算损失</span></span><br><span class="line">            loss = loss_fct(shift_logits, shift_labels)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> CausalLMOutputWithPast(loss=loss, logits=logits, ...)</span><br></pre></td></tr></table></figure>
+<p>上述对齐过程，可以举例解释如下：</p>
+<ul>
+<li>假设有一个句子作为输入文本序列：I love eating，模型将预测下一个词是什么。</li>
+<li>在这个例子中，预测结果序列为<code>love eating</code>，标签序列<code>I love eating</code>也应该调整为与预测序列一致。</li>
+<li>通过取预测结果的前N-1个及标签数据的后N-1个，就可以将logits与标签数据对齐。</li>
+</ul>
+<p>可以看到这里的训练代码其实非常简单，使用最常见的基于概率的交叉熵损失即可实现损失定义。至于反向传播过程，PyTorch已经为我们实现了，训练时程序可以自动计算梯度，我们无需实现反向传播的过程。</p>
+<h3 id="强化学习部分训练代码"><a class="markdownIt-Anchor" href="#强化学习部分训练代码"></a> 强化学习部分训练代码</h3>
+<p>下面来分析一下由ColossalAI实现的指令微调阶段的模型及代码。根据上面的分析，指令微调阶段分为三个步骤完成：1. 与第二阶段相同的监督微调； 2. 训练一个奖励模型；3. 训练一个强化学习模型。</p>
+<h4 id="监督微调"><a class="markdownIt-Anchor" href="#监督微调"></a> 监督微调</h4>
+<p>看起来第一步骤的代码与Alpaca和Vicuna的代码应该是一样的，不过ColossalAI为了支持在单卡上面做训练，采用了Lora的方式进行监督微调。</p>
+<p>Lora是一种少量参数模型微调的方法，由微软于2021年提出。其基本的思想是：</p>
+<ol>
+<li>冻结所有原来的大模型参数</li>
+<li>对某些层（一般是线性变换层）的参数，采用两个小矩阵合成一个与原参数大小一样的大矩阵（如采用一个10x2的矩阵A和一个2X10的矩阵B，两者的矩阵乘积就可以得到一个10x10的大矩阵C）</li>
+<li>计算时（前向计算），参数的值采用原参数矩阵加上合成矩阵的值作为最终参数矩阵的值</li>
+<li>微调时（反向传播），只更新上述小矩阵的参数</li>
+</ol>
+<p>具体代码在<a href="https://github.com/hpcaitech/ColossalAI/blob/main/applications/Chat/examples/train_sft.py">这里</a>，以下是核心逻辑。（ColossalAI由于支持了多个模型，其代码比较长，以下是单独看LLaMA模型的简化后的代码。）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    strategy = ColossalAIStrategy(stage=<span class="number">2</span>, placement_policy=<span class="string">&#x27;cuda&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> strategy.model_init_context():</span><br><span class="line">        <span class="comment"># 将transformers库中的LlamaForCausalLM模型转化为Lora模型</span></span><br><span class="line">        model = convert_to_lora_module(LlamaForCausalLM.from_pretrained(args.pretrain), args.lora_rank)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备分词器</span></span><br><span class="line">    tokenizer = AutoTokenizer.from_pretrained(args.pretrain, padding_side=<span class="string">&quot;right&quot;</span>, ...)</span><br><span class="line">    tokenizer = prepare_llama_tokenizer_and_embedding(tokenizer, model)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备优化器</span></span><br><span class="line">    optim = HybridAdam(model.parameters(), lr=args.lr, clipping_norm=<span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备数据集</span></span><br><span class="line">    train_dataset = SFTDataset(train_data, tokenizer, max_len)</span><br><span class="line">    eval_dataset = SFTDataset(eval_data, tokenizer, max_len)</span><br><span class="line">    train_dataloader = DataLoader(train_dataset, ...)</span><br><span class="line">    eval_dataloader = DataLoader(eval_dataset, ...)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 构造训练器并开始训练</span></span><br><span class="line">    (model, optim) = strategy.prepare((model, optim))</span><br><span class="line">    trainer = SFTTrainer(model=model, ...)</span><br><span class="line">    trainer.fit(...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SFTTrainer</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">self, ...</span>):</span><br><span class="line">        <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(self.max_epochs):</span><br><span class="line">            <span class="comment"># 设置模型为训练模式</span></span><br><span class="line">            self.model.train()</span><br><span class="line">            <span class="comment"># 对数据集里面的每一个批次进行训练</span></span><br><span class="line">            <span class="keyword">for</span> batch_id, batch <span class="keyword">in</span> <span class="built_in">enumerate</span>(self.train_dataloader):</span><br><span class="line">                <span class="comment"># 执行模型前向计算</span></span><br><span class="line">                outputs = self.model(batch[<span class="string">&quot;input_ids&quot;</span>], batch[<span class="string">&quot;attention_mask&quot;</span>], batch[<span class="string">&quot;labels&quot;</span>])</span><br><span class="line">                <span class="comment"># 下面的代码采用了一种累计梯度的机制，可以让模型在批太小的场景下也能较为稳定的更新</span></span><br><span class="line">                <span class="comment"># 每次计算梯度时，将损失平均一下，再计算梯度</span></span><br><span class="line">                loss = outputs.loss</span><br><span class="line">                loss = loss / self.accumulation_steps</span><br><span class="line">                <span class="comment"># 计算梯度</span></span><br><span class="line">                self.strategy.backward(loss, self.model, self.optimizer)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 当达到定义的累计批次数时更新参数并将梯度置零</span></span><br><span class="line">                <span class="keyword">if</span> (batch_id + <span class="number">1</span>) % self.accumulation_steps == <span class="number">0</span>:</span><br><span class="line">                    self.strategy.optimizer_step(self.optimizer)  <span class="comment"># 更新参数</span></span><br><span class="line">                    self.optimizer.zero_grad()  <span class="comment"># 梯度置零</span></span><br><span class="line">                    self.scheduler.step()  <span class="comment"># 对学习率进行调整</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，上述代码中ColossalAI还贴心的采用了一种累计梯度的机制来支持小批微调。这是因为想要在少量的GPU资源上微调大模型，批大小不能设置太大，否则显存无法支持。关于累计梯度详细的解释，可以参考<a href="https://zhuanlan.zhihu.com/p/595716023">这里</a>。</p>
+<h4 id="奖励模型"><a class="markdownIt-Anchor" href="#奖励模型"></a> 奖励模型</h4>
+<p>第二个步骤是定义并训练一个奖励模型，此模型可以判断哪些回复更好。ColossalAI依然基于大语言模型，并采用Lora微调，来实现这个奖励模型。</p>
+<p>具体代码在<a href="https://github.com/hpcaitech/ColossalAI/blob/main/applications/Chat/examples/train_reward_model.py">这里</a>，以下是核心逻辑。（ColossalAI由于支持了多个模型，其代码比较长，以下是单独看LLaMA模型的简化后的代码。）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    strategy = ColossalAIStrategy(stage=<span class="number">2</span>, placement_policy=<span class="string">&#x27;cuda&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> strategy.model_init_context():</span><br><span class="line">        <span class="comment"># 定义基于LLaMA的奖励模型</span></span><br><span class="line">        model = LlamaRM(pretrained=args.pretrain, lora_rank=args.lora_rank)</span><br><span class="line">    <span class="comment"># 以下代码与监督微调部分类似</span></span><br><span class="line">    tokenizer = LlamaTokenizer.from_pretrained(args.pretrain)</span><br><span class="line">    tokenizer = prepare_llama_tokenizer_and_embedding(tokenizer, model)</span><br><span class="line">    optim = HybridAdam(model.parameters(), lr=<span class="number">5e-6</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义LogSig损失，LogSig损失是OpenAI在论文Training language models to follow instructions with human feedback中定义的损失函数</span></span><br><span class="line">    loss_fn = LogSigLoss()</span><br><span class="line"></span><br><span class="line">    data = load_dataset(args.dataset)</span><br><span class="line">    train_dataset = RmStaticDataset(data[<span class="string">&#x27;train&#x27;</span>], tokenizer, ...)</span><br><span class="line">    valid_dataset = RmStaticDataset(data[<span class="string">&#x27;test&#x27;</span>], tokenizer, ...)</span><br><span class="line">    train_dataloader = DataLoader(train_dataset, ...)</span><br><span class="line">    eval_dataloader = DataLoader(eval_dataset, ...)</span><br><span class="line"></span><br><span class="line">    (model, optim) = strategy.prepare((model, optim))</span><br><span class="line">    trainer = RewardModelTrainer(model=model, ...)</span><br><span class="line">    trainer.fit()</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LogSigLoss</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, chosen_reward: torch.Tensor, reject_reward: torch.Tensor</span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 根据OpenAI在论文中的损失计算公式计算损失，见下文的分析</span></span><br><span class="line">        probs = torch.sigmoid(chosen_reward - reject_reward)</span><br><span class="line">        log_probs = torch.log(probs)</span><br><span class="line">        loss = -log_probs.mean()</span><br><span class="line">        <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RewardModel</span>(<span class="title class_ inherited__">LoRAModule</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 转换为Lora模型，以便支持少量参数微调</span></span><br><span class="line">        self.convert_to_lora()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, sequences: torch.LongTensor, attention_mask: <span class="type">Optional</span>[torch.Tensor] = <span class="literal">None</span></span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 转换为Lora模型，以便支持少量参数微调</span></span><br><span class="line">        outputs = self.model(sequences, attention_mask=attention_mask)</span><br><span class="line">        last_hidden_states = outputs[<span class="string">&#x27;last_hidden_state&#x27;</span>]</span><br><span class="line">        values = self.value_head(last_hidden_states)[:, :-<span class="number">1</span>]</span><br><span class="line">        value = values.mean(dim=<span class="number">1</span>).squeeze(<span class="number">1</span>)    <span class="comment"># ensure shape is (B)</span></span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaRM</span>(<span class="title class_ inherited__">RewardModel</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 从预训练模型文件中加载LLaMA的基础模型，使用transformers库的实现，无最后一个线性层</span></span><br><span class="line">        model = LlamaModel.from_pretrained(pretrained)</span><br><span class="line">        <span class="comment"># 定义线性最后层，输出维度为1，即一个数值型的奖励值</span></span><br><span class="line">        value_head = nn.Linear(model.config.hidden_size, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>参考Huggingface上面的数据集，可了解到训练奖励模型用到的数据示例为：</p>
+<ul>
+<li><strong>prompt (string)</strong>: Human: I am trying to write a fairy tale. What is the most popular plot? Assistant: The … Human: The … Assistant:</li>
+<li><strong>response (string)</strong>: This sounds like a really interesting modern retelling of the story!</li>
+<li><strong>chosen (string)</strong>: This sounds like a really interesting modern retelling of the story!</li>
+<li><strong>rejected (string)</strong>: And the prince and the princess both decide that they are more powerful together than apart?</li>
+</ul>
+<p>通过上面的分析，可以知道，奖励模型可以为每一个回复生成一个奖励值。这个奖励值就可以用于训练强化学习模型了。</p>
+<p>对于奖励模型的训练，OpenAI论文原文解释如下：</p>
+<blockquote>
+<p>RM是在一个包含两个模型输出之间比较的数据集上进行训练的。他们使用交叉熵损失，将比较结果作为标签，而奖励之间的差异表示了一个人类标注者更喜欢其中一个回答的对数几率。为了加快比较收集的速度，我们向标注者展示了K = 4至K = 9个回答供其进行排名。这为每个提示产生了K²个比较。由于每个标注任务中的比较非常相关，我们发现，如果我们简单地将比较混洗到一个数据集中，对数据集进行一次遍历就会导致奖励模型过拟合（如果将每个可能的K²个比较视为单独的数据点，那么每个完成将可能被用于K-1个独立的梯度更新。模型往往在一个epoch后出现过拟合，因此在一个epoch内重复数据也会导致它出现过拟合）。相反，我们将每个提示的所有K²个比较作为单个批次元素进行训练。这样做在计算上更加高效，因为每个完成（completion）只需要一次RM的前向传播（而不是K个完成需要K²次前向传播），并且由于不再过拟合，验证准确度和对数损失都有显著提升。</p>
+</blockquote>
+<p>损失计算公式为：</p>
+<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/rm.png" alt="Loss of Reward Model" /></p>
+<blockquote>
+<p>其中，rθ(x, y)是奖励模型对于提示x和完成y的标量输出，具有参数θ；yw是在yw和yl这一对完成中更受青睐的完成；D是人类比较的数据集。<br />
+最后，由于奖励模型的损失对于奖励的偏移是不变的，我们使用偏置对奖励模型进行归一化，以使标注者的演示在进行强化学习之前获得平均得分为0。</p>
+</blockquote>
+<h4 id="强化学习模型"><a class="markdownIt-Anchor" href="#强化学习模型"></a> 强化学习模型</h4>
+<p>强化学习模型是最为复杂的部分，涉及很多新的知识点，限于篇幅，待下一篇继续分析。</p>
+<p>不过，事实上基于前面的监督微调部分及奖励模型部分代码，我们似乎已经能窥探到强化学习部分的内容了。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>到这里，我们就分析完了ChatGPT类模型的训练和微调代码。在分析代码时，我们有意忽略了很多细节及模型并行处理的部分代码，这些对于我们理解模型帮助不大。</p>
+<p>自ChatGPT发布以来，很多人认为这是一个人类走向通用人工智能的突破，也有一些人认为它其实没什么本质的改进。有很多人对自己的职业发展产生了很深的焦虑感，也有很多人感觉触碰到了科幻世界中的未来，还有很多人觉得又是一个可以好好捞一把的机会。</p>
+<p>也许每个人都有必要去了解一下机器学习技术的原理，这样才能形成对它的理性的认知。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>这是此系列的第四篇，ChatGPT的模型训练。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ul>
+<li>alpaca博客介绍：<a href="https://crfm.stanford.edu/2023/03/13/alpaca.html">https://crfm.stanford.edu/2023/03/13/alpaca.html</a></li>
+<li>LLAMA Paper：<a href="https://arxiv.org/abs/2302.13971v1">https://arxiv.org/abs/2302.13971v1</a></li>
+<li>Self-Instruct: Aligning Language Model with Self Generated Instructions：<a href="https://arxiv.org/abs/2212.10560">https://arxiv.org/abs/2212.10560</a></li>
+<li>Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90%* ChatGPT Quality: <a href="https://lmsys.org/blog/2023-03-30-vicuna/">https://lmsys.org/blog/2023-03-30-vicuna/</a></li>
+<li>OpenAI开发的ChatGPT资料（Training language models to follow instructions<br />
+with human feedback）： <a href="https://arxiv.org/pdf/2203.02155.pdf">https://arxiv.org/pdf/2203.02155.pdf</a></li>
+<li>OpenAI开放的GPT-3资料（Language Models are Few-Shot Learners）: <a href="https://arxiv.org/pdf/2005.14165.pdf">https://arxiv.org/pdf/2005.14165.pdf</a></li>
+<li>OpenAI开放的GPT-2资料（Language Models are Unsupervised Multitask Learners）: <a href="https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf">https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf</a></li>
+<li>OpenAI开放的GPT资料（Improving Language Understanding by Generative Pre-Training): <a href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf</a></li>
+<li>梯度累加：<a href="https://zhuanlan.zhihu.com/p/595716023">https://zhuanlan.zhihu.com/p/595716023</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>machine-learning</category>
+        <category>ChatGPT</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>机器学习</tag>
+        <tag>ML</tag>
+        <tag>ChatGPT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ChatGPT使用的Transfomer模型</title>
     <url>/2023/05/18/chatgpt-transformer/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
@@ -9450,157 +9601,6 @@ with human feedback）： <a href="https://arxiv.org/pdf/2203.02155.pdf">https:/
       <categories>
         <category>machine-learning</category>
         <category>机器学习</category>
-        <category>ChatGPT</category>
-      </categories>
-      <tags>
-        <tag>AI</tag>
-        <tag>机器学习</tag>
-        <tag>ML</tag>
-        <tag>ChatGPT</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ChatGPT的模型训练</title>
-    <url>/2023/05/20/chatgpt-training/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
-<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
-<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
-<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
-<p>这是此系列的第四篇，ChatGPT的模型训练。</p>
-<span id="more"></span>
-<p><a href="https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/">上一篇</a>文章我们深入分析了ChatGPT使用到的Transformer模型。了解了其最核心的模型结构是Transformer结构，本文来聊一聊ChatGPT如何训练。</p>
-<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
-<p>ChatGPT只在论文中有一些原理的解释，并没有公布代码。因此，为了弄清楚ChatGPT是如何训练的，我们只能从开源的类ChatGPT模型入手。目前，我们能看到ChatGPT的开源平替主要是来自斯坦福大学的<a href="https://github.com/tatsu-lab/stanford_alpaca">Alpaca</a>模型及伯克利大学的<a href="https://github.com/lm-sys/FastChat">Vicuna</a>模型。其中，当使用GPT-4来评估模型效果时，Vicuna模型的效果达到了ChatGPT的90%。这说明这些开源平替模型的正确性和有效性。</p>
-<p>Alpaca模型及Vicuna模型都是基于Meta发布的LLaMA模型进行微调的。LLaMA的训练使用了大量的数据，并花费了大量的计算资源。</p>
-<p>因此本文尝试帮助大家弄清楚这些开源模型的训练。当我们了解了这些开源模型的训练时，应该也能对ChatGPT的模型训练有了一个基本的了解了。</p>
-<h2 id="训练过程"><a class="markdownIt-Anchor" href="#训练过程"></a> 训练过程</h2>
-<p>从ChatGPT公布的论文内容来看，有三个训练阶段：1. 无监督预训练 2. 监督微调 3. 指令微调。</p>
-<p><strong>无监督预训练</strong>是指直接使用大规模的文本数据作为输入来构建数据集，其输出就是当前文本中的下一个词。比如，文本“无监督训练”，可以拆分为如下几个训练样本：</p>
-<ul>
-<li>输入“无”，让模型预测“监督”</li>
-<li>输入“无监督”让模型预测“训练”</li>
-</ul>
-<p>通过采集互联网上的大规模文本，可以构造一个超大规模的数据集用于无监督预训练。</p>
-<p><strong>监督微调</strong>是指在输入文本中放入具体的任务信息，让模型尝试预测答案。比如，对于一个中文翻译为英文的任务可以构建训练样本如下（假定要翻译的文本为“无监督训练”）：</p>
-<ul>
-<li>输入“翻译文本为英文：无监督训练。译文：”，让模型输出“Non-supervised”</li>
-<li>输入“翻译文本为英文：无监督训练。译文：Non-supervised”，让模型输出“training”</li>
-</ul>
-<p>监督微调阶段可以使用大量的当前NLP研究中的训练数据集。比如：</p>
-<ul>
-<li>常识推理数据集，如BoolQ、PIQA、SIQA、OpenBookQA等</li>
-<li>闭卷问答数据集，如Natural Questions、TriviaQA等</li>
-</ul>
-<p>监督微调阶段使用了一些自然语言问答的模板，但是如果对话没有使用这样的模板，模型的效果就会大打折扣。于是为了训练一个ChatGPT这样的通用的模型，就需要更普适的问答模板。这就是<strong>指令微调</strong>阶段的作用。</p>
-<p>从OpenAI开放的论文资料来看，指令微调采用了强化学习的方案。分成三个步骤完成：</p>
-<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/instruct-gpt.png" alt="Instruct GPT" /></p>
-<ul>
-<li>第一步：从测试用户提交的问答中随机抽取数据，让专业的标注人员给出高质量的答案，并使用这些数据优化模型。</li>
-<li>第二步：使用前面的模型生成N个不同的回答，让专业的标注人员对回答的质量进行排序，并使用这些数据训练一个奖励模型。</li>
-<li>第三步：利用前面训练好的奖励模型，无需人工标注，通过强化学习的方式自动更新模型参数。</li>
-</ul>
-<p>这一阶段，通过让模型接受更广泛的自然语言回答任务，模型具备了回答通用问题的能力。</p>
-<p>分析上述三个阶段，可以发现第三阶段用到的强化学习训练相对较为复杂，且需要大量人类的参与，目前开源替代并不多，由HPC-AI开源的<a href="https://github.com/hpcaitech/ColossalAI">ColossalChat</a>算是较为完善的一个。</p>
-<p>上述提到的这些开源模型分别完成的阶段如下：</p>
-<ul>
-<li>LLaMA模型：利用开放的数据集完成了第一阶段和第二阶段</li>
-<li>Alpaca、Vicuna模型：基于LLaMA，利用基于ChatGPT生成的指令数据，完成了第三阶段的第一步</li>
-<li>ColossalChat：完成了完整的三个阶段</li>
-</ul>
-<h2 id="模型训练代码"><a class="markdownIt-Anchor" href="#模型训练代码"></a> 模型训练代码</h2>
-<p>下面基于上述提到的三个模型分析一下模型的训练代码。</p>
-<p>LLaMA的官方代码库中只有模型的结构及推理的代码，而没有包含训练的代码。虽然Meta的论文中提到了是如何训练的，但还是没有像可运行的代码这样包含所有细节。</p>
-<p>Alpaca、Vicuna、ColossalChat模型作为开源可训练的模型，有完整的训练代码和脚本，我们主要基于它们来研究一下模型是如何训练的。</p>
-<p>一般的机器学习模型训练主要包括三部分：定义模型结构、定义损失函数、准备训练数据。下面主要围绕这三部分来分析ChatGPT类模型是如何训练的。</p>
-<h3 id="数据生成"><a class="markdownIt-Anchor" href="#数据生成"></a> 数据生成</h3>
-<p>根据前文对训练过程的介绍，训练数据只需要组织成一系列的问答对即可。</p>
-<p>从Alpaca的<a href="https://github.com/tatsu-lab/stanford_alpaca/tree/main">官方Github代码仓库</a>中的文档可以了解到，Alpaca用到了一种名为Self-Instruct的机制来生成数据。其原理是：</p>
-<ol>
-<li>定义一些种子任务</li>
-<li>借助OpenAI发布的模型来生成具备多样性的指令任务</li>
-<li>借助OpenAI的模型生成这些任务的回复</li>
-</ol>
-<p>以下是来自<a href="https://github.com/yizhongw/self-instruct">Self-Instruct的官方代码仓库</a>的数据生成流程图。其中Alpaca简化了分类任务和非分类任务，将其合成了同一类问答任务。</p>
-<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/self-instruct.jpeg" alt="Self Instruct" /></p>
-<p>下面是一些样例数据：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Give three tips for staying healthy.&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.Eat a balanced diet and make sure to include plenty of fruits and vegetables. \n2. Exercise regularly to keep your body active and strong. \n3. Get enough sleep and maintain a consistent sleep schedule.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;What are the three primary colors?&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;The three primary colors are red, blue, and yellow.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    ...</span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
-<p>Vicuna的模型效果比Alpaca好不少，而且很好的支持了多语言。它的秘诀在于其训练数据与Alpaca通过Self-Instruct的机制生成的数据不一样，质量要高很多。Vicuna的数据来源于 <a href="http://ShareGPT.com">ShareGPT.com</a> 网站上大家分享的与ChatGPT聊天的数据。</p>
-<p>ColossalChat模型的性能也可以与ChatGPT比肩（信息来自代码仓库中的<a href="https://medium.com/pytorch/colossalchat-an-open-source-solution-for-cloning-chatgpt-with-a-complete-rlhf-pipeline-5edf08fb538b">博客</a>），它的训练数据来源于<a href="https://github.com/XueFuzhao/InstructionWild">InstructionWild</a>，这个数据集基于从Twitter获取的700个基础任务，然后采用与Alpaca类似的机制从OpenAI获取更多样性的任务及回复。</p>
-<h3 id="微调部分训练代码"><a class="markdownIt-Anchor" href="#微调部分训练代码"></a> 微调部分训练代码</h3>
-<p>阅读Alpaca和Vicuna的训练代码，可以发现训练代码非常短，主要是调用了transformers库中的Trainer类来完成训练。</p>
-<p>所以，要了解训练过程的代码，我们需要阅读一下transformers代码库中的相应代码。</p>
-<p><a href="https://github.com/huggingface/transformers">Transformers</a> 是 Huggingface 打造的一个开源库。提供了数以千计的预训练模型，支持 100 多种语言的文本分类、信息抽取、问答、摘要、翻译、文本生成。其宗旨是为最先进的 NLP 技术提供易用性。 Transformers 提供了便于快速下载和使用的API，让你可以把预训练模型用在给定文本、在你的数据集上微调然后通过 model hub 与社区共享。同时，每个定义的 Python 模块均完全独立，方便修改和快速研究实验。（来自官方介绍）</p>
-<p>由于Alpaca和Vicuna采用LLaMA作为基础模型，我们主要关注LLaMA相关的代码。源代码在<a href="https://github.com/huggingface/transformers/tree/main/src/transformers/models/llama">这个目录</a>下。</p>
-<p>模型的核心代码在<a href="https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py">这里</a>，虽然Transformers库中的实现与Meta发布的源代码有所区别，但都是基于PyTorch库，并且模型结构是一致的，就不赘述了（想了解细节的请回顾<a href="%5B%E4%B8%8A%E4%B8%80%E7%AF%87%5D(https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/)">上一篇</a>）。 下面分析一下与模型训练相关的核心代码。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaForCausalLM</span>(<span class="title class_ inherited__">LlamaPreTrainedModel</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, config</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(config)</span><br><span class="line">        <span class="comment"># 根据配置初始化LLaMA模型，此模型的结构与Meta发布的LLaMA一致，除了不包含最后一层</span></span><br><span class="line">        self.model = LlamaModel(config)</span><br><span class="line">        <span class="comment"># 定义最后一层全连接层</span></span><br><span class="line">        self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=<span class="literal">False</span>)</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">...</span>):</span><br><span class="line">        <span class="comment"># 从LLaMA的模型获取预测的结果，并取最后一个Transformer块的计算结果</span></span><br><span class="line">        outputs = self.model(...)</span><br><span class="line">        hidden_states = outputs[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算模型输出</span></span><br><span class="line">        logits = self.lm_head(hidden_states)</span><br><span class="line"></span><br><span class="line">        loss = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> labels <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 取预测结果的前N-1个，使预测的下一个词与标签词对应。</span></span><br><span class="line">            shift_logits = logits[..., :-<span class="number">1</span>, :].contiguous()</span><br><span class="line">            <span class="comment"># 取标签数据的后N-1个，使预测的下一个词与标签词对应。</span></span><br><span class="line">            shift_labels = labels[..., <span class="number">1</span>:].contiguous()</span><br><span class="line">            <span class="comment"># 创建交叉熵损失，用于计算模型预测结果与标签之间的差异。</span></span><br><span class="line">            loss_fct = CrossEntropyLoss()</span><br><span class="line">            <span class="comment"># 将预测结果和标签进行形状变换，展平为二维张量。第一个维度为样本的数量，第二个维度为词汇表的大小。</span></span><br><span class="line">            shift_logits = shift_logits.view(-<span class="number">1</span>, self.config.vocab_size)</span><br><span class="line">            shift_labels = shift_labels.view(-<span class="number">1</span>)</span><br><span class="line">            <span class="comment"># 计算损失</span></span><br><span class="line">            loss = loss_fct(shift_logits, shift_labels)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> CausalLMOutputWithPast(loss=loss, logits=logits, ...)</span><br></pre></td></tr></table></figure>
-<p>上述对齐过程，可以举例解释如下：</p>
-<ul>
-<li>假设有一个句子作为输入文本序列：I love eating，模型将预测下一个词是什么。</li>
-<li>在这个例子中，预测结果序列为<code>love eating</code>，标签序列<code>I love eating</code>也应该调整为与预测序列一致。</li>
-<li>通过取预测结果的前N-1个及标签数据的后N-1个，就可以将logits与标签数据对齐。</li>
-</ul>
-<p>可以看到这里的训练代码其实非常简单，使用最常见的基于概率的交叉熵损失即可实现损失定义。至于反向传播过程，PyTorch已经为我们实现了，训练时程序可以自动计算梯度，我们无需实现反向传播的过程。</p>
-<h3 id="强化学习部分训练代码"><a class="markdownIt-Anchor" href="#强化学习部分训练代码"></a> 强化学习部分训练代码</h3>
-<p>下面来分析一下由ColossalAI实现的指令微调阶段的模型及代码。根据上面的分析，指令微调阶段分为三个步骤完成：1. 与第二阶段相同的监督微调； 2. 训练一个奖励模型；3. 训练一个强化学习模型。</p>
-<h4 id="监督微调"><a class="markdownIt-Anchor" href="#监督微调"></a> 监督微调</h4>
-<p>看起来第一步骤的代码与Alpaca和Vicuna的代码应该是一样的，不过ColossalAI为了支持在单卡上面做训练，采用了Lora的方式进行监督微调。</p>
-<p>Lora是一种少量参数模型微调的方法，由微软于2021年提出。其基本的思想是：</p>
-<ol>
-<li>冻结所有原来的大模型参数</li>
-<li>对某些层（一般是线性变换层）的参数，采用两个小矩阵合成一个与原参数大小一样的大矩阵（如采用一个10x2的矩阵A和一个2X10的矩阵B，两者的矩阵乘积就可以得到一个10x10的大矩阵C）</li>
-<li>计算时（前向计算），参数的值采用原参数矩阵加上合成矩阵的值作为最终参数矩阵的值</li>
-<li>微调时（反向传播），只更新上述小矩阵的参数</li>
-</ol>
-<p>具体代码在<a href="https://github.com/hpcaitech/ColossalAI/blob/main/applications/Chat/examples/train_sft.py">这里</a>，以下是核心逻辑。（ColossalAI由于支持了多个模型，其代码比较长，以下是单独看LLaMA模型的简化后的代码。）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    strategy = ColossalAIStrategy(stage=<span class="number">2</span>, placement_policy=<span class="string">&#x27;cuda&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> strategy.model_init_context():</span><br><span class="line">        <span class="comment"># 将transformers库中的LlamaForCausalLM模型转化为Lora模型</span></span><br><span class="line">        model = convert_to_lora_module(LlamaForCausalLM.from_pretrained(args.pretrain), args.lora_rank)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备分词器</span></span><br><span class="line">    tokenizer = AutoTokenizer.from_pretrained(args.pretrain, padding_side=<span class="string">&quot;right&quot;</span>, ...)</span><br><span class="line">    tokenizer = prepare_llama_tokenizer_and_embedding(tokenizer, model)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备优化器</span></span><br><span class="line">    optim = HybridAdam(model.parameters(), lr=args.lr, clipping_norm=<span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备数据集</span></span><br><span class="line">    train_dataset = SFTDataset(train_data, tokenizer, max_len)</span><br><span class="line">    eval_dataset = SFTDataset(eval_data, tokenizer, max_len)</span><br><span class="line">    train_dataloader = DataLoader(train_dataset, ...)</span><br><span class="line">    eval_dataloader = DataLoader(eval_dataset, ...)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 构造训练器并开始训练</span></span><br><span class="line">    (model, optim) = strategy.prepare((model, optim))</span><br><span class="line">    trainer = SFTTrainer(model=model, ...)</span><br><span class="line">    trainer.fit(...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SFTTrainer</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">self, ...</span>):</span><br><span class="line">        <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(self.max_epochs):</span><br><span class="line">            <span class="comment"># 设置模型为训练模式</span></span><br><span class="line">            self.model.train()</span><br><span class="line">            <span class="comment"># 对数据集里面的每一个批次进行训练</span></span><br><span class="line">            <span class="keyword">for</span> batch_id, batch <span class="keyword">in</span> <span class="built_in">enumerate</span>(self.train_dataloader):</span><br><span class="line">                <span class="comment"># 执行模型前向计算</span></span><br><span class="line">                outputs = self.model(batch[<span class="string">&quot;input_ids&quot;</span>], batch[<span class="string">&quot;attention_mask&quot;</span>], batch[<span class="string">&quot;labels&quot;</span>])</span><br><span class="line">                <span class="comment"># 下面的代码采用了一种累计梯度的机制，可以让模型在批太小的场景下也能较为稳定的更新</span></span><br><span class="line">                <span class="comment"># 每次计算梯度时，将损失平均一下，再计算梯度</span></span><br><span class="line">                loss = outputs.loss</span><br><span class="line">                loss = loss / self.accumulation_steps</span><br><span class="line">                <span class="comment"># 计算梯度</span></span><br><span class="line">                self.strategy.backward(loss, self.model, self.optimizer)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 当达到定义的累计批次数时更新参数并将梯度置零</span></span><br><span class="line">                <span class="keyword">if</span> (batch_id + <span class="number">1</span>) % self.accumulation_steps == <span class="number">0</span>:</span><br><span class="line">                    self.strategy.optimizer_step(self.optimizer)  <span class="comment"># 更新参数</span></span><br><span class="line">                    self.optimizer.zero_grad()  <span class="comment"># 梯度置零</span></span><br><span class="line">                    self.scheduler.step()  <span class="comment"># 对学习率进行调整</span></span><br></pre></td></tr></table></figure>
-<p>可以看到，上述代码中ColossalAI还贴心的采用了一种累计梯度的机制来支持小批微调。这是因为想要在少量的GPU资源上微调大模型，批大小不能设置太大，否则显存无法支持。关于累计梯度详细的解释，可以参考<a href="https://zhuanlan.zhihu.com/p/595716023">这里</a>。</p>
-<h4 id="奖励模型"><a class="markdownIt-Anchor" href="#奖励模型"></a> 奖励模型</h4>
-<p>第二个步骤是定义并训练一个奖励模型，此模型可以判断哪些回复更好。ColossalAI依然基于大语言模型，并采用Lora微调，来实现这个奖励模型。</p>
-<p>具体代码在<a href="https://github.com/hpcaitech/ColossalAI/blob/main/applications/Chat/examples/train_reward_model.py">这里</a>，以下是核心逻辑。（ColossalAI由于支持了多个模型，其代码比较长，以下是单独看LLaMA模型的简化后的代码。）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    strategy = ColossalAIStrategy(stage=<span class="number">2</span>, placement_policy=<span class="string">&#x27;cuda&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> strategy.model_init_context():</span><br><span class="line">        <span class="comment"># 定义基于LLaMA的奖励模型</span></span><br><span class="line">        model = LlamaRM(pretrained=args.pretrain, lora_rank=args.lora_rank)</span><br><span class="line">    <span class="comment"># 以下代码与监督微调部分类似</span></span><br><span class="line">    tokenizer = LlamaTokenizer.from_pretrained(args.pretrain)</span><br><span class="line">    tokenizer = prepare_llama_tokenizer_and_embedding(tokenizer, model)</span><br><span class="line">    optim = HybridAdam(model.parameters(), lr=<span class="number">5e-6</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义LogSig损失，LogSig损失是OpenAI在论文Training language models to follow instructions with human feedback中定义的损失函数</span></span><br><span class="line">    loss_fn = LogSigLoss()</span><br><span class="line"></span><br><span class="line">    data = load_dataset(args.dataset)</span><br><span class="line">    train_dataset = RmStaticDataset(data[<span class="string">&#x27;train&#x27;</span>], tokenizer, ...)</span><br><span class="line">    valid_dataset = RmStaticDataset(data[<span class="string">&#x27;test&#x27;</span>], tokenizer, ...)</span><br><span class="line">    train_dataloader = DataLoader(train_dataset, ...)</span><br><span class="line">    eval_dataloader = DataLoader(eval_dataset, ...)</span><br><span class="line"></span><br><span class="line">    (model, optim) = strategy.prepare((model, optim))</span><br><span class="line">    trainer = RewardModelTrainer(model=model, ...)</span><br><span class="line">    trainer.fit()</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LogSigLoss</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, chosen_reward: torch.Tensor, reject_reward: torch.Tensor</span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 根据OpenAI在论文中的损失计算公式计算损失，见下文的分析</span></span><br><span class="line">        probs = torch.sigmoid(chosen_reward - reject_reward)</span><br><span class="line">        log_probs = torch.log(probs)</span><br><span class="line">        loss = -log_probs.mean()</span><br><span class="line">        <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RewardModel</span>(<span class="title class_ inherited__">LoRAModule</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 转换为Lora模型，以便支持少量参数微调</span></span><br><span class="line">        self.convert_to_lora()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, sequences: torch.LongTensor, attention_mask: <span class="type">Optional</span>[torch.Tensor] = <span class="literal">None</span></span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 转换为Lora模型，以便支持少量参数微调</span></span><br><span class="line">        outputs = self.model(sequences, attention_mask=attention_mask)</span><br><span class="line">        last_hidden_states = outputs[<span class="string">&#x27;last_hidden_state&#x27;</span>]</span><br><span class="line">        values = self.value_head(last_hidden_states)[:, :-<span class="number">1</span>]</span><br><span class="line">        value = values.mean(dim=<span class="number">1</span>).squeeze(<span class="number">1</span>)    <span class="comment"># ensure shape is (B)</span></span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaRM</span>(<span class="title class_ inherited__">RewardModel</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 从预训练模型文件中加载LLaMA的基础模型，使用transformers库的实现，无最后一个线性层</span></span><br><span class="line">        model = LlamaModel.from_pretrained(pretrained)</span><br><span class="line">        <span class="comment"># 定义线性最后层，输出维度为1，即一个数值型的奖励值</span></span><br><span class="line">        value_head = nn.Linear(model.config.hidden_size, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<p>参考Huggingface上面的数据集，可了解到训练奖励模型用到的数据示例为：</p>
-<ul>
-<li><strong>prompt (string)</strong>: Human: I am trying to write a fairy tale. What is the most popular plot? Assistant: The … Human: The … Assistant:</li>
-<li><strong>response (string)</strong>: This sounds like a really interesting modern retelling of the story!</li>
-<li><strong>chosen (string)</strong>: This sounds like a really interesting modern retelling of the story!</li>
-<li><strong>rejected (string)</strong>: And the prince and the princess both decide that they are more powerful together than apart?</li>
-</ul>
-<p>通过上面的分析，可以知道，奖励模型可以为每一个回复生成一个奖励值。这个奖励值就可以用于训练强化学习模型了。</p>
-<p>对于奖励模型的训练，OpenAI论文原文解释如下：</p>
-<blockquote>
-<p>RM是在一个包含两个模型输出之间比较的数据集上进行训练的。他们使用交叉熵损失，将比较结果作为标签，而奖励之间的差异表示了一个人类标注者更喜欢其中一个回答的对数几率。为了加快比较收集的速度，我们向标注者展示了K = 4至K = 9个回答供其进行排名。这为每个提示产生了K²个比较。由于每个标注任务中的比较非常相关，我们发现，如果我们简单地将比较混洗到一个数据集中，对数据集进行一次遍历就会导致奖励模型过拟合（如果将每个可能的K²个比较视为单独的数据点，那么每个完成将可能被用于K-1个独立的梯度更新。模型往往在一个epoch后出现过拟合，因此在一个epoch内重复数据也会导致它出现过拟合）。相反，我们将每个提示的所有K²个比较作为单个批次元素进行训练。这样做在计算上更加高效，因为每个完成（completion）只需要一次RM的前向传播（而不是K个完成需要K²次前向传播），并且由于不再过拟合，验证准确度和对数损失都有显著提升。</p>
-</blockquote>
-<p>损失计算公式为：</p>
-<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/rm.png" alt="Loss of Reward Model" /></p>
-<blockquote>
-<p>其中，rθ(x, y)是奖励模型对于提示x和完成y的标量输出，具有参数θ；yw是在yw和yl这一对完成中更受青睐的完成；D是人类比较的数据集。<br />
-最后，由于奖励模型的损失对于奖励的偏移是不变的，我们使用偏置对奖励模型进行归一化，以使标注者的演示在进行强化学习之前获得平均得分为0。</p>
-</blockquote>
-<h4 id="强化学习模型"><a class="markdownIt-Anchor" href="#强化学习模型"></a> 强化学习模型</h4>
-<p>强化学习模型是最为复杂的部分，涉及很多新的知识点，限于篇幅，待下一篇继续分析。</p>
-<p>不过，事实上基于前面的监督微调部分及奖励模型部分代码，我们似乎已经能窥探到强化学习部分的内容了。</p>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
-<p>到这里，我们就分析完了ChatGPT类模型的训练和微调代码。在分析代码时，我们有意忽略了很多细节及模型并行处理的部分代码，这些对于我们理解模型帮助不大。</p>
-<p>自ChatGPT发布以来，很多人认为这是一个人类走向通用人工智能的突破，也有一些人认为它其实没什么本质的改进。有很多人对自己的职业发展产生了很深的焦虑感，也有很多人感觉触碰到了科幻世界中的未来，还有很多人觉得又是一个可以好好捞一把的机会。</p>
-<p>也许每个人都有必要去了解一下机器学习技术的原理，这样才能形成对它的理性的认知。</p>
-<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
-<p>这是此系列的第四篇，ChatGPT的模型训练。</p>
-<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
-<ul>
-<li>alpaca博客介绍：<a href="https://crfm.stanford.edu/2023/03/13/alpaca.html">https://crfm.stanford.edu/2023/03/13/alpaca.html</a></li>
-<li>LLAMA Paper：<a href="https://arxiv.org/abs/2302.13971v1">https://arxiv.org/abs/2302.13971v1</a></li>
-<li>Self-Instruct: Aligning Language Model with Self Generated Instructions：<a href="https://arxiv.org/abs/2212.10560">https://arxiv.org/abs/2212.10560</a></li>
-<li>Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90%* ChatGPT Quality: <a href="https://lmsys.org/blog/2023-03-30-vicuna/">https://lmsys.org/blog/2023-03-30-vicuna/</a></li>
-<li>OpenAI开发的ChatGPT资料（Training language models to follow instructions<br />
-with human feedback）： <a href="https://arxiv.org/pdf/2203.02155.pdf">https://arxiv.org/pdf/2203.02155.pdf</a></li>
-<li>OpenAI开放的GPT-3资料（Language Models are Few-Shot Learners）: <a href="https://arxiv.org/pdf/2005.14165.pdf">https://arxiv.org/pdf/2005.14165.pdf</a></li>
-<li>OpenAI开放的GPT-2资料（Language Models are Unsupervised Multitask Learners）: <a href="https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf">https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf</a></li>
-<li>OpenAI开放的GPT资料（Improving Language Understanding by Generative Pre-Training): <a href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf</a></li>
-<li>梯度累加：<a href="https://zhuanlan.zhihu.com/p/595716023">https://zhuanlan.zhihu.com/p/595716023</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>machine-learning</category>
         <category>ChatGPT</category>
       </categories>
       <tags>
