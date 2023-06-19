@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见这里）。 从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。 ChatGPT的内容很多，我计划采用一个系列，多篇文章来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT的模型训练">
+<meta property="og:url" content="http://brightliao.com/2023/05/20/chatgpt-training/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见这里）。 从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。 ChatGPT的内容很多，我计划采用一个系列，多篇文章来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-20-chatgpt-training/instruct-gpt.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-20-chatgpt-training/self-instruct.jpeg">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-20-chatgpt-training/rm.png">
+<meta property="article:published_time" content="2023-05-20T12:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-16T09:54:11.637Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2023/2023-05-20-chatgpt-training/instruct-gpt.png">
+
+<link rel="canonical" href="http://brightliao.com/2023/05/20/chatgpt-training/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ChatGPT的模型训练 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-数据">
+
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">37</span></a>
+
+  </li>
+        <li class="menu-item menu-item-机器学习">
+
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
+
+  </li>
+        <li class="menu-item menu-item-敏捷">
+
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-技术">
+
+    <a href="/tech/" rel="section"><i class="fa fa-quidditch fa-fw"></i>技术<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-架构">
+
+    <a href="/arch/" rel="section"><i class="fa fa-warehouse fa-fw"></i>架构<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-其他">
+
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">25</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search" style="border-bottom: solid 1px #eee; margin-bottom: 8px;">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">51</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">133</span></a>
+
+  </li>
+
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/05/20/chatgpt-training/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ChatGPT的模型训练
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-05-20 20:00:00" itemprop="dateCreated datePublished" datetime="2023-05-20T20:00:00+08:00">2023-05-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-16 17:54:11" itemprop="dateModified" datetime="2023-06-16T17:54:11+08:00">2023-06-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/chatgpt/" itemprop="url" rel="index"><span itemprop="name">ChatGPT</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/05/20/chatgpt-training/" class="post-meta-item leancloud_visitors" data-flag-title="ChatGPT的模型训练" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>19 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
+<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
+<p>这是此系列的第四篇，ChatGPT的模型训练。</p>
+<span id="more"></span>
+<p><a href="https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/">上一篇</a>文章我们深入分析了ChatGPT使用到的Transformer模型。了解了其最核心的模型结构是Transformer结构，本文来聊一聊ChatGPT如何训练。</p>
+<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
+<p>ChatGPT只在论文中有一些原理的解释，并没有公布代码。因此，为了弄清楚ChatGPT是如何训练的，我们只能从开源的类ChatGPT模型入手。目前，我们能看到ChatGPT的开源平替主要是来自斯坦福大学的<a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca">Alpaca</a>模型及伯克利大学的<a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat">Vicuna</a>模型。其中，当使用GPT-4来评估模型效果时，Vicuna模型的效果达到了ChatGPT的90%。这说明这些开源平替模型的正确性和有效性。</p>
+<p>Alpaca模型及Vicuna模型都是基于Meta发布的LLaMA模型进行微调的。LLaMA的训练使用了大量的数据，并花费了大量的计算资源。</p>
+<p>因此本文尝试帮助大家弄清楚这些开源模型的训练。当我们了解了这些开源模型的训练时，应该也能对ChatGPT的模型训练有了一个基本的了解了。</p>
+<h2 id="训练过程"><a class="markdownIt-Anchor" href="#训练过程"></a> 训练过程</h2>
+<p>从ChatGPT公布的论文内容来看，有三个训练阶段：1. 无监督预训练 2. 监督微调 3. 指令微调。</p>
+<p><strong>无监督预训练</strong>是指直接使用大规模的文本数据作为输入来构建数据集，其输出就是当前文本中的下一个词。比如，文本“无监督训练”，可以拆分为如下几个训练样本：</p>
+<ul>
+<li>输入“无”，让模型预测“监督”</li>
+<li>输入“无监督”让模型预测“训练”</li>
+</ul>
+<p>通过采集互联网上的大规模文本，可以构造一个超大规模的数据集用于无监督预训练。</p>
+<p><strong>监督微调</strong>是指在输入文本中放入具体的任务信息，让模型尝试预测答案。比如，对于一个中文翻译为英文的任务可以构建训练样本如下（假定要翻译的文本为“无监督训练”）：</p>
+<ul>
+<li>输入“翻译文本为英文：无监督训练。译文：”，让模型输出“Non-supervised”</li>
+<li>输入“翻译文本为英文：无监督训练。译文：Non-supervised”，让模型输出“training”</li>
+</ul>
+<p>监督微调阶段可以使用大量的当前NLP研究中的训练数据集。比如：</p>
+<ul>
+<li>常识推理数据集，如BoolQ、PIQA、SIQA、OpenBookQA等</li>
+<li>闭卷问答数据集，如Natural Questions、TriviaQA等</li>
+</ul>
+<p>监督微调阶段使用了一些自然语言问答的模板，但是如果对话没有使用这样的模板，模型的效果就会大打折扣。于是为了训练一个ChatGPT这样的通用的模型，就需要更普适的问答模板。这就是<strong>指令微调</strong>阶段的作用。</p>
+<p>从OpenAI开放的论文资料来看，指令微调采用了强化学习的方案。分成三个步骤完成：</p>
+<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/instruct-gpt.png" alt="Instruct GPT" /></p>
+<ul>
+<li>第一步：从测试用户提交的问答中随机抽取数据，让专业的标注人员给出高质量的答案，并使用这些数据优化模型。</li>
+<li>第二步：使用前面的模型生成N个不同的回答，让专业的标注人员对回答的质量进行排序，并使用这些数据训练一个奖励模型。</li>
+<li>第三步：利用前面训练好的奖励模型，无需人工标注，通过强化学习的方式自动更新模型参数。</li>
+</ul>
+<p>这一阶段，通过让模型接受更广泛的自然语言回答任务，模型具备了回答通用问题的能力。</p>
+<p>分析上述三个阶段，可以发现第三阶段用到的强化学习训练相对较为复杂，且需要大量人类的参与，目前开源替代并不多，由HPC-AI开源的<a target="_blank" rel="noopener" href="https://github.com/hpcaitech/ColossalAI">ColossalChat</a>算是较为完善的一个。</p>
+<p>上述提到的这些开源模型分别完成的阶段如下：</p>
+<ul>
+<li>LLaMA模型：利用开放的数据集完成了第一阶段和第二阶段</li>
+<li>Alpaca、Vicuna模型：基于LLaMA，利用基于ChatGPT生成的指令数据，完成了第三阶段的第一步</li>
+<li>ColossalChat：完成了完整的三个阶段</li>
+</ul>
+<h2 id="模型训练代码"><a class="markdownIt-Anchor" href="#模型训练代码"></a> 模型训练代码</h2>
+<p>下面基于上述提到的三个模型分析一下模型的训练代码。</p>
+<p>LLaMA的官方代码库中只有模型的结构及推理的代码，而没有包含训练的代码。虽然Meta的论文中提到了是如何训练的，但还是没有像可运行的代码这样包含所有细节。</p>
+<p>Alpaca、Vicuna、ColossalChat模型作为开源可训练的模型，有完整的训练代码和脚本，我们主要基于它们来研究一下模型是如何训练的。</p>
+<p>一般的机器学习模型训练主要包括三部分：定义模型结构、定义损失函数、准备训练数据。下面主要围绕这三部分来分析ChatGPT类模型是如何训练的。</p>
+<h3 id="数据生成"><a class="markdownIt-Anchor" href="#数据生成"></a> 数据生成</h3>
+<p>根据前文对训练过程的介绍，训练数据只需要组织成一系列的问答对即可。</p>
+<p>从Alpaca的<a target="_blank" rel="noopener" href="https://github.com/tatsu-lab/stanford_alpaca/tree/main">官方Github代码仓库</a>中的文档可以了解到，Alpaca用到了一种名为Self-Instruct的机制来生成数据。其原理是：</p>
+<ol>
+<li>定义一些种子任务</li>
+<li>借助OpenAI发布的模型来生成具备多样性的指令任务</li>
+<li>借助OpenAI的模型生成这些任务的回复</li>
+</ol>
+<p>以下是来自<a target="_blank" rel="noopener" href="https://github.com/yizhongw/self-instruct">Self-Instruct的官方代码仓库</a>的数据生成流程图。其中Alpaca简化了分类任务和非分类任务，将其合成了同一类问答任务。</p>
+<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/self-instruct.jpeg" alt="Self Instruct" /></p>
+<p>下面是一些样例数据：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Give three tips for staying healthy.&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.Eat a balanced diet and make sure to include plenty of fruits and vegetables. \n2. Exercise regularly to keep your body active and strong. \n3. Get enough sleep and maintain a consistent sleep schedule.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;What are the three primary colors?&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;The three primary colors are red, blue, and yellow.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    ...</span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<p>Vicuna的模型效果比Alpaca好不少，而且很好的支持了多语言。它的秘诀在于其训练数据与Alpaca通过Self-Instruct的机制生成的数据不一样，质量要高很多。Vicuna的数据来源于 <a target="_blank" rel="noopener" href="http://ShareGPT.com">ShareGPT.com</a> 网站上大家分享的与ChatGPT聊天的数据。</p>
+<p>ColossalChat模型的性能也可以与ChatGPT比肩（信息来自代码仓库中的<a target="_blank" rel="noopener" href="https://medium.com/pytorch/colossalchat-an-open-source-solution-for-cloning-chatgpt-with-a-complete-rlhf-pipeline-5edf08fb538b">博客</a>），它的训练数据来源于<a target="_blank" rel="noopener" href="https://github.com/XueFuzhao/InstructionWild">InstructionWild</a>，这个数据集基于从Twitter获取的700个基础任务，然后采用与Alpaca类似的机制从OpenAI获取更多样性的任务及回复。</p>
+<h3 id="微调部分训练代码"><a class="markdownIt-Anchor" href="#微调部分训练代码"></a> 微调部分训练代码</h3>
+<p>阅读Alpaca和Vicuna的训练代码，可以发现训练代码非常短，主要是调用了transformers库中的Trainer类来完成训练。</p>
+<p>所以，要了解训练过程的代码，我们需要阅读一下transformers代码库中的相应代码。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/huggingface/transformers">Transformers</a> 是 Huggingface 打造的一个开源库。提供了数以千计的预训练模型，支持 100 多种语言的文本分类、信息抽取、问答、摘要、翻译、文本生成。其宗旨是为最先进的 NLP 技术提供易用性。 Transformers 提供了便于快速下载和使用的API，让你可以把预训练模型用在给定文本、在你的数据集上微调然后通过 model hub 与社区共享。同时，每个定义的 Python 模块均完全独立，方便修改和快速研究实验。（来自官方介绍）</p>
+<p>由于Alpaca和Vicuna采用LLaMA作为基础模型，我们主要关注LLaMA相关的代码。源代码在<a target="_blank" rel="noopener" href="https://github.com/huggingface/transformers/tree/main/src/transformers/models/llama">这个目录</a>下。</p>
+<p>模型的核心代码在<a target="_blank" rel="noopener" href="https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py">这里</a>，虽然Transformers库中的实现与Meta发布的源代码有所区别，但都是基于PyTorch库，并且模型结构是一致的，就不赘述了（想了解细节的请回顾<a href="%5B%E4%B8%8A%E4%B8%80%E7%AF%87%5D(https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/)">上一篇</a>）。 下面分析一下与模型训练相关的核心代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaForCausalLM</span>(<span class="title class_ inherited__">LlamaPreTrainedModel</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, config</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(config)</span><br><span class="line">        <span class="comment"># 根据配置初始化LLaMA模型，此模型的结构与Meta发布的LLaMA一致，除了不包含最后一层</span></span><br><span class="line">        self.model = LlamaModel(config)</span><br><span class="line">        <span class="comment"># 定义最后一层全连接层</span></span><br><span class="line">        self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=<span class="literal">False</span>)</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">...</span>):</span><br><span class="line">        <span class="comment"># 从LLaMA的模型获取预测的结果，并取最后一个Transformer块的计算结果</span></span><br><span class="line">        outputs = self.model(...)</span><br><span class="line">        hidden_states = outputs[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算模型输出</span></span><br><span class="line">        logits = self.lm_head(hidden_states)</span><br><span class="line"></span><br><span class="line">        loss = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> labels <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 取预测结果的前N-1个，使预测的下一个词与标签词对应。</span></span><br><span class="line">            shift_logits = logits[..., :-<span class="number">1</span>, :].contiguous()</span><br><span class="line">            <span class="comment"># 取标签数据的后N-1个，使预测的下一个词与标签词对应。</span></span><br><span class="line">            shift_labels = labels[..., <span class="number">1</span>:].contiguous()</span><br><span class="line">            <span class="comment"># 创建交叉熵损失，用于计算模型预测结果与标签之间的差异。</span></span><br><span class="line">            loss_fct = CrossEntropyLoss()</span><br><span class="line">            <span class="comment"># 将预测结果和标签进行形状变换，展平为二维张量。第一个维度为样本的数量，第二个维度为词汇表的大小。</span></span><br><span class="line">            shift_logits = shift_logits.view(-<span class="number">1</span>, self.config.vocab_size)</span><br><span class="line">            shift_labels = shift_labels.view(-<span class="number">1</span>)</span><br><span class="line">            <span class="comment"># 计算损失</span></span><br><span class="line">            loss = loss_fct(shift_logits, shift_labels)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> CausalLMOutputWithPast(loss=loss, logits=logits, ...)</span><br></pre></td></tr></table></figure>
+<p>上述对齐过程，可以举例解释如下：</p>
+<ul>
+<li>假设有一个句子作为输入文本序列：I love eating，模型将预测下一个词是什么。</li>
+<li>在这个例子中，预测结果序列为<code>love eating</code>，标签序列<code>I love eating</code>也应该调整为与预测序列一致。</li>
+<li>通过取预测结果的前N-1个及标签数据的后N-1个，就可以将logits与标签数据对齐。</li>
+</ul>
+<p>可以看到这里的训练代码其实非常简单，使用最常见的基于概率的交叉熵损失即可实现损失定义。至于反向传播过程，PyTorch已经为我们实现了，训练时程序可以自动计算梯度，我们无需实现反向传播的过程。</p>
+<h3 id="强化学习部分训练代码"><a class="markdownIt-Anchor" href="#强化学习部分训练代码"></a> 强化学习部分训练代码</h3>
+<p>下面来分析一下由ColossalAI实现的指令微调阶段的模型及代码。根据上面的分析，指令微调阶段分为三个步骤完成：1. 与第二阶段相同的监督微调； 2. 训练一个奖励模型；3. 训练一个强化学习模型。</p>
+<h4 id="监督微调"><a class="markdownIt-Anchor" href="#监督微调"></a> 监督微调</h4>
+<p>看起来第一步骤的代码与Alpaca和Vicuna的代码应该是一样的，不过ColossalAI为了支持在单卡上面做训练，采用了Lora的方式进行监督微调。</p>
+<p>Lora是一种少量参数模型微调的方法，由微软于2021年提出。其基本的思想是：</p>
+<ol>
+<li>冻结所有原来的大模型参数</li>
+<li>对某些层（一般是线性变换层）的参数，采用两个小矩阵合成一个与原参数大小一样的大矩阵（如采用一个10x2的矩阵A和一个2X10的矩阵B，两者的矩阵乘积就可以得到一个10x10的大矩阵C）</li>
+<li>计算时（前向计算），参数的值采用原参数矩阵加上合成矩阵的值作为最终参数矩阵的值</li>
+<li>微调时（反向传播），只更新上述小矩阵的参数</li>
+</ol>
+<p>具体代码在<a target="_blank" rel="noopener" href="https://github.com/hpcaitech/ColossalAI/blob/main/applications/Chat/examples/train_sft.py">这里</a>，以下是核心逻辑。（ColossalAI由于支持了多个模型，其代码比较长，以下是单独看LLaMA模型的简化后的代码。）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    strategy = ColossalAIStrategy(stage=<span class="number">2</span>, placement_policy=<span class="string">&#x27;cuda&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> strategy.model_init_context():</span><br><span class="line">        <span class="comment"># 将transformers库中的LlamaForCausalLM模型转化为Lora模型</span></span><br><span class="line">        model = convert_to_lora_module(LlamaForCausalLM.from_pretrained(args.pretrain), args.lora_rank)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备分词器</span></span><br><span class="line">    tokenizer = AutoTokenizer.from_pretrained(args.pretrain, padding_side=<span class="string">&quot;right&quot;</span>, ...)</span><br><span class="line">    tokenizer = prepare_llama_tokenizer_and_embedding(tokenizer, model)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备优化器</span></span><br><span class="line">    optim = HybridAdam(model.parameters(), lr=args.lr, clipping_norm=<span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备数据集</span></span><br><span class="line">    train_dataset = SFTDataset(train_data, tokenizer, max_len)</span><br><span class="line">    eval_dataset = SFTDataset(eval_data, tokenizer, max_len)</span><br><span class="line">    train_dataloader = DataLoader(train_dataset, ...)</span><br><span class="line">    eval_dataloader = DataLoader(eval_dataset, ...)</span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 构造训练器并开始训练</span></span><br><span class="line">    (model, optim) = strategy.prepare((model, optim))</span><br><span class="line">    trainer = SFTTrainer(model=model, ...)</span><br><span class="line">    trainer.fit(...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SFTTrainer</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">self, ...</span>):</span><br><span class="line">        <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(self.max_epochs):</span><br><span class="line">            <span class="comment"># 设置模型为训练模式</span></span><br><span class="line">            self.model.train()</span><br><span class="line">            <span class="comment"># 对数据集里面的每一个批次进行训练</span></span><br><span class="line">            <span class="keyword">for</span> batch_id, batch <span class="keyword">in</span> <span class="built_in">enumerate</span>(self.train_dataloader):</span><br><span class="line">                <span class="comment"># 执行模型前向计算</span></span><br><span class="line">                outputs = self.model(batch[<span class="string">&quot;input_ids&quot;</span>], batch[<span class="string">&quot;attention_mask&quot;</span>], batch[<span class="string">&quot;labels&quot;</span>])</span><br><span class="line">                <span class="comment"># 下面的代码采用了一种累计梯度的机制，可以让模型在批太小的场景下也能较为稳定的更新</span></span><br><span class="line">                <span class="comment"># 每次计算梯度时，将损失平均一下，再计算梯度</span></span><br><span class="line">                loss = outputs.loss</span><br><span class="line">                loss = loss / self.accumulation_steps</span><br><span class="line">                <span class="comment"># 计算梯度</span></span><br><span class="line">                self.strategy.backward(loss, self.model, self.optimizer)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 当达到定义的累计批次数时更新参数并将梯度置零</span></span><br><span class="line">                <span class="keyword">if</span> (batch_id + <span class="number">1</span>) % self.accumulation_steps == <span class="number">0</span>:</span><br><span class="line">                    self.strategy.optimizer_step(self.optimizer)  <span class="comment"># 更新参数</span></span><br><span class="line">                    self.optimizer.zero_grad()  <span class="comment"># 梯度置零</span></span><br><span class="line">                    self.scheduler.step()  <span class="comment"># 对学习率进行调整</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，上述代码中ColossalAI还贴心的采用了一种累计梯度的机制来支持小批微调。这是因为想要在少量的GPU资源上微调大模型，批大小不能设置太大，否则显存无法支持。关于累计梯度详细的解释，可以参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/595716023">这里</a>。</p>
+<h4 id="奖励模型"><a class="markdownIt-Anchor" href="#奖励模型"></a> 奖励模型</h4>
+<p>第二个步骤是定义并训练一个奖励模型，此模型可以判断哪些回复更好。ColossalAI依然基于大语言模型，并采用Lora微调，来实现这个奖励模型。</p>
+<p>具体代码在<a target="_blank" rel="noopener" href="https://github.com/hpcaitech/ColossalAI/blob/main/applications/Chat/examples/train_reward_model.py">这里</a>，以下是核心逻辑。（ColossalAI由于支持了多个模型，其代码比较长，以下是单独看LLaMA模型的简化后的代码。）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">args</span>):</span><br><span class="line">    strategy = ColossalAIStrategy(stage=<span class="number">2</span>, placement_policy=<span class="string">&#x27;cuda&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> strategy.model_init_context():</span><br><span class="line">        <span class="comment"># 定义基于LLaMA的奖励模型</span></span><br><span class="line">        model = LlamaRM(pretrained=args.pretrain, lora_rank=args.lora_rank)</span><br><span class="line">    <span class="comment"># 以下代码与监督微调部分类似</span></span><br><span class="line">    tokenizer = LlamaTokenizer.from_pretrained(args.pretrain)</span><br><span class="line">    tokenizer = prepare_llama_tokenizer_and_embedding(tokenizer, model)</span><br><span class="line">    optim = HybridAdam(model.parameters(), lr=<span class="number">5e-6</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义LogSig损失，LogSig损失是OpenAI在论文Training language models to follow instructions with human feedback中定义的损失函数</span></span><br><span class="line">    loss_fn = LogSigLoss()</span><br><span class="line"></span><br><span class="line">    data = load_dataset(args.dataset)</span><br><span class="line">    train_dataset = RmStaticDataset(data[<span class="string">&#x27;train&#x27;</span>], tokenizer, ...)</span><br><span class="line">    valid_dataset = RmStaticDataset(data[<span class="string">&#x27;test&#x27;</span>], tokenizer, ...)</span><br><span class="line">    train_dataloader = DataLoader(train_dataset, ...)</span><br><span class="line">    eval_dataloader = DataLoader(eval_dataset, ...)</span><br><span class="line"></span><br><span class="line">    (model, optim) = strategy.prepare((model, optim))</span><br><span class="line">    trainer = RewardModelTrainer(model=model, ...)</span><br><span class="line">    trainer.fit()</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LogSigLoss</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, chosen_reward: torch.Tensor, reject_reward: torch.Tensor</span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 根据OpenAI在论文中的损失计算公式计算损失，见下文的分析</span></span><br><span class="line">        probs = torch.sigmoid(chosen_reward - reject_reward)</span><br><span class="line">        log_probs = torch.log(probs)</span><br><span class="line">        loss = -log_probs.mean()</span><br><span class="line">        <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RewardModel</span>(<span class="title class_ inherited__">LoRAModule</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 转换为Lora模型，以便支持少量参数微调</span></span><br><span class="line">        self.convert_to_lora()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, sequences: torch.LongTensor, attention_mask: <span class="type">Optional</span>[torch.Tensor] = <span class="literal">None</span></span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 转换为Lora模型，以便支持少量参数微调</span></span><br><span class="line">        outputs = self.model(sequences, attention_mask=attention_mask)</span><br><span class="line">        last_hidden_states = outputs[<span class="string">&#x27;last_hidden_state&#x27;</span>]</span><br><span class="line">        values = self.value_head(last_hidden_states)[:, :-<span class="number">1</span>]</span><br><span class="line">        value = values.mean(dim=<span class="number">1</span>).squeeze(<span class="number">1</span>)    <span class="comment"># ensure shape is (B)</span></span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaRM</span>(<span class="title class_ inherited__">RewardModel</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 从预训练模型文件中加载LLaMA的基础模型，使用transformers库的实现，无最后一个线性层</span></span><br><span class="line">        model = LlamaModel.from_pretrained(pretrained)</span><br><span class="line">        <span class="comment"># 定义线性最后层，输出维度为1，即一个数值型的奖励值</span></span><br><span class="line">        value_head = nn.Linear(model.config.hidden_size, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>参考Huggingface上面的数据集，可了解到训练奖励模型用到的数据示例为：</p>
+<ul>
+<li><strong>prompt (string)</strong>: Human: I am trying to write a fairy tale. What is the most popular plot? Assistant: The … Human: The … Assistant:</li>
+<li><strong>response (string)</strong>: This sounds like a really interesting modern retelling of the story!</li>
+<li><strong>chosen (string)</strong>: This sounds like a really interesting modern retelling of the story!</li>
+<li><strong>rejected (string)</strong>: And the prince and the princess both decide that they are more powerful together than apart?</li>
+</ul>
+<p>通过上面的分析，可以知道，奖励模型可以为每一个回复生成一个奖励值。这个奖励值就可以用于训练强化学习模型了。</p>
+<p>对于奖励模型的训练，OpenAI论文原文解释如下：</p>
+<blockquote>
+<p>RM是在一个包含两个模型输出之间比较的数据集上进行训练的。他们使用交叉熵损失，将比较结果作为标签，而奖励之间的差异表示了一个人类标注者更喜欢其中一个回答的对数几率。为了加快比较收集的速度，我们向标注者展示了K = 4至K = 9个回答供其进行排名。这为每个提示产生了K²个比较。由于每个标注任务中的比较非常相关，我们发现，如果我们简单地将比较混洗到一个数据集中，对数据集进行一次遍历就会导致奖励模型过拟合（如果将每个可能的K²个比较视为单独的数据点，那么每个完成将可能被用于K-1个独立的梯度更新。模型往往在一个epoch后出现过拟合，因此在一个epoch内重复数据也会导致它出现过拟合）。相反，我们将每个提示的所有K²个比较作为单个批次元素进行训练。这样做在计算上更加高效，因为每个完成（completion）只需要一次RM的前向传播（而不是K个完成需要K²次前向传播），并且由于不再过拟合，验证准确度和对数损失都有显著提升。</p>
+</blockquote>
+<p>损失计算公式为：</p>
+<p><img data-src="/attaches/2023/2023-05-20-chatgpt-training/rm.png" alt="Loss of Reward Model" /></p>
+<blockquote>
+<p>其中，rθ(x, y)是奖励模型对于提示x和完成y的标量输出，具有参数θ；yw是在yw和yl这一对完成中更受青睐的完成；D是人类比较的数据集。<br />
+最后，由于奖励模型的损失对于奖励的偏移是不变的，我们使用偏置对奖励模型进行归一化，以使标注者的演示在进行强化学习之前获得平均得分为0。</p>
+</blockquote>
+<h4 id="强化学习模型"><a class="markdownIt-Anchor" href="#强化学习模型"></a> 强化学习模型</h4>
+<p>强化学习模型是最为复杂的部分，涉及很多新的知识点，限于篇幅，待下一篇继续分析。</p>
+<p>不过，事实上基于前面的监督微调部分及奖励模型部分代码，我们似乎已经能窥探到强化学习部分的内容了。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>到这里，我们就分析完了ChatGPT类模型的训练和微调代码。在分析代码时，我们有意忽略了很多细节及模型并行处理的部分代码，这些对于我们理解模型帮助不大。</p>
+<p>自ChatGPT发布以来，很多人认为这是一个人类走向通用人工智能的突破，也有一些人认为它其实没什么本质的改进。有很多人对自己的职业发展产生了很深的焦虑感，也有很多人感觉触碰到了科幻世界中的未来，还有很多人觉得又是一个可以好好捞一把的机会。</p>
+<p>也许每个人都有必要去了解一下机器学习技术的原理，这样才能形成对它的理性的认知。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>这是此系列的第四篇，ChatGPT的模型训练。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ul>
+<li>alpaca博客介绍：<a target="_blank" rel="noopener" href="https://crfm.stanford.edu/2023/03/13/alpaca.html">https://crfm.stanford.edu/2023/03/13/alpaca.html</a></li>
+<li>LLAMA Paper：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2302.13971v1">https://arxiv.org/abs/2302.13971v1</a></li>
+<li>Self-Instruct: Aligning Language Model with Self Generated Instructions：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2212.10560">https://arxiv.org/abs/2212.10560</a></li>
+<li>Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90%* ChatGPT Quality: <a target="_blank" rel="noopener" href="https://lmsys.org/blog/2023-03-30-vicuna/">https://lmsys.org/blog/2023-03-30-vicuna/</a></li>
+<li>OpenAI开发的ChatGPT资料（Training language models to follow instructions<br />
+with human feedback）： <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.02155.pdf">https://arxiv.org/pdf/2203.02155.pdf</a></li>
+<li>OpenAI开放的GPT-3资料（Language Models are Few-Shot Learners）: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2005.14165.pdf">https://arxiv.org/pdf/2005.14165.pdf</a></li>
+<li>OpenAI开放的GPT-2资料（Language Models are Unsupervised Multitask Learners）: <a target="_blank" rel="noopener" href="https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf">https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf</a></li>
+<li>OpenAI开放的GPT资料（Improving Language Understanding by Generative Pre-Training): <a target="_blank" rel="noopener" href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf</a></li>
+<li>梯度累加：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/595716023">https://zhuanlan.zhihu.com/p/595716023</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/03/26/wechatgpt/" rel="bookmark">微信中的智能助手--WeChatGPT</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/04/12/chatgpt-from-programmer-point-of-view/" rel="bookmark">程序员眼中的ChatGPT</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/04/25/chatgpt-a-technical-summary/" rel="bookmark">ChatGPT使用的技术概览</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/05/18/chatgpt-transformer/" rel="bookmark">ChatGPT使用的Transfomer模型</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/05/25/chatgpt-rlhf/" rel="bookmark">ChatGPT的自动优化</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/ai/" rel="tag"><i class="fa fa-tag"></i> AI</a>
+              <a href="/tags/ml/" rel="tag"><i class="fa fa-tag"></i> ML</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 机器学习</a>
+              <a href="/tags/chatgpt/" rel="tag"><i class="fa fa-tag"></i> ChatGPT</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/18/chatgpt-transformer/" rel="prev" title="ChatGPT使用的Transfomer模型">
+      <i class="fa fa-chevron-left"></i> ChatGPT使用的Transfomer模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/05/25/chatgpt-rlhf/" rel="next" title="ChatGPT的自动优化">
+      ChatGPT的自动优化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text"> 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text"> 训练过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text"> 模型训练代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90"><span class="nav-number">3.1.</span> <span class="nav-text"> 数据生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83%E9%83%A8%E5%88%86%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text"> 微调部分训练代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E9%83%A8%E5%88%86%E8%AE%AD%E7%BB%83%E4%BB%A3%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text"> 强化学习部分训练代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%91%E7%9D%A3%E5%BE%AE%E8%B0%83"><span class="nav-number">3.3.1.</span> <span class="nav-text"> 监督微调</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%96%E5%8A%B1%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.3.2.</span> <span class="nav-text"> 奖励模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.3.3.</span> <span class="nav-text"> 强化学习模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text"> 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">580k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">16:06</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?36.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '5838934cce42f634fd7bedcea349ee9a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

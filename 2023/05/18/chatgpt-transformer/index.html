@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见这里）。 从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。 ChatGPT的内容很多，我计划采用一个系列，多篇文章来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT使用的Transfomer模型">
+<meta property="og:url" content="http://brightliao.com/2023/05/18/chatgpt-transformer/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见这里）。 从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。 ChatGPT的内容很多，我计划采用一个系列，多篇文章来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-18-chatgpt-transformer/model-archi.png">
+<meta property="article:published_time" content="2023-05-18T12:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-16T09:54:05.636Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2023/2023-05-18-chatgpt-transformer/model-archi.png">
+
+<link rel="canonical" href="http://brightliao.com/2023/05/18/chatgpt-transformer/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ChatGPT使用的Transfomer模型 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-数据">
+
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">37</span></a>
+
+  </li>
+        <li class="menu-item menu-item-机器学习">
+
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
+
+  </li>
+        <li class="menu-item menu-item-敏捷">
+
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-技术">
+
+    <a href="/tech/" rel="section"><i class="fa fa-quidditch fa-fw"></i>技术<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-架构">
+
+    <a href="/arch/" rel="section"><i class="fa fa-warehouse fa-fw"></i>架构<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-其他">
+
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">25</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search" style="border-bottom: solid 1px #eee; margin-bottom: 8px;">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">51</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">133</span></a>
+
+  </li>
+
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/05/18/chatgpt-transformer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ChatGPT使用的Transfomer模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-05-18 20:00:00" itemprop="dateCreated datePublished" datetime="2023-05-18T20:00:00+08:00">2023-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-16 17:54:05" itemprop="dateModified" datetime="2023-06-16T17:54:05+08:00">2023-06-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/chatgpt/" itemprop="url" rel="index"><span itemprop="name">ChatGPT</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/05/18/chatgpt-transformer/" class="post-meta-item leancloud_visitors" data-flag-title="ChatGPT使用的Transfomer模型" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>18k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>30 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
+<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
+<p>这是此系列的第三篇，ChatGPT使用的Transfomer模型。</p>
+<span id="more"></span>
+<p><a href="https://brightliao.com/2023/04/25/chatgpt-a-technical-summary/">上一篇</a>文章我们聊到了ChatGPT使用的技术概览。了解了其最核心的模型结构是Transformer结构，本文来聊一聊Transformer模型。</p>
+<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
+<p>Transformer的网络结构最早是Google在2017年的时候提出的，论文名称是《Attention Is All You Need》。从论文名称也能看出，Transformer结构强调了注意力机制在网络结构中的表示和应用。</p>
+<p>当时这篇论文面世时，不少研究人员还认为标题有点夸大了注意力机制的作用。现在来看，似乎还真有注意力机制一统天下的势头。</p>
+<p>下面我们将一起来揭开这个网络结构的面纱。</p>
+<h2 id="原始的transfomer模型"><a class="markdownIt-Anchor" href="#原始的transfomer模型"></a> 原始的Transfomer模型</h2>
+<p>原始的Transformer的整体结构比较复杂，以下是来自论文中的截图。</p>
+<p><img data-src="/attaches/2023/2023-05-18-chatgpt-transformer/model-archi.png" alt="Model Architecture" /></p>
+<p>可以看到，Transformer网络的主要由编码器和解码器组成。虽然看起来复杂，但实际上，编码器和解码器都是由多个相同的层堆叠而成，并且编码器和解码器结构也很相似。</p>
+<p><strong>编码器（Encoder）每一层内结构为：</strong></p>
+<ul>
+<li>输入嵌入（Input Embedding）：将输入序列中的每个单词或符号转换为连续的向量表示。</li>
+<li>位置编码（Positional Encoding）：为输入序列中的每个位置添加一个表示位置信息的向量。</li>
+<li>多头自注意力（Multi-Head Self-Attention）：通过对输入序列中的每个位置进行自注意力计算，从全局上理解输入序列间的关系和重要性。</li>
+<li>前馈神经网络（Feed-Forward Neural Network）：在每个位置上应用一个全连接前馈神经网络，以对自注意力输出进行进一步的非线性变换。</li>
+<li>残差连接（Residual Connections）和层归一化（Layer Normalization）：在每个子层之间应用残差连接和层归一化，以帮助梯度流动和减少训练中的梯度消失问题。</li>
+</ul>
+<p><strong>解码器（Decoder）每一层内结构为：</strong></p>
+<ul>
+<li>编码器-解码器注意力（Encoder-Decoder Attention）：除了自注意力，解码器还对编码器的输出进行注意力计算，以利用编码器对输入序列的理解。</li>
+<li>解码器自注意力（Decoder Self-Attention）：类似于编码器的自注意力，但在解码器中应用于当前位置以前的输出。</li>
+<li>前馈神经网络：与编码器中的前馈神经网络相同。</li>
+<li>残差连接和层归一化：与编码器中的残差连接和层归一化相同。</li>
+</ul>
+<p>通过堆叠多个编码器和解码器层，Transformer可以具备强大的能力。注意力机制还允许Transformer网络模型自动学习输入序列中的各个单词的依赖关系，并且可以通过并行计算来加速计算过程。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/338817680">这里</a>有一篇博客详细的介绍了每一个结构内部的实现机制。推荐大家阅读以了解细节。</p>
+<p>如果希望阅读完整的代码，Transformer的完整代码在Google的TensorFlow框架和Meta的PyTorch框架中均有实现。TensorFlow的代码入库在<a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/models/transformer.py">这里</a>，不过其代码风格偏函数式风格，并不是很容易理解。PyTorch中的代码相对更容易理解，有兴趣阅读代码的可以看<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/main/torch/nn/modules/transformer.py">这里</a>，只需要阅读其<code>forward</code>函数即可了解到整个网络的结构。</p>
+<h2 id="chatgpt中的transfomer模型"><a class="markdownIt-Anchor" href="#chatgpt中的transfomer模型"></a> ChatGPT中的Transfomer模型</h2>
+<p>ChatGPT中的Transformer模型与原始的Transformer模型有一些差异。主要区别是将Transformer中的Encoder-Decoder双模块设计简化为只有一个Decoder模块。其实也可以认为是只有一个Encoder模块，因为Encoder和Decoder模块本来就很相似。这里之所为大家认为是Decoder，是因为Transformer和ChatGPT的Decoder是自循环的，因为Decoder会根据前一部分的文本生成下一个单词。</p>
+<p>在这个单模块中，Self-Attention被替换为了Masked Self-Attention。</p>
+<p>Masked Self-Attention在计算时，会将当前输入文本中不存在的部分给遮蔽掉，只对已知的文本信息进行计算。遮蔽其实只是在训练阶段有效，因为训练阶段的输入文本是已知的所有文本。遮蔽掉当前单词的后续单词就可以让模型在无法获取后面单词的信息，使得这一场景与预测阶段的一致。</p>
+<p>作为一个程序员，如果不能从代码的粒度去理解，始终会觉得理解不够透彻。下面我们结合代码来详细了解一下Transformer的计算过程。</p>
+<p>在这里，我将用来做LLAMA模型的代码实现作为参考，与大家一起结合代码进行分析。LLAMA模型是Meta的研究团队开发的一个与ChatGPT类似的模型，其核心模型结构与ChatGPT的模型是一致的。</p>
+<p>LLAMA的实现代码非常短，很适合拿来作为学习材料。完整的代码在<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama/blob/main/llama/model.py">这里</a>。下面将结合代码与Transformer的原理进行分析。</p>
+<h3 id="文本生成逻辑"><a class="markdownIt-Anchor" href="#文本生成逻辑"></a> 文本生成逻辑</h3>
+<p>LLAMA生成文本的代码入口在<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama/blob/main/example.py">这里</a>，下面说明一下代码中关键的行为：</p>
+<p>（为了说明代码主要的功能，以下代码仅截取了关键的代码行，并进行了注释，以便大家更容易阅读。）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 整个程序的入口函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">...</span>):</span><br><span class="line">    <span class="comment"># 调用下面的load函数，创建一个LLaMA对象，用于生成文本</span></span><br><span class="line">    generator = load(...)</span><br><span class="line">    <span class="comment"># 调用LLaMA对象，根据传入的文本，以及最大生成长度、温度、单词概率选择</span></span><br><span class="line">    results = generator.generate(prompts, max_gen_len=<span class="number">256</span>, temperature=temperature, top_p=top_p)</span><br><span class="line">    <span class="comment"># 打印结果</span></span><br><span class="line">    <span class="keyword">for</span> result <span class="keyword">in</span> results:</span><br><span class="line">        <span class="built_in">print</span>(result)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\n==================================\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load</span>(<span class="params">...</span>) -&gt; LLaMA:</span><br><span class="line">    <span class="comment"># 加载保存的模型参数</span></span><br><span class="line">    checkpoint = torch.load(ckpt_path, map_location=<span class="string">&quot;cpu&quot;</span>)</span><br><span class="line">    model_args: ModelArgs = ModelArgs(...)</span><br><span class="line">    <span class="comment"># 初始化一个Tokenizer对象，此Tokenizer其实也是一个机器学习模型，用于将文本切分为单词，并将单词编码为整型数值</span></span><br><span class="line">    tokenizer = Tokenizer(model_path=tokenizer_path)</span><br><span class="line">    <span class="comment"># 初始化核心的Transformer模型</span></span><br><span class="line">    model = Transformer(model_args)</span><br><span class="line">    <span class="comment"># 构造LLaMA的文本生成器对象，并返回</span></span><br><span class="line">    generator = LLaMA(model, tokenizer)</span><br><span class="line">    <span class="keyword">return</span> generator</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LLaMA</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generate</span>(<span class="params">...</span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:</span><br><span class="line">        <span class="comment"># 将输入的文本编码为数值</span></span><br><span class="line">        prompt_tokens = [self.tokenizer.encode(x, bos=<span class="literal">True</span>, eos=<span class="literal">False</span>) <span class="keyword">for</span> x <span class="keyword">in</span> prompts]</span><br><span class="line">        <span class="comment"># 用上面的文本数值编码创建一个适合模型输入的矩阵（不超过模型能支持的最大长度），长度太短的文本用pad_id填充</span></span><br><span class="line">        tokens = torch.full((bsz, total_len), self.tokenizer.pad_id).cuda().long()</span><br><span class="line">        <span class="keyword">for</span> k, t <span class="keyword">in</span> <span class="built_in">enumerate</span>(prompt_tokens):</span><br><span class="line">            tokens[k, : <span class="built_in">len</span>(t)] = torch.tensor(t).long()</span><br><span class="line">        <span class="comment"># 根据配置的文本生成长度，迭代生成文本，一次生成一个单词</span></span><br><span class="line">        <span class="keyword">for</span> cur_pos <span class="keyword">in</span> <span class="built_in">range</span>(start_pos, total_len):</span><br><span class="line">            <span class="comment"># 调用模型进行计算</span></span><br><span class="line">            logits = self.model.forward(tokens[:, prev_pos:cur_pos], prev_pos)</span><br><span class="line">            <span class="keyword">if</span> temperature &gt; <span class="number">0</span>:</span><br><span class="line">                <span class="comment"># 如果有传入温度参数，将输出结果根据温度放大，并选择累计概率达到top-p概率的那些结果</span></span><br><span class="line">                <span class="comment"># 关于温度和top-p参数的详细解释见下文</span></span><br><span class="line">                probs = torch.softmax(logits / temperature, dim=-<span class="number">1</span>)</span><br><span class="line">                next_token = sample_top_p(probs, top_p)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># 如果没有传入，则直接选择概率最大的那个单词</span></span><br><span class="line">                next_token = torch.argmax(logits, dim=-<span class="number">1</span>)</span><br><span class="line">            <span class="comment"># 将得到的单词加回原来的文本，继续生成下一个单词</span></span><br><span class="line">            tokens[:, cur_pos] = next_token</span><br><span class="line">        <span class="comment"># 通过单词编码器将生成的数值型文本反编码为可读的文本，并返回</span></span><br><span class="line">        decoded = []</span><br><span class="line">        <span class="keyword">for</span> i, t <span class="keyword">in</span> <span class="built_in">enumerate</span>(tokens.tolist()):</span><br><span class="line">            decoded.append(self.tokenizer.decode(t))</span><br><span class="line">        <span class="keyword">return</span> decoded</span><br></pre></td></tr></table></figure>
+<p>这就是入口代码的主要逻辑。下面我们分析一下涉及到的几个核心子步骤。</p>
+<h4 id="词嵌入"><a class="markdownIt-Anchor" href="#词嵌入"></a> 词嵌入</h4>
+<p>词嵌入是将文本编码为数值的过程。LLaMA在进行词嵌入时，选择了<code>sentencepiece</code>库来实现。</p>
+<p>SentencePiece 是一个开源的文本处理库，用于处理和生成分词模型。它的主要作用是将文本分割成子词（subwords）或标记（tokens），以便用于各种自然语言处理任务，例如机器翻译、文本分类、命名实体识别等。</p>
+<p>SentencePiece 提供了基于不同分割算法的分词方法，包括未经训练的模型和基于训练数据的模型。它支持的分割算法包括 BPE（Byte-Pair Encoding）、Unigram 等。使用 SentencePiece，可以根据具体任务和需求创建自定义的分词模型。</p>
+<p>通过使用 SentencePiece 库，可以实现以下功能：</p>
+<ul>
+<li>文本分词：将文本分割成子词或标记，提供更细粒度的语言处理单元。</li>
+<li>词汇表生成：根据训练数据生成词汇表，用于构建词汇表索引或编码器-解码器模型。</li>
+<li>子词编码：将文本转换为子词序列，以便在模型中进行处理和表示。</li>
+<li>子词解码：将子词序列转换回原始文本，用于生成文本或进行后处理。</li>
+</ul>
+<p>SentencePiece 被广泛应用于各种自然语言处理任务和模型，特别是在跨语言和非常规语言处理方面具有很大的灵活性和适应性。它的灵活性使得可以根据不同语言、文本类型和任务的需求，定制化地构建分词模型，从而提高模型性能和效果。</p>
+<p>下面是<code>Tokenizer</code>的核心代码分析：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Tokenizer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, model_path: <span class="built_in">str</span></span>):</span><br><span class="line">        <span class="comment"># 根据模型文件创建SentencePieceProcessor对象</span></span><br><span class="line">        self.sp_model = SentencePieceProcessor(model_file=model_path)</span><br><span class="line">        <span class="comment"># 保存词汇表大小及一些关键的ID，如开始、结束符、填充符等</span></span><br><span class="line">        self.n_words: <span class="built_in">int</span> = self.sp_model.vocab_size()</span><br><span class="line">        self.bos_id: <span class="built_in">int</span> = self.sp_model.bos_id()</span><br><span class="line">        self.eos_id: <span class="built_in">int</span> = self.sp_model.eos_id()</span><br><span class="line">        self.pad_id: <span class="built_in">int</span> = self.sp_model.pad_id()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">self, s: <span class="built_in">str</span>, bos: <span class="built_in">bool</span>, eos: <span class="built_in">bool</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        <span class="comment"># 将文本编码为数值序列，并根据参数添加开始、结束符</span></span><br><span class="line">        t = self.sp_model.encode(s)</span><br><span class="line">        <span class="keyword">if</span> bos:</span><br><span class="line">            t = [self.bos_id] + t</span><br><span class="line">        <span class="keyword">if</span> eos:</span><br><span class="line">            t = t + [self.eos_id]</span><br><span class="line">        <span class="keyword">return</span> t</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">self, t: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 将文本数值序列反编码为可读文本</span></span><br><span class="line">        <span class="keyword">return</span> self.sp_model.decode(t)</span><br></pre></td></tr></table></figure>
+<h4 id="温度参数"><a class="markdownIt-Anchor" href="#温度参数"></a> 温度参数</h4>
+<p>生成文本时，有两个重要的参数：温度（temperature）和top-p。它们是如何产生作用的呢？</p>
+<p>温度参数（temperature）在生成文本过程中起到控制多样性的作用。较高的温度值会增加生成文本时的随机性，使得模型更加倾向于选择概率较小的标记，从而产生更多样化的输出。</p>
+<p>具体来说，温度参数会影响 <code>softmax</code> 操作中的指数运算。在 <code>softmax</code> 函数中，通过将 <code>logits</code> 值进行指数运算并归一化，将其转换为概率分布。温度参数的作用是调整指数运算的敏感度。较高的温度值会使指数运算的结果更加平滑，增加了各个标记之间的概率差异，降低了概率较大的标记相对于概率较小的标记的优势。这样，在生成过程中，模型更有可能选择概率较小的标记，从而产生更多样化的输出。</p>
+<p>举个例子，假设有一个具有三个候选标记的生成任务，对应的 <code>logits</code> 为 <code>[1.0, 2.0, 3.0]</code>。当温度参数为较低的值（例如1.0）时，通过 <code>softmax</code> 运算后，对应的概率分布为 <code>[0.09, 0.24, 0.67]</code>。可以看到，概率较大的标记 3 相对于其他标记有明显优势，模型更有可能选择标记 3。而当温度参数为较高的值（例如2.0）时，通过 <code>softmax</code> 运算后，对应的概率分布为 <code>[0.02, 0.11, 0.87]</code>。可以看到，概率差异缩小，标记 3 相对于其他标记的优势减小，模型更容易在标记之间进行随机选择。</p>
+<p>因此，通过调整温度参数，可以在生成文本时控制多样性。较高的温度值可以增加生成文本的随机性，产生更多样化的输出；而较低的温度值可以增加生成文本的准确性，更倾向于选择概率较大的标记。根据具体的任务需求和应用场景，可以选择合适的温度值来平衡准确性和多样性之间的权衡。</p>
+<h4 id="top-p参数"><a class="markdownIt-Anchor" href="#top-p参数"></a> top-p参数</h4>
+<p><code>top-p</code>参数用于控制生成文本时的文本选择范围。</p>
+<p>实现时，首先，计算 <code>softmax</code> 操作后的概率分布。然后，按照概率从高到低的顺序对概率进行排序。接下来，按照累积概率的方式逐个考虑排名靠前的标记，直到累积概率超过 <code>top-p</code> 的阈值。此时，只有排名靠前的文本才会被保留在选择范围内，其他排名较低的文本会被舍弃。</p>
+<p>换句话说，<code>top-p</code> 参数通过动态地确定生成时所需的标记范围，使得生成的结果更加多样化且避免选择概率极低的标记。这种方式比传统的 <code>top-k</code> 采样更加灵活，因为 <code>top-p</code> 参数不依赖于固定的 <code>k</code> 值，而是根据概率分布动态地确定需要保留的标记数量。</p>
+<p>下面函数是相关的实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sample_top_p</span>(<span class="params">probs, p</span>):</span><br><span class="line">    <span class="comment"># 对概率进行排序并记录排序后的索引</span></span><br><span class="line">    probs_sort, probs_idx = torch.sort(probs, dim=-<span class="number">1</span>, descending=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 计算累积概率</span></span><br><span class="line">    probs_sum = torch.cumsum(probs_sort, dim=-<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 创建一个布尔掩码，用于确定哪些概率需要保留</span></span><br><span class="line">    mask = probs_sum - probs_sort &gt; p</span><br><span class="line">    <span class="comment"># 将超过 top-p 阈值的概率置为 0</span></span><br><span class="line">    probs_sort[mask] = <span class="number">0.0</span></span><br><span class="line">    <span class="comment"># 将概率归一化，使其和为 1</span></span><br><span class="line">    probs_sort.div_(probs_sort.<span class="built_in">sum</span>(dim=-<span class="number">1</span>, keepdim=<span class="literal">True</span>))</span><br><span class="line">    <span class="comment"># 从归一化的概率分布中进行多项式采样，得到下一个标记</span></span><br><span class="line">    next_token = torch.multinomial(probs_sort, num_samples=<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 使用排序后的索引获取对应的下一个标记</span></span><br><span class="line">    next_token = torch.gather(probs_idx, -<span class="number">1</span>, next_token)</span><br><span class="line">    <span class="keyword">return</span> next_token</span><br></pre></td></tr></table></figure>
+<p>函数接受两个参数：<code>probs</code> 是经过 <code>softmax</code> 操作得到的概率分布，<code>p</code> 是 <code>top-p</code> 参数，用于确定保留的概率范围。</p>
+<p>根据<code>top-p</code>进行结果选择的逻辑如下：</p>
+<ul>
+<li>对概率 <code>probs</code> 进行排序，并记录排序后的索引，使得概率从高到低排列。</li>
+<li>计算概率的累积和。</li>
+<li>创建一个布尔掩码，用于确定哪些概率需要保留。如果累积概率超过了 <code>top-p</code> 阈值，则对应的概率置为 0。</li>
+<li>将概率归一化，使其和为 1，以便进行多项式采样。</li>
+<li>使用多项式采样方法从归一化的概率分布中选取一个下一个标记。</li>
+<li>使用排序后的索引 <code>probs_idx</code> 获取对应的下一个标记。</li>
+<li>返回选取的下一个标记 <code>next_token</code>。</li>
+<li>这段代码实现了根据 <code>top-p</code> 参数选择结果的逻辑，确保生成的结果在给定的概率范围内，并增加生成文本的多样性。</li>
+</ul>
+<h3 id="模型结构"><a class="markdownIt-Anchor" href="#模型结构"></a> 模型结构</h3>
+<p>在生成文本的主流程中，构造了Transformer模型进行下一个单词的预测，下面分析一下Transformer模型的结构。</p>
+<p>下面的代码需要有一些PyTorch构建神经网络模型的基础知识。对于不了解相关知识的同学，以下是一些要点：</p>
+<ul>
+<li>PyTorch抽象了一个Module类用于构建基本的模型构造块</li>
+<li>在构建模型构造块时，需要继承Module类并实现其forward方法将输入变换为输出</li>
+<li>在构建模型构造块时，需要在类的初始化方法<code>__init__</code>中初始化用到的子构造块</li>
+<li>在构建模型构造块时，一般不需要关注参数更新的部分，PyTorch提供了自动计算梯度（参数的偏导数）的机制</li>
+<li>PyTorch提供了很多内置的模块或函数，如<code>full</code> <code>triu</code> <code>matmul</code> <code>silu</code>等，帮助我们更快的复用标准构造块</li>
+</ul>
+<p>Transformer相关的完整代码在<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/llama/blob/main/llama/model.py">这里</a>，下面分析一下关键的实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Transformer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, params: ModelArgs</span>):</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment"># 构造文本嵌入，用于将文本转化为向量表示</span></span><br><span class="line">        self.tok_embeddings = ParallelEmbedding(params.vocab_size, params.dim, ...)</span><br><span class="line">        <span class="comment"># 根据模型参数指定的Transformer层数，创建核心网络结构</span></span><br><span class="line">        self.layers = torch.nn.ModuleList()</span><br><span class="line">        <span class="keyword">for</span> layer_id <span class="keyword">in</span> <span class="built_in">range</span>(params.n_layers):</span><br><span class="line">            self.layers.append(TransformerBlock(layer_id, params))</span><br><span class="line">        <span class="comment"># RMSNorm归一化算子，见下文解释</span></span><br><span class="line">        self.norm = RMSNorm(params.dim, eps=params.norm_eps)</span><br><span class="line">        <span class="comment"># 对输出的文本进行最终的线性变换的算子</span></span><br><span class="line">        self.output = ColumnParallelLinear(params.dim, params.vocab_size, bias=<span class="literal">False</span>, ...)</span><br><span class="line">        <span class="comment"># 预计算频率的复数表示，见下文旋转嵌入部分的分析</span></span><br><span class="line">        self.freqs_cis = precompute_freqs_cis(self.params.dim // self.params.n_heads, self.params.max_seq_len * <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, tokens: torch.Tensor, start_pos: <span class="built_in">int</span></span>):</span><br><span class="line">        <span class="comment"># 对传入的文本取嵌入向量</span></span><br><span class="line">        h = self.tok_embeddings(tokens)</span><br><span class="line">        <span class="comment"># 预计算旋转嵌入的旋转频率。可以减少在每个前向传播步骤中的重复计算，提高模型的运行效率。</span></span><br><span class="line">        <span class="comment"># 这里用到了一些复数计算技巧，详见下文注意力机制部分分析</span></span><br><span class="line">        self.freqs_cis = self.freqs_cis.to(h.device)</span><br><span class="line">        freqs_cis = self.freqs_cis[start_pos : start_pos + seqlen]</span><br><span class="line">        <span class="comment"># 在传入的文本长度大于1时，构造一个上三角矩阵作为掩码，用于遮盖未生成的字词部分</span></span><br><span class="line">        mask = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> seqlen &gt; <span class="number">1</span>:</span><br><span class="line">            mask = torch.full((<span class="number">1</span>, <span class="number">1</span>, seqlen, seqlen), <span class="built_in">float</span>(<span class="string">&quot;-inf&quot;</span>), device=tokens.device)</span><br><span class="line">            mask = torch.triu(mask, diagonal=start_pos + <span class="number">1</span>).type_as(h)</span><br><span class="line">        <span class="comment"># 调用每一个Transfomer分层进行计算</span></span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> self.layers:</span><br><span class="line">            h = layer(h, start_pos, freqs_cis, mask)</span><br><span class="line">        <span class="comment"># 归一化最后的结果</span></span><br><span class="line">        h = self.norm(h)</span><br><span class="line">        <span class="comment"># 取计算出来的最后一个词，并进行最后的线性变换后作为输出返回</span></span><br><span class="line">        output = self.output(h[:, -<span class="number">1</span>, :])  <span class="comment"># only compute last logits</span></span><br><span class="line">        <span class="keyword">return</span> output.<span class="built_in">float</span>()</span><br></pre></td></tr></table></figure>
+<p>上述代码用到的核心结构<code>TransformerBlock</code>代码分析如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TransformerBlock</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, layer_id: <span class="built_in">int</span>, args: ModelArgs</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># 构造注意力部分结构，见下文注意力机制部分</span></span><br><span class="line">        self.attention = Attention(args)</span><br><span class="line">        <span class="comment"># 构造前馈神经网络部分结构，见下文前馈神经网络部分</span></span><br><span class="line">        self.feed_forward = FeedForward(dim=args.dim, hidden_dim=<span class="number">4</span> * args.dim, ...)</span><br><span class="line">        <span class="comment"># 注意力部分用到的RMSNorm归一化算子，见下文解释</span></span><br><span class="line">        self.attention_norm = RMSNorm(args.dim, eps=args.norm_eps)</span><br><span class="line">        <span class="comment"># 前馈神经网络部分用到的RMSNorm归一化算子，见下文解释</span></span><br><span class="line">        self.ffn_norm = RMSNorm(args.dim, eps=args.norm_eps)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x: torch.Tensor, start_pos: <span class="built_in">int</span>, freqs_cis: torch.Tensor, mask: <span class="type">Optional</span>[torch.Tensor]</span>):</span><br><span class="line">        <span class="comment"># 将输入归一化，并计算注意力，然后加上x以形成残差结构</span></span><br><span class="line">        h = x + self.attention.forward(self.attention_norm(x), start_pos, freqs_cis, mask)</span><br><span class="line">        <span class="comment"># 将上述结果进行归一化，并计算前馈神经网络部分，然后加上h以形成残差结构</span></span><br><span class="line">        out = h + self.feed_forward.forward(self.ffn_norm(h))</span><br><span class="line">        <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure>
+<h3 id="注意力机制"><a class="markdownIt-Anchor" href="#注意力机制"></a> 注意力机制</h3>
+<p>Transformer 中的注意力机制（Attention Mechanism）是核心组成部分之一，它在模型中用于捕捉输入序列中的相关信息，并为每个位置分配权重。</p>
+<p>注意力的意思就是让模型关注在重要的地方，权重比较高的位置将得到更多的关注。如何实现？通过在每个位置上计算一个加权和就可以了！</p>
+<p>Transformer 中使用的是自注意力机制（Self-Attention），即将输入序列中的每个位置视为查询（query）、键（key）和值（value）。通过计算查询与键的相似度得到权重分布，然后将权重与值进行加权求和得到每个位置的输出。</p>
+<p>下面是 Transformer 中自注意力机制的主要步骤：</p>
+<ul>
+<li>对输入序列进行线性变换，分别得到查询（Q）、键（K）和值（V）。</li>
+<li>计算查询与键的相似度分数，通常使用点积或其他函数（如缩放点积）计算相似度。</li>
+<li>对相似度分数进行归一化处理，通过 softmax 函数将分数转换为注意力权重。</li>
+<li>将权重与值进行加权求和，得到加权和作为该位置的输出。</li>
+<li>将每个位置的输出进行线性变换，得到最终的自注意力输出。</li>
+</ul>
+<p>自注意力机制的优势在于它能够捕捉输入序列中的长距离依赖关系，并且能够对不同位置之间的相关性进行灵活的建模。通过自注意力机制，Transformer 可以同时考虑输入序列中所有位置的信息，而无需像循环神经网络那样依次处理序列。</p>
+<p>在 Transformer 中，注意力机制通常通过多头注意力（Multi-Head Attention）来进行扩展，即使用多组不同的查询、键和值进行注意力计算，并将它们的输出进行拼接和线性变换，以增加模型的表达能力和学习能力。</p>
+<p>总结起来，注意力机制是 Transformer 模型中重要的组成部分，它通过计算查询与键的相似度来为每个位置分配权重，并将权重与值进行加权求和得到输出。它能够捕捉输入序列中的相关信息，提升模型的表达能力和学习能力。</p>
+<p><code>TransformerBlock</code>代码使用到的核心的<code>Attention</code>模块就是注意力机制的实现。这个模块的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Attention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, args: ModelArgs</span>):</span><br><span class="line">        <span class="comment"># 构造注意力查询（Q）、键（K）和值（V）所需要的线性变换算子</span></span><br><span class="line">        <span class="comment"># 这里直接用一个变换算子支持了多头的场景，因为每个头实际上计算方式是完全一样的，只是参数不同</span></span><br><span class="line">        self.wq = ColumnParallelLinear(args.dim, args.n_heads * self.head_dim, ...)</span><br><span class="line">        self.wk = ColumnParallelLinear(args.dim, args.n_heads * self.head_dim, ...)</span><br><span class="line">        self.wv = ColumnParallelLinear(args.dim, args.n_heads * self.head_dim, ...)</span><br><span class="line">        <span class="comment"># 构造对最终输出进行线性变换的算子</span></span><br><span class="line">        self.wo = RowParallelLinear(args.n_heads * self.head_dim, args.dim, ...)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x: torch.Tensor, start_pos: <span class="built_in">int</span>, freqs_cis: torch.Tensor, mask: <span class="type">Optional</span>[torch.Tensor]</span>):</span><br><span class="line">        <span class="comment"># 对输入序列进行线性变换，分别得到查询（Q）、键（K）和值（V）。</span></span><br><span class="line">        xq, xk, xv = self.wq(x), self.wk(x), self.wv(x)</span><br><span class="line">        <span class="comment"># 对查询和键应用旋转嵌入（Rotary Embedding）操作</span></span><br><span class="line">        <span class="comment"># 旋转嵌入是一种在注意力机制中引入周期性信息的技术，有助于模型捕捉序列的顺序关系</span></span><br><span class="line">        xq, xk = apply_rotary_emb(xq, xk, freqs_cis=freqs_cis)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 更新缓存中的键（K）和值（V），将当前位置的键和值存储在缓存中以供后续的注意力计算使用。</span></span><br><span class="line">        self.cache_k[:bsz, start_pos : start_pos + seqlen] = xk</span><br><span class="line">        self.cache_v[:bsz, start_pos : start_pos + seqlen] = xv</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 从缓存中获取用于注意力计算的键（K）和值（V），包括当前位置之前的所有位置。</span></span><br><span class="line">        keys = self.cache_k[:bsz, : start_pos + seqlen]</span><br><span class="line">        values = self.cache_v[:bsz, : start_pos + seqlen]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 对查询、键和值进行维度转置，以便进行矩阵乘法操作。</span></span><br><span class="line">        xq = xq.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        keys = keys.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        values = values.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="comment"># 计算查询和键之间的相似度得分，通过矩阵乘法计算得到，同时除以头的维度的平方根来进行缩放，以控制相似度的范围。</span></span><br><span class="line">        scores = torch.matmul(xq, keys.transpose(<span class="number">2</span>, <span class="number">3</span>)) / math.sqrt(self.head_dim)</span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 如果存在掩码（mask），则将其加到相似度得分上，以屏蔽无效位置的影响。</span></span><br><span class="line">            scores = scores + mask  <span class="comment"># (bs, n_local_heads, slen, cache_len + slen)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 对相似度得分进行 softmax 操作，将其转换为注意力权重，使得权重在每个位置的分布总和为 1。</span></span><br><span class="line">        scores = F.softmax(scores.<span class="built_in">float</span>(), dim=-<span class="number">1</span>).type_as(xq)</span><br><span class="line">        <span class="comment"># 根据注意力权重对值进行加权求和，得到最终的注意力输出。</span></span><br><span class="line">        output = torch.matmul(scores, values)  <span class="comment"># (bs, n_local_heads, slen, head_dim)</span></span><br><span class="line">        ...</span><br><span class="line">        <span class="comment"># 对注意力输出进行线性变换，得到最终的注意力机制的输出。</span></span><br><span class="line">        <span class="keyword">return</span> self.wo(output)</span><br></pre></td></tr></table></figure>
+<p><strong>旋转嵌入</strong></p>
+<p>旋转嵌入（Rotary Embedding）是一种在注意力机制中引入周期性信息的技术，用于增强模型对序列中的顺序关系的建模能力。它通过将输入的查询（Q）和键（K）进行旋转操作，以捕捉序列中位置之间的相对角度。</p>
+<p>在注意力机制中，查询和键是通过点积运算来计算相似度得分的，而点积运算本质上是计算两个向量的内积。通过旋转嵌入，可以将原始的查询和键进行旋转操作，将它们的信息编码成一个复数的表示形式，从而引入角度信息。</p>
+<p>旋转嵌入的具体操作如下：</p>
+<ul>
+<li>首先，将查询和键的维度分为实部和虚部两部分。</li>
+<li>然后，使用三角函数（sin 和 cos）计算旋转角度的正弦和余弦值。</li>
+<li>将原始的实部和虚部分别与正弦和余弦值相乘，得到旋转后的实部和虚部。</li>
+<li>最后，将旋转后的实部和虚部重新组合成查询和键的表示。</li>
+</ul>
+<p>通过旋转嵌入，查询和键之间的点积运算相当于在复数域中进行了旋转操作，这样可以更好地处理序列中的相对位置关系。旋转嵌入的使用可以提升模型对序列中长距离依赖的建模能力，并有助于捕捉序列中的顺序信息。</p>
+<p>需要注意的是，旋转嵌入只应用于查询和键，而值（V）保持不变。这是因为在注意力机制中，查询和键的作用是计算相似度得分，而值则用于根据得分对序列进行加权求和。旋转嵌入的引入主要是为了增强相似度计算的准确性，而对值的处理不需要引入旋转操作。</p>
+<p>对应的代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">precompute_freqs_cis</span>(<span class="params">dim: <span class="built_in">int</span>, end: <span class="built_in">int</span>, theta: <span class="built_in">float</span> = <span class="number">10000.0</span></span>):</span><br><span class="line">    <span class="comment"># 预计算旋转嵌入的旋转频率。可以减少在每个前向传播步骤中的重复计算，提高模型的运行效率。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算旋转嵌入的频率 freqs。</span></span><br><span class="line">    <span class="comment"># 1. 首先，生成一个从 0 到 dim 的整数序列，并取其中的偶数索引。</span></span><br><span class="line">    <span class="comment"># 2. 然后，将这些索引转换为浮点数，并将其除以 dim 后取倒数。</span></span><br><span class="line">    <span class="comment"># 这样可以生成一个频率递减的序列，用于控制旋转嵌入的旋转速度。</span></span><br><span class="line">    freqs = <span class="number">1.0</span> / (theta ** (torch.arange(<span class="number">0</span>, dim, <span class="number">2</span>)[: (dim // <span class="number">2</span>)].<span class="built_in">float</span>() / dim))</span><br><span class="line">    <span class="comment"># 创建一个长度为 end 的序列 t，其中的值从 0 到 end-1。</span></span><br><span class="line">    t = torch.arange(end, device=freqs.device)  <span class="comment"># type: ignore</span></span><br><span class="line">    <span class="comment"># 使用 torch.outer 函数计算旋转频率的复数形式。</span></span><br><span class="line">    <span class="comment"># 将 t 与 freqs 进行外积，得到一个形状为 [end, dim // 2] 的张量，其中每个元素是一个复数，表示旋转频率。</span></span><br><span class="line">    freqs = torch.outer(t, freqs).<span class="built_in">float</span>()  <span class="comment"># type: ignore</span></span><br><span class="line">    <span class="comment"># 使用 torch.polar 函数将复数频率转换为极坐标形式，得到一个复数张量 freqs_cis。</span></span><br><span class="line">    <span class="comment"># 该函数接受一个表示模长的张量（这里是全为1的张量）和一个表示相位的张量（这里是 freqs），并返回复数形式的张量。</span></span><br><span class="line">    freqs_cis = torch.polar(torch.ones_like(freqs), freqs)  <span class="comment"># complex64</span></span><br><span class="line">    <span class="keyword">return</span> freqs_cis</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">apply_rotary_emb</span>(<span class="params">xq: torch.Tensor, xk: torch.Tensor, freqs_cis: torch.Tensor</span>):</span><br><span class="line">    <span class="comment"># freqs_cis为旋转嵌入的旋转频率</span></span><br><span class="line">    <span class="comment"># 将输入的查询张量和键张量进行形状变换：</span></span><br><span class="line">    <span class="comment"># 1. 首先将其转换为浮点类型</span></span><br><span class="line">    <span class="comment"># 2. 然后将最后两个维度重塑为两倍大小的维度，以便处理复数形式的旋转嵌入。</span></span><br><span class="line">    <span class="comment"># 结果是一个形状为[batch_size, sequence_length, embedding_dim//2, 2]的复数张量。</span></span><br><span class="line">    xq_ = torch.view_as_complex(xq.<span class="built_in">float</span>().reshape(*xq.shape[:-<span class="number">1</span>], -<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">    xk_ = torch.view_as_complex(xk.<span class="built_in">float</span>().reshape(*xk.shape[:-<span class="number">1</span>], -<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">    <span class="comment"># 将旋转频率进行形状调整，使其与查询张量的形状相匹配。</span></span><br><span class="line">    <span class="comment"># 调整后的形状是根据查询张量形状的最后两个维度进行的，其他维度保持不变。</span></span><br><span class="line">    shape = [d <span class="keyword">if</span> i == <span class="number">1</span> <span class="keyword">or</span> i == ndim - <span class="number">1</span> <span class="keyword">else</span> <span class="number">1</span> <span class="keyword">for</span> i, d <span class="keyword">in</span> <span class="built_in">enumerate</span>(x.shape)]</span><br><span class="line">    freqs_cis = freqs_cis.view(*shape)</span><br><span class="line">    <span class="comment"># 将查询张量和键张量与旋转频率进行逐元素相乘。这相当于在复数域中将查询和键进行旋转操作。</span></span><br><span class="line">    <span class="comment"># 并将旋转后的张量重新转换为实数形式，通过取实部得到最终的旋转嵌入结果。</span></span><br><span class="line">    <span class="comment"># 将每个复数值展平为一个实数值。结果是形状为 [batch_size, sequence_length, embedding_dim] 的张量。</span></span><br><span class="line">    xq_out = torch.view_as_real(xq_ * freqs_cis).flatten(<span class="number">3</span>)</span><br><span class="line">    xk_out = torch.view_as_real(xk_ * freqs_cis).flatten(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">return</span> xq_out.type_as(xq), xk_out.type_as(xk)</span><br></pre></td></tr></table></figure>
+<p>旋转嵌入部分代码略显复杂，并且用到了一些数学计算技巧。如果大家在此理解有困难，也可以忽略它，只需要明白旋转嵌入是为了计算注意力中的查询和键的相似度即可。</p>
+<p>如果我们阅读<a target="_blank" rel="noopener" href="https://github.com/openai/gpt-2/blob/master/src/model.py">GPT2的代码</a>，可以发现并没有使用旋转嵌入，只是简单的做了矩阵乘法。这是LLAMA引入的一个模型优化方式。</p>
+<h3 id="前馈神经网络"><a class="markdownIt-Anchor" href="#前馈神经网络"></a> 前馈神经网络</h3>
+<p>整个前馈神经网络的结构为：</p>
+<ul>
+<li>将输入进行线性变换并输入激活函数</li>
+<li>将输入进行另一个线性变换并与上述结果相乘</li>
+<li>将相乘后的结果再次经过线性变换得到最终的输出</li>
+</ul>
+<p>对应的代码为<code>TransformerBlock</code>代码使用的<code>FeedForward</code>模块代码，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FeedForward</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dim: <span class="built_in">int</span>, hidden_dim: <span class="built_in">int</span>, multiple_of: <span class="built_in">int</span></span>):</span><br><span class="line">        <span class="comment"># 首先根据隐藏层维度的要求进行调整。将隐藏层维度的值设置为输入维度的 2/3，并将其转换为整数。</span></span><br><span class="line">        <span class="comment"># 然后，使用 multiple_of 对隐藏层维度进行取整，确保隐藏层维度是 multiple_of 的倍数。</span></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        hidden_dim = <span class="built_in">int</span>(<span class="number">2</span> * hidden_dim / <span class="number">3</span>)</span><br><span class="line">        hidden_dim = multiple_of * ((hidden_dim + multiple_of - <span class="number">1</span>) // multiple_of)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义三个线性变换操作符 self.w1、self.w2 和 self.w3，分别用于前馈神经网络的第一层、第二层和第三层。</span></span><br><span class="line">        self.w1 = ColumnParallelLinear(dim, hidden_dim, ...)</span><br><span class="line">        self.w2 = RowParallelLinear(hidden_dim, dim, ...)</span><br><span class="line">        self.w3 = ColumnParallelLinear(dim, hidden_dim, ...)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># 1. 将输入进行线性变换并输入激活函数</span></span><br><span class="line">        <span class="comment"># 2. 将输入进行另一个线性变换并与上述结果相乘</span></span><br><span class="line">        <span class="comment"># 3. 将相乘后的结果再次经过线性变换得到最终的输出</span></span><br><span class="line">        <span class="keyword">return</span> self.w2(F.silu(self.w1(x)) * self.w3(x))</span><br></pre></td></tr></table></figure>
+<h3 id="rmsnorm"><a class="markdownIt-Anchor" href="#rmsnorm"></a> RMSNorm</h3>
+<p>上述代码中多次用到了RMSNorm归一化，这是什么技术呢？</p>
+<p>其实，RMSNorm（Root Mean Square Normalization）是一种归一化技术，用于在神经网络中对输入进行标准化处理。它旨在增强网络的鲁棒性和稳定性，并有助于减轻输入数据中的噪声和变化对模型的影响。</p>
+<p>RMSNorm 的核心思想是基于输入的均方根（RMS）进行标准化。它通过计算输入张量沿指定维度的均方根，并将每个元素除以该均方根值来进行归一化。这种归一化方法相比于传统的均值和方差归一化（例如 Batch Normalization）更加简单和直观。</p>
+<p>其代码实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RMSNorm</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dim: <span class="built_in">int</span>, eps: <span class="built_in">float</span> = <span class="number">1e-6</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># eps 参数是一个小的常数，用于避免分母为零的情况，确保数值稳定性。</span></span><br><span class="line">        self.eps = eps</span><br><span class="line">        <span class="comment"># dim 参数表示输入张量的维度，即要在哪个维度上计算均方根并进行归一化。</span></span><br><span class="line">        <span class="comment"># weight 是一个可学习的权重参数，用于缩放标准化后的输入。</span></span><br><span class="line">        self.weight = nn.Parameter(torch.ones(dim))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_norm</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># 计算输入张量的均方根，并将每个元素除以均方根值。</span></span><br><span class="line">        <span class="keyword">return</span> x * torch.rsqrt(x.<span class="built_in">pow</span>(<span class="number">2</span>).mean(-<span class="number">1</span>, keepdim=<span class="literal">True</span>) + self.eps)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># 调用 _norm 方法对输入张量进行标准化处理，并将标准化后的结果与权重参数相乘，以进一步缩放和调整输出。</span></span><br><span class="line">        output = self._norm(x.<span class="built_in">float</span>()).type_as(x)</span><br><span class="line">        <span class="keyword">return</span> output * self.weight</span><br></pre></td></tr></table></figure>
+<h3 id="掩码"><a class="markdownIt-Anchor" href="#掩码"></a> 掩码</h3>
+<p>掩码部分也有一些技巧，下面来看看它是如何实现的。</p>
+<p>在Transformer的前向计算时，会计算一个掩码矩阵。然后，在计算注意力时，使用此掩码来遮蔽掉无效位置。对应的代码片段如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Transformer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, tokens: torch.Tensor, start_pos: <span class="built_in">int</span></span>):</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment"># 在传入的文本长度大于1时，构造一个上三角矩阵作为掩码，用于遮盖未生成的字词部分</span></span><br><span class="line">        mask = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> seqlen &gt; <span class="number">1</span>:</span><br><span class="line">            mask = torch.full((<span class="number">1</span>, <span class="number">1</span>, seqlen, seqlen), <span class="built_in">float</span>(<span class="string">&quot;-inf&quot;</span>), device=tokens.device)</span><br><span class="line">            mask = torch.triu(mask, diagonal=start_pos + <span class="number">1</span>).type_as(h)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Attention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x: torch.Tensor, start_pos: <span class="built_in">int</span>, freqs_cis: torch.Tensor, mask: <span class="type">Optional</span>[torch.Tensor]</span>):</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 如果存在掩码（mask），则将其加到相似度得分上，以屏蔽无效位置的影响。</span></span><br><span class="line">            scores = scores + mask  <span class="comment"># (bs, n_local_heads, slen, cache_len + slen)</span></span><br></pre></td></tr></table></figure>
+<p>在生成掩码时，上述代码生成了一个上三角掩码，以屏蔽未来位置的注意力。</p>
+<p>在计算注意力分数时，通过将未来位置的分数设置为负无穷，可以使模型在自回归任务中只依赖于当前及之前的信息。这样可以确保模型在生成序列时不会看到未来位置的信息，保持了模型的自回归性质。</p>
+<p>生成掩码的方式如下：</p>
+<ul>
+<li>首先，创建一个名为 mask 的变量，并将其初始化为 None。这意味着在开始时没有生成掩码。</li>
+<li>如果 seqlen 大于 1，表示当前处理的序列长度大于 1，存在需要屏蔽的位置。</li>
+<li>创建一个形状为 (1, 1, seqlen, seqlen) 的张量 mask，并将所有元素的值设为负无穷（float(&quot;-inf&quot;)）。这里使用 float(&quot;-inf&quot;) 是为了在计算注意力分数时将被掩盖的位置的注意力分数设为负无穷大，从而在softmax操作后将其值近似为0。</li>
+<li>使用 torch.triu() 函数将 mask 张量的下三角部分（包括对角线）设为负无穷。这是通过设置 diagonal 参数为 start_pos + 1 来实现的，表示从对角线位置 start_pos + 1 开始屏蔽。这样，注意力机制在计算时将只关注当前位置及之前的位置，而忽略之后的位置。</li>
+<li>最后，将 mask 张量的数据类型转换为输入张量 h 的数据类型，并将其赋值给 mask 变量。</li>
+</ul>
+<p>在代码中，scores 与 mask 相加，实际上是将 mask 中的非负数值添加到 scores 对应位置的元素上。通过这样的操作，可以将特定位置的注意力分数调整为一个较小的值，从而有效地屏蔽或降低模型对该位置的关注度。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>到这里，我们就分析完了整个LLAMA模型的代码。需要注意的是，这里的代码只是LLAMA模型在生成文本时（即预测时）要执行的代码。LLAMA在训练阶段会有更多的技巧，也会涉及更多的代码。可惜Meta并没有公布相关的训练代码。</p>
+<p>在分析代码时，我们有意忽略了模型并行处理的部分代码，这些是一些并行优化的机制，对于我们理解模型帮助不大。但如果我们希望将这个模型创建为一个服务，从而为大规模的用户服务时，并行处理部分就比较关键了。</p>
+<p>在代码分析过程中，我借助了ChatGPT辅助进行理解，并引用了部分ChatGPT生成的内容，当然，也修正了ChatGPT回复中的一些明显的错误。在这个过程中，ChatGPT可以帮助提供足够多的详细的信息，我也深刻的体会到ChatGPT对于代码和我提出的问题的准确理解。可以说，ChatGPT很大程度上帮助我提升了代码分析的效率和学习的效率。</p>
+<p>自ChatGPT发布以来，很多人认为这是一个人类走向通用人工智能的突破，也有一些人认为它其实没什么本质的改进。有很多人对自己的职业发展产生了很深的焦虑感，也有很多人感觉触碰到了科幻世界中的未来，还有很多人觉得又是一个可以好好捞一把的机会。</p>
+<p>也许每个人都有必要去了解一下机器学习技术的原理，这样才能形成对它的理性的认知。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>这是此系列的第三篇，ChatGPT使用的Transfomer模型。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ul>
+<li>Google的Transformer原始论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1706.03762.pdf">https://arxiv.org/pdf/1706.03762.pdf</a></li>
+<li>Transformer模型详解（图解最完整版）：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/338817680">https://zhuanlan.zhihu.com/p/338817680</a></li>
+<li>LLAMA Paper：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2302.13971v1">https://arxiv.org/abs/2302.13971v1</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/03/26/wechatgpt/" rel="bookmark">微信中的智能助手--WeChatGPT</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/04/12/chatgpt-from-programmer-point-of-view/" rel="bookmark">程序员眼中的ChatGPT</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/04/25/chatgpt-a-technical-summary/" rel="bookmark">ChatGPT使用的技术概览</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/05/20/chatgpt-training/" rel="bookmark">ChatGPT的模型训练</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/05/25/chatgpt-rlhf/" rel="bookmark">ChatGPT的自动优化</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/ai/" rel="tag"><i class="fa fa-tag"></i> AI</a>
+              <a href="/tags/ml/" rel="tag"><i class="fa fa-tag"></i> ML</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 机器学习</a>
+              <a href="/tags/chatgpt/" rel="tag"><i class="fa fa-tag"></i> ChatGPT</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/04/25/chatgpt-a-technical-summary/" rel="prev" title="ChatGPT使用的技术概览">
+      <i class="fa fa-chevron-left"></i> ChatGPT使用的技术概览
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/05/20/chatgpt-training/" rel="next" title="ChatGPT的模型训练">
+      ChatGPT的模型训练 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text"> 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E7%9A%84transfomer%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text"> 原始的Transfomer模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chatgpt%E4%B8%AD%E7%9A%84transfomer%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text"> ChatGPT中的Transfomer模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E9%80%BB%E8%BE%91"><span class="nav-number">3.1.</span> <span class="nav-text"> 文本生成逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%8D%E5%B5%8C%E5%85%A5"><span class="nav-number">3.1.1.</span> <span class="nav-text"> 词嵌入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B8%A9%E5%BA%A6%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.2.</span> <span class="nav-text"> 温度参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#top-p%E5%8F%82%E6%95%B0"><span class="nav-number">3.1.3.</span> <span class="nav-text"> top-p参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">3.2.</span> <span class="nav-text"> 模型结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">3.3.</span> <span class="nav-text"> 注意力机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E9%A6%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">3.4.</span> <span class="nav-text"> 前馈神经网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rmsnorm"><span class="nav-number">3.5.</span> <span class="nav-text"> RMSNorm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A9%E7%A0%81"><span class="nav-number">3.6.</span> <span class="nav-text"> 掩码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text"> 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">580k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">16:06</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?36.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'd3e08ccabb7743a761fac52d9b0141a5',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

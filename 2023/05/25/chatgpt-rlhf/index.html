@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见这里）。 从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。 ChatGPT的内容很多，我计划采用一个系列，多篇文章来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT的自动优化">
+<meta property="og:url" content="http://brightliao.com/2023/05/25/chatgpt-rlhf/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见这里）。 从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。 ChatGPT的内容很多，我计划采用一个系列，多篇文章来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-25-chatgpt-rlhf/rlhf.jpeg">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-25-chatgpt-rlhf/cartpole.png">
+<meta property="article:published_time" content="2023-05-25T12:00:00.000Z">
+<meta property="article:modified_time" content="2023-06-16T09:54:15.242Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="强化学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2023/2023-05-25-chatgpt-rlhf/rlhf.jpeg">
+
+<link rel="canonical" href="http://brightliao.com/2023/05/25/chatgpt-rlhf/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ChatGPT的自动优化 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-数据">
+
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">37</span></a>
+
+  </li>
+        <li class="menu-item menu-item-机器学习">
+
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
+
+  </li>
+        <li class="menu-item menu-item-敏捷">
+
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-技术">
+
+    <a href="/tech/" rel="section"><i class="fa fa-quidditch fa-fw"></i>技术<span class="badge">10</span></a>
+
+  </li>
+        <li class="menu-item menu-item-架构">
+
+    <a href="/arch/" rel="section"><i class="fa fa-warehouse fa-fw"></i>架构<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-其他">
+
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">25</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search" style="border-bottom: solid 1px #eee; margin-bottom: 8px;">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">51</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">133</span></a>
+
+  </li>
+
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/05/25/chatgpt-rlhf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ChatGPT的自动优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-05-25 20:00:00" itemprop="dateCreated datePublished" datetime="2023-05-25T20:00:00+08:00">2023-05-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-16 17:54:15" itemprop="dateModified" datetime="2023-06-16T17:54:15+08:00">2023-06-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/chatgpt/" itemprop="url" rel="index"><span itemprop="name">ChatGPT</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/05/25/chatgpt-rlhf/" class="post-meta-item leancloud_visitors" data-flag-title="ChatGPT的自动优化" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>20k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>33 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
+<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
+<p>这是此系列的第五篇，ChatGPT的自动优化。</p>
+<span id="more"></span>
+<p><a href="https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/">上一篇</a>文章我们深入分析了ChatGPT是如何训练及优化的，了解了如何进行监督微调，及如何让模型可以支持更广泛领域的问答。但是，监督微调始终会限于训练集中的问题模板数量，无法支持更为一般的对话。这一步骤就需要引入强化学习的训练方式，让ChatGPT可以自动进行优化。</p>
+<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
+<p>强化学习模型是最为复杂的部分，参考ColossalAI的文档，模型的工作原理如下：</p>
+<p><img data-src="/attaches/2023/2023-05-25-chatgpt-rlhf/rlhf.jpeg" alt="RLHF" /></p>
+<p>为了理解上图，需要先了解一下强化学习相关的背景知识。</p>
+<h3 id="强化学习"><a class="markdownIt-Anchor" href="#强化学习"></a> 强化学习</h3>
+<p>强化学习（Reinforcement Learning，简称RL）是一种机器学习方法，旨在使智能体（agent）通过与环境的交互来学习适应环境并制定实现特定目标的策略。在强化学习中，智能体通过观察环境的状态，执行动作，并接收环境的奖励或惩罚来不断调整自己的策略，以获得最大化累积奖励的能力。</p>
+<p>强化学习的基本要素包括：</p>
+<ul>
+<li><strong>智能体（Agent）</strong>：智能体是进行学习和决策的主体，它通过观察环境的状态、选择合适的动作，并与环境进行交互。</li>
+<li><strong>环境（Environment）</strong>：环境是智能体所处的外部世界，它可以是真实的物理环境，也可以是抽象的模拟环境。环境会根据智能体的动作进行状态转移，并根据智能体的表现给予奖励或惩罚。</li>
+<li><strong>状态（State）</strong>：状态是描述环境的特征或信息，它可以是完全观察的，也可以是部分观察或隐含的。智能体的决策往往基于当前状态。</li>
+<li><strong>动作（Action）</strong>：动作是智能体在某个状态下可以执行的操作或策略。智能体的目标是根据当前状态选择最优的动作。</li>
+<li><strong>奖励（Reward）</strong>：奖励是环境根据智能体的动作和表现给予的反馈信号，用于指示动作的好坏。智能体的目标是通过最大化累积奖励来学习合适的策略。</li>
+</ul>
+<p>在ChatGPT这个场景中，ChatGPT模型即智能体，环境是一个对话系统，状态是当前对话的上下文及当前消息，动作是如何选择某一个回复，奖励是人类反馈的回复质量好或差。</p>
+<p>强化学习的核心问题是通过智能体与环境的交互来学习一个最优的策略，以使智能体在长期累积奖励的过程中能够获得最大化的回报。强化学习算法通常基于价值函数或策略函数来进行决策和优化，其中价值函数用于评估状态或状态动作对的价值，策略函数用于指导智能体在特定状态下选择动作。</p>
+<p>强化学习常常应用于机器人控制、游戏智能、自动驾驶等领域。</p>
+<h3 id="强化学习算法"><a class="markdownIt-Anchor" href="#强化学习算法"></a> 强化学习算法</h3>
+<p>如何学习最优策略呢？常见的学习算法包括Q-learning、SARSA、Deep Q-Network（DQN）、Policy Gradient、Proximal Policy Optimization（PPO）、Actor-Critic等。</p>
+<p>以下简要介绍和RLHF相关的算法：</p>
+<ul>
+<li>Q-learning: 核心思想是学习一个状态-动作价值函数（Q函数），它衡量在给定状态下采取特定动作的长期累积回报。可根据贝尔曼公式 <code>Q(s,a) = Q(s,a) + α(r + γ * max(Q(s',a')) - Q(s,a))</code> 更新及优化Q函数，其中α是学习率，γ是折扣因子，r是奖励，s’是新的状态。</li>
+<li>Policy Gradient（策略梯度）算法: 不需要建立值函数模型，而是直接优化策略（动作的选择）。其基本思想是通过采样经验轨迹（trajectory），通过最大化累积奖励来计算策略梯度，并利用梯度信息更新策略参数。</li>
+<li>Proximal Policy Optimization（PPO）：一种基于策略梯度的强化学习算法，旨在通过有效地优化策略函数（通过引入一个重要性采样比率和一个剪切函数来限制策略更新的幅度，以保持策略的相对不变性）来提高强化学习的性能和稳定性。</li>
+<li>Actor-Critic（演员-评论家）算法：结合了值函数和策略函数的强化学习算法。它通过同时学习一个策略函数（演员）和一个值函数（评论家），以提高强化学习的效率和性能。演员根据评论家的评估结果来更新策略，从而改进策略的质量。评论家则通过学习一个值函数来估计每个状态的值或动作值，以提供演员关于策略改进的反馈。</li>
+</ul>
+<p>RLHF算法结合了PPO和Actor-Critic算法的优势，所以可以高效而又稳定的优化ChatGPT的模型。</p>
+<h2 id="代码分析"><a class="markdownIt-Anchor" href="#代码分析"></a> 代码分析</h2>
+<p>有了前面的了解，下面咱们跟着代码一起来了解一下算法的细节。</p>
+<h3 id="使用pytorch实现policy-gradient"><a class="markdownIt-Anchor" href="#使用pytorch实现policy-gradient"></a> 使用PyTorch实现Policy Gradient</h3>
+<p>下面来看PyTorch的示例中提供的一个参考的策略梯度算法实现。</p>
+<p>先介绍一下<code>gym</code>库，这个库提供了一个模拟环境，内置了很多小游戏，可以帮助我们开发强化学习算法。</p>
+<p>比如下面这个平衡杆小游戏，我们要想办法控制平衡杆使其一直位于连接点的上方。有两个动作可以用来控制游戏中的连接点，即左和右。控制连接点向左时，可以避免平衡杆往左倾倒。控制连接点向右时，可以避免平衡杆往右倾倒。</p>
+<p><img data-src="/attaches/2023/2023-05-25-chatgpt-rlhf/cartpole.png" alt="Cart Pole" /></p>
+<p>下面来用策略梯度的方法训练一个强化学习算法让机器人自动玩游戏。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Policy</span>(nn.Module): <span class="comment"># 定义策略函数网络，输出每个动作对应的概率</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(Policy, self).__init__()</span><br><span class="line">        <span class="comment"># 定义网络结构，包含了两层线性连接层，第二层输出的动作数量为2</span></span><br><span class="line">        self.affine1 = nn.Linear(<span class="number">4</span>, <span class="number">128</span>)</span><br><span class="line">        self.dropout = nn.Dropout(p=<span class="number">0.6</span>)</span><br><span class="line">        self.affine2 = nn.Linear(<span class="number">128</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        self.saved_log_probs = []</span><br><span class="line">        self.rewards = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = F.relu(self.dropout(self.affine1(x)))</span><br><span class="line">        action_scores = self.affine2(x)</span><br><span class="line">        <span class="keyword">return</span> F.softmax(action_scores, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PolicyTrainer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 初始化游戏环境</span></span><br><span class="line">        self.env = gym.make(<span class="string">&quot;CartPole-v1&quot;</span>, render_mode=<span class="string">&quot;rgb_array&quot;</span>)</span><br><span class="line">        <span class="comment"># 初始化策略函数网络及优化器</span></span><br><span class="line">        self.policy = Policy()</span><br><span class="line">        self.optimizer = optim.Adam(self.policy.parameters(), lr=<span class="number">1e-2</span>)</span><br><span class="line">        self.eps = np.finfo(np.float32).eps.item()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">select_action</span>(<span class="params">self, state</span>):</span><br><span class="line">        <span class="comment"># 根据当前的状态，执行策略函数，并根据函数输出的概率选择一个动作</span></span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>().unsqueeze(<span class="number">0</span>)</span><br><span class="line">        probs = self.policy(state)</span><br><span class="line">        m = Categorical(probs)</span><br><span class="line">        action = m.sample()</span><br><span class="line">        <span class="comment"># 将动作保存起来，在一局游戏结束的时候，用于训练</span></span><br><span class="line">        self.policy.saved_log_probs.append(m.log_prob(action))</span><br><span class="line">        <span class="keyword">return</span> action.item()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">finish_episode</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 在一局游戏结束的时候，执行策略函数的训练</span></span><br><span class="line">        <span class="comment"># 根据执行动作时保存的奖励，来迭代计算每一个动作的奖励</span></span><br><span class="line">        <span class="comment"># 每一个动作的奖励 = 当前奖励 + 折扣率 * 整局游戏中将来的奖励</span></span><br><span class="line">        R = <span class="number">0</span></span><br><span class="line">        returns = deque()</span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> self.policy.rewards[::-<span class="number">1</span>]:</span><br><span class="line">            R = r + args.gamma * R</span><br><span class="line">            returns.appendleft(R)</span><br><span class="line">        returns = torch.tensor(returns)</span><br><span class="line">        <span class="comment"># 将奖励归一化</span></span><br><span class="line">        returns = (returns - returns.mean()) / (returns.std() + self.eps)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 采用梯度上升法最大化策略奖励，这里使用最小化策略奖励的负数来实现</span></span><br><span class="line">        policy_loss = []</span><br><span class="line">        <span class="keyword">for</span> log_prob, R <span class="keyword">in</span> <span class="built_in">zip</span>(self.policy.saved_log_probs, returns):</span><br><span class="line">            <span class="comment"># 计算每一个动作的策略损失，策略损失 = -动作概率 * 动作奖励</span></span><br><span class="line">            policy_loss.append(-log_prob * R)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 根据整局游戏的结果来计算梯度，并更新参数</span></span><br><span class="line">        self.optimizer.zero_grad()</span><br><span class="line">        policy_loss = torch.cat(policy_loss).<span class="built_in">sum</span>()</span><br><span class="line">        policy_loss.backward()</span><br><span class="line">        self.optimizer.step()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">del</span> self.policy.rewards[:]</span><br><span class="line">        <span class="keyword">del</span> self.policy.saved_log_probs[:]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">self</span>):</span><br><span class="line">        running_reward = <span class="number">10</span></span><br><span class="line">        <span class="keyword">for</span> i_episode <span class="keyword">in</span> count(<span class="number">1</span>):</span><br><span class="line">            <span class="comment"># 新的一局游戏开始，初始化环境</span></span><br><span class="line">            state, _ = self.env.reset()</span><br><span class="line">            ep_reward = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10000</span>):  <span class="comment"># Don&#x27;t infinite loop while learning</span></span><br><span class="line">                <span class="comment"># 采用策略函数来生成下一步采用的动作，并执行</span></span><br><span class="line">                action = self.select_action(state)</span><br><span class="line">                state, reward, done, _, _ = self.env.step(action)</span><br><span class="line">                <span class="comment"># 记录奖励</span></span><br><span class="line">                self.policy.rewards.append(reward)</span><br><span class="line">                ep_reward += reward  <span class="comment"># 累计计算当前这一局游戏的奖励</span></span><br><span class="line">                <span class="keyword">if</span> done: <span class="comment"># 如果游戏结束，则退出循环</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 在一局游戏结束是，计算奖励的移动平均值</span></span><br><span class="line">            <span class="comment"># 这里将当前这一局游戏的奖励以5%的百分比给平衡掉，让我们更容易看出游戏当前能得到的奖励</span></span><br><span class="line">            running_reward = <span class="number">0.05</span> * ep_reward + (<span class="number">1</span> - <span class="number">0.05</span>) * running_reward</span><br><span class="line">            <span class="comment"># 触发策略网络更新</span></span><br><span class="line">            self.finish_episode()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 周期性打印日志</span></span><br><span class="line">            <span class="keyword">if</span> i_episode % args.log_interval == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Episode &#123;&#125;\tLast reward: &#123;:.2f&#125;\tAverage reward: &#123;:.2f&#125;&quot;</span>.<span class="built_in">format</span>(i_episode, ep_reward, running_reward))</span><br><span class="line">            <span class="keyword">if</span> running_reward &gt; self.env.spec.reward_threshold:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Solved! Running reward is now &#123;&#125; and &quot;</span> <span class="string">&quot;the last episode runs to &#123;&#125; time steps!&quot;</span>.<span class="built_in">format</span>(running_reward, t))</span><br><span class="line">                <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>完整代码见<a target="_blank" rel="noopener" href="https://github.com/pytorch/examples/blob/main/reinforcement_learning/reinforce.py">这里</a>。运行以上算法可以看到以下日志：</p>
+<blockquote>
+<p>Episode 10      Last reward: 21.00      Average reward: 16.30<br />
+Episode 20      Last reward: 41.00      Average reward: 24.02<br />
+Episode 30      Last reward: 33.00      Average reward: 33.05<br />
+Episode 40      Last reward: 64.00      Average reward: 50.71<br />
+Episode 50      Last reward: 73.00      Average reward: 59.70<br />
+Episode 60      Last reward: 41.00      Average reward: 63.28<br />
+Episode 70      Last reward: 59.00      Average reward: 63.88<br />
+Episode 80      Last reward: 86.00      Average reward: 80.87<br />
+Episode 90      Last reward: 125.00     Average reward: 91.54<br />
+Episode 100     Last reward: 224.00     Average reward: 136.09<br />
+Episode 110     Last reward: 95.00      Average reward: 182.31<br />
+Episode 120     Last reward: 200.00     Average reward: 170.03<br />
+Episode 130     Last reward: 80.00      Average reward: 149.48<br />
+Episode 140     Last reward: 102.00     Average reward: 148.63<br />
+Episode 150     Last reward: 644.00     Average reward: 349.26<br />
+Solved! Running reward is now 550.1608406568259 and the last episode runs to 2888 time steps!</p>
+</blockquote>
+<p>可以看到，在算法玩了150多次游戏的时候，已经可以玩得非常好了。但是我们也能注意到算法有一些波动，特别是在100局到110局时，曾经达到一个不错的水平，但是后来突然又有一些下降。</p>
+<h3 id="使用pytorch实现actor-critic"><a class="markdownIt-Anchor" href="#使用pytorch实现actor-critic"></a> 使用PyTorch实现Actor-Critic</h3>
+<p>Actor-Critic算法与Policy Gradient算法是类似的。下面看一下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">SavedAction = namedtuple(<span class="string">&quot;SavedAction&quot;</span>, [<span class="string">&quot;log_prob&quot;</span>, <span class="string">&quot;value&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Policy</span>(nn.Module): <span class="comment"># 定义演员函数和评论家函数网络</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(Policy, self).__init__()</span><br><span class="line">        self.affine1 = nn.Linear(<span class="number">4</span>, <span class="number">128</span>)</span><br><span class="line">        self.action_head = nn.Linear(<span class="number">128</span>, <span class="number">2</span>) <span class="comment"># 演员函数输出每个动作对应的概率</span></span><br><span class="line">        self.value_head = nn.Linear(<span class="number">128</span>, <span class="number">1</span>) <span class="comment"># 评论家函数输出每个动作对应的奖励</span></span><br><span class="line">        <span class="comment"># action &amp; reward buffer</span></span><br><span class="line">        self.saved_actions = []</span><br><span class="line">        self.rewards = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = F.relu(self.affine1(x))</span><br><span class="line">        action_prob = F.softmax(self.action_head(x), dim=-<span class="number">1</span>)</span><br><span class="line">        state_values = self.value_head(x)</span><br><span class="line">        <span class="keyword">return</span> action_prob, state_values</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PolicyTrainer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        self.env = gym.make(<span class="string">&quot;CartPole-v1&quot;</span>)</span><br><span class="line">        self.model = Policy()</span><br><span class="line">        self.optimizer = optim.Adam(self.model.parameters(), lr=<span class="number">3e-2</span>)</span><br><span class="line">        self.eps = np.finfo(np.float32).eps.item()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">select_action</span>(<span class="params">self, state</span>):</span><br><span class="line">        state = torch.from_numpy(state).<span class="built_in">float</span>()</span><br><span class="line">        probs, state_value = self.model(state)</span><br><span class="line">        m = Categorical(probs)</span><br><span class="line">        action = m.sample()</span><br><span class="line">        self.model.saved_actions.append(SavedAction(m.log_prob(action), state_value))</span><br><span class="line">        <span class="keyword">return</span> action.item()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">finish_episode</span>(<span class="params">self</span>):</span><br><span class="line">        R = <span class="number">0</span></span><br><span class="line">        saved_actions = self.model.saved_actions</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算每一个步骤的奖励</span></span><br><span class="line">        returns = []</span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> self.model.rewards[::-<span class="number">1</span>]:</span><br><span class="line">            R = r + args.gamma * R</span><br><span class="line">            returns.insert(<span class="number">0</span>, R)</span><br><span class="line"></span><br><span class="line">        returns = torch.tensor(returns)</span><br><span class="line">        returns = (returns - returns.mean()) / (returns.std() + self.eps)</span><br><span class="line"></span><br><span class="line">        policy_losses = []</span><br><span class="line">        value_losses = []</span><br><span class="line">        <span class="keyword">for</span> (log_prob, value), R <span class="keyword">in</span> <span class="built_in">zip</span>(saved_actions, returns):</span><br><span class="line">            <span class="comment"># 计算真实奖励与评论家函数估计的奖励之差，并将其用于计算演员函数的损失</span></span><br><span class="line">            advantage = R - value.item()</span><br><span class="line">            policy_losses.append(-log_prob * advantage)</span><br><span class="line">            <span class="comment"># 评论家函数的损失使用平滑L1损失函数（与均方差损失类似，但更稳定）</span></span><br><span class="line">            value_losses.append(F.smooth_l1_loss(value, torch.tensor([R])))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算梯度并更新网络</span></span><br><span class="line">        self.optimizer.zero_grad()</span><br><span class="line">        loss = torch.stack(policy_losses).<span class="built_in">sum</span>() + torch.stack(value_losses).<span class="built_in">sum</span>()</span><br><span class="line">        loss.backward()</span><br><span class="line">        self.optimizer.step()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清理数据</span></span><br><span class="line">        <span class="keyword">del</span> self.model.rewards[:]</span><br><span class="line">        <span class="keyword">del</span> self.model.saved_actions[:]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 训练过程与策略梯度方法类似</span></span><br><span class="line">        running_reward = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i_episode <span class="keyword">in</span> count(<span class="number">1</span>):</span><br><span class="line">            state, _ = self.env.reset()</span><br><span class="line">            ep_reward = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">10000</span>):</span><br><span class="line">                action = self.select_action(state)</span><br><span class="line">                state, reward, done, _, _ = self.env.step(action)</span><br><span class="line">                self.model.rewards.append(reward)</span><br><span class="line">                ep_reward += reward</span><br><span class="line">                <span class="keyword">if</span> done:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            running_reward = <span class="number">0.05</span> * ep_reward + (<span class="number">1</span> - <span class="number">0.05</span>) * running_reward</span><br><span class="line"></span><br><span class="line">            self.finish_episode()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># log results</span></span><br><span class="line">            <span class="keyword">if</span> i_episode % args.log_interval == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Episode &#123;&#125;\tLast reward: &#123;:.2f&#125;\tAverage reward: &#123;:.2f&#125;&quot;</span>.<span class="built_in">format</span>(i_episode, ep_reward, running_reward))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># check if we have &quot;solved&quot; the cart pole problem</span></span><br><span class="line">            <span class="keyword">if</span> running_reward &gt; self.env.spec.reward_threshold:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Solved! Running reward is now &#123;&#125; and &quot;</span> <span class="string">&quot;the last episode runs to &#123;&#125; time steps!&quot;</span>.<span class="built_in">format</span>(running_reward, t))</span><br><span class="line">                <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>完整代码见<a target="_blank" rel="noopener" href="https://github.com/pytorch/examples/blob/main/reinforcement_learning/actor_critic.py">这里</a>。运行以上算法可以看到以下日志：</p>
+<blockquote>
+<p>Episode 10      Last reward: 32.00      Average reward: 14.11<br />
+Episode 20      Last reward: 89.00      Average reward: 32.64<br />
+Episode 30      Last reward: 20.00      Average reward: 45.73<br />
+Episode 40      Last reward: 32.00      Average reward: 47.44<br />
+Episode 50      Last reward: 332.00     Average reward: 142.78<br />
+Episode 60      Last reward: 410.00     Average reward: 428.13<br />
+Solved! Running reward is now 476.8880228063767 and the last episode runs to 1334 time steps!</p>
+</blockquote>
+<p>可以看到算法在经历60多次的迭代之后就有一个很好的效果了。</p>
+<h2 id="chatgpt的rlhf算法"><a class="markdownIt-Anchor" href="#chatgpt的rlhf算法"></a> ChatGPT的RLHF算法</h2>
+<p>ColossalAI中使用的强化学习算法与上述算法基本一致，完整代码的入口在<a target="_blank" rel="noopener" href="https://github.com/hpcaitech/ColossalAI/blob/main/applications/Chat/examples/train_prompts.py">这里</a>， 代码比较长，以下是简化后的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">args</span>):</span><br><span class="line">    strategy = ColossalAIStrategy(stage=<span class="number">2</span>, placement_policy=<span class="string">&#x27;cuda&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> strategy.model_init_context():</span><br><span class="line">        initial_model = LlamaActor(pretrained=args.pretrain)</span><br><span class="line">        reward_model = LlamaRM(pretrained=args.rm_pretrain)</span><br><span class="line">        actor = LlamaActor(pretrained=args.pretrain, lora_rank=args.lora_rank)</span><br><span class="line">        critic = LlamaCritic(pretrained=args.rm_pretrain, lora_rank=args.lora_rank, use_action_mask=<span class="literal">True</span>)</span><br><span class="line">    actor_optim = HybridAdam(actor.parameters(), lr=<span class="number">1e-7</span>)</span><br><span class="line">    critic_optim = HybridAdam(critic.parameters(), lr=<span class="number">1e-7</span>)</span><br><span class="line">    tokenizer = LlamaTokenizer.from_pretrained(args.pretrain)</span><br><span class="line">    tokenizer = prepare_llama_tokenizer_and_embedding(tokenizer, actor)</span><br><span class="line"></span><br><span class="line">    prompt_dataset = PromptDataset(tokenizer=tokenizer, data_path=args.prompt_dataset, max_datasets_size=<span class="number">16384</span>)</span><br><span class="line">    prompt_dataloader = DataLoader(prompt_dataset, ...)</span><br><span class="line">    pretrain_dataset = SupervisedDataset(tokenizer=tokenizer, ...)</span><br><span class="line">    pretrain_dataloader = DataLoader(pretrain_dataset, ...)</span><br><span class="line"></span><br><span class="line">    (actor, actor_optim), (critic, critic_optim) = strategy.prepare((actor, actor_optim), (critic, critic_optim))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># configure trainer</span></span><br><span class="line">    trainer = PPOTrainer(strategy, actor, critic, reward_model, initial_model, ...)</span><br><span class="line">    trainer.fit(prompt_dataloader, pretrain_dataloader, args.num_episodes, ...)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Critic</span>(<span class="title class_ inherited__">LoRAModule</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        ...</span><br><span class="line">        self.convert_to_lora()  <span class="comment"># 将Critic模型转换为LoRA模型</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, sequences: torch.LongTensor, action_mask, attention_mask</span>) -&gt; torch.Tensor:</span><br><span class="line">        outputs = self.model(sequences, attention_mask=attention_mask)  <span class="comment"># 模型前向传播</span></span><br><span class="line">        <span class="comment"># 获取最后一层隐藏状态，并通过value_head线性层得到值函数估计值</span></span><br><span class="line">        last_hidden_states = outputs[<span class="string">&#x27;last_hidden_state&#x27;</span>]</span><br><span class="line">        values = self.value_head(last_hidden_states).squeeze(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> action_mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.use_action_mask:</span><br><span class="line">            num_actions = action_mask.size(<span class="number">1</span>)</span><br><span class="line">            prompt_mask = attention_mask[:, :-num_actions]</span><br><span class="line">            values = values[:, :-num_actions]</span><br><span class="line">            value = masked_mean(values, prompt_mask, dim=<span class="number">1</span>) <span class="comment"># 根据动作掩码计算平均值</span></span><br><span class="line">            <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line">        values = values[:, :-<span class="number">1</span>]</span><br><span class="line">        value = values.mean(dim=<span class="number">1</span>)  <span class="comment"># 计算平均值作为最终的评论家函数估计值</span></span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaCritic</span>(<span class="title class_ inherited__">Critic</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        model = LlamaModel.from_pretrained(pretrained)  <span class="comment"># 使用预训练的LlamaModel初始化模型</span></span><br><span class="line">        value_head = nn.Linear(model.config.hidden_size, <span class="number">1</span>)  <span class="comment"># 使用线性层作为评论家函数头部</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Actor</span>(<span class="title class_ inherited__">LoRAModule</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, model: nn.Module, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        self.convert_to_lora()  <span class="comment"># 将Actor模型转换为LoRA模型</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @torch.no_grad()</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generate</span>(<span class="params">self, input_ids: torch.Tensor, return_action_mask: <span class="built_in">bool</span> = <span class="literal">True</span>, **kwargs</span>):</span><br><span class="line">        sequences = generate(self.model, input_ids, **kwargs)  <span class="comment"># 生成序列</span></span><br><span class="line">        attention_mask = <span class="literal">None</span></span><br><span class="line">        attention_mask = sequences.not_equal(pad_token_id)  <span class="comment"># 生成注意力掩码</span></span><br><span class="line">        <span class="comment"># left padding may be applied, only mask action</span></span><br><span class="line">        action_mask = (sequences[:, input_len:] == eos_token_id).cumsum(dim=-<span class="number">1</span>) == <span class="number">0</span>  <span class="comment"># 生成动作掩码</span></span><br><span class="line">        action_mask = F.pad(action_mask, (<span class="number">1</span> + input_len, -<span class="number">1</span>), value=<span class="literal">True</span>)    <span class="comment"># include eos token and input</span></span><br><span class="line">        action_mask[:, :input_len] = <span class="literal">False</span></span><br><span class="line">        action_mask = action_mask[:, <span class="number">1</span>:]</span><br><span class="line">        <span class="comment"># 返回生成的序列、注意力掩码和动作掩码</span></span><br><span class="line">        <span class="keyword">return</span> sequences, attention_mask, action_mask[:, -(sequences.size(<span class="number">1</span>) - input_len):]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, sequences: torch.LongTensor, num_actions: <span class="built_in">int</span>, attention_mask</span>):</span><br><span class="line">        output = self.model(sequences, attention_mask=attention_mask)  <span class="comment"># 模型前向传播</span></span><br><span class="line">        <span class="comment"># 从logits计算动作的对数概率</span></span><br><span class="line">        log_probs = log_probs_from_logits(output[<span class="string">&#x27;logits&#x27;</span>][:, :-<span class="number">1</span>, :], sequences[:, <span class="number">1</span>:])</span><br><span class="line">        <span class="keyword">return</span> log_probs[:, -num_actions:]  <span class="comment"># 返回动作的对数概率</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LlamaActor</span>(<span class="title class_ inherited__">Actor</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        model = LlamaForCausalLM.from_pretrained(pretrained)  <span class="comment"># 使用预训练的LlamaForCausalLM初始化模型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PPOTrainer</span>(<span class="title class_ inherited__">Trainer</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, ...</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 初始化PPO训练器的各个组件和参数</span></span><br><span class="line">        self.experience_maker = NaiveExperienceMaker(actor, critic, reward_model, initial_model, kl_coef)</span><br><span class="line">        self.replay_buffer = NaiveReplayBuffer(train_batch_size, buffer_limit, buffer_cpu_offload)</span><br><span class="line"></span><br><span class="line">        self.actor = actor</span><br><span class="line">        self.critic = critic</span><br><span class="line"></span><br><span class="line">        self.actor_loss_fn = PolicyLoss(eps_clip)  <span class="comment"># 演员损失函数</span></span><br><span class="line">        self.critic_loss_fn = ValueLoss(value_clip)  <span class="comment"># 评论家损失函数</span></span><br><span class="line">        self.vf_coef = vf_coef</span><br><span class="line">        self.ptx_loss_fn = GPTLMLoss()  <span class="comment"># 预训练损失函数</span></span><br><span class="line">        self.ptx_coef = ptx_coef</span><br><span class="line">        self.actor_optim = actor_optim   <span class="comment"># 演员网络的优化器</span></span><br><span class="line">        self.critic_optim = critic_optim  <span class="comment"># 评论家网络的优化器</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_learn</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 根据是否使用重放缓冲区选择不同的训练方式</span></span><br><span class="line">        <span class="keyword">if</span> self.sample_replay_buffer:</span><br><span class="line">            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(self.max_epochs):</span><br><span class="line">                experience = self.replay_buffer.sample()  <span class="comment"># 从重放缓冲区中采样经验</span></span><br><span class="line">                metrics = self.training_step(experience)  <span class="comment"># 执行训练步骤</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(self.max_epochs):</span><br><span class="line">                <span class="keyword">for</span> experience <span class="keyword">in</span> dataloader:  <span class="comment"># 从数据集中获取经验</span></span><br><span class="line">                    metrics = self.training_step(experience)  <span class="comment"># 执行训练步骤</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">self, prompt_dataloader, pretrain_dataloader</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        time = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> episode <span class="keyword">in</span> <span class="built_in">range</span>(num_episodes):</span><br><span class="line">            <span class="keyword">for</span> timestep <span class="keyword">in</span> <span class="built_in">range</span>(max_timesteps):</span><br><span class="line">                time += <span class="number">1</span></span><br><span class="line">                prompts = <span class="built_in">next</span>(<span class="built_in">iter</span>(self.prompt_dataloader))  <span class="comment"># 获取输入提示数据</span></span><br><span class="line">                <span class="comment"># 生成经验，这里可以支持在线和人进行对话</span></span><br><span class="line">                experience = self.experience_maker.make_experience(prompts, **self.generate_kwargs)</span><br><span class="line">                self.replay_buffer.append(experience)  <span class="comment"># 将经验添加到重放缓冲区</span></span><br><span class="line">                <span class="keyword">if</span> time % update_timesteps == <span class="number">0</span>:</span><br><span class="line">                    self._learn()  <span class="comment"># 执行模型更新</span></span><br><span class="line">                    self.replay_buffer.clear()  <span class="comment"># 清空重放缓冲区</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">training_step</span>(<span class="params">self, experience: Experience</span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="built_in">float</span>]:</span><br><span class="line">        self.actor.train()  <span class="comment"># 设置演员网络为训练模式</span></span><br><span class="line">        self.critic.train()  <span class="comment"># 设置评论家网络为训练模式</span></span><br><span class="line">        <span class="comment"># 计算演员网络的动作对数概率</span></span><br><span class="line">        num_actions = experience.action_mask.size(<span class="number">1</span>)</span><br><span class="line">        action_log_probs = self.actor(experience.sequences, num_actions, attention_mask=experience.attention_mask)</span><br><span class="line">        <span class="comment"># 计算演员损失函数</span></span><br><span class="line">        actor_loss = self.actor_loss_fn(</span><br><span class="line">            action_log_probs, experience.action_log_probs, experience.advantages, experience.action_mask)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算预训练损失函数</span></span><br><span class="line">        <span class="keyword">if</span> self.ptx_coef != <span class="number">0</span>:</span><br><span class="line">            batch = <span class="built_in">next</span>(<span class="built_in">iter</span>(self.pretrain_dataloader))</span><br><span class="line">            ptx_log_probs = self.actor.get_base_model()(batch[<span class="string">&#x27;input_ids&#x27;</span>],</span><br><span class="line">                                                        attention_mask=batch[<span class="string">&#x27;attention_mask&#x27;</span>])[<span class="string">&#x27;logits&#x27;</span>]</span><br><span class="line">            ptx_loss = self.ptx_loss_fn(ptx_log_probs, batch[<span class="string">&#x27;labels&#x27;</span>])</span><br><span class="line">            actor_loss = ptx_loss * self.ptx_coef + actor_loss * (<span class="number">1</span> - self.ptx_coef)</span><br><span class="line"></span><br><span class="line">        self.strategy.backward(actor_loss, self.actor, self.actor_optim)  <span class="comment"># 演员网络的反向传播</span></span><br><span class="line">        self.strategy.optimizer_step(self.actor_optim)  <span class="comment"># 演员网络的优化器步骤</span></span><br><span class="line">        self.actor_optim.zero_grad()  <span class="comment"># 清空演员网络的梯度</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算评论家损失函数</span></span><br><span class="line">        values = self.critic(experience.sequences, experience.action_mask, experience.attention_mask)</span><br><span class="line">        critic_loss = self.critic_loss_fn(values, experience.values, experience.reward, experience.action_mask)</span><br><span class="line">        critic_loss = critic_loss * self.vf_coef</span><br><span class="line">        self.strategy.backward(critic_loss, self.critic, self.critic_optim)  <span class="comment"># 评论家网络的反向传播</span></span><br><span class="line">        self.strategy.optimizer_step(self.critic_optim)  <span class="comment"># 评论家网络的优化器步骤</span></span><br><span class="line">        self.critic_optim.zero_grad()  <span class="comment"># 清空评论家网络的梯度</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GPTLMLoss</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.loss = nn.CrossEntropyLoss()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, logits: torch.Tensor, labels: torch.Tensor</span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 将logits向左移动一位，去掉最后一个时间步的预测</span></span><br><span class="line">        shift_logits = logits[..., :-<span class="number">1</span>, :].contiguous()</span><br><span class="line">        <span class="comment"># 将标签向右移动一位，去掉第一个时间步的标签</span></span><br><span class="line">        shift_labels = labels[..., <span class="number">1</span>:].contiguous()</span><br><span class="line">        <span class="comment"># 计算交叉熵损失</span></span><br><span class="line">        <span class="keyword">return</span> self.loss(shift_logits.view(-<span class="number">1</span>, shift_logits.size(-<span class="number">1</span>)), shift_labels.view(-<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PolicyLoss</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, clip_eps: <span class="built_in">float</span> = <span class="number">0.2</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.clip_eps = clip_eps</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, log_probs, old_log_probs, advantages, action_mask</span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 计算当前动作对数概率和旧动作对数概率的比例</span></span><br><span class="line">        ratio = (log_probs - old_log_probs).exp()</span><br><span class="line">        surr1 = ratio * advantages  <span class="comment"># 第一项损失计算</span></span><br><span class="line">        surr2 = ratio.clamp(<span class="number">1</span> - self.clip_eps, <span class="number">1</span> + self.clip_eps) * advantages <span class="comment"># 第二项损失计算</span></span><br><span class="line">        loss = -torch.<span class="built_in">min</span>(surr1, surr2)  <span class="comment"># 选取较小的损失</span></span><br><span class="line">        <span class="keyword">if</span> action_mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            loss = masked_mean(loss, action_mask)  <span class="comment"># 根据动作掩码计算平均损失</span></span><br><span class="line">        loss = loss.mean()  <span class="comment"># 计算平均损失</span></span><br><span class="line">        <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ValueLoss</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, clip_eps: <span class="built_in">float</span> = <span class="number">0.4</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.clip_eps = clip_eps</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, values, old_values, reward, action_mask</span>) -&gt; torch.Tensor:</span><br><span class="line">        <span class="comment"># 对奖励进行裁剪</span></span><br><span class="line">        values_clipped = old_values + (values - old_values).clamp(-self.clip_eps, self.clip_eps)</span><br><span class="line">        surr1 = (values_clipped - reward)**<span class="number">2</span>  <span class="comment"># 第一项损失计算</span></span><br><span class="line">        surr2 = (values - reward)**<span class="number">2</span> <span class="comment"># 第二项损失计算</span></span><br><span class="line">        loss = torch.<span class="built_in">max</span>(surr1, surr2)  <span class="comment"># 选取较大的损失</span></span><br><span class="line">        loss = loss.mean()  <span class="comment"># 计算平均损失</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.5</span> * loss</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NaiveExperienceMaker</span>(<span class="title class_ inherited__">ExperienceMaker</span>):</span><br><span class="line"><span class="meta">    @torch.no_grad()</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">make_experience</span>(<span class="params">self, input_ids: torch.Tensor, **generate_kwargs</span>) -&gt; Experience:</span><br><span class="line">        <span class="comment"># 基于演员函数生成回复及掩码</span></span><br><span class="line">        sequences, attention_mask, action_mask = self.actor.generate(input_ids, ...)</span><br><span class="line">        num_actions = action_mask.size(<span class="number">1</span>)  <span class="comment"># 获取动作的数量</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算动作的对数概率</span></span><br><span class="line">        action_log_probs = self.actor(sequences, num_actions, attention_mask)</span><br><span class="line">        <span class="comment"># 使用初始模型计算动作的对数概率</span></span><br><span class="line">        base_action_log_probs = self.initial_model(sequences, num_actions, attention_mask)</span><br><span class="line">        <span class="comment"># 计算价值</span></span><br><span class="line">        value = self.critic(sequences, action_mask, attention_mask)</span><br><span class="line">        <span class="comment"># 计算基础奖励值</span></span><br><span class="line">        r = self.reward_model(sequences, attention_mask)</span><br><span class="line">        <span class="comment"># 基于动作概率调整奖励值</span></span><br><span class="line">        reward = compute_reward(r, self.kl_coef, action_log_probs, base_action_log_probs, action_mask=action_mask)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算优势函数</span></span><br><span class="line">        advantage = reward - value</span><br><span class="line">        <span class="keyword">return</span> Experience(...)  <span class="comment"># 返回经验</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_reward</span>(<span class="params">r, kl_coef, log_probs, log_probs_base, action_mask</span>) -&gt; torch.Tensor:</span><br><span class="line">    kl = compute_approx_kl(log_probs, log_probs_base, action_mask=action_mask)  <span class="comment"># 计算KL散度</span></span><br><span class="line">    reward = r - kl_coef * kl  <span class="comment"># 计算奖励</span></span><br><span class="line">    <span class="keyword">return</span> reward</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_approx_kl</span>(<span class="params">log_probs, log_probs_base, action_mask</span>) -&gt; torch.Tensor:</span><br><span class="line">    log_ratio = log_probs - log_probs_base  <span class="comment"># 计算对数概率之间的差异</span></span><br><span class="line">    approx_kl = (log_ratio.exp() - <span class="number">1</span>) - log_ratio  <span class="comment"># 计算近似KL散度</span></span><br><span class="line">    <span class="keyword">if</span> action_mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        approx_kl = masked_mean(approx_kl, action_mask, dim=<span class="number">1</span>)  <span class="comment"># 根据动作掩码计算平均KL散度</span></span><br><span class="line">        <span class="keyword">return</span> approx_kl</span><br><span class="line">    approx_kl = approx_kl.mean(dim=<span class="number">1</span>)  <span class="comment"># 计算平均KL散度</span></span><br><span class="line">    <span class="keyword">return</span> approx_kl</span><br></pre></td></tr></table></figure>
+<p>上述代码中用到了KL散度。KL散度（Kullback-Leibler divergence）是一种用于衡量两个概率分布之间差异的指标。在信息论和统计学中广泛应用。</p>
+<p>给定两个离散概率分布P和Q，它们的KL散度定义为：<code>KL(P || Q) = Σ P(i) * log(P(i) / Q(i))</code> 其中，P(i)和Q(i)分别表示P和Q在第i个事件上的概率。</p>
+<p>KL散度不具备对称性，即KL(P || Q) ≠ KL(Q || P)。它度量的是从P到Q的信息损失或差异。KL散度的值为非负数，当且仅当P和Q相等时，KL散度等于0。当P和Q之间的差异增大时，KL散度的值也会增大。</p>
+<p>在深度学习中，KL散度常用于衡量生成模型生成的样本分布与真实数据分布之间的差异。通过最小化KL散度，可以使生成模型逼近真实数据分布，从而提高生成样本的质量。在上述代码中，KL散度被用于计算奖励信号。通过比较动作对数概率与基准动作对数概率之间的差异，可以衡量动作选择与基准模型之间的差异程度，进而调整奖励的大小。</p>
+<h3 id="rlhf算法总结"><a class="markdownIt-Anchor" href="#rlhf算法总结"></a> RLHF算法总结</h3>
+<p>回顾RLHF算法的过程，可以看到，由于我们之前训练了一个奖励函数，RLHF算法在执行过程中，可以没有人类的参与而自动进行。奖励函数代替人给出了对于模型生成的回复的质量的反馈。</p>
+<p>到这里，大家可以理解为什么ChatGPT可以如此智能的回复大家的任意的自然语言问题了吧？OpenAI开放ChatGPT模型给大家使用，随着大家使用越多，OpenAI就可以根据RLHF的算法让模型接触到更多的对话，从而基于这些对话自动的优化ChatGPT！</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>到这里，我们就分析完了所有的ChatGPT类模型的训练和微调、RLHF微调的代码。在分析代码时，我们有意忽略了很多细节及模型并行处理的部分代码，这些对于我们理解模型帮助不大。</p>
+<p>到这里大家应该对ChatGPT类模型的训练有一个较为深入的认识了。</p>
+<p>自ChatGPT发布以来，很多人认为这是一个人类走向通用人工智能的突破，也有一些人认为它其实没什么本质的改进。有很多人对自己的职业发展产生了很深的焦虑感，也有很多人感觉触碰到了科幻世界中的未来，还有很多人觉得又是一个可以好好捞一把的机会。</p>
+<p>也许每个人都有必要去了解一下机器学习技术的原理，这样才能形成对它的理性的认知。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>这是此系列的第五篇，ChatGPT的自动优化。</p>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<ul>
+<li>alpaca博客介绍：<a target="_blank" rel="noopener" href="https://crfm.stanford.edu/2023/03/13/alpaca.html">https://crfm.stanford.edu/2023/03/13/alpaca.html</a></li>
+<li>LLAMA Paper：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2302.13971v1">https://arxiv.org/abs/2302.13971v1</a></li>
+<li>Self-Instruct: Aligning Language Model with Self Generated Instructions：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2212.10560">https://arxiv.org/abs/2212.10560</a></li>
+<li>Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90%* ChatGPT Quality: <a target="_blank" rel="noopener" href="https://lmsys.org/blog/2023-03-30-vicuna/">https://lmsys.org/blog/2023-03-30-vicuna/</a></li>
+<li>OpenAI开发的ChatGPT资料（Training language models to follow instructions<br />
+with human feedback）： <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2203.02155.pdf">https://arxiv.org/pdf/2203.02155.pdf</a></li>
+<li>OpenAI开放的GPT-3资料（Language Models are Few-Shot Learners）: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2005.14165.pdf">https://arxiv.org/pdf/2005.14165.pdf</a></li>
+<li>OpenAI开放的GPT-2资料（Language Models are Unsupervised Multitask Learners）: <a target="_blank" rel="noopener" href="https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf">https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf</a></li>
+<li>OpenAI开放的GPT资料（Improving Language Understanding by Generative Pre-Training): <a target="_blank" rel="noopener" href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/03/26/wechatgpt/" rel="bookmark">微信中的智能助手--WeChatGPT</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/04/12/chatgpt-from-programmer-point-of-view/" rel="bookmark">程序员眼中的ChatGPT</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/04/25/chatgpt-a-technical-summary/" rel="bookmark">ChatGPT使用的技术概览</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/05/18/chatgpt-transformer/" rel="bookmark">ChatGPT使用的Transfomer模型</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/05/20/chatgpt-training/" rel="bookmark">ChatGPT的模型训练</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/ai/" rel="tag"><i class="fa fa-tag"></i> AI</a>
+              <a href="/tags/ml/" rel="tag"><i class="fa fa-tag"></i> ML</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 机器学习</a>
+              <a href="/tags/chatgpt/" rel="tag"><i class="fa fa-tag"></i> ChatGPT</a>
+              <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 强化学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/05/20/chatgpt-training/" rel="prev" title="ChatGPT的模型训练">
+      <i class="fa fa-chevron-left"></i> ChatGPT的模型训练
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/12/chatgpt-used-in-data-development/" rel="next" title="ChatGPT在数据开发中的应用">
+      ChatGPT在数据开发中的应用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text"> 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.</span> <span class="nav-text"> 强化学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text"> 强化学习算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text"> 代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8pytorch%E5%AE%9E%E7%8E%B0policy-gradient"><span class="nav-number">2.1.</span> <span class="nav-text"> 使用PyTorch实现Policy Gradient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8pytorch%E5%AE%9E%E7%8E%B0actor-critic"><span class="nav-number">2.2.</span> <span class="nav-text"> 使用PyTorch实现Actor-Critic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chatgpt%E7%9A%84rlhf%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text"> ChatGPT的RLHF算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rlhf%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93"><span class="nav-number">3.1.</span> <span class="nav-text"> RLHF算法总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text"> 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">580k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">16:06</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?36.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : '6da391f1c61fb765b01f1847dc6daca8',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
