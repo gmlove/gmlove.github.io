@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-06-19T14:41:19.309Z</updated>
+  <updated>2023-06-16T09:54:15.242Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -15,44 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>ChatGPT在数据开发中的应用</title>
-    <link href="http://brightliao.com/2023/06/12/chatgpt-used-in-data-development/"/>
-    <id>http://brightliao.com/2023/06/12/chatgpt-used-in-data-development/</id>
-    <published>2023-06-12T12:00:00.000Z</published>
-    <updated>2023-06-19T14:41:19.309Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css">]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;</summary>
-      
-    
-    
-    
-    <category term="machine-learning" scheme="http://brightliao.com/categories/machine-learning/"/>
-    
-    <category term="ChatGPT" scheme="http://brightliao.com/categories/machine-learning/chatgpt/"/>
-    
-    <category term="数据" scheme="http://brightliao.com/categories/machine-learning/chatgpt/%E6%95%B0%E6%8D%AE/"/>
-    
-    
-    <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
-    
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
-    <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
-    
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
-    <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
-    
-  </entry>
   
   <entry>
     <title>ChatGPT的自动优化</title>
@@ -79,13 +41,13 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-    <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
-    
     <category term="强化学习" scheme="http://brightliao.com/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
+    
+    <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
   </entry>
   
@@ -114,9 +76,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -149,9 +111,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -184,9 +146,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -217,9 +179,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -249,9 +211,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -278,15 +240,15 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
-    <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
-    
     <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
+    <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
   </entry>
   
@@ -416,8 +378,6 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
     
     <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
@@ -425,6 +385,8 @@
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
@@ -464,8 +426,6 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
     
     <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
@@ -473,6 +433,8 @@
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
@@ -511,8 +473,6 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
     
     <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
@@ -520,6 +480,8 @@
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
@@ -560,9 +522,9 @@
     
     <category term="领域" scheme="http://brightliao.com/tags/%E9%A2%86%E5%9F%9F/"/>
     
-    <category term="编程" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
     <category term="编程范式" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F/"/>
+    
+    <category term="编程" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
     <category term="SOLID" scheme="http://brightliao.com/tags/solid/"/>
     
@@ -586,8 +548,6 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
     
     <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
@@ -595,6 +555,8 @@
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
@@ -630,8 +592,6 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
     
     <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
@@ -639,6 +599,8 @@
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
@@ -673,11 +635,11 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
   </entry>
   
@@ -700,11 +662,11 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
   </entry>
   
@@ -719,6 +681,31 @@
     
     
     <summary type="html">&lt;p&gt;在上一篇文章&lt;a href=&quot;http://brightliao.com/2021/05/26/data-indicator-calculation-practice/&quot;&gt;《指标计算实践》&lt;/a&gt;中，我们分析了指标开发过程，并给出了一些如何复用代码的建议。在一系列指标开发出来之后，如何管理好它们，使之容易访问，并方便的对外提供服务，这是数据平台建设中不得不解决的另一个问题。这里我们将这些问题统一称为指标管理问题。本文希望分享一些相关经验。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
+    
+    
+    <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
+    
+    <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>指标计算实践</title>
+    <link href="http://brightliao.com/2021/05/26/data-indicator-calculation-practice/"/>
+    <id>http://brightliao.com/2021/05/26/data-indicator-calculation-practice/</id>
+    <published>2021-05-26T12:00:00.000Z</published>
+    <updated>2023-01-08T08:34:45.587Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p><img data-src="/attaches/2021/2021-05-26-data-indicator-calculation-practice/post-structure.png" alt="post structure" /></p><p>有了数据开发测试工具及<code>DWD</code>模型，数据开发看起来可以顺利往前推进了。下一步是数据开发真正产生业务价值的过程，即指标计算。前面的基础建设其实都是为了指标计算能高效高质量的完成。本文将尝试分享一些关于指标计算的实践经验。</p><p>在前面的文章<a href="http://bright.com/2021/03/15/data-management-practice/">数据平台数据管理实践</a>中，我们提到了基础数据层（也常被称为轻度汇总层）。这一层一般以<code>DWB</code>的缩写来表示，其全称是<code>Data Warehouse Basis</code>。<code>DWB</code>这样的数据分层是业界常见的数据仓库分层实践，对指标计算有很好的参考意义。</p><span id="more"></span><p>指标计算除了要处理指标逻辑之外，一个核心实践就是抽象和构建<code>DWB</code>数据层。本文将尝试分享一般的<code>DWB</code>构建过程，并从开发工具支持上提供一些思路来辅助解决数据应用中的复用问题。</p><h2 id="数据应用中的复用"><a class="markdownIt-Anchor" href="#数据应用中的复用"></a> 数据应用中的复用</h2><p>回顾前面文章中计算空调销量的例子，我们会考虑订单的状态，产品的范围等因素。在实现时，一般需要在第一步就根据这些条件做数据过滤，选出来需要做计算的数据。我们常常将这类数据过滤逻辑称作取数逻辑。</p><p>同样取数逻辑常常会在很多其他指标计算中使用。比如，当需要统计某一个用户产生了多少笔订单以确定高价值用户时，这里的指标取数逻辑就可能跟空调销量指标的取数逻辑相同。这提醒我们需要进行一定的抽象将这部分逻辑在项目中复用起来，以便可以有效的避免<code>bug</code>，并提高交付效率。</p><p>在一般的功能性软件开发中，我们可以通过代码复用来解决这个问题（比如抽象一个公共的模块）。在数据开发中，除了代码复用，还需要考虑计算复用，因为很多大数据量的计算是比较消耗资源的。</p><p>计算复用的一个典型示例还可以从“轻度汇总层”这个名字中引申得到，即某些高级汇总指标可以通过轻度汇总指标计算得到。比如计算空调销量，在业务上，除了希望能计算每日销量，还需要计算每月销量。在计算月销量时，可能可以根据日销量汇总得到。如果这样做，统计月销量可能只需要计算几十条数据就可以了，这可以非常快速的完成。</p><p>在数据应用开发中，我们需要有一些解决复用问题的方案。</p><h2 id="构建dwb层"><a class="markdownIt-Anchor" href="#构建dwb层"></a> 构建<code>DWB</code>层</h2><p>解决数据应用中的复用问题的一个常用思路就是抽象出<code>DWB</code>数据层。由于<code>DWB</code>的数据常常是由一个独立的数据任务产生，所以它同时解决了代码复用和计算复用的问题。</p><p>如何构建一个好的<code>DBW</code>数据层呢？</p><p>可以采用代码重构的思路。比如，在开发第一个指标的时候，我们将所有的代码放在了一起。开发第二个指标的时候，我们发现可以和第一个指标有一定的逻辑复用，于是我们抽象了一个<code>DWB</code>层的数据表，将公共的计算逻辑抽取出来用于构建这个表。构建这个表的代码一般还会形成一个独立的数据计算任务，在数据管道的另一个任务中执行。经过几轮重构之后，我们将得到一些比较稳定的公共层数据表，<code>DWB</code>数据层也就慢慢丰富起来了。</p><p>采用重构的思路构建<code>DWB</code>层数据表存在效率不高的问题。因为计算额外的数据表并不只是需要修改代码，我们还常常需要因此多次重跑数据。对于很多指标而言，都需要计算历史数据指标，这里的量级通常是很大的，在我们的实践过程中，重新跑一次全部历史数据可能需要一天到一周。相比修改代码，其实重新跑数据花费的时间更长。</p><p>更高效的做法可能是一开始就能有一个好的<code>DWB</code>表设计。这需要对业务和数据有足够的了解，同时有较多的数据开发经验。从我们的实践来看，这里的设计也有不少值得参考的经验。</p><p>从需要设计的数据表来看，一般的数据统计都会基于事实表展开，所以，我们常常可以对常用的事实表设计对应的<code>DBW</code>表。</p><p>从特定表的设计来看，首先是要选择合理的粒度。一般而言，可以选择轻度汇总粒度，也可以选择细节粒度。为了能灵活的支持所有上层指标，选择细节粒度的情况可能是居多的。选好粒度之后，主要有两种设计思路可以参考。一是建立少量字段的全量表，二是建立较多字段的增量表。</p><h3 id="轻度汇总粒度"><a class="markdownIt-Anchor" href="#轻度汇总粒度"></a> 轻度汇总粒度</h3><p>如果选择了轻度汇总粒度来构建<code>DWB</code>层，我们会发现一些<code>DWB</code>直接就存储了最终需要的指标数据。比如每日销量可以作为一个轻度汇总指标，它可以支持高级汇总指标月销量的计算。</p><p>这看起来有点奇怪，不过我们也无需担心，只需要在<code>DM</code>输出层建立一个数据映射即可。这一映射可以通过构建一个简单的物理表来实现。如果不想管理数据任务，也不想产生数据复制，还可以考虑通过数据表视图来实现。</p><h3 id="少量字段的全量表"><a class="markdownIt-Anchor" href="#少量字段的全量表"></a> 少量字段的全量表</h3><p>接下来，我们来看一下如何建立少量字段的全量表。为了阐述这一设计思路，我们主要需要回答几个相关问题。</p><p>为什么需要全量表？答案很简单，因为很多统计需要提取所有数据进行计算。空调销量就是一个例子，从逻辑上看，其统计时间范围是全量数据。有人可能会觉得是不是可以基于每天的销量数据进行汇总。这不总是能得到正确的值，因为订单存在取消、退货等情况。一个正确的销量统计可能需要根据所有订单的最新状态进行计算。</p><p>为什么是少量字段呢？这里的设计方式是建立全量表，即每天的数据分区都是一份全量的数据。既然如此，如果大量的字段都需要每天复制存储，那将带来巨大的存储空间占用。</p><p>字段少到什么程度是合适的呢？这个问题并没有统一的答案。可以参考以下做法：</p><ul><li>一般而言，我们需要提取所有的状态字段(如订单的状态，删除标记状态等)，然后根据这些状态字段计算一些标记字段供上层使用。比如可以将完成状态且非内部奖励且非翻新产品订单标记为<code>is_new_valid_order</code>，在计算销量的时候，可以简单的按这个标记字段进行数据过滤。</li><li>一些常用的关联维度放到这个全量表通常也是合适的。<ul><li>某些数据量特别大的关联表的维度，比如用户的年龄、性别等，尤其可以考虑放到全量表中。由于数据量大（用户表通常可以到千万级别），表关联是很慢的，放在<code>DWB</code>数据层来完成就可以避免上层多次进行数据关联，从而提高效率。</li><li>某些数据量特别小的关联表的维度，比如经销店的属性，可以考虑在全量<code>DWB</code>表中仅保留关联经销店<code>ID</code>，然后在上层进行表关联获取相关维度。是否要应用这个建议可能还需要评估加入这些维度之后会带来多大的存储增量，由于数据都是压缩存储的，这里带来的额外存储可能没有想象的那么大。</li></ul></li></ul><h3 id="较多字段的增量表"><a class="markdownIt-Anchor" href="#较多字段的增量表"></a> 较多字段的增量表</h3><p>一些指标的计算无需使用全量数据，这样的指标计算就可以只关心每日增量数据了。可以根据每日增量数据构建<code>DWB</code>表。</p><p>对于这样的增量数据<code>DWB</code>表，其数据量通常不大，因此，我们常常可以在此完成大部分维度的统一关联。这样上层的指标计算将能更简单更快的完成。</p><p>除了可以在此类<code>DWB</code>表中尽可能多的存储关联维度，计算并存储上面提到的标记字段也是合理的。这样可以推进取数逻辑复用，并有效简化上层指标计算的代码。</p><h3 id="增量的添加字段"><a class="markdownIt-Anchor" href="#增量的添加字段"></a> 增量的添加字段</h3><p><code>DWB</code>表的设计很难一蹴而就，因为指标需求往往不是一开始就确定的，而是随着业务的发展逐步完善的。因此，<code>DWB</code>表的设计需要具备一定的扩展性。这里的扩展性可以通过一定的方法来实现，比如：</p><ul><li>在全量表中尽量保留所有的数据，避免出现由于数据不够用需要全部重新构建数据表的情况</li><li>在新加字段之后，<code>DWB</code>的数据需要重跑，通常耗时很长。此时可以建立一个临时的<code>DWB</code>表，将数据输出到这个临时表中。一旦所有历史数据准备完毕，再一次性将原表归档（可以通过重命名实现）并将临时的<code>DWB</code>表重命名为原表名</li></ul><p>采用上述这样增量的方式完善<code>DWB</code>表，将可以有效减少由设计修改带来的对生产正在运行的指标的影响。</p><h2 id="代码复用"><a class="markdownIt-Anchor" href="#代码复用"></a> 代码复用</h2><p>构建一个物理的<code>DWB</code>层有一定的副作用，主要是需要管理额外的数据计算任务，并且，由于额外的数据计算任务的出现，<code>DWB</code>层计算逻辑的变更可能需要引入大量的数据重新计算。此时，我们也可以考虑只在代码层面进行复用，不构建单独的物理数据分层。</p><p>在刚开始的时候，<code>DWB</code>的设计还不够稳定，经常需要修改，<code>DWB</code>层的变更会尤其频繁，在此时选择只在代码层面进行复用就是一个好的时机。</p><p>我们的指标计算代码一般都是通过<code>SQL</code>编写而成，如何实现<code>SQL</code>代码的复用呢？这可能需要新的技术，或从数据工具上做一些支持。</p><h3 id="视图技术"><a class="markdownIt-Anchor" href="#视图技术"></a> 视图技术</h3><p>一个可选的可直接替代物理<code>DWB</code>分层的技术是视图。特别是对于增量的<code>DWB</code>表，可以考虑用视图的方式来构建。</p><p>通过视图构建<code>DWB</code>表有一些前提条件，那就是所有分区的计算逻辑是一致的，也即每个分区的数据可以由<code>DWD</code>层的对应分区计算得来。比如活跃用户数指标，如果计算口径是最近三天有交互，其计算需要选择最近三天的数据，这就不适合用视图来解决问题了。</p><p>除了视图技术，还有一个新的选择，那就是物化视图。</p><p><code>Hive</code> 3.0中引入了对<code>Materialized view</code>的支持，这就是物化视图了。顾名思义，物化视图就是物理化的视图，即提前计算好的视图，相当于有一个物理表。</p><p>在进行视图查询时，<code>SQL</code>引擎会将视图对应的<code>SQL</code>扩展到待执行的<code>SQL</code>中，所以实际的查询常常很复杂，速度也很慢。而物化视图就可以解决这个问题。</p><p>使用物化视图时，我们无需关心这个物理表的数据是什么时候跑出来的，也无需关心什么时候应该更新，<code>Hive</code>帮我们管理好了这一切。</p><p>由此看来，相比视图，物化视图可能是更好的选择。不过，<code>Hive</code>中的物化视图需要开启事务支持，这增加了一些限制。</p><h3 id="sql片段共享"><a class="markdownIt-Anchor" href="#sql片段共享"></a> <code>SQL</code>片段共享</h3><p>除了可以用视图技术来实现代码的复用，另一个更直接的方式就是共享<code>SQL</code>代码片段。这与我们编写其他语言的代码时抽象一个公共模块的思路一样。</p><p>在<a href="http://bright.com/2021/04/01/data-development-language-and-environment/">数据应用开发语言和环境</a>一文中，我们提到了一个新的<code>SQL</code>语法，即模板。一个简单的包含模板的<code>ETL</code>可以是：</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- target=template.a</span></span><br><span class="line"><span class="comment">-- 将下面的sql片段保存为模板a</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">as</span> a, <span class="number">2</span> <span class="keyword">as</span> b</span><br><span class="line"><span class="comment">-- target=temp.result</span></span><br><span class="line"><span class="comment">-- 读取数据，保存为一个临时的表（Spark的TempView）</span></span><br><span class="line"><span class="keyword">select</span> @&#123;a()&#125;, <span class="operator">*</span> <span class="keyword">from</span> some_table;</span><br></pre></td></tr></table></figure><p>模板可以支持在单个<code>ETL</code>文件中共享代码片段。但我们这里的问题是跨<code>ETL</code>共享代码。其实只需要对<code>SQL</code>处理器进行很少的修改就可以支持共享模板了。</p><p>简单来说，我们可以将共享模板定义到一个单独的文件里面，然后在运行时，先执行共享的模板，再执行模板<code>ETL</code>即可。</p><p>另一个思路是，继续增强<code>SQL</code>，增加新的语法，比如可以支持一个称为<code>include</code>指令的语法。<code>include</code>指令的工作方式类似<code>c</code>语言中的<code>include</code>指令，它可以将指令指定的文件内容扩展到当前位置。有了<code>include</code>指令，我们的<code>ETL</code>写起来可能是下面这样：</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- shared_code.snippet.sql</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- target=template.a</span></span><br><span class="line"><span class="comment">-- 将下面的sql片段保存为模板a</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">as</span> a, <span class="number">2</span> <span class="keyword">as</span> b</span><br></pre></td></tr></table></figure><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- etl.sql</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- include=shared_code.snippet.sql</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- target=temp.result</span></span><br><span class="line"><span class="comment">-- 读取数据，保存为一个临时的表（Spark的TempView）</span></span><br><span class="line"><span class="keyword">select</span> @&#123;a()&#125;, <span class="operator">*</span> <span class="keyword">from</span> some_table;</span><br></pre></td></tr></table></figure><p>为支持这个新语法，我们需要在<code>SQL</code>处理器里面增加一个预处理的过程，在该预处理阶段完成文件内容扩展。</p><h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2><p>指标计算过程中的一个重要问题是如何进行复用。本文尝试从<code>DWB</code>的构建及公共<code>SQL</code>片段提取两个方面分享了我们的一些实践经验。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;/attaches/2021/2021-05-26-data-indicator-calculation-practice/post-structure.png&quot; alt=&quot;post structure&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;有了数据开发测试工具及&lt;code&gt;DWD&lt;/code&gt;模型，数据开发看起来可以顺利往前推进了。下一步是数据开发真正产生业务价值的过程，即指标计算。前面的基础建设其实都是为了指标计算能高效高质量的完成。本文将尝试分享一些关于指标计算的实践经验。&lt;/p&gt;
+&lt;p&gt;在前面的文章&lt;a href=&quot;http://bright.com/2021/03/15/data-management-practice/&quot;&gt;数据平台数据管理实践&lt;/a&gt;中，我们提到了基础数据层（也常被称为轻度汇总层）。这一层一般以&lt;code&gt;DWB&lt;/code&gt;的缩写来表示，其全称是&lt;code&gt;Data Warehouse Basis&lt;/code&gt;。&lt;code&gt;DWB&lt;/code&gt;这样的数据分层是业界常见的数据仓库分层实践，对指标计算有很好的参考意义。&lt;/p&gt;</summary>
     
     
     
