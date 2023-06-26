@@ -41,13 +41,13 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-    <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
-    
     <category term="强化学习" scheme="http://brightliao.com/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
+    
+    <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
   </entry>
   
@@ -76,9 +76,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -109,9 +109,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -142,9 +142,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -155,7 +155,7 @@
     <link href="http://brightliao.com/2023/04/12/chatgpt-from-programmer-point-of-view/"/>
     <id>http://brightliao.com/2023/04/12/chatgpt-from-programmer-point-of-view/</id>
     <published>2023-04-12T12:00:00.000Z</published>
-    <updated>2023-06-25T04:18:49.220Z</updated>
+    <updated>2023-06-25T05:33:44.698Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p><p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p><p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p><p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p><p>这是此系列的第一篇，程序员眼中的ChatGPT。</p><span id="more"></span><h2 id="什么是chatgpt"><a class="markdownIt-Anchor" href="#什么是chatgpt"></a> 什么是ChatGPT</h2><p>网络上已经有铺天盖地的内容介绍ChatGPT是什么了。总结起来，有以下几个关于ChatGPT的认知：</p><ul><li>ChatGPT是由OpenAI开发的一个用于对话生成的AI模型</li><li>GPT是&quot;Generative Pre-trained Transformer&quot;的缩写，表示它是一个经过预训练的生成式Transformer模型</li><li>ChatGPT学习了大规模的文本内容，如互联网上的网页、书籍和对话等，能够准确理解输入的自然语言，并生成自然而连贯的回复</li><li>可用于构建智能聊天机器人、虚拟助手、虚拟客服等应用，可以帮助我们写文章、写剧本、做设计，甚至还能辅助编写和调试程序</li><li>ChatGPT的计算过程非常复杂，包含了超过千亿的参数，需要用大量的显卡并行计算</li></ul><p>这些内容，相信大家已经了解得足够多了，在这里我们就不详述了。</p><p>那么，对于开发人员而言，ChatGPT有哪些不一样的特征呢？如何与我们所熟悉的东西对比进行理解呢？下面主要从这个角度来分享一下我的观点。</p><h2 id="确定性与非确定性"><a class="markdownIt-Anchor" href="#确定性与非确定性"></a> 确定性与非确定性</h2><p>从普通开发人员的视角来看，ChatGPT与普通的程序会有什么不同呢？我觉得最大的不同在于确定性与非确定性。</p><p>我们编写的大部分可运行的软件程序以一种确定性的方式在工作。比如，这篇文章以Markdown格式编写，有一个程序，可以以一种确定的方式解析Markdown格式，并以一种确定的方式展示它。</p><p>ChatGPT模型就很不一样，它更多是以一种概率性的非确定的方式在工作。我们都知道自然语言本身就是充满不确定性的。比如，同样一句话“他这个人谁都看不上”，可能表示“他”很挑剔，看不上别人；也可能表示“他”能力比较差，大家都看不起他。到底表示什么意义？这就要根据不同的上下文、情境来确定。</p><p>ChatGPT模型可以较为准确的理解自然语言的含义，这说明它可以综合分析输入给它的文本，然后选择一个概率最高的理解。</p><p>同时，ChatGPT模型可以生成不同的回复，这也是由概率控制的。ChatGPT模型在工作时会根据给定的文本生成下一个词。如何选定下一个词？程序会根据配置随机的选择一个较高概率的词，由于这里的随机性，就产生了AI回复的多样性。如果我们在生成下一个词时始终选择概率最高的那个词，那ChatGPT模型就会变成一个确定性的程序。</p><h2 id="自动优化得来的一个复杂函数"><a class="markdownIt-Anchor" href="#自动优化得来的一个复杂函数"></a> 自动优化得来的一个复杂函数</h2><p>从开发人员的视角来看，ChatGPT其实也可以看做一个普通的函数，根据输入的文本，输出另一些文本。只不过，这个函数能实现的功能比较强大，并且是基于概率去实现的而已。</p><p>在这个函数的实现上，它与其他的主要通过开发人员编写代码去实现的方式也不一样。ChatGPT模型与其他的AI模型一样，它是通过训练来实现的。</p><p>简单来说，它的实现流程是这样。为了实现这个函数，我们随机初始化了一堆参数，然后准备好大量的我们认为这个函数应该具有的输入输出对（即训练数据集），用这些数据去训练它。训练的过程其实就是调整我们之前随机初始化的参数的过程。当这些参数经过长时间的大量的调整之后，我们发现这个函数大概率能针对我们提供的输入返回我们预期的输出了。此时，实际上这个函数就被以一种概率的方式实现了。</p><p>调整参数的过程，也可以类比高中数学中的方程组求解过程。比如，给一个包含两个未知数的方程<code>ax + by = c</code>，只要我们知道两组<code>a b c</code>的值，我们就可以求解出<code>x</code>和<code>y</code>。这里的训练就相当于找到了大量的这样的<code>a b c</code>值对，然后用这些值去求解<code>x</code>和<code>y</code>。不过，这里的求解过程实际上用到了一些基于向量的微积分的技术。</p><h2 id="难以理解的黑盒"><a class="markdownIt-Anchor" href="#难以理解的黑盒"></a> 难以理解的黑盒</h2><p>有了前面的理解，相信大家也不会觉得ChatGPT是什么神秘的技术了。它只是与我们平常的函数的实现机制稍微有些区别而已。</p><p>或许我们会觉得用这种参数优化的方式去实现复杂函数的机制很有趣，也很有启发意义。但其实这种实现方式也有其问题。</p><p>最大的问题或许在于，我们难以理解这个函数为什么可以工作。</p><p>这一方面是因为函数包含了大规模的参数，特别是ChatGPT这种大模型，比如ChatGPT3.5版本，就包含了1750亿个参数。这么多的参数显然无法依靠人为的去分析每一个参数的作用。</p><p>另一方面，我们也不知道这些参数是如何计算来的。因为参数的调整过程同样是经过了超长的时间，有超大规模的输入输出对给到它。我们只能从数学原理上说明，这些参数可以最终收敛到某一个靠近最优值的点。但是我们无法去分析每一次的优化具体产生了什么影响。</p><p>可以说，这样的AI模型，或者说智能函数，本身就是一个难以理解的黑盒。</p><p>既然难以理解，我们在使用上就需要小心，因为它很可能一直表现很好，但是某一个场景下就出现无法预料的很差的效果。这也是目前的人工智能技术让人觉得很炫酷，但在真正落地应用时，总是有这样那样的问题的一个重要原因。</p><p>实际上，如果我们问ChatGPT，ChatGPT模型在应用上有哪些挑战，它就会回复：</p><blockquote><p>ChatGPT具有令人振奋的潜力，但也面临着一些挑战和限制。例如，它可能会生成不准确或不符合预期的回复，以及对偏见和敏感话题的处理问题。</p></blockquote><h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2><p>有了上面的理解，大家再来看ChatGPT，我相信大家也不会觉得它很神秘了。</p><p>自ChatGPT发布以来，很多人认为这是一个人类走向通用人工智能的突破，也有一些人认为它其实没什么本质的改进。有很多人对自己的职业发展产生了很深的焦虑感，也有很多人感觉触碰到了科幻世界中的未来，还有很多人觉得又是一个可以好好捞一把的机会。</p><p>也许每个人都有必要去了解一下机器学习技术的原理，这样才能形成对它的理性的认知。</p><p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p><p>这是此系列的第一篇，程序员眼中的ChatGPT。</p>]]></content>
     
@@ -175,9 +175,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -207,9 +207,9 @@
     
     <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
     
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
     <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
     
     <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
@@ -374,11 +374,15 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
+    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
+    
+    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
@@ -391,10 +395,6 @@
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     <category term="SQL" scheme="http://brightliao.com/tags/sql/"/>
-    
-    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
-    
-    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
   </entry>
   
@@ -422,11 +422,15 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
+    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
+    
+    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
@@ -439,10 +443,6 @@
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     <category term="SQL" scheme="http://brightliao.com/tags/sql/"/>
-    
-    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
-    
-    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
   </entry>
   
@@ -469,11 +469,15 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
+    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
+    
+    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
@@ -486,10 +490,6 @@
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     <category term="SQL" scheme="http://brightliao.com/tags/sql/"/>
-    
-    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
-    
-    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
   </entry>
   
@@ -544,11 +544,15 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
+    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
+    
+    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
@@ -561,10 +565,6 @@
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     <category term="SQL" scheme="http://brightliao.com/tags/sql/"/>
-    
-    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
-    
-    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
   </entry>
   
@@ -588,11 +588,15 @@
     <category term="数据" scheme="http://brightliao.com/categories/%E6%95%B0%E6%8D%AE/"/>
     
     
-    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
+    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
+    
+    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
     <category term="数据平台" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0/"/>
+    
+    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="ETL" scheme="http://brightliao.com/tags/etl/"/>
     
@@ -605,10 +609,6 @@
     <category term="编程语言" scheme="http://brightliao.com/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
     
     <category term="SQL" scheme="http://brightliao.com/tags/sql/"/>
-    
-    <category term="编译" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91/"/>
-    
-    <category term="编译器" scheme="http://brightliao.com/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
   </entry>
   
