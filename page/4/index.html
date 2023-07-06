@@ -146,7 +146,7 @@
   </li>
         <li class="menu-item menu-item-机器学习">
 
-    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">22</span></a>
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
 
   </li>
         <li class="menu-item menu-item-敏捷">
@@ -185,7 +185,7 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">108</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -249,6 +249,246 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/10/30/hadoop-auth-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/30/hadoop-auth-2/" class="post-title-link" itemprop="url">Hadoop安全认证机制 （二）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-30 20:00:00" itemprop="dateCreated datePublished" datetime="2019-10-30T20:00:00+08:00">2019-10-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-19 22:33:06" itemprop="dateModified" datetime="2023-06-19T22:33:06+08:00">2023-06-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/10/30/hadoop-auth-2/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （二）" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在<a href="/2019/10/27/hadoop-auth/">上一篇</a>文章中，我们分析了<code>Kerberos</code>协议的设计和通信过程。可以了解到，<code>Kerberos</code>主要实现了不在网络传输密码的同时又能在本地进行高性能鉴权。由于<code>kerberos</code>的协议设计相对复杂，看到评论有人还有疑问，这里再举一个例子来分析一下<code>kerberos</code>的安全性。</p>
+<h2 id="kerberos协议回顾"><a class="markdownIt-Anchor" href="#kerberos协议回顾"></a> <code>Kerberos</code>协议回顾</h2>
+<p>假设有三个组件A B C，A想和C进行安全通信，而B作为一个认证中心保存了认证信息。那么以以下的方式进行通信就可以做到安全：</p>
+<ol>
+<li>A向B请求说要访问C，将此消息用A的秘钥加密之后，发给B</li>
+<li>B验证A的权限之后，用A自己的秘钥加密一个会话密码，然后传给A</li>
+<li>同时B还向A发送一个A自己不能解密，只能由C解密的消息</li>
+<li>A在解密会话密码之后，将需要和C通信的消息（业务消息）用这个会话密码加密然后发给C，同时A需要将B发给A而A又不能解密的消息发给C</li>
+<li>C在拿到消息之后，可以将第三步中的消息解密，得到会话秘钥，从而可以解密A发过来的业务消息了</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/30/hadoop-auth-2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/10/27/hadoop-auth/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/27/hadoop-auth/" class="post-title-link" itemprop="url">Hadoop安全认证机制 (一)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-27 20:00:00" itemprop="dateCreated datePublished" datetime="2019-10-27T20:00:00+08:00">2019-10-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-19 22:33:02" itemprop="dateModified" datetime="2023-06-19T22:33:02+08:00">2023-06-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/10/27/hadoop-auth/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 (一)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>12k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>19 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>安全无小事，我们常常要为了预防安全问题而付出大量的代价。虽然小区楼道里面的灭火器、消防栓常年没人用，但是我们还是要准备着。我们之所以愿意为了这些小概率事件而付出巨大的成本，是因为安全问题一旦发生，很多时候我们将无法承担它带来的后果。</p>
+<p>在软件行业，安全问题尤其突出，因为无法预料的事情实在太多了。软件的复杂性让我们几乎无法完全扫清安全问题，模块A独立运行可能没问题，但是一旦和模块B一起工作也许就产生了安全问题。</p>
+<p>不可否认为了让软件更安全，我们引入了很多复杂的机制。不少人开发者也抱怨为了进行安全处理而做了太多额外的事情。在一个复杂的分布式软件Hadoop中，我们为此付出的成本将更大。比如，我们可能可以比较轻松的搭建一个无安全机制的集群，但是一旦需要支持安全机制的时候，我们可能会付出额外几倍的时间来进行各种复杂的配置和调试。</p>
+<p>Hadoop在开始的几个版本中其实并没有安全机制的支持，后来Yahoo在大规模应用Hadoop之后，安全问题也就日益明显起来。大家都在一个平台上面进行操作是很容易引起安全问题的，比如一个人把另一个人的数据删除了，一个人把另一个人正在运行的任务给停掉了，等等。在当今的企业应用里面，一旦我们的数据开始上规模之后，安全机制的引入几乎是必然的选择。所以作为大数据领域的开发者，理解Hadoop的安全机制就显得非常重要。</p>
+<p>Hadoop的安全机制现在已经比较成熟，网上关于它的介绍也很多，但相对较零散，下面我将尝试更系统的，并结合实例代码，给大家分享一下最近一段时间关于Hadoop安全机制的学习所得，抛个砖。</p>
+<p>预计将包括这样几个方面：</p>
+<ol>
+<li>Kerberos协议介绍及实践</li>
+<li>Kerberos协议发展及Hadoop相关源码分析</li>
+<li>Hadoop安全集群搭建及测试</li>
+<li>周边工具的安全支持</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/27/hadoop-auth/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -456,116 +696,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/03/26/wechatgpt/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/05/25/chatgpt-rlhf/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/05/25/chatgpt-rlhf/" class="post-title-link" itemprop="url">ChatGPT的自动优化</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-05-25 20:00:00" itemprop="dateCreated datePublished" datetime="2023-05-25T20:00:00+08:00">2023-05-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-16 17:54:15" itemprop="dateModified" datetime="2023-06-16T17:54:15+08:00">2023-06-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/chatgpt/" itemprop="url" rel="index"><span itemprop="name">ChatGPT</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2023/05/25/chatgpt-rlhf/" class="post-meta-item leancloud_visitors" data-flag-title="ChatGPT的自动优化" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>20k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>33 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
-<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
-<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
-<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
-<p>这是此系列的第五篇，ChatGPT的自动优化。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/05/25/chatgpt-rlhf/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1203,110 +1333,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/04/15/understanding-gradients-of-conv2d-in-experiments/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/" class="post-title-link" itemprop="url">理解Conv2d及其梯度的计算过程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-15 11:48:56" itemprop="dateCreated datePublished" datetime="2017-04-15T11:48:56+08:00">2017-04-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-16 17:52:57" itemprop="dateModified" datetime="2023-06-16T17:52:57+08:00">2023-06-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/" class="post-meta-item leancloud_visitors" data-flag-title="理解Conv2d及其梯度的计算过程" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。</p>
-<h2 id="卷积计算过程"><a class="markdownIt-Anchor" href="#卷积计算过程"></a> 卷积计算过程</h2>
-<p>在卷积神经网络中，卷积计算过程可以通过下面的动图（来自<a target="_blank" rel="noopener" href="https://docs.google.com/presentation/d/1TVixw6ItiZ8igjp6U17tcgoFrLSaHWQmMOwjlgQY9co/pub?slide=id.g1245051c73_0_2184">此处</a>）来理解：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1378,7 +1404,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-count">109</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1486,12 +1512,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">580k</span>
+    <span title="站点总字数">585k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">16:06</span>
+    <span title="站点阅读时长">16:15</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1622,7 +1648,7 @@
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?40.js"></script>
+<script src="/js/next-boot.js?41.js"></script>
 
 <script src="/js/bookmark.js"></script>
 

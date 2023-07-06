@@ -32,7 +32,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-18-chatgpt-transformer/model-archi.png">
 <meta property="article:published_time" content="2023-05-18T12:00:00.000Z">
-<meta property="article:modified_time" content="2023-06-19T16:02:52.603Z">
+<meta property="article:modified_time" content="2023-06-30T02:45:29.529Z">
 <meta property="article:author" content="Bright LGM">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="机器学习">
@@ -156,7 +156,7 @@
   </li>
         <li class="menu-item menu-item-机器学习">
 
-    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">22</span></a>
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
 
   </li>
         <li class="menu-item menu-item-敏捷">
@@ -195,7 +195,7 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">108</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -294,7 +294,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-20 00:02:52" itemprop="dateModified" datetime="2023-06-20T00:02:52+08:00">2023-06-20</time>
+                <time title="修改时间：2023-06-30 10:45:29" itemprop="dateModified" datetime="2023-06-30T10:45:29+08:00">2023-06-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -404,22 +404,22 @@
 <h4 id="温度参数"><a class="markdownIt-Anchor" href="#温度参数"></a> 温度参数</h4>
 <p>生成文本时，有两个重要的参数：温度（temperature）和top-p。它们是如何产生作用的呢？</p>
 <p>温度参数（temperature）在生成文本过程中起到控制多样性的作用。较高的温度值会增加生成文本时的随机性，使得模型更加倾向于选择概率较小的标记，从而产生更多样化的输出。</p>
-<p>具体来说，温度参数会影响 <code>softmax</code> 操作中的指数运算。在 <code>softmax</code> 函数中，通过将 <code>logits</code> 值进行指数运算并归一化，将其转换为概率分布。温度参数的作用是调整指数运算的敏感度。较高的温度值会使指数运算的结果更加平滑，增加了各个标记之间的概率差异，降低了概率较大的标记相对于概率较小的标记的优势。这样，在生成过程中，模型更有可能选择概率较小的标记，从而产生更多样化的输出。</p>
-<p>举个例子，假设有一个具有三个候选标记的生成任务，对应的 <code>logits</code> 为 <code>[1.0, 2.0, 3.0]</code>。当温度参数为较低的值（例如1.0）时，通过 <code>softmax</code> 运算后，对应的概率分布为 <code>[0.09, 0.24, 0.67]</code>。可以看到，概率较大的标记 3 相对于其他标记有明显优势，模型更有可能选择标记 3。而当温度参数为较高的值（例如2.0）时，通过 <code>softmax</code> 运算后，对应的概率分布为 <code>[0.02, 0.11, 0.87]</code>。可以看到，概率差异缩小，标记 3 相对于其他标记的优势减小，模型更容易在标记之间进行随机选择。</p>
+<p>具体来说，温度参数会影响 <code>softmax</code> 操作中的指数运算。在 <code>softmax</code> 函数中，通过将 <code>logits</code> 值进行指数运算并归一化，将其转换为概率分布。温度参数的作用是调整指数运算的敏感度。较高的温度值会使指数运算的结果更加平滑，减小了各个标记之间的概率差异，降低了概率较大的标记相对于概率较小的标记的优势。这样，在生成过程中，模型更有可能选择概率较小的标记，从而产生更多样化的输出。</p>
+<p>举个例子，假设有一个具有三个候选标记的生成任务，对应的 <code>logits</code> 为 <code>[1.0, 2.0, 3.0]</code>。当温度参数为较低的值（例如1.0）时，通过 <code>softmax</code> 运算后，对应的概率分布为 <code>[0.09, 0.24, 0.67]</code>。可以看到，概率较大的标记 3 相对于其他标记有明显优势，模型更有可能选择标记 3。而当温度参数为较高的值（例如2.0）时，通过 <code>softmax</code> 运算后，对应的概率分布为 <code>[0.19, 0.31, 0.51]</code>。可以看到，概率差异缩小，标记 3 相对于其他标记的优势减小，模型更容易在标记之间进行随机选择。</p>
 <p>因此，通过调整温度参数，可以在生成文本时控制多样性。较高的温度值可以增加生成文本的随机性，产生更多样化的输出；而较低的温度值可以增加生成文本的准确性，更倾向于选择概率较大的标记。根据具体的任务需求和应用场景，可以选择合适的温度值来平衡准确性和多样性之间的权衡。</p>
 <h4 id="top-p参数"><a class="markdownIt-Anchor" href="#top-p参数"></a> top-p参数</h4>
 <p><code>top-p</code>参数用于控制生成文本时的文本选择范围。</p>
 <p>实现时，首先，计算 <code>softmax</code> 操作后的概率分布。然后，按照概率从高到低的顺序对概率进行排序。接下来，按照累积概率的方式逐个考虑排名靠前的标记，直到累积概率超过 <code>top-p</code> 的阈值。此时，只有排名靠前的文本才会被保留在选择范围内，其他排名较低的文本会被舍弃。</p>
 <p>换句话说，<code>top-p</code> 参数通过动态地确定生成时所需的标记范围，使得生成的结果更加多样化且避免选择概率极低的标记。这种方式比传统的 <code>top-k</code> 采样更加灵活，因为 <code>top-p</code> 参数不依赖于固定的 <code>k</code> 值，而是根据概率分布动态地确定需要保留的标记数量。</p>
 <p>下面函数是相关的实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sample_top_p</span>(<span class="params">probs, p</span>):</span><br><span class="line">    <span class="comment"># 对概率进行排序并记录排序后的索引</span></span><br><span class="line">    probs_sort, probs_idx = torch.sort(probs, dim=-<span class="number">1</span>, descending=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 计算累积概率</span></span><br><span class="line">    probs_sum = torch.cumsum(probs_sort, dim=-<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 创建一个布尔掩码，用于确定哪些概率需要保留</span></span><br><span class="line">    mask = probs_sum - probs_sort &gt; p</span><br><span class="line">    <span class="comment"># 将超过 top-p 阈值的概率置为 0</span></span><br><span class="line">    probs_sort[mask] = <span class="number">0.0</span></span><br><span class="line">    <span class="comment"># 将概率归一化，使其和为 1</span></span><br><span class="line">    probs_sort.div_(probs_sort.<span class="built_in">sum</span>(dim=-<span class="number">1</span>, keepdim=<span class="literal">True</span>))</span><br><span class="line">    <span class="comment"># 从归一化的概率分布中进行多项式采样，得到下一个标记</span></span><br><span class="line">    next_token = torch.multinomial(probs_sort, num_samples=<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 使用排序后的索引获取对应的下一个标记</span></span><br><span class="line">    next_token = torch.gather(probs_idx, -<span class="number">1</span>, next_token)</span><br><span class="line">    <span class="keyword">return</span> next_token</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sample_top_p</span>(<span class="params">probs, p</span>):</span><br><span class="line">    <span class="comment"># 对概率进行排序并记录排序后的索引</span></span><br><span class="line">    probs_sort, probs_idx = torch.sort(probs, dim=-<span class="number">1</span>, descending=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 计算累积概率</span></span><br><span class="line">    probs_sum = torch.cumsum(probs_sort, dim=-<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 创建一个布尔掩码，用于确定哪些概率需要保留</span></span><br><span class="line">    mask = probs_sum - probs_sort &gt; p</span><br><span class="line">    <span class="comment"># 将超过 top-p 阈值的概率置为 0</span></span><br><span class="line">    probs_sort[mask] = <span class="number">0.0</span></span><br><span class="line">    <span class="comment"># 将概率归一化，使其和为 1</span></span><br><span class="line">    probs_sort.div_(probs_sort.<span class="built_in">sum</span>(dim=-<span class="number">1</span>, keepdim=<span class="literal">True</span>))</span><br><span class="line">    <span class="comment"># 从归一化的概率分布中进行多项式分布采样，得到下一个标记</span></span><br><span class="line">    next_token = torch.multinomial(probs_sort, num_samples=<span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 使用排序后的索引获取对应的下一个标记</span></span><br><span class="line">    next_token = torch.gather(probs_idx, -<span class="number">1</span>, next_token)</span><br><span class="line">    <span class="keyword">return</span> next_token</span><br></pre></td></tr></table></figure>
 <p>函数接受两个参数：<code>probs</code> 是经过 <code>softmax</code> 操作得到的概率分布，<code>p</code> 是 <code>top-p</code> 参数，用于确定保留的概率范围。</p>
 <p>根据<code>top-p</code>进行结果选择的逻辑如下：</p>
 <ul>
 <li>对概率 <code>probs</code> 进行排序，并记录排序后的索引，使得概率从高到低排列。</li>
 <li>计算概率的累积和。</li>
 <li>创建一个布尔掩码，用于确定哪些概率需要保留。如果累积概率超过了 <code>top-p</code> 阈值，则对应的概率置为 0。</li>
-<li>将概率归一化，使其和为 1，以便进行多项式采样。</li>
+<li>将概率归一化，使其和为 1，以便进行多项式分布采样。</li>
 <li>使用多项式采样方法从归一化的概率分布中选取一个下一个标记。</li>
 <li>使用排序后的索引 <code>probs_idx</code> 获取对应的下一个标记。</li>
 <li>返回选取的下一个标记 <code>next_token</code>。</li>
@@ -540,7 +540,7 @@
       <div class="popular-posts-title"><a href="/2023/05/20/chatgpt-training/" rel="bookmark">ChatGPT的模型训练</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2023/05/25/chatgpt-rlhf/" rel="bookmark">ChatGPT的自动优化</a></div>
+      <div class="popular-posts-title"><a href="/2023/06/02/chatgpt-long-context/" rel="bookmark">突破ChatGPT的知识限制</a></div>
     </li>
   </ul>
 
@@ -681,7 +681,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-count">109</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -789,12 +789,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">580k</span>
+    <span title="站点总字数">585k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">16:06</span>
+    <span title="站点阅读时长">16:15</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -925,7 +925,7 @@
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?40.js"></script>
+<script src="/js/next-boot.js?41.js"></script>
 
 <script src="/js/bookmark.js"></script>
 

@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-25-chatgpt-rlhf/rlhf.jpeg">
 <meta property="og:image" content="http://brightliao.com/attaches/2023/2023-05-25-chatgpt-rlhf/cartpole.png">
 <meta property="article:published_time" content="2023-05-25T12:00:00.000Z">
-<meta property="article:modified_time" content="2023-06-16T09:54:15.242Z">
+<meta property="article:modified_time" content="2023-06-27T08:06:18.278Z">
 <meta property="article:author" content="Bright LGM">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="机器学习">
@@ -158,7 +158,7 @@
   </li>
         <li class="menu-item menu-item-机器学习">
 
-    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">22</span></a>
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
 
   </li>
         <li class="menu-item menu-item-敏捷">
@@ -197,7 +197,7 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">108</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -296,7 +296,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-16 17:54:15" itemprop="dateModified" datetime="2023-06-16T17:54:15+08:00">2023-06-16</time>
+                <time title="修改时间：2023-06-27 16:06:18" itemprop="dateModified" datetime="2023-06-27T16:06:18+08:00">2023-06-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -350,7 +350,7 @@
 <p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
 <p>这是此系列的第五篇，ChatGPT的自动优化。</p>
 <span id="more"></span>
-<p><a href="https://brightliao.com/2023/05/18/2023-05-18-chatgpt-transformer/">上一篇</a>文章我们深入分析了ChatGPT是如何训练及优化的，了解了如何进行监督微调，及如何让模型可以支持更广泛领域的问答。但是，监督微调始终会限于训练集中的问题模板数量，无法支持更为一般的对话。这一步骤就需要引入强化学习的训练方式，让ChatGPT可以自动进行优化。</p>
+<p><a href="https://brightliao.com/2023/05/20/2023-05-20-chatgpt-training/">上一篇</a>文章我们深入分析了ChatGPT是如何训练及优化的，了解了如何进行监督微调，及如何让模型可以支持更广泛领域的问答。但是，监督微调始终会限于训练集中的问题模板数量，无法支持更为一般的对话。这一步骤就需要引入强化学习的训练方式，让ChatGPT可以自动进行优化。</p>
 <h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
 <p>强化学习模型是最为复杂的部分，参考ColossalAI的文档，模型的工作原理如下：</p>
 <p><img data-src="/attaches/2023/2023-05-25-chatgpt-rlhf/rlhf.jpeg" alt="RLHF" /></p>
@@ -471,10 +471,10 @@ with human feedback）： <a target="_blank" rel="noopener" href="https://arxiv.
       <div class="popular-posts-title"><a href="/2023/04/25/chatgpt-a-technical-summary/" rel="bookmark">ChatGPT使用的技术概览</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2023/05/18/chatgpt-transformer/" rel="bookmark">ChatGPT使用的Transfomer模型</a></div>
+      <div class="popular-posts-title"><a href="/2023/05/20/chatgpt-training/" rel="bookmark">ChatGPT的模型训练</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="/2023/05/20/chatgpt-training/" rel="bookmark">ChatGPT的模型训练</a></div>
+      <div class="popular-posts-title"><a href="/2023/06/02/chatgpt-long-context/" rel="bookmark">突破ChatGPT的知识限制</a></div>
     </li>
   </ul>
 
@@ -537,7 +537,10 @@ with human feedback）： <a target="_blank" rel="noopener" href="https://arxiv.
     <a href="/2023/05/20/chatgpt-training/" rel="prev" title="ChatGPT的模型训练">
       <i class="fa fa-chevron-left"></i> ChatGPT的模型训练
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/02/chatgpt-long-context/" rel="next" title="突破ChatGPT的知识限制">
+      突破ChatGPT的知识限制 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -613,7 +616,7 @@ with human feedback）： <a target="_blank" rel="noopener" href="https://arxiv.
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-count">109</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -721,12 +724,12 @@ with human feedback）： <a target="_blank" rel="noopener" href="https://arxiv.
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">580k</span>
+    <span title="站点总字数">585k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">16:06</span>
+    <span title="站点阅读时长">16:15</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -857,7 +860,7 @@ with human feedback）： <a target="_blank" rel="noopener" href="https://arxiv.
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?40.js"></script>
+<script src="/js/next-boot.js?41.js"></script>
 
 <script src="/js/bookmark.js"></script>
 
