@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-07-25T14:26:08.970Z</updated>
+  <updated>2023-07-25T14:35:17.056Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-07-25T14:26:08.970Z</updated>
+    <updated>2023-07-25T14:35:17.056Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="725-工作的节奏"><a class="markdownIt-Anchor" href="#725-工作的节奏"></a> 7.25: 工作的节奏</h2><p>在专业软件服务公司工作很容易形成一种节奏感。<br />xx<br />我们都是以项目制为单位进行团队组织的。项目一般会定期更替，这是较长期的节奏。项目内部我们以敏捷迭代的方式展开，这是短期的节奏。</p><p>节奏就像持续不断的音乐节拍，有起有伏，井井有条，让人乐在其中。</p><p>有的时候，节奏却也像是时钟的滴答，背后的齿轮机械而固定地转动，一成不变，永无止境，让人感觉枯燥无聊。</p><p>人生也许就是需要有略显枯燥的大的节奏，以便可以在一个框架中前进，而不至于偏离方向。同时，大的节奏并不意味着无聊，因为在大的节奏期间我们可以尽情发挥。这就像音乐，高低不同的音符伴随着规律的节奏形成了打动人心的篇章。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="725-工作的节奏"><a class="markdownIt-Anchor" href="#725-工作的节奏"></a> 7.25: 工作的节奏</h2><p>在专业软件服务公司工作很容易形成一种节奏感。</p><p>我们都是以项目制为单位进行团队组织的。项目一般会定期更替，这是较长期的节奏。项目内部我们以敏捷迭代的方式展开，这是短期的节奏。</p><p>节奏就像持续不断的音乐节拍，有起有伏，井井有条，让人乐在其中。</p><p>有的时候，节奏却也像是时钟的滴答，背后的齿轮机械而固定地转动，一成不变，永无止境，让人感觉枯燥无聊。</p><p>人生也许就是需要有略显枯燥的大的节奏，以便可以在一个框架中前进，而不至于偏离方向。同时，大的节奏并不意味着无聊，因为在大的节奏期间我们可以尽情发挥。这就像音乐，高低不同的音符伴随着规律的节奏形成了打动人心的篇章。</p>]]></content>
     
     
       
@@ -493,9 +493,9 @@
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
+    
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
@@ -526,9 +526,9 @@
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
+    
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
@@ -560,11 +560,11 @@
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
-    
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
@@ -594,11 +594,11 @@
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
+    
     <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
-    
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
