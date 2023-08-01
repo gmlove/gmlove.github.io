@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-07-31T01:20:25.841Z</updated>
+  <updated>2023-08-01T00:00:28.345Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="http://brightliao.com/2023/07/31/daily-thoughts/"/>
     <id>http://brightliao.com/2023/07/31/daily-thoughts/</id>
     <published>2023-07-31T20:00:00.000Z</published>
-    <updated>2023-07-31T01:20:25.841Z</updated>
+    <updated>2023-08-01T00:00:28.345Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-07-31-突破时空的染色"><a class="markdownIt-Anchor" href="#2023-07-31-突破时空的染色"></a> 2023-07-31: 突破时空的染色</h2><p>康德在描述我们认识事物的过程时，认为我们认识任何自然事物都会带着主观的色彩。最基础的主观色彩就是时间和空间。时间、空间是自我与生俱来的先天直观形式，只要我们对事物进行感知，我们就必须把它放在空间和时间中。</p><p>当我们带着主观的色彩去认识事物的时候，事物就不是完全自由实在的了。至于完全自在的事物，那是不可知的。</p><p>结合弗洛伊德的意识和潜意识理论，这种先天直观形式其实是一种潜意识，它确实会给我们认识事物带来障碍，但通过训练我们也是可以认识并突破这种障碍的。所以，完全自在的事物依然是有可能可知的。</p><p>那么，我们等等看黑格尔是怎么说的。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-01-没有测试代码的自动化测试"><a class="markdownIt-Anchor" href="#2023-08-01-没有测试代码的自动化测试"></a> 2023-08-01: 没有测试代码的自动化测试</h2><p>数据测试一直是一个难题，需要建表，构造数据，运行etl，对比结果等繁琐的步骤。手工构造测试场景不仅耗时巨大，而且难以维护。</p><p>有没有一种轻量级的自动化测试方式？</p><p>可以这样来做：</p><ul><li><p>根据etl代码生成数据血缘图</p></li><li><p>从图里面提取表和字段</p></li><li><p>自动根据输入表和字段创建空表</p></li><li><p>针对空表运行etl</p></li><li><p>以输出空表为标准，对比结果</p></li></ul><p>这种测试无法验证逻辑的正确性，但可以验证语法、udf、相互引用关系等基础正确性。</p><p>胜在无需编写任何一行测试代码即可运行程序，非常轻量，适合往大数据平台提交任务之前先在本地验证。</p><p>这种方法通过极低成本在早期提供反馈来提高开发效率，值得尝试。</p><h2 id="2023-07-31-突破时空的染色"><a class="markdownIt-Anchor" href="#2023-07-31-突破时空的染色"></a> 2023-07-31: 突破时空的染色</h2><p>康德在描述我们认识事物的过程时，认为我们认识任何自然事物都会带着主观的色彩。最基础的主观色彩就是时间和空间。时间、空间是自我与生俱来的先天直观形式，只要我们对事物进行感知，我们就必须把它放在空间和时间中。</p><p>当我们带着主观的色彩去认识事物的时候，事物就不是完全自由实在的了。至于完全自在的事物，那是不可知的。</p><p>结合弗洛伊德的意识和潜意识理论，这种先天直观形式其实是一种潜意识，它确实会给我们认识事物带来障碍，但通过训练我们也是可以认识并突破这种障碍的。所以，完全自在的事物依然是有可能可知的。</p><p>那么，我们等等看黑格尔是怎么说的。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-07-31-突破时空的染色&quot;&gt;&lt;a class=&quot;markdownIt-Anc</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-01-没有测试代码的自动化测试&quot;&gt;&lt;a class=&quot;markdownI</summary>
       
     
     
@@ -43,14 +43,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-07-31T01:20:24.833Z</updated>
+    <updated>2023-08-01T00:00:27.593Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="731-突破时空的染色"><a class="markdownIt-Anchor" href="#731-突破时空的染色"></a> 7.31: 突破时空的染色</h2><p>康德在描述我们认识事物的过程时，认为我们认识任何自然事物都会带着主观的色彩。最基础的主观色彩就是时间和空间。时间、空间是自我与生俱来的先天直观形式，只要我们对事物进行感知，我们就必须把它放在空间和时间中。</p><p>当我们带着主观的色彩去认识事物的时候，事物就不是完全自由实在的了。至于完全自在的事物，那是不可知的。</p><p>结合弗洛伊德的意识和潜意识理论，这种先天直观形式其实是一种潜意识，它确实会给我们认识事物带来障碍，但通过训练我们也是可以认识并突破这种障碍的。所以，完全自在的事物依然是有可能可知的。</p><p>那么，我们等等看黑格尔是怎么说的。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="81-没有测试代码的自动化测试"><a class="markdownIt-Anchor" href="#81-没有测试代码的自动化测试"></a> 8.1: 没有测试代码的自动化测试</h2><p>数据测试一直是一个难题，需要建表，构造数据，运行etl，对比结果等繁琐的步骤。手工构造测试场景不仅耗时巨大，而且难以维护。</p><p>有没有一种轻量级的自动化测试方式？</p><p>可以这样来做：</p><ul><li><p>根据etl代码生成数据血缘图</p></li><li><p>从图里面提取表和字段</p></li><li><p>自动根据输入表和字段创建空表</p></li><li><p>针对空表运行etl</p></li><li><p>以输出空表为标准，对比结果</p></li></ul><p>这种测试无法验证逻辑的正确性，但可以验证语法、udf、相互引用关系等基础正确性。</p><p>胜在无需编写任何一行测试代码即可运行程序，非常轻量，适合往大数据平台提交任务之前先在本地验证。</p><p>这种方法通过极低成本在早期提供反馈来提高开发效率，值得尝试。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;731-突破时空的染色&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; hr</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;81-没有测试代码的自动化测试&quot;&gt;&lt;a class=&quot;markdownIt-Anchor</summary>
       
     
     

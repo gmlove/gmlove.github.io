@@ -364,7 +364,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/08/06/you-may-need-a-lightweight-zhongtai/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/20/tdd-for-improving-design/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -378,7 +378,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/08/06/you-may-need-a-lightweight-zhongtai/" class="post-title-link" itemprop="url">你可能需要一个轻量级的中台</a>
+            <a href="/2019/07/20/tdd-for-improving-design/" class="post-title-link" itemprop="url">从改善设计的角度理解TDD</a>
         </h2>
 
         <div class="post-meta">
@@ -388,7 +388,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-08-06 20:00:00" itemprop="dateCreated datePublished" datetime="2019-08-06T20:00:00+00:00">2019-08-06</time>
+              <time title="创建时间：2019-07-20 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-20T20:00:00+00:00">2019-07-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -403,16 +403,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/08/06/you-may-need-a-lightweight-zhongtai/" class="post-meta-item leancloud_visitors" data-flag-title="你可能需要一个轻量级的中台" title="阅读次数">
+            <span id="/2019/07/20/tdd-for-improving-design/" class="post-meta-item leancloud_visitors" data-flag-title="从改善设计的角度理解TDD" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -424,14 +424,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
+              <span>6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>10 分钟</span>
             </span>
 
         </div>
@@ -443,10 +443,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>中台的概念从阿里17年开始提出来就快速成为了年度IT热词。阿里这样体量的企业的成功无疑论证了中台建设的正确性，让大家对于中台这样的解决方案跃跃欲试。而阿里顺理成章成为了中台的最好代言人，大家学习中台的榜样。那么什么是中台？事实上，对于中台的定义大家也一直在探讨中。阿里内部业务系统有其独有的特点，诞生其中的中台自然也带着阿里独有的特征，这一点从<a target="_blank" rel="noopener" href="https://book.douban.com/subject/27039508/">《企业IT架构转型之道：阿里巴巴中台战略思想与架构实战》</a>这本书中我们也能读出来。直接复制阿里的中台方案真的能解决广大企业中的共性问题吗？可能未必，这应该也是当前大家关于数据中台有着各种各样的解读的原因。</p>
+          <p>TDD有很多好处，但是广大程序员却总是难以接受。即便在我们ThoughtWorks，有着非常浓厚的TDD氛围的公司里，接受起来也依然不是一件简单的事情。我曾经见过一些在我们公司工作过一年甚至两年的同事，对TDD的理解都还停留在比较粗浅的认识上，平时的实践也难以跟上。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/08/06/you-may-need-a-lightweight-zhongtai/#more" rel="contents">
+              <a class="btn" href="/2019/07/20/tdd-for-improving-design/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -554,113 +554,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/07/24/what-programmer-should-know-about-compiler/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/19/python-json-serializable-lib/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/19/python-json-serializable-lib/" class="post-title-link" itemprop="url">如何实现一个优雅的Python的Json序列化库</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-19 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-19T20:00:00+00:00">2019-07-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/07/19/python-json-serializable-lib/" class="post-meta-item leancloud_visitors" data-flag-title="如何实现一个优雅的Python的Json序列化库" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="/attaches/2019/2019-07-19-python-json-serializable-lib/serializable.png" alt="python json serializable" /></p>
-<p>在Python的世界里，将一个对象以json格式进行序列化或反序列化一直是一个问题。Python标准库里面提供了json序列化的工具，我们可以简单的用<code>json.dumps</code>来将一个对象序列化。但是这种序列化仅支持python内置的基本类型，对于自定义的类，我们将得到<code>Object of type A is not JSON serializable</code>的错误。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/19/python-json-serializable-lib/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -898,118 +791,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/08/18/tdd-for-improving-design-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/08/18/tdd-for-improving-design-2/" class="post-title-link" itemprop="url">从改善设计的角度理解TDD (2)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-18 20:00:00" itemprop="dateCreated datePublished" datetime="2019-08-18T20:00:00+00:00">2019-08-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/08/18/tdd-for-improving-design-2/" class="post-meta-item leancloud_visitors" data-flag-title="从改善设计的角度理解TDD (2)" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>10 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：</p>
-<ol>
-<li>TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。</li>
-<li>先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。</li>
-<li>由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试覆盖率不够带来的质量问题了。</li>
-</ol>
-<p>TDD给我们编写代码带来的好处多多，我前面有一篇<a href="/2019/07/20/tdd-for-improving-design/">文章</a>主要分析了如何从改善设计的角度理解TDD，相信大家能感受到TDD给改善程序设计带来的好处。这里我想再次分享一个用TDD改善设计的例子，我们将从中看到不用TDD时我们的代码可能会变成什么样，而用了TDD又将变成什么样。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/08/18/tdd-for-improving-design-2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/08/26/the-functional-programming-you-understand-may-not-be-what-we-recommended/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1098,6 +879,112 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/08/26/the-functional-programming-you-understand-may-not-be-what-we-recommended/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/08/06/you-may-need-a-lightweight-zhongtai/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/06/you-may-need-a-lightweight-zhongtai/" class="post-title-link" itemprop="url">你可能需要一个轻量级的中台</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-06 20:00:00" itemprop="dateCreated datePublished" datetime="2019-08-06T20:00:00+00:00">2019-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/08/06/you-may-need-a-lightweight-zhongtai/" class="post-meta-item leancloud_visitors" data-flag-title="你可能需要一个轻量级的中台" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>中台的概念从阿里17年开始提出来就快速成为了年度IT热词。阿里这样体量的企业的成功无疑论证了中台建设的正确性，让大家对于中台这样的解决方案跃跃欲试。而阿里顺理成章成为了中台的最好代言人，大家学习中台的榜样。那么什么是中台？事实上，对于中台的定义大家也一直在探讨中。阿里内部业务系统有其独有的特点，诞生其中的中台自然也带着阿里独有的特征，这一点从<a target="_blank" rel="noopener" href="https://book.douban.com/subject/27039508/">《企业IT架构转型之道：阿里巴巴中台战略思想与架构实战》</a>这本书中我们也能读出来。直接复制阿里的中台方案真的能解决广大企业中的共性问题吗？可能未必，这应该也是当前大家关于数据中台有着各种各样的解读的原因。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/08/06/you-may-need-a-lightweight-zhongtai/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1346,6 +1233,118 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/08/18/tdd-for-improving-design-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/18/tdd-for-improving-design-2/" class="post-title-link" itemprop="url">从改善设计的角度理解TDD (2)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-18 20:00:00" itemprop="dateCreated datePublished" datetime="2019-08-18T20:00:00+00:00">2019-08-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/08/18/tdd-for-improving-design-2/" class="post-meta-item leancloud_visitors" data-flag-title="从改善设计的角度理解TDD (2)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：</p>
+<ol>
+<li>TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。</li>
+<li>先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。</li>
+<li>由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试覆盖率不够带来的质量问题了。</li>
+</ol>
+<p>TDD给我们编写代码带来的好处多多，我前面有一篇<a href="/2019/07/20/tdd-for-improving-design/">文章</a>主要分析了如何从改善设计的角度理解TDD，相信大家能感受到TDD给改善程序设计带来的好处。这里我想再次分享一个用TDD改善设计的例子，我们将从中看到不用TDD时我们的代码可能会变成什么样，而用了TDD又将变成什么样。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/08/18/tdd-for-improving-design-2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1530,7 +1529,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:10</span>
+    <span title="站点阅读时长">17:11</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
