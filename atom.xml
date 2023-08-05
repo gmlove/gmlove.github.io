@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-08-04T00:00:28.829Z</updated>
+  <updated>2023-08-05T11:30:29.830Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="http://brightliao.com/2023/07/31/daily-thoughts/"/>
     <id>http://brightliao.com/2023/07/31/daily-thoughts/</id>
     <published>2023-07-31T20:00:00.000Z</published>
-    <updated>2023-08-04T00:00:28.829Z</updated>
+    <updated>2023-08-05T11:30:29.830Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-04-sql代码的重构"><a class="markdownIt-Anchor" href="#2023-08-04-sql代码的重构"></a> 2023-08-04: sql代码的重构</h2><p>随着大数据越来越广泛的应用，基于sql的etl代码也越来越长。当代码达到数百行规模时，就急需要引入整洁代码（clean code）这类高质量编码实践，否则很容易变得不可维护。</p><p>重构是实现高质量代码的重要手段，如何针对etl进行代码重构呢？最重要的是需要有一款强大的sql代码重构工具。它应该具备这样一些功能：</p><ul><li><p>能将中间子查询抽取为cte格式的临时视图</p></li><li><p>能修改子查询或cte视图的别名</p></li><li><p>能修改子查询或cte视图中的字段名</p></li><li><p>能自动进行代码格式化</p></li></ul><p>目前似乎还没有特别匹配这些需求的工具，期待它的出现…</p><h2 id="2023-08-03-理性限制的建立与破除"><a class="markdownIt-Anchor" href="#2023-08-03-理性限制的建立与破除"></a> 2023-08-03: 理性限制的建立与破除</h2><p>康德认为这世界有很多二律背反问题，比如，正题：世界上的一切都是由单纯的部分复合而成；反题：世界上的一切都是复合的，没有单纯的东西。这两个论断都可以用理性来证明，却又是相互矛盾的结论。所以，理性是有限制的，不应该用于超验的自在之物上。</p><p>到了谢林和黑格尔，理性的限制被认为是理性的怯弱。矛盾不是不可调和的，而是所有事物发展过程的中必然出现的阶段。但是，随着认识的深入，矛盾和对立终将达到同一。这世界本质是发展和运动的，总是将一轮一轮的经历从同一到差别到对立，再到矛盾最后回到同一的过程，这也是黑格尔的肯定、否定和否定之否定。否定之否定是最初的肯定的升华。</p><p>到这里，终于能理解为什么马克思主义哲学的第一句话是：世界是物质的，物质是运动的。</p><h2 id="2023-08-02-早上六点钟"><a class="markdownIt-Anchor" href="#2023-08-02-早上六点钟"></a> 2023-08-02: 早上六点钟</h2><p>早上六点钟的世界是什么样子？机械化的工作时间可能已经将我们和这个时段划清了界限，但最近的生活节奏让我有机会出去看一看。</p><p>马路上的汽车要少一些，但还是络绎不绝，在红绿灯前面排着队。</p><p>公路清理工作已经开始，洒水车、扫地车、环卫工人已经就位，赶在天还不热的时候为大家创造一个更干净的环境。</p><p>住所旁边有一个运动公园，公园里已经有很多健身的人，有的开着节奏舒缓的音乐打着太极，有人沿着跑道散步，更多的是身着运动装跑步的。</p><p>我是去公园跑步的，跟着同跑的人流向前。大家节奏不一，脚步声噼里啪啦的，偶尔超过几个速度慢一点的，偶尔被几个速度快的超过。</p><p>唯物主义哲学认为世界是物质的，物质决定精神。但不管物质如何变化，精神却是自由的，如果没有早起的精神意识，那也看不到早上六点钟的世界。</p><h2 id="2023-08-01-没有测试代码的自动化测试"><a class="markdownIt-Anchor" href="#2023-08-01-没有测试代码的自动化测试"></a> 2023-08-01: 没有测试代码的自动化测试</h2><p>数据测试一直是一个难题，需要建表，构造数据，运行etl，对比结果等繁琐的步骤。手工构造测试场景不仅耗时巨大，而且难以维护。</p><p>有没有一种轻量级的自动化测试方式？</p><p>可以这样来做：</p><ul><li><p>根据etl代码生成数据血缘图</p></li><li><p>从图里面提取表和字段</p></li><li><p>自动根据输入表和字段创建空表</p></li><li><p>针对空表运行etl</p></li><li><p>以输出空表为标准，对比结果</p></li></ul><p>这种测试无法验证逻辑的正确性，但可以验证语法、udf、相互引用关系等基础正确性。</p><p>胜在无需编写任何一行测试代码即可运行程序，非常轻量，适合往大数据平台提交任务之前先在本地验证。</p><p>这种方法通过极低成本在早期提供反馈来提高开发效率，值得尝试。</p><h2 id="2023-07-31-突破时空的染色"><a class="markdownIt-Anchor" href="#2023-07-31-突破时空的染色"></a> 2023-07-31: 突破时空的染色</h2><p>康德在描述我们认识事物的过程时，认为我们认识任何自然事物都会带着主观的色彩。最基础的主观色彩就是时间和空间。时间、空间是自我与生俱来的先天直观形式，只要我们对事物进行感知，我们就必须把它放在空间和时间中。</p><p>当我们带着主观的色彩去认识事物的时候，事物就不是完全自由实在的了。至于完全自在的事物，那是不可知的。</p><p>结合弗洛伊德的意识和潜意识理论，这种先天直观形式其实是一种潜意识，它确实会给我们认识事物带来障碍，但通过训练我们也是可以认识并突破这种障碍的。所以，完全自在的事物依然是有可能可知的。</p><p>那么，我们等等看黑格尔是怎么说的。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-05-人类的本质差异"><a class="markdownIt-Anchor" href="#2023-08-05-人类的本质差异"></a> 2023-08-05: 人类的本质差异</h2><p>地球上有很多动物，为什么人类可以站在食物链最顶端？</p><p>是因为人类会语言？很多动物其实也会，猫狗的不同叫声代表不同意思，鸟类可以模仿人讲话，其音域甚至更广。</p><p>是因为人可以直立行走，操作工具？很多猴子、猩猩，甚至乌鸦也可以。</p><p>《人类简史》中提到人与其他动物的本质差异可能在于人类可以创造一些原本不存在的概念，并通过交流让大家广泛相信，从而聚集起大规模的群体，比如国家与军队。这个群体由于数量上可以大大超过其他动物形成的群体，而具有极强的优势。正是这个优势让肌肉并不发达，体格并不高大的人类站在了食物链最顶端。</p><h2 id="2023-08-04-sql代码的重构"><a class="markdownIt-Anchor" href="#2023-08-04-sql代码的重构"></a> 2023-08-04: sql代码的重构</h2><p>随着大数据越来越广泛的应用，基于sql的etl代码也越来越长。当代码达到数百行规模时，就急需要引入整洁代码（clean code）这类高质量编码实践，否则很容易变得不可维护。</p><p>重构是实现高质量代码的重要手段，如何针对etl进行代码重构呢？最重要的是需要有一款强大的sql代码重构工具。它应该具备这样一些功能：</p><ul><li><p>能将中间子查询抽取为cte格式的临时视图</p></li><li><p>能修改子查询或cte视图的别名</p></li><li><p>能修改子查询或cte视图中的字段名</p></li><li><p>能自动进行代码格式化</p></li></ul><p>目前似乎还没有特别匹配这些需求的工具，期待它的出现…</p><h2 id="2023-08-03-理性限制的建立与破除"><a class="markdownIt-Anchor" href="#2023-08-03-理性限制的建立与破除"></a> 2023-08-03: 理性限制的建立与破除</h2><p>康德认为这世界有很多二律背反问题，比如，正题：世界上的一切都是由单纯的部分复合而成；反题：世界上的一切都是复合的，没有单纯的东西。这两个论断都可以用理性来证明，却又是相互矛盾的结论。所以，理性是有限制的，不应该用于超验的自在之物上。</p><p>到了谢林和黑格尔，理性的限制被认为是理性的怯弱。矛盾不是不可调和的，而是所有事物发展过程的中必然出现的阶段。但是，随着认识的深入，矛盾和对立终将达到同一。这世界本质是发展和运动的，总是将一轮一轮的经历从同一到差别到对立，再到矛盾最后回到同一的过程，这也是黑格尔的肯定、否定和否定之否定。否定之否定是最初的肯定的升华。</p><p>到这里，终于能理解为什么马克思主义哲学的第一句话是：世界是物质的，物质是运动的。</p><h2 id="2023-08-02-早上六点钟"><a class="markdownIt-Anchor" href="#2023-08-02-早上六点钟"></a> 2023-08-02: 早上六点钟</h2><p>早上六点钟的世界是什么样子？机械化的工作时间可能已经将我们和这个时段划清了界限，但最近的生活节奏让我有机会出去看一看。</p><p>马路上的汽车要少一些，但还是络绎不绝，在红绿灯前面排着队。</p><p>公路清理工作已经开始，洒水车、扫地车、环卫工人已经就位，赶在天还不热的时候为大家创造一个更干净的环境。</p><p>住所旁边有一个运动公园，公园里已经有很多健身的人，有的开着节奏舒缓的音乐打着太极，有人沿着跑道散步，更多的是身着运动装跑步的。</p><p>我是去公园跑步的，跟着同跑的人流向前。大家节奏不一，脚步声噼里啪啦的，偶尔超过几个速度慢一点的，偶尔被几个速度快的超过。</p><p>唯物主义哲学认为世界是物质的，物质决定精神。但不管物质如何变化，精神却是自由的，如果没有早起的精神意识，那也看不到早上六点钟的世界。</p><h2 id="2023-08-01-没有测试代码的自动化测试"><a class="markdownIt-Anchor" href="#2023-08-01-没有测试代码的自动化测试"></a> 2023-08-01: 没有测试代码的自动化测试</h2><p>数据测试一直是一个难题，需要建表，构造数据，运行etl，对比结果等繁琐的步骤。手工构造测试场景不仅耗时巨大，而且难以维护。</p><p>有没有一种轻量级的自动化测试方式？</p><p>可以这样来做：</p><ul><li><p>根据etl代码生成数据血缘图</p></li><li><p>从图里面提取表和字段</p></li><li><p>自动根据输入表和字段创建空表</p></li><li><p>针对空表运行etl</p></li><li><p>以输出空表为标准，对比结果</p></li></ul><p>这种测试无法验证逻辑的正确性，但可以验证语法、udf、相互引用关系等基础正确性。</p><p>胜在无需编写任何一行测试代码即可运行程序，非常轻量，适合往大数据平台提交任务之前先在本地验证。</p><p>这种方法通过极低成本在早期提供反馈来提高开发效率，值得尝试。</p><h2 id="2023-07-31-突破时空的染色"><a class="markdownIt-Anchor" href="#2023-07-31-突破时空的染色"></a> 2023-07-31: 突破时空的染色</h2><p>康德在描述我们认识事物的过程时，认为我们认识任何自然事物都会带着主观的色彩。最基础的主观色彩就是时间和空间。时间、空间是自我与生俱来的先天直观形式，只要我们对事物进行感知，我们就必须把它放在空间和时间中。</p><p>当我们带着主观的色彩去认识事物的时候，事物就不是完全自由实在的了。至于完全自在的事物，那是不可知的。</p><p>结合弗洛伊德的意识和潜意识理论，这种先天直观形式其实是一种潜意识，它确实会给我们认识事物带来障碍，但通过训练我们也是可以认识并突破这种障碍的。所以，完全自在的事物依然是有可能可知的。</p><p>那么，我们等等看黑格尔是怎么说的。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-04-sql代码的重构&quot;&gt;&lt;a class=&quot;markdownIt-An</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-05-人类的本质差异&quot;&gt;&lt;a class=&quot;markdownIt-Anc</summary>
       
     
     
@@ -43,14 +43,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-08-04T00:00:27.221Z</updated>
+    <updated>2023-08-05T11:30:28.066Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="84-sql代码的重构"><a class="markdownIt-Anchor" href="#84-sql代码的重构"></a> 8.4: sql代码的重构</h2><p>随着大数据越来越广泛的应用，基于sql的etl代码也越来越长。当代码达到数百行规模时，就急需要引入整洁代码（clean code）这类高质量编码实践，否则很容易变得不可维护。</p><p>重构是实现高质量代码的重要手段，如何针对etl进行代码重构呢？最重要的是需要有一款强大的sql代码重构工具。它应该具备这样一些功能：</p><ul><li><p>能将中间子查询抽取为cte格式的临时视图</p></li><li><p>能修改子查询或cte视图的别名</p></li><li><p>能修改子查询或cte视图中的字段名</p></li><li><p>能自动进行代码格式化</p></li></ul><p>目前似乎还没有特别匹配这些需求的工具，期待它的出现…</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="85-人类的本质差异"><a class="markdownIt-Anchor" href="#85-人类的本质差异"></a> 8.5: 人类的本质差异</h2><p>地球上有很多动物，为什么人类可以站在食物链最顶端？</p><p>是因为人类会语言？很多动物其实也会，猫狗的不同叫声代表不同意思，鸟类可以模仿人讲话，其音域甚至更广。</p><p>是因为人可以直立行走，操作工具？很多猴子、猩猩，甚至乌鸦也可以。</p><p>《人类简史》中提到人与其他动物的本质差异可能在于人类可以创造一些原本不存在的概念，并通过交流让大家广泛相信，从而聚集起大规模的群体，比如国家与军队。这个群体由于数量上可以大大超过其他动物形成的群体，而具有极强的优势。正是这个优势让肌肉并不发达，体格并不高大的人类站在了食物链最顶端。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;84-sql代码的重构&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; hr</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;85-人类的本质差异&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; hre</summary>
       
     
     
@@ -517,9 +517,9 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
   </entry>
   
@@ -550,9 +550,9 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
+    
+    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
   </entry>
   
@@ -584,11 +584,11 @@
     
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
+    <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
+    
     <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
-    
-    <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
   </entry>
   
