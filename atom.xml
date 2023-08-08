@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-08-08T00:40:23.532Z</updated>
+  <updated>2023-08-08T23:40:27.660Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="http://brightliao.com/2023/08/08/daily-thoughts/"/>
     <id>http://brightliao.com/2023/08/08/daily-thoughts/</id>
     <published>2023-08-08T20:00:00.000Z</published>
-    <updated>2023-08-08T00:40:23.532Z</updated>
+    <updated>2023-08-08T23:40:27.660Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-08-终点却是过程"><a class="markdownIt-Anchor" href="#2023-08-08-终点却是过程"></a> 2023-08-08: 终点却是过程</h2><p>人们常常奔着一个目标往前冲，甚至能不分昼夜，不顾身体。</p><p>但是等目标按照预期实现了之后，却觉得心里一下子空虚起来，不知道该干什么了。</p><p>有多少软件功能在实现之后就成了它的坟墓？无人问津的程度甚至不如当初开发阶段的测试使用频率。</p><p>也许有时候终点恰恰是过程，是奋力向上的有着充实感受的过程。而目的的意义在于为我们提供一个参与这个过程的机会。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-09-基于代码复用的数据工程"><a class="markdownIt-Anchor" href="#2023-08-09-基于代码复用的数据工程"></a> 2023-08-09: 基于代码复用的数据工程</h2><p>业界普遍采用以sql为主的数据开发语言进行数据开发，依靠数仓分层来避免重复计算，这一复用方式可以称之为数据复用。但数据复用的灵活性较差，可能会形成一个非常复杂的数据任务流水线，并且，当我们想独立运行某一个etl的时候，我们不得不执行所有依赖的任务。</p><p>基于代码复用的数据工程是指采用复用代码的方式进行数据工程中的复用。它采用以计算资源换取维护成本的方式帮我们节省开支。在大量数据量没那么大的场景下更适用。</p><p>目前很多框架可以支持这一使用方式，比如dbt，easysql都有相应的支持。</p><h2 id="2023-08-08-终点却是过程"><a class="markdownIt-Anchor" href="#2023-08-08-终点却是过程"></a> 2023-08-08: 终点却是过程</h2><p>人们常常奔着一个目标往前冲，甚至能不分昼夜，不顾身体。</p><p>但是等目标按照预期实现了之后，却觉得心里一下子空虚起来，不知道该干什么了。</p><p>有多少软件功能在实现之后就成了它的坟墓？无人问津的程度甚至不如当初开发阶段的测试使用频率。</p><p>也许有时候终点恰恰是过程，是奋力向上的有着充实感受的过程。而目的的意义在于为我们提供一个参与这个过程的机会。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-08-终点却是过程&quot;&gt;&lt;a class=&quot;markdownIt-Anch</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-09-基于代码复用的数据工程&quot;&gt;&lt;a class=&quot;markdownIt</summary>
       
     
     
@@ -65,14 +65,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-08-08T00:40:22.976Z</updated>
+    <updated>2023-08-08T23:40:26.832Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="88-终点却是过程"><a class="markdownIt-Anchor" href="#88-终点却是过程"></a> 8.8: 终点却是过程</h2><p>人们常常奔着一个目标往前冲，甚至能不分昼夜，不顾身体。</p><p>但是等目标按照预期实现了之后，却觉得心里一下子空虚起来，不知道该干什么了。</p><p>有多少软件功能在实现之后就成了它的坟墓？无人问津的程度甚至不如当初开发阶段的测试使用频率。</p><p>也许有时候终点恰恰是过程，是奋力向上的有着充实感受的过程。而目的的意义在于为我们提供一个参与这个过程的机会。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="89-基于代码复用的数据工程"><a class="markdownIt-Anchor" href="#89-基于代码复用的数据工程"></a> 8.9: 基于代码复用的数据工程</h2><p>业界普遍采用以sql为主的数据开发语言进行数据开发，依靠数仓分层来避免重复计算，这一复用方式可以称之为数据复用。但数据复用的灵活性较差，可能会形成一个非常复杂的数据任务流水线，并且，当我们想独立运行某一个etl的时候，我们不得不执行所有依赖的任务。</p><p>基于代码复用的数据工程是指采用复用代码的方式进行数据工程中的复用。它采用以计算资源换取维护成本的方式帮我们节省开支。在大量数据量没那么大的场景下更适用。</p><p>目前很多框架可以支持这一使用方式，比如dbt，easysql都有相应的支持。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;88-终点却是过程&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;89-基于代码复用的数据工程&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
       
     
     
@@ -537,9 +537,9 @@
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
@@ -570,9 +570,9 @@
     
     <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
     
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
     <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    
+    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
