@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-08-06T11:20:28.862Z</updated>
+  <updated>2023-08-08T00:40:23.532Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日一思</title>
+    <link href="http://brightliao.com/2023/08/08/daily-thoughts/"/>
+    <id>http://brightliao.com/2023/08/08/daily-thoughts/</id>
+    <published>2023-08-08T20:00:00.000Z</published>
+    <updated>2023-08-08T00:40:23.532Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-08-终点却是过程"><a class="markdownIt-Anchor" href="#2023-08-08-终点却是过程"></a> 2023-08-08: 终点却是过程</h2><p>人们常常奔着一个目标往前冲，甚至能不分昼夜，不顾身体。</p><p>但是等目标按照预期实现了之后，却觉得心里一下子空虚起来，不知道该干什么了。</p><p>有多少软件功能在实现之后就成了它的坟墓？无人问津的程度甚至不如当初开发阶段的测试使用频率。</p><p>也许有时候终点恰恰是过程，是奋力向上的有着充实感受的过程。而目的的意义在于为我们提供一个参与这个过程的机会。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-08-终点却是过程&quot;&gt;&lt;a class=&quot;markdownIt-Anch</summary>
+      
+    
+    
+    
+    <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>每日一思</title>
@@ -43,14 +65,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-08-06T11:20:26.602Z</updated>
+    <updated>2023-08-08T00:40:22.976Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="86-弄清需求背后的原因"><a class="markdownIt-Anchor" href="#86-弄清需求背后的原因"></a> 8.6: 弄清需求背后的原因</h2><p>家里孩子到了1岁半的年纪，开始喜欢抓人和咬人。经常没来由的给人脸上身上来一爪或者来一口，弄得家里人满身伤痕。家里人为此苦恼不已。</p><p>一开始我也不理解他的行为，采取打回去或者抓回去的办法，并且表现出很凶的样子试图进行教育。然而，教育的时候他总是表现出听不懂的样子，重复数次也没有效果。</p><p>在网上搜索一番之后，开始弄清楚了背后的原因：</p><ul><li><p>身体发育到特定阶段，用嘴和手来感知这个世界</p></li><li><p>以此寻求关注</p></li><li><p>以此发泄情绪</p></li><li><p>以此表达喜欢</p></li></ul><p>在理解这些之后，终于释然，现在会更注意用手护住自己，并且根据尝试平和地把他的想表达的东西说出来，引导他进行正常表达。</p><p>了解一开始不理解的事物的原因可以帮助我们更好的应对。</p><p>在软件开发过程中也是一样。很多开发人员总是只遵循需求描述进行开发，而极少思考背后的原因，即业务价值。所以，他们常常觉得很多需求实现起来很别扭，最终形成了我们在代码里面看到的很奇怪的注释或者条件判断。这样的软件常常满是bug，维护起来非常痛苦。这就像直接针对小孩抓人这件事用表现得很凶的样子教育孩子一样，自己很痛苦，效果也很差。长期下来，软件就渐渐腐坏掉。</p><p>如果我们可以尝试去弄清楚需求背后的原因（业务价值），就可以了解到可能有更符合设计的实现，也可以了解到将来可能的演进方向，那就更可能达到简单的架构和优雅的实现。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="88-终点却是过程"><a class="markdownIt-Anchor" href="#88-终点却是过程"></a> 8.8: 终点却是过程</h2><p>人们常常奔着一个目标往前冲，甚至能不分昼夜，不顾身体。</p><p>但是等目标按照预期实现了之后，却觉得心里一下子空虚起来，不知道该干什么了。</p><p>有多少软件功能在实现之后就成了它的坟墓？无人问津的程度甚至不如当初开发阶段的测试使用频率。</p><p>也许有时候终点恰恰是过程，是奋力向上的有着充实感受的过程。而目的的意义在于为我们提供一个参与这个过程的机会。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;86-弄清需求背后的原因&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; h</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;88-终点却是过程&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href</summary>
       
     
     
@@ -551,42 +573,6 @@
     <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
     
     <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
-    
-    <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>敏捷数据工程实践--代码化一切</title>
-    <link href="http://brightliao.com/2022/08/16/ade-everthing-as-code/"/>
-    <id>http://brightliao.com/2022/08/16/ade-everthing-as-code/</id>
-    <published>2022-08-16T20:00:00.000Z</published>
-    <updated>2023-07-25T14:07:02.662Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p><a href="/2022/08/10/agile-data-engineering-practices/">前文</a>讨论了敏捷数据工程实践的相关概念。有哪些具体的敏捷数据工程实践呢？本文将分享“代码化一切”的实践。</p><p><img data-src="/attaches/2022/2022-08-16-ade-everthing-as-code/everything-as-code.png" alt="Everything as code" /></p><h2 id="代码化xx"><a class="markdownIt-Anchor" href="#代码化xx"></a> 代码化XX</h2><p>在应用软件开发中，“代码化一切”被讨论得很多。常见的代码化XX有：</p><span id="more"></span><ul><li>配置即代码（Configuration as code）：将配置文件放入代码仓库进行管理，可以实现配置修改的可追溯性。</li><li><a href="https://www.thoughtworks.com/zh-cn/radar/techniques/infrastructure-as-code">基础设施即代码（Infrastructure as code）</a>：将基础设施需要的通用能力抽象出来，以便可以用代码来定义基础设施。然后将基础设施代码放入代码仓库进行管理，可实现随时可重建的基础设施。通常借助一些工具实现，比如<code>Kubernetes</code>支持用<code>yaml</code>文件代码来定义基于容器的基础设施，<code>Terraform</code>支持用<code>yaml</code>文件代码定义各类基础设施，并通过插件来支持几乎所有的基础设施提供商（如本地服务器、AWS/GCP/Azure云服务等）。</li><li><a href="https://www.thoughtworks.com/radar/techniques/pipelines-as-code">流水线即代码（Pipeline as code）</a>：避免通过持续集成工具（如Jenkins）的<code>UI</code>上的复杂配置来定义流水线，而是通过代码来定义持续集成流水线。早在2016年就在Thoughtworks的技术雷达上提出，后来得到了各种主流的持续集成工具的支持。比如Jenkins支持用Groovy代码来定义流水线，GitHub Actions/GitLab/Circle CI/Travis CI等支持用<code>yaml</code>代码来定义流水线。</li></ul><p>除了这些，还有更多的“代码化XX”实践，比如：</p><ul><li><a href="https://www.thoughtworks.com/radar/techniques/observability-as-code">微服务的可观察性即代码（observability as code）</a></li><li><a href="https://www.thoughtworks.com/radar/techniques/security-policy-as-code">安全策略即代码（Security policy as code）</a></li><li><a href="https://www.thoughtworks.com/radar/techniques/diagrams-as-code">图表即代码（Diagrams as code）</a></li><li>…</li></ul><h2 id="代码化的优势"><a class="markdownIt-Anchor" href="#代码化的优势"></a> 代码化的优势</h2><p>从上面这些“代码化XX”中，我们可以看到一个趋势，似乎我们正在尝试把“一切”代码化。为什么“代码化”这么有吸引力？</p><p>这要追溯到开发人员日常工作方式中。作为一个程序员，开发人员每天做得最多的事情是写代码，最习惯最熟练的工作也是写代码。通过一个熟悉的集成开发环境（IDE）或者文本编辑器，开发人员可以高效的编写、调试代码并完成工作。</p><p>正由于此，现在市场上有大量成熟的帮助开发人员写代码的工具。它们大都支持了数量众多的快捷键，可辅助编写代码的智能代码提示，语法检查等等对代码编写非常友好的功能。开发人员还往往会根据自己的习惯对这些工具进行配置，以便达到最高的编码效率。</p><p>不难看出，正是由于这些工作方式，所以开发人员会更希望以代码化的方式来工作，这也就推动了“代码化一切”这样的工程思想的发展。</p><p>除了可以高效编辑之外，代码化之后还能获得这样一些好处：</p><ul><li>可追踪变更历史记录：开发人员有成熟的代码版本控制工具可用于记录每一次修改内容、修改人、修改时间、注释等。如果有必要，还可以比较任意两个版本的差异。对于诊断问题而言，这无疑是非常高效的。</li><li>可回退到任一版本：由于待开发的功能往往非常逻辑复杂，因此，常常会隐藏一些问题在交付的软件中。如果实现了“代码化”，则可根据需要随时回退到某一个无问题的版本。</li><li>可融入开发人员的日常开发实践：代码化之后，可以更容易的融入到开发团队的日常实践中，比如代码评审Code Review</li></ul><h2 id="非代码化工作方式"><a class="markdownIt-Anchor" href="#非代码化工作方式"></a> 非代码化工作方式</h2><p>如果没有“代码化”，情况会怎样呢？“代码化”的反面常常体现为：</p><ul><li>开发人员通过一个可视化程序设计器辅助进行开发，通常通过拖拽完成</li><li>开发人员通过一个复杂的可视化配置界面，通过提供大量配置来完成开发</li></ul><p>此类工具通常给人一种低门槛高效率进行软件开发的错觉，但是深入使用之后，开发人员往往会觉得开发过程很痛苦且效率也很低。</p><p>在用户界面应用程序开发中，可视化程序设计器被广泛用于所见即所得的界面开发。这一开发方式看上去很美好，但是一旦应用程序逻辑比较复杂之后，常常由于难以调试，无法支持重构且修改成本特别高而降低开发效率。业界将这一反模式称为Smart UI。提供这一开发方式的程序设计器，一般也不会提供代码，开发人员自然也无法享受到代码化之后获得的版本控制能力，难以进行代码评审、历史回溯、版本回滚等。</p><p>通过提供一个复杂配置界面来辅助开发是另一种非代码化的形式。这种方式常常将原本通过简单的代码可以实现的功能，复杂化为一个长长的配置。开发人员不得不去理解每一个配置的意义，配置间的逻辑关系，然后配置一个特别长的且无法纳入版本控制的配置。</p><p>当然，此类工具也有其价值，对于简单场景的开发工作，它们确实可以帮助开发人员快速完成开发。</p><h2 id="非代码化工具的代码化支持"><a class="markdownIt-Anchor" href="#非代码化工具的代码化支持"></a> “非代码化”工具的代码化支持</h2><p>虽然“非代码化”不是一个好的实践，但是市面上很多此类工具往代码化的方向多走了一步，从而使得这一情况得到改善。比如，很多开发工具提供了代码导出的功能，使得开发人员具备了基于代码库进行程序管理的能力（如ant design landing）。另一些工具可以直接连接到代码库，所有的修改都可以保存到代码库中（如Databricks）。还有一些工具，虽然没有提供导出代码的功能，但是却提供了完善的API来获取或者更新配置，开发人员可以利用这样的API间接实现代码化的工作方式（如AWS提供了完善的API来配置各类资源）。</p><p>有代码化能力的程序设计器是一种推荐的开发工具。它不仅可以提供低门槛，同时也兼具了代码化的优势。如果此类工具可以提供一些方式使得开发人员可以进行自定义的抽象和封装，那就更好了。</p><p><img data-src="/attaches/2022/2022-08-16-ade-everthing-as-code/from-none-codify-to-codify.png" alt="From none codification to codification" /></p><h2 id="数据开发中的代码化"><a class="markdownIt-Anchor" href="#数据开发中的代码化"></a> 数据开发中的“代码化”</h2><p>数据开发中，我们一般要面对这样几类开发资源：基础设施、安全配置、ETL代码、ETL任务配置、数据流水线、运维脚本、业务注释等。</p><p>事实上，这些资源均可以很容易的被“代码化”。</p><p><strong>基础设施</strong>可以通过Terraform进行代码化。如果整个系统运行在类似Kubernetes这样的容器平台上，也可以Kubernetes提供的YAML来定义基础设施。</p><p><strong>安全配置</strong>代码化常常需要一定的开发成本，一般可借助于各类安全管理应用提供的API进行代码化。一个推荐的做法如下。首先根据具体的应用场景设计安全管理模型，并据此模型定义（较少的）配置项，然后提供一个程序读取这些配置，并根据安全管理模型生成安全管理工具提供的API所对应的数据，最后调用安全管理工具提供的API完成安全配置的应用。</p><p><strong>ETL</strong>一般以代码的形式存在，大部分的数据开发工具都提供了功能，使得开发者可以用SQL的来开发ETL。但是只有SQL常常难以满足开发需求，比如，我们很难在SQL中发送HTTP请求、打印日志或断点调试。这里可以推荐Thoughtworks开源的<a href="https://github.com/easysql/easy_sql">Easy SQL</a>，它基于SQL进行语法增强，提供了一种方式使得我们可以更加模块化的组织ETL代码，支持了变量、日志打印、断言、调试、外部函数调用等等功能。有了这些功能，我们可以在ETL代码中完成各式各样的工作，无需再结合其他工具使用，也无需自己编写复杂的代码。</p><p><strong>ETL任务配置</strong>是指ETL任务运行时使用的各类配置。很多数据计算引擎都提供了配置接口，以便我们可以根据需要来配置最适当的计算资源、配置程序运行所需的外部文件、配置算法等。这些配置看起来不起眼，但是也非常重要，因为它们常常可以决定程序运行时性能，而这跟ETL任务的运行时间、稳定性紧密相关。所以，将ETL配置纳入到代码库中管理就显得十分必要。Easy SQL提供了一种能力，使得开发人员可以在ETL文件中定义ETL执行所需的配置，是一种支持将配置与对应的代码放在一起的好的实践。</p><p><strong>数据流水线</strong>常常以一种“非代码化”的方式进行开发。很多调度工具都提供了界面，使得我们可以通过拖拽及配置来完成流水线的开发。比如阿里的Dataworks，Azure的ADF等。以“非代码化”的方式开发流水线的灵活性很差且无法享受到版本控制的优势。一些开源工具提供了代码化能力，比如受到很多数据开发人员喜爱的Airflow，它支持用python代码来定义数据流水线，然后根据流水线定义进行可视化展示。对开发人员更友好的方式是，提供一种自动管理数据流水线的机制，这样开发人员就无需编写流水线了。这是可能的，事实上，完全可以编写一个程序，解析出ETL代码中的输入输出表，然后根据这些信息自动提取ETL间的依赖关系，接着根据这些依赖关系就可以自动生成数据流水线了。</p><p><strong>运维脚本</strong>常常以代码的形式呈现，但是很多数据工具希望将此类脚本纳入工具内部管理。这容易让我们丧失代码化的能力，因为它总是鼓励我们将此类代码配置到工具的UI界面里（可以想象一下在Jenkins还不支持用Groovy编写CI/CD流水线时的使用方式）。</p><p><strong>业务注释</strong>是另一类可以考虑代码化的资源。很多团队将此类信息纳入到一个名为元数据管理的应用中进行管理。元数据管理应用通常可以提供一些基于自然语言的搜索能力，而且可以提供友好的界面展示。这是其优势，但是对于此类信息的维护，就不得不在元数据管理应用中完成。这常常带来另一些问题。比如，当我们重建某些数据库表时，元数据管理应用无法将原来的元数据迁移到新表。还比如，元数据管理应用常常无法提供完善的数据版本管理功能，从而使得我们无法进行版本追溯及回滚。如果将此类业务注释放到代码库中进行管理，就可以享受到代码化的优势，并且，通过调用元数据管理应用的API可以此元数据同步到元数据管理应用，从而我们也能享受到元数据管理应用提供的搜索即友好的数据展示的能力。</p><p>当然，实际项目中可能还有其他一些没有提到的资源类型，这里不在于为所有资源列举代码化方案，而是更多的提供一种代码化一切的建议。当我们发现团队正在以一种非代码化的方式进行数据开发时，可能需要思考有没有什么好的方案可以转变为代码化的方式。这将给我们的开发带来非常多的好处。</p><h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2><p>本文讨论了数据开发中的一个重要敏捷实践–代码化一切。结合敏捷软件开发过程，我们分析了代码化一切的实践所带来的好处，并分析了与代码化相反的做法的缺点。最后，结合数据开发的实际情况，将数据开发过程中涉及的各类资源进行了分类，并为每一类资源提供了代码化的建议。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;a href=&quot;/2022/08/10/agile-data-engineering-practices/&quot;&gt;前文&lt;/a&gt;讨论了敏捷数据工程实践的相关概念。有哪些具体的敏捷数据工程实践呢？本文将分享“代码化一切”的实践。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/attaches/2022/2022-08-16-ade-everthing-as-code/everything-as-code.png&quot; alt=&quot;Everything as code&quot; /&gt;&lt;/p&gt;
-&lt;h2 id=&quot;代码化xx&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#代码化xx&quot;&gt;&lt;/a&gt; 代码化XX&lt;/h2&gt;
-&lt;p&gt;在应用软件开发中，“代码化一切”被讨论得很多。常见的代码化XX有：&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="敏捷" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/"/>
-    
-    <category term="数据" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/%E6%95%B0%E6%8D%AE/"/>
-    
-    
-    <category term="敏捷" scheme="http://brightliao.com/tags/%E6%95%8F%E6%8D%B7/"/>
-    
-    <category term="数据" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE/"/>
-    
-    <category term="数据工程" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/"/>
-    
-    <category term="软件工程" scheme="http://brightliao.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
-    
-    <category term="EasySQL" scheme="http://brightliao.com/tags/easysql/"/>
     
     <category term="数据开发" scheme="http://brightliao.com/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/"/>
     
