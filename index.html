@@ -284,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-08 23:40:26" itemprop="dateModified" datetime="2023-08-08T23:40:26+00:00">2023-08-08</time>
+                <time title="修改时间：2023-08-11 00:40:26" itemprop="dateModified" datetime="2023-08-11T00:40:26+00:00">2023-08-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,7 +309,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>253</span>
+              <span>439</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -328,10 +328,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="89-基于代码复用的数据工程"><a class="markdownIt-Anchor" href="#89-基于代码复用的数据工程"></a> 8.9: 基于代码复用的数据工程</h2>
-<p>业界普遍采用以sql为主的数据开发语言进行数据开发，依靠数仓分层来避免重复计算，这一复用方式可以称之为数据复用。但数据复用的灵活性较差，可能会形成一个非常复杂的数据任务流水线，并且，当我们想独立运行某一个etl的时候，我们不得不执行所有依赖的任务。</p>
-<p>基于代码复用的数据工程是指采用复用代码的方式进行数据工程中的复用。它采用以计算资源换取维护成本的方式帮我们节省开支。在大量数据量没那么大的场景下更适用。</p>
-<p>目前很多框架可以支持这一使用方式，比如dbt，easysql都有相应的支持。</p>
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="811-用编程语言的性能提升你的效率"><a class="markdownIt-Anchor" href="#811-用编程语言的性能提升你的效率"></a> 8.11: 用编程语言的性能提升你的效率</h2>
+<p>最近项目中需要搜集一个公开产品的文档，以便快速为团队补充相关知识。通过实现一个简单的爬虫，解析网页，获取信息就可以支持。</p>
+<p>第一个版本，我采用了最近用得最多的python实现。代码很快写完，但是一运行就发现了一个较大的问题，网页解析太慢了！一个20MB的网页需要解析十分钟，而这样的网页总共有好几百个。没想到，本来以为可以快速完成的任务，结果输在了程序性能上！在Python这条路上折腾好长时间，无果。</p>
+<p>由于nodejs天生就对网页解析和元素查找很擅长，所以，考虑改为nodejs实现。于是，花了一小时左右，程序搞定。上真实网页一测，性能简直不要太好，20MB的网页解析只用了不到5秒。于是这个任务在采用nodejs重新实现之后，顺利地在两小时内完成了。</p>
+<p>我们在开发程序的时候，一般都先入为主采用自己最擅长的开发语言，希望通过熟练度来提升效率。但是每一种开发语言都有其擅长和不擅长的领域。了解这些，就可能可以通过编程语言的性能带来颠覆式的效率提升。</p>
 
       
     </div>
@@ -1214,7 +1215,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/05/25/chatgpt-rlhf/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/06/02/chatgpt-long-context/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1228,7 +1229,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2023/05/25/chatgpt-rlhf/" class="post-title-link" itemprop="url">ChatGPT的自动优化</a>
+            <a href="/2023/06/02/chatgpt-long-context/" class="post-title-link" itemprop="url">突破ChatGPT的知识限制</a>
         </h2>
 
         <div class="post-meta">
@@ -1238,7 +1239,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-05-25 20:00:00" itemprop="dateCreated datePublished" datetime="2023-05-25T20:00:00+00:00">2023-05-25</time>
+              <time title="创建时间：2023-06-02 20:00:00" itemprop="dateCreated datePublished" datetime="2023-06-02T20:00:00+00:00">2023-06-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1262,7 +1263,7 @@
             </span>
 
           
-            <span id="/2023/05/25/chatgpt-rlhf/" class="post-meta-item leancloud_visitors" data-flag-title="ChatGPT的自动优化" title="阅读次数">
+            <span id="/2023/06/02/chatgpt-long-context/" class="post-meta-item leancloud_visitors" data-flag-title="突破ChatGPT的知识限制" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1274,14 +1275,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>20k</span>
+              <span>5.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>33 分钟</span>
+              <span>9 分钟</span>
             </span>
 
         </div>
@@ -1297,10 +1298,11 @@
 <p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
 <p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
 <p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
-<p>这是此系列的第五篇，ChatGPT的自动优化。</p>
+<p>这是此系列的第六篇，突破ChatGPT的知识限制。</p>
+<p><img src="/attaches/2023/2023-06-02-chatgpt-long-context/content.png" alt="文章内容" /></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/05/25/chatgpt-rlhf/#more" rel="contents">
+              <a class="btn" href="/2023/06/02/chatgpt-long-context/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1504,7 +1506,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:14</span>
+    <span title="站点阅读时长">17:15</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
