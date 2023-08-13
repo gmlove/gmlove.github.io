@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-08-12T03:10:29.924Z</updated>
+  <updated>2023-08-13T10:00:26.391Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="http://brightliao.com/2023/08/08/daily-thoughts/"/>
     <id>http://brightliao.com/2023/08/08/daily-thoughts/</id>
     <published>2023-08-08T20:00:00.000Z</published>
-    <updated>2023-08-12T03:10:29.924Z</updated>
+    <updated>2023-08-13T10:00:26.391Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-12-on中的条件和where中的条件"><a class="markdownIt-Anchor" href="#2023-08-12-on中的条件和where中的条件"></a> 2023-08-12: on中的条件和where中的条件</h2><p>sql语言的表达能力非常强，但在某些场景下看起来功能相同的代码却有着非常细微的差别，稍不留神可能就被坑了几个小时的调试时间。</p><p>比如，某一个条件写在表的连接条件中和写在连接后的where条件中有什么区别？</p><p>示例如下：</p><ul><li><p>写在on：select * from a left join b on <a href="http://a.id=b.id">a.id=b.id</a> and a.cond=1</p></li><li><p>写在where：select * from a left join b on <a href="http://a.id=b.id">a.id=b.id</a> where a.cond=1</p></li></ul><p>思考一下，第一个的结果集里面会出现a.cond!=1的数据吗？</p><h2 id="2023-08-11-用编程语言的性能提升你的效率"><a class="markdownIt-Anchor" href="#2023-08-11-用编程语言的性能提升你的效率"></a> 2023-08-11: 用编程语言的性能提升你的效率</h2><p>最近项目中需要搜集一个公开产品的文档，以便快速为团队补充相关知识。通过实现一个简单的爬虫，解析网页，获取信息就可以支持。</p><p>第一个版本，我采用了最近用得最多的python实现。代码很快写完，但是一运行就发现了一个较大的问题，网页解析太慢了！一个20MB的网页需要解析十分钟，而这样的网页总共有好几百个。没想到，本来以为可以快速完成的任务，结果输在了程序性能上！在Python这条路上折腾好长时间，无果。</p><p>由于nodejs天生就对网页解析和元素查找很擅长，所以，考虑改为nodejs实现。于是，花了一小时左右，程序搞定。上真实网页一测，性能简直不要太好，20MB的网页解析只用了不到5秒。于是这个任务在采用nodejs重新实现之后，顺利地在两小时内完成了。</p><p>我们在开发程序的时候，一般都先入为主采用自己最擅长的开发语言，希望通过熟练度来提升效率。但是每一种开发语言都有其擅长和不擅长的领域。了解这些，就可能可以通过编程语言的性能带来颠覆式的效率提升。</p><h2 id="2023-08-09-基于代码复用的数据工程"><a class="markdownIt-Anchor" href="#2023-08-09-基于代码复用的数据工程"></a> 2023-08-09: 基于代码复用的数据工程</h2><p>业界普遍采用以sql为主的数据开发语言进行数据开发，依靠数仓分层来避免重复计算，这一复用方式可以称之为数据复用。但数据复用的灵活性较差，可能会形成一个非常复杂的数据任务流水线，并且，当我们想独立运行某一个etl的时候，我们不得不执行所有依赖的任务。</p><p>基于代码复用的数据工程是指采用复用代码的方式进行数据工程中的复用。它采用以计算资源换取维护成本的方式帮我们节省开支。在大量数据量没那么大的场景下更适用。</p><p>目前很多框架可以支持这一使用方式，比如dbt，easysql都有相应的支持。</p><h2 id="2023-08-08-终点却是过程"><a class="markdownIt-Anchor" href="#2023-08-08-终点却是过程"></a> 2023-08-08: 终点却是过程</h2><p>人们常常奔着一个目标往前冲，甚至能不分昼夜，不顾身体。</p><p>但是等目标按照预期实现了之后，却觉得心里一下子空虚起来，不知道该干什么了。</p><p>有多少软件功能在实现之后就成了它的坟墓？无人问津的程度甚至不如当初开发阶段的测试使用频率。</p><p>也许有时候终点恰恰是过程，是奋力向上的有着充实感受的过程。而目的的意义在于为我们提供一个参与这个过程的机会。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-13-会计准则与领域词典"><a class="markdownIt-Anchor" href="#2023-08-13-会计准则与领域词典"></a> 2023-08-13: 会计准则与领域词典</h2><p>财务是一个很有意思的部门，它的职责是记录和管理企业内部的各类经济事务。由于企业内部几乎所有活动都要和钱相关，因此也都需要和财务相关。故而，企业几乎所有业务活动所涉及的（高层次）知识都将流入财务系统，财务系统事实上成了企业内部的知识中心。</p><p>这对于软件开发有什么启示？</p><p>领域驱动设计建议我们逐步构建一个领域词典，以便于让大家对于系统的理解达成一致。如何构建这个词典？</p><p>企业财务管理需要符合国家会计准则，而国家会计准则则对于社会上的各类企业业务做了较为明确的高层次划分及规范制定。比如，会计科目中关于原材料采购业务定义了这几类相关科目：银行存款/应付账款/应交税费用于钱款流转事务，在途物资/原材料用于物品运输与仓储事务，生产成本/制造费用/管理费用则用于和原材料相关的各类生产消耗事务。从这里所涉及到的一些术语可以了解到会计准则中的知识几乎覆盖了企业所有核心业务过程。</p><p>基于以上分析，领域词典是不是可以基于标准的会计准则中的知识来定义？</p><p>会计准则作为一个国家颁布的企业经济行为标准，经过了社会广泛调研，可以覆盖绝大多数的关键场景，并且相关的解释和研究非常丰富，实在是不可多得的材料。</p><p>虽如此，会计准则之于领域词典也有局限。因为会计准则中的知识是仅停留在高层次，其应用范围也将限于高层次（比如架构、系统对接接口等），细节或较低层次的内容则还是应该根据具体系统相关的业务确定。</p><h2 id="2023-08-12-on中的条件和where中的条件"><a class="markdownIt-Anchor" href="#2023-08-12-on中的条件和where中的条件"></a> 2023-08-12: on中的条件和where中的条件</h2><p>sql语言的表达能力非常强，但在某些场景下看起来功能相同的代码却有着非常细微的差别，稍不留神可能就被坑了几个小时的调试时间。</p><p>比如，某一个条件写在表的连接条件中和写在连接后的where条件中有什么区别？</p><p>示例如下：</p><ul><li><p>写在on：select * from a left join b on <a href="http://a.id=b.id">a.id=b.id</a> and a.cond=1</p></li><li><p>写在where：select * from a left join b on <a href="http://a.id=b.id">a.id=b.id</a> where a.cond=1</p></li></ul><p>思考一下，第一个的结果集里面会出现a.cond!=1的数据吗？</p><h2 id="2023-08-11-用编程语言的性能提升你的效率"><a class="markdownIt-Anchor" href="#2023-08-11-用编程语言的性能提升你的效率"></a> 2023-08-11: 用编程语言的性能提升你的效率</h2><p>最近项目中需要搜集一个公开产品的文档，以便快速为团队补充相关知识。通过实现一个简单的爬虫，解析网页，获取信息就可以支持。</p><p>第一个版本，我采用了最近用得最多的python实现。代码很快写完，但是一运行就发现了一个较大的问题，网页解析太慢了！一个20MB的网页需要解析十分钟，而这样的网页总共有好几百个。没想到，本来以为可以快速完成的任务，结果输在了程序性能上！在Python这条路上折腾好长时间，无果。</p><p>由于nodejs天生就对网页解析和元素查找很擅长，所以，考虑改为nodejs实现。于是，花了一小时左右，程序搞定。上真实网页一测，性能简直不要太好，20MB的网页解析只用了不到5秒。于是这个任务在采用nodejs重新实现之后，顺利地在两小时内完成了。</p><p>我们在开发程序的时候，一般都先入为主采用自己最擅长的开发语言，希望通过熟练度来提升效率。但是每一种开发语言都有其擅长和不擅长的领域。了解这些，就可能可以通过编程语言的性能带来颠覆式的效率提升。</p><h2 id="2023-08-09-基于代码复用的数据工程"><a class="markdownIt-Anchor" href="#2023-08-09-基于代码复用的数据工程"></a> 2023-08-09: 基于代码复用的数据工程</h2><p>业界普遍采用以sql为主的数据开发语言进行数据开发，依靠数仓分层来避免重复计算，这一复用方式可以称之为数据复用。但数据复用的灵活性较差，可能会形成一个非常复杂的数据任务流水线，并且，当我们想独立运行某一个etl的时候，我们不得不执行所有依赖的任务。</p><p>基于代码复用的数据工程是指采用复用代码的方式进行数据工程中的复用。它采用以计算资源换取维护成本的方式帮我们节省开支。在大量数据量没那么大的场景下更适用。</p><p>目前很多框架可以支持这一使用方式，比如dbt，easysql都有相应的支持。</p><h2 id="2023-08-08-终点却是过程"><a class="markdownIt-Anchor" href="#2023-08-08-终点却是过程"></a> 2023-08-08: 终点却是过程</h2><p>人们常常奔着一个目标往前冲，甚至能不分昼夜，不顾身体。</p><p>但是等目标按照预期实现了之后，却觉得心里一下子空虚起来，不知道该干什么了。</p><p>有多少软件功能在实现之后就成了它的坟墓？无人问津的程度甚至不如当初开发阶段的测试使用频率。</p><p>也许有时候终点恰恰是过程，是奋力向上的有着充实感受的过程。而目的的意义在于为我们提供一个参与这个过程的机会。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-12-on中的条件和where中的条件&quot;&gt;&lt;a class=&quot;markd</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-13-会计准则与领域词典&quot;&gt;&lt;a class=&quot;markdownIt-A</summary>
       
     
     
@@ -65,14 +65,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-08-12T03:10:28.532Z</updated>
+    <updated>2023-08-13T10:00:24.899Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="812-on中的条件和where中的条件"><a class="markdownIt-Anchor" href="#812-on中的条件和where中的条件"></a> 8.12: on中的条件和where中的条件</h2><p>sql语言的表达能力非常强，但在某些场景下看起来功能相同的代码却有着非常细微的差别，稍不留神可能就被坑了几个小时的调试时间。</p><p>比如，某一个条件写在表的连接条件中和写在连接后的where条件中有什么区别？</p><p>示例如下：</p><ul><li><p>写在on：select * from a left join b on <a href="http://a.id=b.id">a.id=b.id</a> and a.cond=1</p></li><li><p>写在where：select * from a left join b on <a href="http://a.id=b.id">a.id=b.id</a> where a.cond=1</p></li></ul><p>思考一下，第一个的结果集里面会出现a.cond!=1的数据吗？</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="813-会计准则与领域词典"><a class="markdownIt-Anchor" href="#813-会计准则与领域词典"></a> 8.13: 会计准则与领域词典</h2><p>财务是一个很有意思的部门，它的职责是记录和管理企业内部的各类经济事务。由于企业内部几乎所有活动都要和钱相关，因此也都需要和财务相关。故而，企业几乎所有业务活动所涉及的（高层次）知识都将流入财务系统，财务系统事实上成了企业内部的知识中心。</p><p>这对于软件开发有什么启示？</p><p>领域驱动设计建议我们逐步构建一个领域词典，以便于让大家对于系统的理解达成一致。如何构建这个词典？</p><p>企业财务管理需要符合国家会计准则，而国家会计准则则对于社会上的各类企业业务做了较为明确的高层次划分及规范制定。比如，会计科目中关于原材料采购业务定义了这几类相关科目：银行存款/应付账款/应交税费用于钱款流转事务，在途物资/原材料用于物品运输与仓储事务，生产成本/制造费用/管理费用则用于和原材料相关的各类生产消耗事务。从这里所涉及到的一些术语可以了解到会计准则中的知识几乎覆盖了企业所有核心业务过程。</p><p>基于以上分析，领域词典是不是可以基于标准的会计准则中的知识来定义？</p><p>会计准则作为一个国家颁布的企业经济行为标准，经过了社会广泛调研，可以覆盖绝大多数的关键场景，并且相关的解释和研究非常丰富，实在是不可多得的材料。</p><p>虽如此，会计准则之于领域词典也有局限。因为会计准则中的知识是仅停留在高层次，其应用范围也将限于高层次（比如架构、系统对接接口等），细节或较低层次的内容则还是应该根据具体系统相关的业务确定。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;812-on中的条件和where中的条件&quot;&gt;&lt;a class=&quot;markdownIt-A</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;813-会计准则与领域词典&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; </summary>
       
     
     
