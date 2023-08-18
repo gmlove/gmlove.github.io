@@ -1213,7 +1213,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/07/05/tdd-to-develop-a-long-running-task-system/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/07/27/smart-domain-and-ddd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1227,7 +1227,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/07/05/tdd-to-develop-a-long-running-task-system/" class="post-title-link" itemprop="url">用TDD开发基于数据库的长时任务系统</a>
+            <a href="/2022/07/27/smart-domain-and-ddd/" class="post-title-link" itemprop="url">我理解的Smart Domain与DDD</a>
         </h2>
 
         <div class="post-meta">
@@ -1237,7 +1237,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-07-05 20:00:00" itemprop="dateCreated datePublished" datetime="2022-07-05T20:00:00+00:00">2022-07-05</time>
+              <time title="创建时间：2022-07-27 20:00:00" itemprop="dateCreated datePublished" datetime="2022-07-27T20:00:00+00:00">2022-07-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1252,16 +1252,20 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E6%9E%B6%E6%9E%84/ddd/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
                 </span>
             </span>
 
           
-            <span id="/2022/07/05/tdd-to-develop-a-long-running-task-system/" class="post-meta-item leancloud_visitors" data-flag-title="用TDD开发基于数据库的长时任务系统" title="阅读次数">
+            <span id="/2022/07/27/smart-domain-and-ddd/" class="post-meta-item leancloud_visitors" data-flag-title="我理解的Smart Domain与DDD" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1273,14 +1277,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>7.8k</span>
+              <span>4.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>13 分钟</span>
+              <span>8 分钟</span>
             </span>
 
         </div>
@@ -1292,17 +1296,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
-<p>在最近的一个项目上，我们再次碰到了需要处理长时任务的场景。事实上，随着要处理的业务问题越来越复杂，要集成的系统越来越多，在<code>Web</code>服务器端开发中，长时任务处理已经成为了一个普遍的问题。</p>
-<p>以下场景均可看作长时任务场景：</p>
-<ul>
-<li>在<code>GitHub</code>提交了一个<code>PR</code>，要分别向上百个相关用户单独发送邮件</li>
-<li>用户上传了一个文件，需要扫描这个文件是不是带病毒</li>
-<li>用户想以<code>pdf</code>格式下载某一个文档，需要先将文档转换为<code>pdf</code>格式</li>
-</ul>
+          <p>前段时间，咱们CTO八叉在极客时间做了一次关于用Smart Domain实现DDD的分享（点击<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1QT411J7jh">这里</a>回看）。一个新词Smart Domain进入大家的视野。</p>
+<h2 id="smart-domain解析"><a class="markdownIt-Anchor" href="#smart-domain解析"></a> Smart Domain解析</h2>
+<p>Smart Domain是啥？为什么可以用Smart Domain实现DDD？本文尝试结合以往对DDD的学习和实践的经验，跟大家分享一下个人的理解。</p>
+<p>八叉在分享中提到Smart Domain这个名字来源于Smart UI。我们都知道Smart UI是DDD中提到的一种反模式，只能用于解决简单问题。这里的命名略带反讽戏谑的意味。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/07/05/tdd-to-develop-a-long-running-task-system/#more" rel="contents">
+              <a class="btn" href="/2022/07/27/smart-domain-and-ddd/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1506,7 +1506,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:18</span>
+    <span title="站点阅读时长">17:19</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

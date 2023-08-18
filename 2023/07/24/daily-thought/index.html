@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="8.17: 程序员终极提效工具 最近的数据开发项目中，我们引入了一个etl代码编译解析工具，它可以自动分析代码为语法树，并从中提取代码相关信息。 然后，我发现有很多日常开发需要手工完成的事情都可以用它来自动完成，比如：   自动生成建表语句   自动生成数据血缘分析图   自动提取输入表、输出表，辅助生成输入输出处理代码   自动代码格式化   自动重构   自动提示待重构的代码   -… 有了">
+  <meta name="description" content="8.18: 半梦半醒 我左手抱着小孩，有一种沉甸甸的感觉。他今天很安静，没有吵闹。客厅的墙、过道、地板看起来都非常的清晰。我没有戴眼镜。家里人都正常在家休息，有的在沙发上半躺着，有的在房间其他角落走动。 我能清晰的知道这不是现实。但眼前的事物是那么的清晰和真实，即便在我的身体自然移动时，这些事物也可以正常地跟随切换。 我想挑战一下这自动在脑海里出现的场景，看看它的能力极限在哪里。 走进房间的过道">
 <meta property="og:type" content="article">
 <meta property="og:title" content="每日一思">
 <meta property="og:url" content="http://brightliao.com/2023/07/24/daily-thought/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="8.17: 程序员终极提效工具 最近的数据开发项目中，我们引入了一个etl代码编译解析工具，它可以自动分析代码为语法树，并从中提取代码相关信息。 然后，我发现有很多日常开发需要手工完成的事情都可以用它来自动完成，比如：   自动生成建表语句   自动生成数据血缘分析图   自动提取输入表、输出表，辅助生成输入输出处理代码   自动代码格式化   自动重构   自动提示待重构的代码   -… 有了">
+<meta property="og:description" content="8.18: 半梦半醒 我左手抱着小孩，有一种沉甸甸的感觉。他今天很安静，没有吵闹。客厅的墙、过道、地板看起来都非常的清晰。我没有戴眼镜。家里人都正常在家休息，有的在沙发上半躺着，有的在房间其他角落走动。 我能清晰的知道这不是现实。但眼前的事物是那么的清晰和真实，即便在我的身体自然移动时，这些事物也可以正常地跟随切换。 我想挑战一下这自动在脑海里出现的场景，看看它的能力极限在哪里。 走进房间的过道">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-07-24T20:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-17T01:00:21.327Z">
+<meta property="article:modified_time" content="2023-08-18T01:20:24.141Z">
 <meta property="article:author" content="Bright LGM">
 <meta name="twitter:card" content="summary">
 
@@ -288,7 +288,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-17 01:00:21" itemprop="dateModified" datetime="2023-08-17T01:00:21+00:00">2023-08-17</time>
+                <time title="修改时间：2023-08-18 01:20:24" itemprop="dateModified" datetime="2023-08-18T01:20:24+00:00">2023-08-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,7 +313,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>329</span>
+              <span>407</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -332,33 +332,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="817-程序员终极提效工具"><a class="markdownIt-Anchor" href="#817-程序员终极提效工具"></a> 8.17: 程序员终极提效工具</h2>
-<p>最近的数据开发项目中，我们引入了一个etl代码编译解析工具，它可以自动分析代码为语法树，并从中提取代码相关信息。</p>
-<p>然后，我发现有很多日常开发需要手工完成的事情都可以用它来自动完成，比如：</p>
-<ul>
-<li>
-<p>自动生成建表语句</p>
-</li>
-<li>
-<p>自动生成数据血缘分析图</p>
-</li>
-<li>
-<p>自动提取输入表、输出表，辅助生成输入输出处理代码</p>
-</li>
-<li>
-<p>自动代码格式化</p>
-</li>
-<li>
-<p>自动重构</p>
-</li>
-<li>
-<p>自动提示待重构的代码</p>
-</li>
-</ul>
-<p>-…</p>
-<p>有了语言级的信息支持，有一种思路一下子被打开的感觉。随着一个一个工具的实现，工作效率也是蹭蹭蹭往上涨。</p>
-<p>程序员的终极提效工具是什么？除却GPT这种自动写代码的黑科技之外，那可能就是编程语言级的自动分析优化和代码生成了。</p>
-<p>回想很多语言提出的元编程思想（比如rust），其实与这里的解法一致，不过它们大多由官方提供了支持。</p>
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="818-半梦半醒"><a class="markdownIt-Anchor" href="#818-半梦半醒"></a> 8.18: 半梦半醒</h2>
+<p>我左手抱着小孩，有一种沉甸甸的感觉。他今天很安静，没有吵闹。客厅的墙、过道、地板看起来都非常的清晰。我没有戴眼镜。家里人都正常在家休息，有的在沙发上半躺着，有的在房间其他角落走动。</p>
+<p>我能清晰的知道这不是现实。但眼前的事物是那么的清晰和真实，即便在我的身体自然移动时，这些事物也可以正常地跟随切换。</p>
+<p>我想挑战一下这自动在脑海里出现的场景，看看它的能力极限在哪里。</p>
+<p>走进房间的过道，进入一间卧室。没错，是我们家的卧室！床和柜子的摆放都是没问题的。甚至连门上面的贴画上面的字都清晰映入眼帘。</p>
+<p>穿出过道，进入了一个黑黢黢的拐角处，朝房间里面望去。这好像是好几年前的住过的房间。床和家具是深色木质的，被子铺在床上。看起来是被人直接在床上面躺过而没有将被子展平，有很多褶皱。衣柜的一边柜门贴着一张四方形的福字贴，里面有老婆很久以前写的八个字，字非常清晰。和我有关，读后感觉很感动。这个场景渐渐勾起了我更多的回忆。。。</p>
 
     </div>
 
@@ -483,7 +462,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#817-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%BB%88%E6%9E%81%E6%8F%90%E6%95%88%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text"> 8.17: 程序员终极提效工具</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#818-%E5%8D%8A%E6%A2%A6%E5%8D%8A%E9%86%92"><span class="nav-number">1.</span> <span class="nav-text"> 8.18: 半梦半醒</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -612,7 +591,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:18</span>
+    <span title="站点阅读时长">17:19</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
