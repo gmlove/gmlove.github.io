@@ -284,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-22 00:40:23" itemprop="dateModified" datetime="2023-08-22T00:40:23+00:00">2023-08-22</time>
+                <time title="修改时间：2023-08-23 00:00:24" itemprop="dateModified" datetime="2023-08-23T00:00:24+00:00">2023-08-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,7 +309,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>129</span>
+              <span>264</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -328,7 +328,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="822-困局br-br-地上一滩水小蚂蚁在水边爬恶作剧的人用手划过这滩水圈出一个水圈将小蚂蚁困在圈子里面-br-br-小蚂蚁在水圈里面来回爬想要找到一个出路它一直尝试一直尝试把能尝试的路径都试过了始终都没有找到出路-br-br-随着这滩水越积越多水圈慢慢变小慢慢变小"><a class="markdownIt-Anchor" href="#822-困局br-br-地上一滩水小蚂蚁在水边爬恶作剧的人用手划过这滩水圈出一个水圈将小蚂蚁困在圈子里面-br-br-小蚂蚁在水圈里面来回爬想要找到一个出路它一直尝试一直尝试把能尝试的路径都试过了始终都没有找到出路-br-br-随着这滩水越积越多水圈慢慢变小慢慢变小"></a> 8.22: 困局<br /><br />地上一滩水，小蚂蚁在水边爬，恶作剧的人用手划过这滩水，圈出一个水圈，将小蚂蚁困在圈子里面。<br /><br />小蚂蚁在水圈里面来回爬，想要找到一个出路，它一直尝试一直尝试，把能尝试的路径都试过了，始终都没有找到出路。<br /><br />随着这滩水越积越多，水圈慢慢变小，慢慢变小。。。</h2>
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="823-分解复杂数据问题"><a class="markdownIt-Anchor" href="#823-分解复杂数据问题"></a> 8.23: 分解复杂数据问题</h2>
+<p>数据开发常常碰到数千行的sql代码，如何看待和优化这些代码呢？</p>
+<p>可以将问题按照业务和技术复杂性进行分解。</p>
+<ol>
+<li>
+<p>识别复杂代码中涉及的大表连接场景，这通常很慢而且难以优化。</p>
+</li>
+<li>
+<p>针对大表连接场景，识别是否可以将更多数据筛选条件下推到连接之前；识别是否可以在连接条件中利用分区键；识别是否可以优化为小表连接大表等。这些场景下有很多成熟的优化方案。</p>
+</li>
+<li>
+<p>将大表连接代码隔离出来，单独处理。即拆分为简单代码大数据量代码段及复杂代码小数据量代码段两部分。第一部分主要进行技术优化，第二部分主要进行业务逻辑优化。此即为关注点分离的模式。</p>
+</li>
+</ol>
 
       
     </div>
@@ -1496,12 +1509,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">624k</span>
+    <span title="站点总字数">625k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:20</span>
+    <span title="站点阅读时长">17:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

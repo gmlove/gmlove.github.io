@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-08-22T00:40:24.429Z</updated>
+  <updated>2023-08-23T00:00:26.385Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="http://brightliao.com/2023/08/21/daily-thoughts/"/>
     <id>http://brightliao.com/2023/08/21/daily-thoughts/</id>
     <published>2023-08-21T20:00:00.000Z</published>
-    <updated>2023-08-22T00:40:24.429Z</updated>
+    <updated>2023-08-23T00:00:26.385Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-22-困局"><a class="markdownIt-Anchor" href="#2023-08-22-困局"></a> 2023-08-22: 困局</h2><p>地上一滩水，小蚂蚁在水边爬，恶作剧的人用手划过这滩水，圈出一个水圈，将小蚂蚁困在圈子里面。</p><p>小蚂蚁在水圈里面来回爬，想要找到一个出路，它一直尝试一直尝试，把能尝试的路径都试过了，始终都没有找到出路。</p><p>随着这滩水越积越多，水圈慢慢变小，慢慢变小。。。</p><h2 id="2023-08-21-推荐反被推荐误"><a class="markdownIt-Anchor" href="#2023-08-21-推荐反被推荐误"></a> 2023-08-21: 推荐反被推荐误</h2><p>下火车了，赶紧用滴滴订一个车，滴滴推荐了几个上车点，随意选一个，然后开始往上车点赶。到了上车点，是一个停车场，人真多，嘈杂的打电话声音夹杂着汽车的哄哄声，在夏天的潮湿而又闷热的空气中乱作一团。汽车排着长队一个车位一个车位往前挪，刺耳的喇叭声不绝于耳。等了20分钟终于上车。</p><p>这是很多人在火车站打滴滴车的日常。</p><p>这次到站了，由于我实在无法忍受在热浪中等待20分钟之久，就选择了一个自己定位的上车点。没想到一切竟出奇的顺利，快速的叫到了车，师傅快速到了上车点，我也快速的上了车。由于上车点在马路旁，人流量不大，车也没有排长队。体验一下子提升n个档次。</p><p>为什么滴滴推荐的上车点体验如此差，而自己选择的却还不错？</p><p>本来是一个不错的地点，但正是由于将少量资源推荐给了大多数人，这个不错的地点就变成了很差的地点。推荐反被推荐误！</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-23-分解复杂数据问题"><a class="markdownIt-Anchor" href="#2023-08-23-分解复杂数据问题"></a> 2023-08-23: 分解复杂数据问题</h2><p>数据开发常常碰到数千行的sql代码，如何看待和优化这些代码呢？</p><p>可以将问题按照业务和技术复杂性进行分解。</p><ol><li><p>识别复杂代码中涉及的大表连接场景，这通常很慢而且难以优化。</p></li><li><p>针对大表连接场景，识别是否可以将更多数据筛选条件下推到连接之前；识别是否可以在连接条件中利用分区键；识别是否可以优化为小表连接大表等。这些场景下有很多成熟的优化方案。</p></li><li><p>将大表连接代码隔离出来，单独处理。即拆分为简单代码大数据量代码段及复杂代码小数据量代码段两部分。第一部分主要进行技术优化，第二部分主要进行业务逻辑优化。此即为关注点分离的模式。</p></li></ol><h2 id="2023-08-22-困局"><a class="markdownIt-Anchor" href="#2023-08-22-困局"></a> 2023-08-22: 困局</h2><p>地上一滩水，小蚂蚁在水边爬，恶作剧的人用手划过这滩水，圈出一个水圈，将小蚂蚁困在圈子里面。</p><p>小蚂蚁在水圈里面来回爬，想要找到一个出路，它一直尝试一直尝试，把能尝试的路径都试过了，始终都没有找到出路。</p><p>随着这滩水越积越多，水圈慢慢变小，慢慢变小。。。</p><h2 id="2023-08-21-推荐反被推荐误"><a class="markdownIt-Anchor" href="#2023-08-21-推荐反被推荐误"></a> 2023-08-21: 推荐反被推荐误</h2><p>下火车了，赶紧用滴滴订一个车，滴滴推荐了几个上车点，随意选一个，然后开始往上车点赶。到了上车点，是一个停车场，人真多，嘈杂的打电话声音夹杂着汽车的哄哄声，在夏天的潮湿而又闷热的空气中乱作一团。汽车排着长队一个车位一个车位往前挪，刺耳的喇叭声不绝于耳。等了20分钟终于上车。</p><p>这是很多人在火车站打滴滴车的日常。</p><p>这次到站了，由于我实在无法忍受在热浪中等待20分钟之久，就选择了一个自己定位的上车点。没想到一切竟出奇的顺利，快速的叫到了车，师傅快速到了上车点，我也快速的上了车。由于上车点在马路旁，人流量不大，车也没有排长队。体验一下子提升n个档次。</p><p>为什么滴滴推荐的上车点体验如此差，而自己选择的却还不错？</p><p>本来是一个不错的地点，但正是由于将少量资源推荐给了大多数人，这个不错的地点就变成了很差的地点。推荐反被推荐误！</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-22-困局&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; </summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-08-23-分解复杂数据问题&quot;&gt;&lt;a class=&quot;markdownIt-An</summary>
       
     
     
@@ -109,14 +109,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-08-22T00:40:23.597Z</updated>
+    <updated>2023-08-23T00:00:24.457Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="822-困局br-br-地上一滩水小蚂蚁在水边爬恶作剧的人用手划过这滩水圈出一个水圈将小蚂蚁困在圈子里面-br-br-小蚂蚁在水圈里面来回爬想要找到一个出路它一直尝试一直尝试把能尝试的路径都试过了始终都没有找到出路-br-br-随着这滩水越积越多水圈慢慢变小慢慢变小"><a class="markdownIt-Anchor" href="#822-困局br-br-地上一滩水小蚂蚁在水边爬恶作剧的人用手划过这滩水圈出一个水圈将小蚂蚁困在圈子里面-br-br-小蚂蚁在水圈里面来回爬想要找到一个出路它一直尝试一直尝试把能尝试的路径都试过了始终都没有找到出路-br-br-随着这滩水越积越多水圈慢慢变小慢慢变小"></a> 8.22: 困局<br /><br />地上一滩水，小蚂蚁在水边爬，恶作剧的人用手划过这滩水，圈出一个水圈，将小蚂蚁困在圈子里面。<br /><br />小蚂蚁在水圈里面来回爬，想要找到一个出路，它一直尝试一直尝试，把能尝试的路径都试过了，始终都没有找到出路。<br /><br />随着这滩水越积越多，水圈慢慢变小，慢慢变小。。。</h2>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="823-分解复杂数据问题"><a class="markdownIt-Anchor" href="#823-分解复杂数据问题"></a> 8.23: 分解复杂数据问题</h2><p>数据开发常常碰到数千行的sql代码，如何看待和优化这些代码呢？</p><p>可以将问题按照业务和技术复杂性进行分解。</p><ol><li><p>识别复杂代码中涉及的大表连接场景，这通常很慢而且难以优化。</p></li><li><p>针对大表连接场景，识别是否可以将更多数据筛选条件下推到连接之前；识别是否可以在连接条件中利用分区键；识别是否可以优化为小表连接大表等。这些场景下有很多成熟的优化方案。</p></li><li><p>将大表连接代码隔离出来，单独处理。即拆分为简单代码大数据量代码段及复杂代码小数据量代码段两部分。第一部分主要进行技术优化，第二部分主要进行业务逻辑优化。此即为关注点分离的模式。</p></li></ol>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;822-困局br-br-地上一滩水小蚂蚁在水边爬恶作剧的人用手划过这滩水圈出一个水圈将小</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;823-分解复杂数据问题&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; h</summary>
       
     
     
