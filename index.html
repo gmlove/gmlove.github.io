@@ -284,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-23 23:50:23" itemprop="dateModified" datetime="2023-08-23T23:50:23+00:00">2023-08-23</time>
+                <time title="修改时间：2023-08-25 00:00:27" itemprop="dateModified" datetime="2023-08-25T00:00:27+00:00">2023-08-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,7 +309,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>274</span>
+              <span>379</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -328,23 +328,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="824-spark同时读写某一张表"><a class="markdownIt-Anchor" href="#824-spark同时读写某一张表"></a> 8.24: spark同时读写某一张表</h2>
-<p>spark无疑是一个优秀的计算引擎，但却在支持同时读写某一张表时略显不足。</p>
-<p>一个简单的示例为：insert overwrite a select * from a</p>
-<p>事实上，如果我们碰到了这样的场景，spark直接报错：cannot overwrite a path that is also being read from.</p>
-<p>如何解决？一个很简单的方案是，先写入一个临时目录，然后再修改一下目录名。</p>
-<p>用sql表达，即：</p>
-<ol>
-<li>
-<p>insert overwrite a_tmp select * from a</p>
-</li>
-<li>
-<p>drop table a</p>
-</li>
-<li>
-<p>alter table a_tmp rename to a</p>
-</li>
-</ol>
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="825-滴滴打车意外打到了一辆model-3"><a class="markdownIt-Anchor" href="#825-滴滴打车意外打到了一辆model-3"></a> 8.25: 滴滴打车意外打到了一辆model 3</h2>
+<p>滴滴打车意外打到了一辆model 3，我靠近车门，准备拉开门上车，发现门把手嵌入到车门里面，不知道如何打开。我敲一敲车窗，司机师傅告诉我说要按一下门把手一边，另一边就会翘起，然后就可以开门了。上车之后，座位怎么坐都不太舒服，仔细感受之后发现坐垫太短且地台太高，腿一大截没有被支撑到。而且后面座位也显得有点紧张，活动空间有限。车辆行驶过程中，周边环境及车辆会跟随显示，非常清晰和准确，司机可以清楚的看到周围的情况。</p>
+<p>更多能打到的车是比亚迪汉，靠近车门，门把手自动弹出来，我拉开门上车，一气呵成。进入车内，座位坐起来相当舒服，不管是地台高度还是坐垫长度都非常适当，活动空间也非常宽敞。座位皮质显得很高档，不管是触感还是观感都有一种高级和精致的感觉。当然这辆车虽然有大屏幕，但看起来只像是摆设，司机师傅只是用来显示空调信息。</p>
 
       
     </div>
@@ -1117,116 +1103,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/05/20/chatgpt-training/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/05/20/chatgpt-training/" class="post-title-link" itemprop="url">ChatGPT的模型训练</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-05-20 20:00:00" itemprop="dateCreated datePublished" datetime="2023-05-20T20:00:00+00:00">2023-05-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/chatgpt/" itemprop="url" rel="index"><span itemprop="name">ChatGPT</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2023/05/20/chatgpt-training/" class="post-meta-item leancloud_visitors" data-flag-title="ChatGPT的模型训练" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>11k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>19 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
-<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
-<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
-<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
-<p>这是此系列的第四篇，ChatGPT的模型训练。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/05/20/chatgpt-training/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/05/25/chatgpt-rlhf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1314,6 +1190,117 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/05/25/chatgpt-rlhf/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/06/02/chatgpt-long-context/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/06/02/chatgpt-long-context/" class="post-title-link" itemprop="url">突破ChatGPT的知识限制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-06-02 20:00:00" itemprop="dateCreated datePublished" datetime="2023-06-02T20:00:00+00:00">2023-06-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/chatgpt/" itemprop="url" rel="index"><span itemprop="name">ChatGPT</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/06/02/chatgpt-long-context/" class="post-meta-item leancloud_visitors" data-flag-title="突破ChatGPT的知识限制" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p>
+<p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p>
+<p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p>
+<p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p>
+<p>这是此系列的第六篇，突破ChatGPT的知识限制。</p>
+<p><img src="/attaches/2023/2023-06-02-chatgpt-long-context/content.png" alt="文章内容" /></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/06/02/chatgpt-long-context/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1517,7 +1504,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:21</span>
+    <span title="站点阅读时长">17:22</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

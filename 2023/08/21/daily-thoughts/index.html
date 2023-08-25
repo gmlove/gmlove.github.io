@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="2023-08-24: spark同时读写某一张表 spark无疑是一个优秀的计算引擎，但却在支持同时读写某一张表时略显不足。 一个简单的示例为：insert overwrite a select * from a 事实上，如果我们碰到了这样的场景，spark直接报错：cannot overwrite a path that is also being read from. 如何解决？一个很简单">
+  <meta name="description" content="2023-08-25: 滴滴打车意外打到了一辆model 3 滴滴打车意外打到了一辆model 3，我靠近车门，准备拉开门上车，发现门把手嵌入到车门里面，不知道如何打开。我敲一敲车窗，司机师傅告诉我说要按一下门把手一边，另一边就会翘起，然后就可以开门了。上车之后，座位怎么坐都不太舒服，仔细感受之后发现坐垫太短且地台太高，腿一大截没有被支撑到。而且后面座位也显得有点紧张，活动空间有限。车辆行驶过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="每日一思">
 <meta property="og:url" content="http://brightliao.com/2023/08/21/daily-thoughts/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="2023-08-24: spark同时读写某一张表 spark无疑是一个优秀的计算引擎，但却在支持同时读写某一张表时略显不足。 一个简单的示例为：insert overwrite a select * from a 事实上，如果我们碰到了这样的场景，spark直接报错：cannot overwrite a path that is also being read from. 如何解决？一个很简单">
+<meta property="og:description" content="2023-08-25: 滴滴打车意外打到了一辆model 3 滴滴打车意外打到了一辆model 3，我靠近车门，准备拉开门上车，发现门把手嵌入到车门里面，不知道如何打开。我敲一敲车窗，司机师傅告诉我说要按一下门把手一边，另一边就会翘起，然后就可以开门了。上车之后，座位怎么坐都不太舒服，仔细感受之后发现坐垫太短且地台太高，腿一大截没有被支撑到。而且后面座位也显得有点紧张，活动空间有限。车辆行驶过程">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-21T20:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-23T23:50:25.047Z">
+<meta property="article:modified_time" content="2023-08-25T00:00:28.923Z">
 <meta property="article:author" content="Bright LGM">
 <meta name="twitter:card" content="summary">
 
@@ -288,7 +288,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-23 23:50:25" itemprop="dateModified" datetime="2023-08-23T23:50:25+00:00">2023-08-23</time>
+                <time title="修改时间：2023-08-25 00:00:28" itemprop="dateModified" datetime="2023-08-25T00:00:28+00:00">2023-08-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,7 +313,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
+              <span>1.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -332,7 +332,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-24-spark同时读写某一张表"><a class="markdownIt-Anchor" href="#2023-08-24-spark同时读写某一张表"></a> 2023-08-24: spark同时读写某一张表</h2>
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-08-25-滴滴打车意外打到了一辆model-3"><a class="markdownIt-Anchor" href="#2023-08-25-滴滴打车意外打到了一辆model-3"></a> 2023-08-25: 滴滴打车意外打到了一辆model 3</h2>
+<p>滴滴打车意外打到了一辆model 3，我靠近车门，准备拉开门上车，发现门把手嵌入到车门里面，不知道如何打开。我敲一敲车窗，司机师傅告诉我说要按一下门把手一边，另一边就会翘起，然后就可以开门了。上车之后，座位怎么坐都不太舒服，仔细感受之后发现坐垫太短且地台太高，腿一大截没有被支撑到。而且后面座位也显得有点紧张，活动空间有限。车辆行驶过程中，周边环境及车辆会跟随显示，非常清晰和准确，司机可以清楚的看到周围的情况。</p>
+<p>更多能打到的车是比亚迪汉，靠近车门，门把手自动弹出来，我拉开门上车，一气呵成。进入车内，座位坐起来相当舒服，不管是地台高度还是坐垫长度都非常适当，活动空间也非常宽敞。座位皮质显得很高档，不管是触感还是观感都有一种高级和精致的感觉。当然这辆车虽然有大屏幕，但看起来只像是摆设，司机师傅只是用来显示空调信息。</p>
+<h2 id="2023-08-24-spark同时读写某一张表"><a class="markdownIt-Anchor" href="#2023-08-24-spark同时读写某一张表"></a> 2023-08-24: spark同时读写某一张表</h2>
 <p>spark无疑是一个优秀的计算引擎，但却在支持同时读写某一张表时略显不足。</p>
 <p>一个简单的示例为：insert overwrite a select * from a</p>
 <p>事实上，如果我们碰到了这样的场景，spark直接报错：cannot overwrite a path that is also being read from.</p>
@@ -494,7 +497,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-24-spark%E5%90%8C%E6%97%B6%E8%AF%BB%E5%86%99%E6%9F%90%E4%B8%80%E5%BC%A0%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text"> 2023-08-24: spark同时读写某一张表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-23-%E5%88%86%E8%A7%A3%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text"> 2023-08-23: 分解复杂数据问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-22-%E5%9B%B0%E5%B1%80"><span class="nav-number">3.</span> <span class="nav-text"> 2023-08-22: 困局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-21-%E6%8E%A8%E8%8D%90%E5%8F%8D%E8%A2%AB%E6%8E%A8%E8%8D%90%E8%AF%AF"><span class="nav-number">4.</span> <span class="nav-text"> 2023-08-21: 推荐反被推荐误</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-25-%E6%BB%B4%E6%BB%B4%E6%89%93%E8%BD%A6%E6%84%8F%E5%A4%96%E6%89%93%E5%88%B0%E4%BA%86%E4%B8%80%E8%BE%86model-3"><span class="nav-number">1.</span> <span class="nav-text"> 2023-08-25: 滴滴打车意外打到了一辆model 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-24-spark%E5%90%8C%E6%97%B6%E8%AF%BB%E5%86%99%E6%9F%90%E4%B8%80%E5%BC%A0%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text"> 2023-08-24: spark同时读写某一张表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-23-%E5%88%86%E8%A7%A3%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text"> 2023-08-23: 分解复杂数据问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-22-%E5%9B%B0%E5%B1%80"><span class="nav-number">4.</span> <span class="nav-text"> 2023-08-22: 困局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-21-%E6%8E%A8%E8%8D%90%E5%8F%8D%E8%A2%AB%E6%8E%A8%E8%8D%90%E8%AF%AF"><span class="nav-number">5.</span> <span class="nav-text"> 2023-08-21: 推荐反被推荐误</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -623,7 +626,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:21</span>
+    <span title="站点阅读时长">17:22</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
