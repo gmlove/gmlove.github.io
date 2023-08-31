@@ -284,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-31 15:35:41" itemprop="dateModified" datetime="2023-08-31T15:35:41+00:00">2023-08-31</time>
+                <time title="修改时间：2023-08-31 23:50:27" itemprop="dateModified" datetime="2023-08-31T23:50:27+00:00">2023-08-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,7 +309,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>315</span>
+              <span>239</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -328,12 +328,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="831-核污染水的数据与逻辑"><a class="markdownIt-Anchor" href="#831-核污染水的数据与逻辑"></a> 8.31: 核污染水的数据与逻辑</h2>
-<p>日本核污染水排海事件正在成为国际关注的焦点。关于这件事有很多说法，比如日本自私论，美国阴谋论，中国过分反应论等等。</p>
-<p>日本举出了很多数据说明核污染水无害。然而中国的逻辑很简单，如果无害就没必要排海，如果有害就更不应该排海。</p>
-<p>在这件事上，我们的态度应该是保守的，因为它关乎全人类的健康。同时，在这件事上，过分相信数据那是极危险的，因为数据极容易作假，特别是这样复杂的专业领域，漏报一项数据就可能让性质完全不一样。</p>
-<p>这件事上更应该相信的是简单的逻辑，中国的逻辑就是简单而显然的。</p>
-<p>在关乎健康的重大问题上，中国是偏保守的，这让我们很放心，感觉更安全。为什么要拿安全去冒险？钱是可以赚的，安全问题发生了，就无法回头了。</p>
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="91-数据流水线自动生成"><a class="markdownIt-Anchor" href="#91-数据流水线自动生成"></a> 9.1: 数据流水线自动生成</h2>
+<p>在很多数据项目中，数据流水线的配置都是靠团队手工完成。这带来了很大的工作量（特别是在开发阶段），而且容易出错。</p>
+<p>事实上，数据流水线完全可根据etl血缘关系自动生成出来。</p>
+<p>我们在团队中这样做：</p>
+<ol>
+<li>
+<p>采用airflow这样的可通过代码定义流水线的调度工具</p>
+</li>
+<li>
+<p>自动解析etl文件中的依赖表，并找到对应的etl文件</p>
+</li>
+<li>
+<p>根据以上依赖关系自动生成etl依赖图</p>
+</li>
+<li>
+<p>将此依赖图转化为流水线代码</p>
+</li>
+</ol>
+<p>自动化数据流水线的生成和管理给我们带来了极大的便利，节省了团队大量的时间。团队变得更高效和敏捷了。</p>
 
       
     </div>
