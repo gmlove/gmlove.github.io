@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="2023-09-05: 稳妥的技术路线 今天被一个hive分区问题给坑了。 问题表现非常奇怪，使用create table as select *…创建的表居然与原表数据量不一致！ 调查了很久，发现了一些端倪：   原表为分区表，采用insert overwrite以动态分区的形式创建   查看底层文件系统发现，原表有一些分区列值为空的分区，以及分区列值为 hive__default 的分区">
+  <meta name="description" content="2023-09-06: 他乡遇故知 想象一下，你在一个陌生的城市，正在为生计做着事，突然一抬头，发现一个多年未见的朋友，恰好，他也看见你。 “xxx”！“xxx”！你们兴奋而又惊讶地相互叫出名字。 相约去大餐一顿。饭间，以前一起经历的往事，搞笑的尴尬的，变成现在的笑谈… 人类的情感就是这么奇妙，一次偶然的遇见，一段尘封的往事，就足以令人潸然泪下。  2023-09-05: 稳妥的技术路线 今天被">
 <meta property="og:type" content="article">
 <meta property="og:title" content="每日一思">
 <meta property="og:url" content="http://brightliao.com/2023/09/04/daily-thoughts/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="2023-09-05: 稳妥的技术路线 今天被一个hive分区问题给坑了。 问题表现非常奇怪，使用create table as select *…创建的表居然与原表数据量不一致！ 调查了很久，发现了一些端倪：   原表为分区表，采用insert overwrite以动态分区的形式创建   查看底层文件系统发现，原表有一些分区列值为空的分区，以及分区列值为 hive__default 的分区">
+<meta property="og:description" content="2023-09-06: 他乡遇故知 想象一下，你在一个陌生的城市，正在为生计做着事，突然一抬头，发现一个多年未见的朋友，恰好，他也看见你。 “xxx”！“xxx”！你们兴奋而又惊讶地相互叫出名字。 相约去大餐一顿。饭间，以前一起经历的往事，搞笑的尴尬的，变成现在的笑谈… 人类的情感就是这么奇妙，一次偶然的遇见，一段尘封的往事，就足以令人潸然泪下。  2023-09-05: 稳妥的技术路线 今天被">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-04T20:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-05T00:40:25.795Z">
+<meta property="article:modified_time" content="2023-09-06T00:30:27.489Z">
 <meta property="article:author" content="Bright LGM">
 <meta name="twitter:card" content="summary">
 
@@ -288,7 +288,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-05 00:40:25" itemprop="dateModified" datetime="2023-09-05T00:40:25+00:00">2023-09-05</time>
+                <time title="修改时间：2023-09-06 00:30:27" itemprop="dateModified" datetime="2023-09-06T00:30:27+00:00">2023-09-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,14 +313,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>799</span>
+              <span>968</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -332,7 +332,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-09-05-稳妥的技术路线"><a class="markdownIt-Anchor" href="#2023-09-05-稳妥的技术路线"></a> 2023-09-05: 稳妥的技术路线</h2>
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-09-06-他乡遇故知"><a class="markdownIt-Anchor" href="#2023-09-06-他乡遇故知"></a> 2023-09-06: 他乡遇故知</h2>
+<p>想象一下，你在一个陌生的城市，正在为生计做着事，突然一抬头，发现一个多年未见的朋友，恰好，他也看见你。</p>
+<p>“xxx”！“xxx”！你们兴奋而又惊讶地相互叫出名字。</p>
+<p>相约去大餐一顿。饭间，以前一起经历的往事，搞笑的尴尬的，变成现在的笑谈…</p>
+<p>人类的情感就是这么奇妙，一次偶然的遇见，一段尘封的往事，就足以令人潸然泪下。</p>
+<h2 id="2023-09-05-稳妥的技术路线"><a class="markdownIt-Anchor" href="#2023-09-05-稳妥的技术路线"></a> 2023-09-05: 稳妥的技术路线</h2>
 <p>今天被一个hive分区问题给坑了。</p>
 <p>问题表现非常奇怪，使用create table as select *…创建的表居然与原表数据量不一致！</p>
 <p>调查了很久，发现了一些端倪：</p>
@@ -501,7 +506,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-09-05-%E7%A8%B3%E5%A6%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF"><span class="nav-number">1.</span> <span class="nav-text"> 2023-09-05: 稳妥的技术路线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-09-04-%E6%88%90%E5%B0%B1%E8%87%AA%E5%B7%B1%E4%B8%8E%E6%88%90%E5%B0%B1%E4%BB%96%E4%BA%BA"><span class="nav-number">2.</span> <span class="nav-text"> 2023-09-04: 成就自己与成就他人</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-09-06-%E4%BB%96%E4%B9%A1%E9%81%87%E6%95%85%E7%9F%A5"><span class="nav-number">1.</span> <span class="nav-text"> 2023-09-06: 他乡遇故知</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-09-05-%E7%A8%B3%E5%A6%A5%E7%9A%84%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF"><span class="nav-number">2.</span> <span class="nav-text"> 2023-09-05: 稳妥的技术路线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-09-04-%E6%88%90%E5%B0%B1%E8%87%AA%E5%B7%B1%E4%B8%8E%E6%88%90%E5%B0%B1%E4%BB%96%E4%BA%BA"><span class="nav-number">3.</span> <span class="nav-text"> 2023-09-04: 成就自己与成就他人</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

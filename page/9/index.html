@@ -355,7 +355,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2015/12/08/pitfall-jasmin-any/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/03/04/maven-tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -369,7 +369,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2015/12/08/pitfall-jasmin-any/" class="post-title-link" itemprop="url">jasmine.any之坑</a>
+            <a href="/2016/03/04/maven-tips/" class="post-title-link" itemprop="url">Maven Tips</a>
         </h2>
 
         <div class="post-meta">
@@ -379,7 +379,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2015-12-08 15:29:47" itemprop="dateCreated datePublished" datetime="2015-12-08T15:29:47+00:00">2015-12-08</time>
+              <time title="创建时间：2016-03-04 04:21:46" itemprop="dateCreated datePublished" datetime="2016-03-04T04:21:46+00:00">2016-03-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -394,12 +394,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                  <a href="/categories/build-tools/" itemprop="url" rel="index"><span itemprop="name">build tools</span></a>
                 </span>
             </span>
 
           
-            <span id="/2015/12/08/pitfall-jasmin-any/" class="post-meta-item leancloud_visitors" data-flag-title="jasmine.any之坑" title="阅读次数">
+            <span id="/2016/03/04/maven-tips/" class="post-meta-item leancloud_visitors" data-flag-title="Maven Tips" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -411,7 +411,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
+              <span>1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -430,12 +430,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any(&#123;premitive type&#125;)</code>，可以考虑使用<code>anything()</code></p>
-<p>坑位：使用<code>toHaveBeenCalledWith</code>测试函数被调用时的参数。</p>
-<p>当参数列表太长（如：<code>func(p1, p2, p3)&#123;...&#125;</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。</p>
+          <h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
+<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
+<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
+<ul>
+<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
+</ul>
+<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
+<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2015/12/08/pitfall-jasmin-any/#more" rel="contents">
+              <a class="btn" href="/2016/03/04/maven-tips/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -540,116 +546,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/01/15/css-best-practise/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/03/04/maven-tips/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/03/04/maven-tips/" class="post-title-link" itemprop="url">Maven Tips</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-03-04 04:21:46" itemprop="dateCreated datePublished" datetime="2016-03-04T04:21:46+00:00">2016-03-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/build-tools/" itemprop="url" rel="index"><span itemprop="name">build tools</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2016/03/04/maven-tips/" class="post-meta-item leancloud_visitors" data-flag-title="Maven Tips" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
-<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
-<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
-<ul>
-<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
-</ul>
-<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
-<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/03/04/maven-tips/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1283,6 +1179,104 @@
 <p>但是，事实上<code>*/master</code>是可以匹配<code>master</code> <code>xx/master</code>分支的。如果当前repo里面有一个branch为<code>xx/master</code>，那么就会匹配到两个分支。在这样的设置之下，如果master有新的commit，Jenkins就会尝试build这两个分支，于是就会触发两次build。</p>
 <h2 id="grunt在压缩文件的时候一些自动生成的文件没有包含进去但当第二次运行编译文件又被编译进去了"><a class="markdownIt-Anchor" href="#grunt在压缩文件的时候一些自动生成的文件没有包含进去但当第二次运行编译文件又被编译进去了"></a> grunt在压缩文件的时候，一些自动生成的文件没有包含进去，但当第二次运行编译，文件又被编译进去了</h2>
 <p>grunt可能在编译之前生成的待压缩的文件列表，由于第一次编译的时候，编译文件没有生成，在压缩的时候就不会包含这个中间文件。第二次编译的时候，中间文件已经存在（可能会在编译过程中更新这个文件），这个时候就可以包含这个文件了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/04/25/docker-and-micro-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/04/25/docker-and-micro-service/" class="post-title-link" itemprop="url">Docker和微服务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-04-25 10:04:14" itemprop="dateCreated datePublished" datetime="2016-04-25T10:04:14+00:00">2016-04-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/devops/" itemprop="url" rel="index"><span itemprop="name">DevOps</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2016/04/25/docker-and-micro-service/" class="post-meta-item leancloud_visitors" data-flag-title="Docker和微服务" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>74</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="微服务的优势和带来的挑战"><a class="markdownIt-Anchor" href="#微服务的优势和带来的挑战"></a> 微服务的优势和带来的挑战</h2>
+<h2 id="docker给微服务部署带来的便利"><a class="markdownIt-Anchor" href="#docker给微服务部署带来的便利"></a> Docker给微服务部署带来的便利</h2>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000004998167">https://segmentfault.com/a/1190000004998167</a></p>
 
       
     </div>
