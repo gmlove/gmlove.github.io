@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-09-13T03:30:24.918Z</updated>
+  <updated>2023-09-14T01:00:24.242Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="http://brightliao.com/2023/09/11/daily-thoughts/"/>
     <id>http://brightliao.com/2023/09/11/daily-thoughts/</id>
     <published>2023-09-11T20:00:00.000Z</published>
-    <updated>2023-09-13T03:30:24.918Z</updated>
+    <updated>2023-09-14T01:00:24.242Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-09-13-etl代码静态检查"><a class="markdownIt-Anchor" href="#2023-09-13-etl代码静态检查"></a> 2023-09-13: etl代码静态检查</h2><p>作为数据开发的专用dsl–sql，它与其他编程语言存在着一个显著差异：其正确性严重依赖于外部环境。这带来了一些问题：</p><ul><li><p>无法在编码时静态检查字段有没有写错。一个字段在当前没有，不代表后续建表的时候不会重新加上；一个当前已存在的字段也可能在运行时被删除了。</p></li><li><p>无法检查潜在的类型转换问题。比如，当你在按照数字类型处理数据时，如果实际上该类型为字符串，就可能由于类型隐式转换导致大量空置。</p></li></ul><p>这些基本的错误常常在代码执行时才暴露出来，反馈循环太长，开发人员因此效率低下。</p><p>因此，数据开发迫切需要一个能实时连接元数据库进行静态代码检查的集成开发环境。目前有很多数据库专用开发工具可以给到这样的开发体验，比如Oracle提供的sql developer。但支持spark或hive这类大数据引擎的目前还比较少。</p><p>一个简单的实现思路是：</p><ol><li><p>将sql代码转换为基于cte的一条查询语句</p></li><li><p>在最后添加一个用于输出结果的占位语句，如select 1</p></li><li><p>在查询引擎上面执行这个查询，并分析报错结果，然后映射回对应的代码行</p></li></ol><h2 id="2023-09-12-想念"><a class="markdownIt-Anchor" href="#2023-09-12-想念"></a> 2023-09-12: 想念</h2><p>一位很久没有打电话问候的奶奶，突然入梦，慈祥的脸上还是洋溢着那般笑容。</p><p>她不愿意到城市里面和我们一起生活，一个人在农村老家待得自在。</p><p>上次回去，家里显得空空的，大大的堂屋里面只有一张陈旧的小桌子和两张长条凳。但是，她一个人在家，也要收拾得干干净净，桌凳上、地上、墙壁上没有一点灰尘。</p><p>上次回家带上一岁儿子一起，一开始，小孙子还认生，不愿意跟太奶奶亲近。太奶奶很想和小孙子抱一抱，张开双臂，嘴里温和的念叨着要抱一抱，还比着手势。小孩子纠结了好一会儿，最后笑着投入太奶奶的怀抱。</p><p>在老家，有人气的家里就会受燕子的青睐，上次回去，墙壁上又筑好了两个燕子巢。</p><h2 id="2023-09-11-影响"><a class="markdownIt-Anchor" href="#2023-09-11-影响"></a> 2023-09-11: 影响</h2><p>跑步，总是能碰到跑在我前面的。遇到实力差不多的，总是忍不住想要跟上去，从而不自觉地加快脚步。</p><p>图书馆，看到满座都是捧起书津津有味吸取知识精华的人，总是忍不住也伸手拿起一本，沉下心来，享受阅读的乐趣。</p><p>景区，附近一个停车的地方，一位当地的老乡说，这是他们自己家修的，不收费。附近的几处停车的地方也没有收费。</p><p>景区，你随手捡起地上的塑料垃圾，准备收集起来处理掉，避免污染环境。旁边也有人效仿你开始捡起其他的垃圾。</p><p>泰戈尔说：把自己活成一道光，因为你不知道，谁会借着你的光，走出了黑暗；请保持心中的善良，因为你不知道，谁会借着你的善良，走出了绝望。</p><p>这就是影响的力量！</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-09-14-一个开发者工具的出现"><a class="markdownIt-Anchor" href="#2023-09-14-一个开发者工具的出现"></a> 2023-09-14: 一个开发者工具的出现</h2><p>为了能及时获得开发反馈，我们开发了一个工具，将easysql编写的etl转换为impala可执行的sql代码。它给我们带来了极大的便利，定位olap引擎的impala可以非常及时的告诉我们代码是否有问题。</p><p>但是，改进似乎是没有尽头的。工具虽然好用，但是是以命令行的形式调用的。于是，为了能获得这样的开发反馈，总是需要手动的执行命令，拷贝代码，然后粘贴到impala的sql执行工具中执行一下。每改一行代码都需要重复这个工作。总是感觉很繁琐。</p><p>然后，我们又在酝酿下一次工具的迭代升级。思路非常简单，把之前需要手动完成的操作进一步自动化，使得开发者可以一键获取反馈，或者更进一步，自动在后台给我们提供开发反馈。</p><p>道家说，道生一，一生二，二生三，三生万物。回过头来看这样的工具演进路线，一个之前完全不存在的工具，似乎正在变得越来越丰富和完善。这可能是软件的发展之道。</p><h2 id="2023-09-13-etl代码静态检查"><a class="markdownIt-Anchor" href="#2023-09-13-etl代码静态检查"></a> 2023-09-13: etl代码静态检查</h2><p>作为数据开发的专用dsl–sql，它与其他编程语言存在着一个显著差异：其正确性严重依赖于外部环境。这带来了一些问题：</p><ul><li><p>无法在编码时静态检查字段有没有写错。一个字段在当前没有，不代表后续建表的时候不会重新加上；一个当前已存在的字段也可能在运行时被删除了。</p></li><li><p>无法检查潜在的类型转换问题。比如，当你在按照数字类型处理数据时，如果实际上该类型为字符串，就可能由于类型隐式转换导致大量空置。</p></li></ul><p>这些基本的错误常常在代码执行时才暴露出来，反馈循环太长，开发人员因此效率低下。</p><p>因此，数据开发迫切需要一个能实时连接元数据库进行静态代码检查的集成开发环境。目前有很多数据库专用开发工具可以给到这样的开发体验，比如Oracle提供的sql developer。但支持spark或hive这类大数据引擎的目前还比较少。</p><p>一个简单的实现思路是：</p><ol><li><p>将sql代码转换为基于cte的一条查询语句</p></li><li><p>在最后添加一个用于输出结果的占位语句，如select 1</p></li><li><p>在查询引擎上面执行这个查询，并分析报错结果，然后映射回对应的代码行</p></li></ol><h2 id="2023-09-12-想念"><a class="markdownIt-Anchor" href="#2023-09-12-想念"></a> 2023-09-12: 想念</h2><p>一位很久没有打电话问候的奶奶，突然入梦，慈祥的脸上还是洋溢着那般笑容。</p><p>她不愿意到城市里面和我们一起生活，一个人在农村老家待得自在。</p><p>上次回去，家里显得空空的，大大的堂屋里面只有一张陈旧的小桌子和两张长条凳。但是，她一个人在家，也要收拾得干干净净，桌凳上、地上、墙壁上没有一点灰尘。</p><p>上次回家带上一岁儿子一起，一开始，小孙子还认生，不愿意跟太奶奶亲近。太奶奶很想和小孙子抱一抱，张开双臂，嘴里温和的念叨着要抱一抱，还比着手势。小孩子纠结了好一会儿，最后笑着投入太奶奶的怀抱。</p><p>在老家，有人气的家里就会受燕子的青睐，上次回去，墙壁上又筑好了两个燕子巢。</p><h2 id="2023-09-11-影响"><a class="markdownIt-Anchor" href="#2023-09-11-影响"></a> 2023-09-11: 影响</h2><p>跑步，总是能碰到跑在我前面的。遇到实力差不多的，总是忍不住想要跟上去，从而不自觉地加快脚步。</p><p>图书馆，看到满座都是捧起书津津有味吸取知识精华的人，总是忍不住也伸手拿起一本，沉下心来，享受阅读的乐趣。</p><p>景区，附近一个停车的地方，一位当地的老乡说，这是他们自己家修的，不收费。附近的几处停车的地方也没有收费。</p><p>景区，你随手捡起地上的塑料垃圾，准备收集起来处理掉，避免污染环境。旁边也有人效仿你开始捡起其他的垃圾。</p><p>泰戈尔说：把自己活成一道光，因为你不知道，谁会借着你的光，走出了黑暗；请保持心中的善良，因为你不知道，谁会借着你的善良，走出了绝望。</p><p>这就是影响的力量！</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-09-13-etl代码静态检查&quot;&gt;&lt;a class=&quot;markdownIt-A</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-09-14-一个开发者工具的出现&quot;&gt;&lt;a class=&quot;markdownIt-</summary>
       
     
     
@@ -175,14 +175,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-09-13T03:30:23.874Z</updated>
+    <updated>2023-09-14T01:00:22.994Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="913-etl代码静态检查"><a class="markdownIt-Anchor" href="#913-etl代码静态检查"></a> 9.13: etl代码静态检查</h2><p>作为数据开发的专用dsl–sql，它与其他编程语言存在着一个显著差异：其正确性严重依赖于外部环境。这带来了一些问题：</p><ul><li><p>无法在编码时静态检查字段有没有写错。一个字段在当前没有，不代表后续建表的时候不会重新加上；一个当前已存在的字段也可能在运行时被删除了。</p></li><li><p>无法检查潜在的类型转换问题。比如，当你在按照数字类型处理数据时，如果实际上该类型为字符串，就可能由于类型隐式转换导致大量空置。</p></li></ul><p>这些基本的错误常常在代码执行时才暴露出来，反馈循环太长，开发人员因此效率低下。</p><p>因此，数据开发迫切需要一个能实时连接元数据库进行静态代码检查的集成开发环境。目前有很多数据库专用开发工具可以给到这样的开发体验，比如Oracle提供的sql developer。但支持spark或hive这类大数据引擎的目前还比较少。</p><p>一个简单的实现思路是：</p><ol><li><p>将sql代码转换为基于cte的一条查询语句</p></li><li><p>在最后添加一个用于输出结果的占位语句，如select 1</p></li><li><p>在查询引擎上面执行这个查询，并分析报错结果，然后映射回对应的代码行</p></li></ol>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="914-一个开发者工具的出现"><a class="markdownIt-Anchor" href="#914-一个开发者工具的出现"></a> 9.14: 一个开发者工具的出现</h2><p>为了能及时获得开发反馈，我们开发了一个工具，将easysql编写的etl转换为impala可执行的sql代码。它给我们带来了极大的便利，定位olap引擎的impala可以非常及时的告诉我们代码是否有问题。</p><p>但是，改进似乎是没有尽头的。工具虽然好用，但是是以命令行的形式调用的。于是，为了能获得这样的开发反馈，总是需要手动的执行命令，拷贝代码，然后粘贴到impala的sql执行工具中执行一下。每改一行代码都需要重复这个工作。总是感觉很繁琐。</p><p>然后，我们又在酝酿下一次工具的迭代升级。思路非常简单，把之前需要手动完成的操作进一步自动化，使得开发者可以一键获取反馈，或者更进一步，自动在后台给我们提供开发反馈。</p><p>道家说，道生一，一生二，二生三，三生万物。回过头来看这样的工具演进路线，一个之前完全不存在的工具，似乎正在变得越来越丰富和完善。这可能是软件的发展之道。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;913-etl代码静态检查&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; </summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;914-一个开发者工具的出现&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
       
     
     
