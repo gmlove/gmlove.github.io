@@ -253,6 +253,119 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/07/05/tdd-to-develop-a-long-running-task-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/05/tdd-to-develop-a-long-running-task-system/" class="post-title-link" itemprop="url">用TDD开发基于数据库的长时任务系统</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-05 20:00:00" itemprop="dateCreated datePublished" datetime="2022-07-05T20:00:00+00:00">2022-07-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/07/05/tdd-to-develop-a-long-running-task-system/" class="post-meta-item leancloud_visitors" data-flag-title="用TDD开发基于数据库的长时任务系统" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
+<p>在最近的一个项目上，我们再次碰到了需要处理长时任务的场景。事实上，随着要处理的业务问题越来越复杂，要集成的系统越来越多，在<code>Web</code>服务器端开发中，长时任务处理已经成为了一个普遍的问题。</p>
+<p>以下场景均可看作长时任务场景：</p>
+<ul>
+<li>在<code>GitHub</code>提交了一个<code>PR</code>，要分别向上百个相关用户单独发送邮件</li>
+<li>用户上传了一个文件，需要扫描这个文件是不是带病毒</li>
+<li>用户想以<code>pdf</code>格式下载某一个文档，需要先将文档转换为<code>pdf</code>格式</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/07/05/tdd-to-develop-a-long-running-task-system/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/07/27/smart-domain-and-ddd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -801,114 +914,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/01/10/ade-ci-cd-per-etl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/01/10/ade-ci-cd-per-etl/" class="post-title-link" itemprop="url">敏捷数据工程实践--以ETL为单位的CI和CD</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-01-10 20:00:00" itemprop="dateCreated datePublished" datetime="2023-01-10T20:00:00+00:00">2023-01-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2023/01/10/ade-ci-cd-per-etl/" class="post-meta-item leancloud_visitors" data-flag-title="敏捷数据工程实践--以ETL为单位的CI和CD" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>前几天，我在跟一位做进口贸易的朋友聊天，发现一个很有意思的事情。</p>
-<p>他们做的是国内的高端仪器进口的进口贸易业务。主要帮助销售国外产品的公司完成竞标、合同签订、物流、海关、进口贸易政策符合、维保等等事务。</p>
-<p>我很疑惑，为什么会有这样的业务形态存在？为什么这些产品销售公司不自己处理这些事务，反而代理出去让其他公司赚钱呢？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/01/10/ade-ci-cd-per-etl/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/08/reproduce-ml-models-dorn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1216,7 +1221,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/20/tdd-for-improving-design/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/19/python-json-serializable-lib/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1230,7 +1235,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/20/tdd-for-improving-design/" class="post-title-link" itemprop="url">从改善设计的角度理解TDD</a>
+            <a href="/2019/07/19/python-json-serializable-lib/" class="post-title-link" itemprop="url">如何实现一个优雅的Python的Json序列化库</a>
         </h2>
 
         <div class="post-meta">
@@ -1240,7 +1245,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-20 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-20T20:00:00+00:00">2019-07-20</time>
+              <time title="创建时间：2019-07-19 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-19T20:00:00+00:00">2019-07-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1255,16 +1260,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/07/20/tdd-for-improving-design/" class="post-meta-item leancloud_visitors" data-flag-title="从改善设计的角度理解TDD" title="阅读次数">
+            <span id="/2019/07/19/python-json-serializable-lib/" class="post-meta-item leancloud_visitors" data-flag-title="如何实现一个优雅的Python的Json序列化库" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1276,14 +1281,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6k</span>
+              <span>6.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>10 分钟</span>
+              <span>11 分钟</span>
             </span>
 
         </div>
@@ -1295,10 +1300,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>TDD有很多好处，但是广大程序员却总是难以接受。即便在我们ThoughtWorks，有着非常浓厚的TDD氛围的公司里，接受起来也依然不是一件简单的事情。我曾经见过一些在我们公司工作过一年甚至两年的同事，对TDD的理解都还停留在比较粗浅的认识上，平时的实践也难以跟上。</p>
+          <p><img src="/attaches/2019/2019-07-19-python-json-serializable-lib/serializable.png" alt="python json serializable" /></p>
+<p>在Python的世界里，将一个对象以json格式进行序列化或反序列化一直是一个问题。Python标准库里面提供了json序列化的工具，我们可以简单的用<code>json.dumps</code>来将一个对象序列化。但是这种序列化仅支持python内置的基本类型，对于自定义的类，我们将得到<code>Object of type A is not JSON serializable</code>的错误。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/20/tdd-for-improving-design/#more" rel="contents">
+              <a class="btn" href="/2019/07/19/python-json-serializable-lib/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1497,12 +1503,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">634k</span>
+    <span title="站点总字数">635k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:37</span>
+    <span title="站点阅读时长">17:38</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
