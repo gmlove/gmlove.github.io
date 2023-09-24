@@ -490,6 +490,125 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/hadoop-auth-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/12/02/hadoop-auth-4/" class="post-title-link" itemprop="url">Hadoop安全认证机制 （四）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-02 23:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T23:00:00+00:00">2019-12-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/12/02/hadoop-auth-4/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （四）" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>15k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>24 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>系列文章：</p>
+<ul>
+<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
+<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
+<li><a href="/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
+</ul>
+<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
+<h2 id="hive"><a class="markdownIt-Anchor" href="#hive"></a> <code>hive</code></h2>
+<p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
+<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/02/hadoop-auth-4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/sense-of-ceremony-and-professional-service/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -701,125 +820,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/hadoop-auth-4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/02/hadoop-auth-4/" class="post-title-link" itemprop="url">Hadoop安全认证机制 （四）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-12-02 23:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T23:00:00+00:00">2019-12-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/12/02/hadoop-auth-4/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （四）" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>15k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>24 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>系列文章：</p>
-<ul>
-<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
-<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
-<li><a href="/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
-</ul>
-<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
-<h2 id="hive"><a class="markdownIt-Anchor" href="#hive"></a> <code>hive</code></h2>
-<p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
-<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/02/hadoop-auth-4/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/01/05/DDD-in-pipeline-code/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -910,6 +910,116 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/01/05/DDD-in-pipeline-code/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/02/06/DRL-the-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/06/DRL-the-problem/" class="post-title-link" itemprop="url">强化学习入门</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-06 20:00:00" itemprop="dateCreated datePublished" datetime="2020-02-06T20:00:00+00:00">2020-02-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/02/06/DRL-the-problem/" class="post-meta-item leancloud_visitors" data-flag-title="强化学习入门" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
+<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
+<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
+<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
+<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/02/06/DRL-the-problem/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1027,116 +1137,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/01/21/spark-performance-tuning-on-billions-of-data/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/02/06/DRL-the-problem/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/06/DRL-the-problem/" class="post-title-link" itemprop="url">强化学习入门</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-02-06 20:00:00" itemprop="dateCreated datePublished" datetime="2020-02-06T20:00:00+00:00">2020-02-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/02/06/DRL-the-problem/" class="post-meta-item leancloud_visitors" data-flag-title="强化学习入门" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
-<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
-<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
-<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
-<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/02/06/DRL-the-problem/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1552,12 +1552,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">635k</span>
+    <span title="站点总字数">636k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:39</span>
+    <span title="站点阅读时长">17:40</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
