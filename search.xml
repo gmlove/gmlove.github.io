@@ -68,21 +68,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>强化学习 - MDP</title>
-    <url>/2018/05/06/reinforcement-learning-mdp/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>做一个小demo来演示强化学习的入门问题–MDP问题的解决。</p>
-]]></content>
-      <categories>
-        <category>machine-learning</category>
-      </categories>
-      <tags>
-        <tag>Reinforcement Learning</tag>
-        <tag>MDP</tag>
-        <tag>Markov Decision Process</tag>
-        <tag>AI</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>大规模Tensorflow网络的一些技巧</title>
     <url>/2017/01/16/dl-workshop-massive-network-tips/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。</p>
@@ -170,8 +155,8 @@
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
       </tags>
@@ -281,8 +266,8 @@
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
         <tag>Android</tag>
@@ -408,8 +393,8 @@
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
       </tags>
@@ -607,8 +592,8 @@
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
         <tag>GAN</tag>
@@ -817,8 +802,8 @@
         <category>Machine Learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
         <tag>GAN</tag>
@@ -2076,8 +2061,8 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
       </tags>
   </entry>
@@ -2239,8 +2224,8 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
         <tag>RNN</tag>
@@ -2377,75 +2362,13 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>Reinforcement Learning</tag>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
+        <tag>Reinforcement Learning</tag>
         <tag>DQN</tag>
         <tag>Deep Reinforcement Learning</tag>
         <tag>DeepQ Network</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习Workshop总结</title>
-    <url>/2016/12/16/dl-workshop-summary/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="深度学习workshop总结"><a class="markdownIt-Anchor" href="#深度学习workshop总结"></a> 深度学习Workshop总结</h2>
-<p>深度学习Workshop是我们AI俱乐部面向全中国区的发起的学习机器学习的系列session。这次Workshop最初由佟达发起，由于他当时在成都，所以我们就从成都开始了。</p>
-<p>这次workshop从11.7开始，直到1.17结束，共七次session，历时10周。我们以Google在Udacity上面的Tensorflow课程为基础，适当扩展，作为本次workshop的内容。</p>
-<p>本次workshop一共包含七次session：</p>
-<span id="more"></span>
-<ul>
-<li>深度学习工作坊01: 人工智能、机器学习和深度学习 by Tongda 11.7</li>
-<li>深度学习工作坊02: 深度学习界的Hello World–构建数字图片识别器 by Wu Zhiping 11.17</li>
-<li>深度学习工作坊03: 深度神经网络 by Wu Zhiping 11.23</li>
-<li>深度学习工作坊04: 卷积神经网络 by Zhang Yaodan 12.1</li>
-<li>深度学习工作坊05: RNN/LSTM之文本处理和词向量 by Liao Guangming 12.8</li>
-<li>深度学习工作坊06: RNN/LSTM之语句生成 by Liao Guangming 12.15</li>
-<li>深度学习工作坊07: 识别连续数字的Android应用 by Wu Zhiping 及 tensorflow工程实践 by Liao Guangming 1.17</li>
-</ul>
-<p>对于所有参与过此次Workshop的同学，由于参与Workshop基本上每周四晚上需要花3个小时左右的时间，而大家多数又都在项目上，所以免不了要牺牲自己的休息时间，还可能占用项目上的时间。感谢大家可以依靠对这个领域的兴趣和学习的热情积极来参加此次Workshop，一起来学习。如果漏掉一些课程，也是比较遗憾。后面有此次课程用到的所有资料和相关的keynote，大家可以作为参考。</p>
-<p>以下放送大家在workshop上面的风采：</p>
-<p><img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/02-1.jpeg" alt="02-1" /><br />
-<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/02-2.jpeg" alt="02-2" /><br />
-<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/04-1.jpeg" alt="04-1" /><br />
-<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/04-2.jpeg" alt="04-2" /><br />
-<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/05-1.jpeg" alt="05-1" /><br />
-<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/06-1.jpeg" alt="06-1" /><br />
-<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/07-1.jpeg" alt="07-1" /></p>
-<p>下面是我们和参加workshop的五星级同学：</p>
-<p><img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/all.jpeg" alt="all" /></p>
-<p>来自他们的评价：</p>
-<blockquote>
-<p>每次workshop讲师们都准备的非常充分，先有细致的ppt讲解理论，再有通过tensorflow实际代码操作的练习，每节课都很充实。感受到了讲师团队们满满的诚意。这种必将是未来发展趋势的前沿技术型workshop特别有价值！ ---- 刘珊</p>
-</blockquote>
-<blockquote>
-<p>通过这一系列的workshop我学习了解了深度学习的基本概念和知识。讲师们深入浅出的讲解，使得深度学习这项前沿技术不再高不可及，变成我们大家都可以来了解和掌握的技术。AI已经开始影响我们的生活，并且在接下来的数年中，它将变得越发重要。我们将看到层出不穷的基于它的新兴应用，而随时间推移它最终将成为各类应用必不可少的一部分，就如同今日互联网功能是应用必不可少的一样。这个过程需要我们大家都参与进来，需要更多像这一系列workshop一样的学习，去掌握技术，我们要去迎接这个未来，我们更要去创造这个未来。 ---- 陈成</p>
-</blockquote>
-<p>我们最后的识别连续数字Android小应用：</p>
-<p><embed src='https://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed></p>
-<p>做完此次Workshop，我想大多数人都会觉得机器学习也不过如此。实际上在当前，理论和工程实践已经发展得相对成熟，入门还是比较容易的。特别是深度学习，我们无须手动提取特征，直接进行端到端的学习，只需要几行代码就可以实现一个自己的机器学习模型。</p>
-<p>机器学习作为当下极为热门同时也是极有可能改变世界的技术方向，是很值得大家投入时间学习的。当然入门容易，深入还是不易，Workshop只是一个研究机器学习领域的起步，真正要深入此领域，还需要大家在之后更多的投入和努力。同时欢迎大家能密切关注或者加入我们公司AI俱乐部！</p>
-<p>当然这次workshop能顺利的开展离不开来自办公室其他team的支持。特别要感谢VR/AR俱乐部为我们提供性能强悍的显卡，极大了提升了我们训练和优化机器学习模型的效率。同时还要特别感谢办公室能在我们没有code的情况下提供订饭的支持，感谢代领导。感谢感谢！</p>
-<p>再说说我们俱乐部的情况。当前我们AI俱乐部条件还比较艰苦，比如经费缺少，没有自己独立的硬件设备等等。但是大家都有着对这个领域的无限热爱和满腔热情，一直坚持着学习和分享。一起学习的日子是最快乐的！我们俱乐部接下来可能的活动会有如下这些：</p>
-<ul>
-<li>强化学习</li>
-<li>自动驾驶</li>
-<li>在OpenAI搞些demo</li>
-<li>ROS</li>
-<li>参加Kaggle比赛之后，给办公室做些分享</li>
-</ul>
-<p>敬请期待！！！</p>
-<p>作为此次Workshop的组织者之一，我也有一些个人的感受想给大家分享。</p>
-<ul>
-<li>有时候真的只需要一个开始，开始了你就停不下来</li>
-<li>想要真正学习一个领域，那就去讲关于这个领域的课</li>
-<li>每次session，可以整理一个博客，既是自我rehearsal的过程，也可以记录所讲的东西，让更多人可以受用，扩大自己的影响力</li>
-</ul>
-<p>最后附上整理好的完整的所有session的资料和keynote，欢迎大家作为参考：</p>
-<p><a href="https://github.com/gmlove/dl-workshop">https://github.com/gmlove/dl-workshop</a></p>
-]]></content>
-      <tags>
-        <tag>personal</tag>
       </tags>
   </entry>
   <entry>
@@ -2588,12 +2511,89 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
         <tag>RNN</tag>
         <tag>LSTM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习Workshop总结</title>
+    <url>/2016/12/16/dl-workshop-summary/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="深度学习workshop总结"><a class="markdownIt-Anchor" href="#深度学习workshop总结"></a> 深度学习Workshop总结</h2>
+<p>深度学习Workshop是我们AI俱乐部面向全中国区的发起的学习机器学习的系列session。这次Workshop最初由佟达发起，由于他当时在成都，所以我们就从成都开始了。</p>
+<p>这次workshop从11.7开始，直到1.17结束，共七次session，历时10周。我们以Google在Udacity上面的Tensorflow课程为基础，适当扩展，作为本次workshop的内容。</p>
+<p>本次workshop一共包含七次session：</p>
+<span id="more"></span>
+<ul>
+<li>深度学习工作坊01: 人工智能、机器学习和深度学习 by Tongda 11.7</li>
+<li>深度学习工作坊02: 深度学习界的Hello World–构建数字图片识别器 by Wu Zhiping 11.17</li>
+<li>深度学习工作坊03: 深度神经网络 by Wu Zhiping 11.23</li>
+<li>深度学习工作坊04: 卷积神经网络 by Zhang Yaodan 12.1</li>
+<li>深度学习工作坊05: RNN/LSTM之文本处理和词向量 by Liao Guangming 12.8</li>
+<li>深度学习工作坊06: RNN/LSTM之语句生成 by Liao Guangming 12.15</li>
+<li>深度学习工作坊07: 识别连续数字的Android应用 by Wu Zhiping 及 tensorflow工程实践 by Liao Guangming 1.17</li>
+</ul>
+<p>对于所有参与过此次Workshop的同学，由于参与Workshop基本上每周四晚上需要花3个小时左右的时间，而大家多数又都在项目上，所以免不了要牺牲自己的休息时间，还可能占用项目上的时间。感谢大家可以依靠对这个领域的兴趣和学习的热情积极来参加此次Workshop，一起来学习。如果漏掉一些课程，也是比较遗憾。后面有此次课程用到的所有资料和相关的keynote，大家可以作为参考。</p>
+<p>以下放送大家在workshop上面的风采：</p>
+<p><img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/02-1.jpeg" alt="02-1" /><br />
+<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/02-2.jpeg" alt="02-2" /><br />
+<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/04-1.jpeg" alt="04-1" /><br />
+<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/04-2.jpeg" alt="04-2" /><br />
+<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/05-1.jpeg" alt="05-1" /><br />
+<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/06-1.jpeg" alt="06-1" /><br />
+<img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/07-1.jpeg" alt="07-1" /></p>
+<p>下面是我们和参加workshop的五星级同学：</p>
+<p><img data-src="/attaches/2016/2016-12-16-dl-workshop-summary/all.jpeg" alt="all" /></p>
+<p>来自他们的评价：</p>
+<blockquote>
+<p>每次workshop讲师们都准备的非常充分，先有细致的ppt讲解理论，再有通过tensorflow实际代码操作的练习，每节课都很充实。感受到了讲师团队们满满的诚意。这种必将是未来发展趋势的前沿技术型workshop特别有价值！ ---- 刘珊</p>
+</blockquote>
+<blockquote>
+<p>通过这一系列的workshop我学习了解了深度学习的基本概念和知识。讲师们深入浅出的讲解，使得深度学习这项前沿技术不再高不可及，变成我们大家都可以来了解和掌握的技术。AI已经开始影响我们的生活，并且在接下来的数年中，它将变得越发重要。我们将看到层出不穷的基于它的新兴应用，而随时间推移它最终将成为各类应用必不可少的一部分，就如同今日互联网功能是应用必不可少的一样。这个过程需要我们大家都参与进来，需要更多像这一系列workshop一样的学习，去掌握技术，我们要去迎接这个未来，我们更要去创造这个未来。 ---- 陈成</p>
+</blockquote>
+<p>我们最后的识别连续数字Android小应用：</p>
+<p><embed src='https://player.youku.com/player.php/sid/XMjQ4MTI5OTcwMA==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed></p>
+<p>做完此次Workshop，我想大多数人都会觉得机器学习也不过如此。实际上在当前，理论和工程实践已经发展得相对成熟，入门还是比较容易的。特别是深度学习，我们无须手动提取特征，直接进行端到端的学习，只需要几行代码就可以实现一个自己的机器学习模型。</p>
+<p>机器学习作为当下极为热门同时也是极有可能改变世界的技术方向，是很值得大家投入时间学习的。当然入门容易，深入还是不易，Workshop只是一个研究机器学习领域的起步，真正要深入此领域，还需要大家在之后更多的投入和努力。同时欢迎大家能密切关注或者加入我们公司AI俱乐部！</p>
+<p>当然这次workshop能顺利的开展离不开来自办公室其他team的支持。特别要感谢VR/AR俱乐部为我们提供性能强悍的显卡，极大了提升了我们训练和优化机器学习模型的效率。同时还要特别感谢办公室能在我们没有code的情况下提供订饭的支持，感谢代领导。感谢感谢！</p>
+<p>再说说我们俱乐部的情况。当前我们AI俱乐部条件还比较艰苦，比如经费缺少，没有自己独立的硬件设备等等。但是大家都有着对这个领域的无限热爱和满腔热情，一直坚持着学习和分享。一起学习的日子是最快乐的！我们俱乐部接下来可能的活动会有如下这些：</p>
+<ul>
+<li>强化学习</li>
+<li>自动驾驶</li>
+<li>在OpenAI搞些demo</li>
+<li>ROS</li>
+<li>参加Kaggle比赛之后，给办公室做些分享</li>
+</ul>
+<p>敬请期待！！！</p>
+<p>作为此次Workshop的组织者之一，我也有一些个人的感受想给大家分享。</p>
+<ul>
+<li>有时候真的只需要一个开始，开始了你就停不下来</li>
+<li>想要真正学习一个领域，那就去讲关于这个领域的课</li>
+<li>每次session，可以整理一个博客，既是自我rehearsal的过程，也可以记录所讲的东西，让更多人可以受用，扩大自己的影响力</li>
+</ul>
+<p>最后附上整理好的完整的所有session的资料和keynote，欢迎大家作为参考：</p>
+<p><a href="https://github.com/gmlove/dl-workshop">https://github.com/gmlove/dl-workshop</a></p>
+]]></content>
+      <tags>
+        <tag>personal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>强化学习 - MDP</title>
+    <url>/2018/05/06/reinforcement-learning-mdp/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>做一个小demo来演示强化学习的入门问题–MDP问题的解决。</p>
+]]></content>
+      <categories>
+        <category>machine-learning</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>Reinforcement Learning</tag>
+        <tag>MDP</tag>
+        <tag>Markov Decision Process</tag>
       </tags>
   </entry>
   <entry>
@@ -2644,8 +2644,8 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
         <tag>keras</tag>
@@ -2667,8 +2667,8 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
       </tags>
@@ -2752,8 +2752,8 @@ c. <code>drop_connect</code>函数，可以新建一个继承至<code>keras.laye
         <category>machine-learning</category>
       </categories>
       <tags>
-        <tag>AI</tag>
         <tag>tensorflow</tag>
+        <tag>AI</tag>
         <tag>Machine Learning</tag>
         <tag>Deep Learning</tag>
         <tag>keras</tag>
@@ -3602,6 +3602,91 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
+    <title>Hadoop安全认证机制 （四）</title>
+    <url>/2019/12/02/hadoop-auth-4/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>系列文章：</p>
+<ul>
+<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
+<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
+<li><a href="/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
+</ul>
+<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
+<h2 id="hive"><a class="markdownIt-Anchor" href="#hive"></a> <code>hive</code></h2>
+<p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
+<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
+<span id="more"></span>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HiveTest</span> &#123;</span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_connect_to_hive_and_execute_query</span><span class="params">()</span> <span class="keyword">throws</span> IOException, SQLException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        org.apache.hadoop.conf.<span class="type">Configuration</span> <span class="variable">conf</span> <span class="operator">=</span> <span class="keyword">new</span></span><br><span class="line">                <span class="title class_">org</span>.apache.hadoop.conf.Configuration();</span><br><span class="line">        conf.set(<span class="string">&quot;hadoop.security.authentication&quot;</span>, <span class="string">&quot;Kerberos&quot;</span>);</span><br><span class="line">        UserGroupInformation.setConfiguration(conf);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> testConfig.hiveUrl();</span><br><span class="line">        <span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url);</span><br><span class="line">        <span class="type">Statement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line"></span><br><span class="line">        statement.execute(<span class="string">&quot;create database if not exists t&quot;</span>);</span><br><span class="line">        statement.execute(<span class="string">&quot;drop table if exists t.t&quot;</span>);</span><br><span class="line">        statement.execute(<span class="string">&quot;create table t.t (a int)&quot;</span>);</span><br><span class="line">        statement.execute(<span class="string">&quot;insert into table t.t values (1), (2)&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">ResultSet</span> <span class="variable">resultSet</span> <span class="operator">=</span> statement.executeQuery(<span class="string">&quot;desc t.t&quot;</span>);</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="string">&quot;a&quot;</span>, resultSet.getString(<span class="string">&quot;col_name&quot;</span>));</span><br><span class="line">        assertEquals(<span class="string">&quot;int&quot;</span>, resultSet.getString(<span class="string">&quot;data_type&quot;</span>));</span><br><span class="line">        assertEquals(<span class="string">&quot;&quot;</span>, resultSet.getString(<span class="string">&quot;comment&quot;</span>));</span><br><span class="line"></span><br><span class="line">        resultSet = statement.executeQuery(<span class="string">&quot;select * from t.t&quot;</span>);</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="number">1</span>, resultSet.getInt(<span class="string">&quot;a&quot;</span>));</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="number">2</span>, resultSet.getInt(<span class="string">&quot;a&quot;</span>));</span><br><span class="line"></span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/HiveTest.java">这里</a>）</p>
+<p><code>hive</code>的运行时包括两个核心组件，存储元数据的<code>metastore</code>及对外提供<code>sql</code>操作服务<code>hiveserver</code>。在这里我们用使用最广泛<code>mysql</code>作为<code>metastore</code>的存储。</p>
+<p>执行脚本如下，即可搭建并运行<code>metastore</code>及<code>hiveserver</code>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入我们之前创建好的容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it shd bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载、解压、配置</span></span><br><span class="line"><span class="built_in">cd</span> /hd</span><br><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-1.2.2/apache-hive-1.2.2-bin.tar.gz</span><br><span class="line">tar xf apache-hive-1.2.2-bin.tar.gz</span><br><span class="line"><span class="built_in">ln</span> -sv apache-hive-1.2.2-bin hive</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装metastore</span></span><br><span class="line">yum install -y mariadb-server</span><br><span class="line">/usr/libexec/mariadb-prepare-db-dir mariadb.service</span><br><span class="line">/usr/bin/mysqld_safe --basedir=/usr 2&gt;&amp;1 1&gt;hive/hive.metastore.mysql.log &amp;</span><br><span class="line">mysql -uroot -e <span class="string">&quot;create user &#x27;hive&#x27;@&#x27;localhost&#x27; identified by &#x27;123456&#x27;; grant all on *.* to hive@&#x27;localhost&#x27;;&quot;</span></span><br><span class="line"><span class="comment"># 测试metastore连接</span></span><br><span class="line">mysql -uhive -p123456 -e <span class="string">&#x27;select now()&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置、启动hive</span></span><br><span class="line">wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar -O hive/lib/mysql-connector-java-5.1.48.jar</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hive/conf/hive-site.xml -O hive/conf/hive-site.xml</span><br><span class="line"><span class="built_in">cd</span> hive &amp;&amp; bin/hive --service metastore 2&gt;&amp;1 1&gt;hive.metastore.service.log &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用hive的命令行工具测试 (下面的命令需要成功运行)</span></span><br><span class="line"><span class="built_in">cd</span> hive &amp;&amp; bin/beeline</span><br><span class="line">&gt; !connect jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM</span><br><span class="line">Enter username <span class="keyword">for</span> jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM: (这里直接Enter)</span><br><span class="line">Enter password <span class="keyword">for</span> jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM: (这里直接Enter)</span><br><span class="line">&gt; create database <span class="keyword">if</span> not exists t;</span><br><span class="line">&gt; drop table <span class="keyword">if</span> exists t.t;</span><br><span class="line">&gt; create table t.t (a int);</span><br><span class="line">&gt; insert into table t.t values (1), (2);</span><br><span class="line">&gt; select * from t.t;</span><br></pre></td></tr></table></figure>
+<p>我们这里修改的配置如下：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">hive.server2.authentication</span>=<span class="string">KERBEROS</span></span><br><span class="line"><span class="attr">hive.server2.authentication.kerberos.principal</span>=<span class="string">root/_HOST@HADOOP.COM</span></span><br><span class="line"><span class="attr">hive.server2.authentication.kerberos.keytab</span>=<span class="string">/hd/conf/hadoop.keytab</span></span><br><span class="line"></span><br><span class="line"><span class="attr">hive.metastore.sasl.enabled</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">hive.metastore.kerberos.keytab.file</span>=<span class="string">/hd/conf/hadoop.keytab</span></span><br><span class="line"><span class="attr">hive.metastore.kerberos.principal</span>=<span class="string">root/_HOST@HADOOP.COM</span></span><br><span class="line"></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionURL</span>=<span class="string">jdbc:mysql://localhost/hive_remote?createDatabaseIfNotExist=true</span></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionDriverName</span>=<span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionUserName</span>=<span class="string">hive</span></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionPassword</span>=<span class="string">123456</span></span><br></pre></td></tr></table></figure>
+<p>运行最初我们定义的测试如下：（接上篇中对应的测试运行部分）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line"><span class="built_in">cat</span> &gt; src/test/resources/hive-site.xml &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span></span><br><span class="line"><span class="string">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&gt;</span></span><br><span class="line"><span class="string">&lt;configuration&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.server2.authentication&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;KERBEROS&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.server2.authentication.kerberos.principal&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;root/shd@HADOOP.COM&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.metastore.sasl.enabled&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;true&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.metastore.kerberos.principal&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;root/shd@HADOOP.COM&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">&lt;/configuration&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">mvn -DshdHost=shd -Dtest=test.HiveTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>到这里一个安全的<code>hive</code>搭建和测试就完成了。</p>
+<h2 id="hbase"><a class="markdownIt-Anchor" href="#hbase"></a> <code>hbase</code></h2>
+<p><code>hbase</code>是一个分布式大规模数据存储组件，支持随机的、实时的读写超过数十亿行的超大数据库。<code>hbase</code>基于google的论文《Bigtable: A Distributed Storage System for Structured Data》设计实现。我们来看看如何搭建一个安全的<code>hbase</code>数据库。</p>
+<p>对于一个安全<code>hbase</code>的读写，我们可以建立测试如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HbaseTest</span> &#123;</span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_read_write_hbase</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        <span class="type">Configuration</span> <span class="variable">config</span> <span class="operator">=</span> HBaseConfiguration.create();</span><br><span class="line">        config.addResource(<span class="keyword">new</span> <span class="title class_">Path</span>(testConfig.hbaseSiteFilePath()));</span><br><span class="line">        UserGroupInformation.setConfiguration(config);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line"></span><br><span class="line">        <span class="type">TableName</span> <span class="variable">tableName</span> <span class="operator">=</span> TableName.valueOf(<span class="string">&quot;test&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> ConnectionFactory.createConnection(config);</span><br><span class="line">        <span class="type">Admin</span> <span class="variable">admin</span> <span class="operator">=</span> connection.getAdmin();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (admin.tableExists(tableName)) &#123;</span><br><span class="line">            admin.deleteTable(tableName);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">family1</span> <span class="operator">=</span> <span class="string">&quot;Family1&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">family2</span> <span class="operator">=</span> <span class="string">&quot;Family2&quot;</span>;</span><br><span class="line">        <span class="type">HTableDescriptor</span> <span class="variable">tableDescriptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HTableDescriptor</span>(tableName);</span><br><span class="line">        tableDescriptor.addFamily(<span class="keyword">new</span> <span class="title class_">HColumnDescriptor</span>(family1));</span><br><span class="line">        tableDescriptor.addFamily(<span class="keyword">new</span> <span class="title class_">HColumnDescriptor</span>(family2));</span><br><span class="line">        admin.createTable(tableDescriptor);</span><br><span class="line"></span><br><span class="line">        <span class="type">Put</span> <span class="variable">p</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Put</span>(Bytes.toBytes(<span class="string">&quot;row1&quot;</span>));</span><br><span class="line">        <span class="type">String</span> <span class="variable">qualifier1</span> <span class="operator">=</span> <span class="string">&quot;Qualifier1&quot;</span>;</span><br><span class="line">        p.addColumn(family1.getBytes(), qualifier1.getBytes(), <span class="string">&quot;value1&quot;</span>.getBytes());</span><br><span class="line">        p.addColumn(family2.getBytes(), qualifier1.getBytes(), <span class="string">&quot;value2&quot;</span>.getBytes());</span><br><span class="line"></span><br><span class="line">        <span class="type">Table</span> <span class="variable">table</span> <span class="operator">=</span> connection.getTable(tableName);</span><br><span class="line">        table.put(p);</span><br><span class="line"></span><br><span class="line">        <span class="type">Get</span> <span class="variable">g</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Get</span>(Bytes.toBytes(<span class="string">&quot;row1&quot;</span>));</span><br><span class="line"></span><br><span class="line">        assertEquals(<span class="string">&quot;value1&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>(table.get(g).getValue(family1.getBytes(), qualifier1.getBytes())));</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/HbaseTest.java">这里</a>）</p>
+<p><code>hbase</code>的运行时包括三个核心组件，存储元数据的<code>Master</code>、存储数据的<code>RegionServers</code>及一个分布式协调器<code>ZooKeeper</code>。在这里，我们将部署<code>ZooKeeper</code>作为一个独立的大数据组件运行，以便将来当我们要引入其他的基于<code>ZooKeeper</code>的组件时可以直接使用。</p>
+<p>运行下面的命令，即可搭建并运行一个安全的<code>ZooKeeper</code>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://archive.apache.org/dist/zookeeper/zookeeper-3.5.5/apache-zookeeper-3.5.5-bin.tar.gz</span><br><span class="line">tar xf /</span><br><span class="line"><span class="built_in">ln</span> -sv apache-zookeeper-3.5.5-bin zookeeper</span><br><span class="line"><span class="comment"># 创建对应的key</span></span><br><span class="line">kadmin.local addprinc -randkey zookeeper/shd@HADOOP.COM</span><br><span class="line">kadmin.local xst -k /hd/conf/zookeeper.keytab zookeeper/shd@HADOOP.COM</span><br><span class="line"><span class="comment"># 配置、启动</span></span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/bin/zkEnv.sh -O zookeeper/bin/zkEnv.sh</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/jaas.conf -O zookeeper/conf/jaas.conf</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/client-jaas.conf -O zookeeper/conf/client-jaas.conf</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/zoo.cfg -O zookeeper/conf/zoo.cfg</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/jaas.conf</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/client-jaas.conf</span><br><span class="line"><span class="built_in">cd</span> zookeeper &amp;&amp; bin/zkServer.sh start</span><br><span class="line"><span class="comment"># 测试如下：</span></span><br><span class="line"><span class="built_in">cd</span> zookeeper &amp;&amp; bin/zkCli.sh</span><br><span class="line">&gt; create /test <span class="built_in">test</span></span><br><span class="line">&gt; get /test</span><br></pre></td></tr></table></figure>
+<p>接下来是<code>hbase</code>，运行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载、配置hbase</span></span><br><span class="line">wget http://mirrors.tuna.tsinghua.edu.cn/apache/hbase/hbase-1.3.6/hbase-1.3.6-bin.tar.gz</span><br><span class="line">tar xf hbase-1.3.6-bin.tar.gz</span><br><span class="line"><span class="built_in">ln</span> -sv hbase-1.3.6 hbase</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/hbase-site.xml -O hbase/conf/hbase-site.xml</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/hbase-env.sh -O hbase/conf/hbase-env.sh</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/jaas.conf -O hbase/conf/jaas.conf</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;shd&#x27;</span> &gt; hbase/conf/regionservers</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/hbase-site.xml</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/jaas.conf</span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line"><span class="built_in">cd</span> hbase</span><br><span class="line">./bin/start-hbase.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">./bin/hbase shell</span><br><span class="line">&gt; create <span class="string">&#x27;member&#x27;</span>, <span class="string">&#x27;id&#x27;</span>,<span class="string">&#x27;address&#x27;</span>,<span class="string">&#x27;info&#x27;</span></span><br><span class="line">&gt; put <span class="string">&#x27;member&#x27;</span>, <span class="string">&#x27;debugo&#x27;</span>, <span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;1&#x27;</span></span><br><span class="line">&gt; get <span class="string">&#x27;member&#x27;</span>, <span class="string">&#x27;debugo&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>运行最初我们定义的测试如下：（接上篇中对应的测试运行部分）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line">docker <span class="built_in">cp</span> shd:/hd/hbase/conf/hbase-site.xml ./resources/</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.HbaseTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>到这里一个安全的<code>hase</code>搭建和测试就完成了。</p>
+<h2 id="spark"><a class="markdownIt-Anchor" href="#spark"></a> <code>Spark</code></h2>
+<p><code>Spark</code>是一个独立的通用的高性能分布式计算引擎。相比基于<code>MapReduce</code>计算模型的<code>hive</code>，<code>Spark</code>设计了一套高效的<code>DAG</code>来优化计算流，有效的防止了多余的中间数据存储。由于<code>Spark</code>提供了更高的计算效率，它逐渐成了当前最流行的计算框架。</p>
+<p><code>Spark</code>其实是作为一个工具库来与<code>Hadoop</code>大数据集群进行集成的。我们直接依赖<code>Spark</code>的库就可以使用，无需任何配置。</p>
+<p>我们可以建立测试如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SparkTest</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_be_able_to_read_hive_from_spark</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        org.apache.hadoop.conf.<span class="type">Configuration</span> <span class="variable">conf</span> <span class="operator">=</span> <span class="keyword">new</span></span><br><span class="line">                <span class="title class_">org</span>.apache.hadoop.conf.Configuration();</span><br><span class="line">        conf.set(<span class="string">&quot;hadoop.security.authentication&quot;</span>, <span class="string">&quot;Kerberos&quot;</span>);</span><br><span class="line">        UserGroupInformation.setConfiguration(conf);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line">        <span class="type">SparkSession</span> <span class="variable">spark</span> <span class="operator">=</span> SparkSession</span><br><span class="line">                .builder()</span><br><span class="line">                .appName(<span class="string">&quot;Simple Spark Example&quot;</span>)</span><br><span class="line">                .master(<span class="string">&quot;yarn&quot;</span>)</span><br><span class="line">                .enableHiveSupport()</span><br><span class="line">                .config(<span class="string">&quot;spark.sql.warehouse.dir&quot;</span>, testConfig.sparkSqlWarehouseDir())</span><br><span class="line">                .config(<span class="string">&quot;hive.metastore.uris&quot;</span>, testConfig.hiveMetastoreUrl())</span><br><span class="line">                .getOrCreate();</span><br><span class="line"></span><br><span class="line">        spark.sql(<span class="string">&quot;create database if not exists t&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;drop table if exists t.t&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;create table t.t (a int)&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;insert into table t.t values (1), (2)&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;desc t.t&quot;</span>).show();</span><br><span class="line">        spark.sql(<span class="string">&quot;select * from t.t&quot;</span>).show();</span><br><span class="line"></span><br><span class="line">        spark.stop();</span><br><span class="line">        spark.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/SparkTest.java">这里</a>）</p>
+<p>运行以上测试：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.SparkTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>如果我们想使用<code>spark-shell</code>来交互式的探索<code>spark</code>，则我们需要下载spark并做一定的配置。</p>
+<p>执行脚本如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://archive.apache.org/dist/spark/spark-2.1.0/spark-2.1.0-bin-hadoop2.7.tgz</span><br><span class="line">tar xf spark-2.1.0-bin-hadoop2.7.tgz</span><br><span class="line"><span class="built_in">ln</span> -sv spark-2.1.0-bin-hadoop2.7 spark</span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/hd/hadoop</span><br><span class="line"><span class="built_in">export</span> HIVE_HOME=/hd/hive</span><br><span class="line"><span class="built_in">export</span> HADOOP_CONF_DIR=/hd/hadoop/etc/hadoop</span><br><span class="line"><span class="built_in">cp</span> hive/conf/hive-site.xml spark/conf/</span><br><span class="line">wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar -O spark/jars/mysql-connector-java-5.1.48.jar</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试：（下面的spark程序将能计算出PI的近似值）</span></span><br><span class="line"><span class="built_in">cd</span> spark</span><br><span class="line">./bin/spark-submit \</span><br><span class="line">    --class org.apache.spark.examples.SparkPi \</span><br><span class="line">    --master yarn \</span><br><span class="line">    --deploy-mode cluster \</span><br><span class="line">    --executor-memory 512M \</span><br><span class="line">    --num-executors 1 \</span><br><span class="line">    examples/jars/spark-examples_2.11-2.1.0.jar 1000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行spark-shell进入交互式环境</span></span><br><span class="line">./bin/spark-shell --master yarn</span><br><span class="line">&gt; new org.apache.spark.sql.SQLContext(sc).sql(<span class="string">&quot;show databases&quot;</span>).collectAsList()</span><br></pre></td></tr></table></figure>
+<h2 id="livy"><a class="markdownIt-Anchor" href="#livy"></a> <code>Livy</code></h2>
+<p><code>Livy</code>将运行<code>spark</code>应用的这一能力封装为了一个服务，这样我们就可以更方便的进行统一资源管理。</p>
+<p>对于一个安全的<code>Livy</code>服务，我们可以编写对应的测试如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LivyTest</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Logger</span> <span class="variable">log</span> <span class="operator">=</span> LoggerFactory.getLogger(LivyTest.class);</span><br><span class="line"></span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_submit_and_run_job_through_livy</span><span class="params">()</span> <span class="keyword">throws</span> IOException, URISyntaxException, InterruptedException, ExecutionException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        <span class="type">LivyClient</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LivyClientBuilder</span>()</span><br><span class="line">                .setURI(<span class="keyword">new</span> <span class="title class_">URI</span>(testConfig.livyUrl()))</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.spnego.enable&quot;</span>, <span class="string">&quot;true&quot;</span>)</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.auth.login.config&quot;</span>, testConfig.jaasConfPath())</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.krb5.conf&quot;</span>, testConfig.krb5FilePath())</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.krb5.debug&quot;</span>, <span class="string">&quot;true&quot;</span>)</span><br><span class="line">                .build();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">piJar</span> <span class="operator">=</span> testConfig.sparkPiJarFilePath();</span><br><span class="line">            log.info(<span class="string">&quot;Uploading &#123;&#125; to the Spark context...&quot;</span>, piJar);</span><br><span class="line">            client.uploadJar(<span class="keyword">new</span> <span class="title class_">File</span>(piJar)).get();</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> <span class="variable">samples</span> <span class="operator">=</span> <span class="number">10000</span>;</span><br><span class="line">            log.info(<span class="string">&quot;Running PiJob with &#123;&#125; samples...\n&quot;</span>, samples);</span><br><span class="line">            <span class="type">double</span> <span class="variable">pi</span> <span class="operator">=</span> client.submit(<span class="keyword">new</span> <span class="title class_">PiJob</span>(samples)).get();</span><br><span class="line"></span><br><span class="line">            log.info(<span class="string">&quot;Pi is roughly: &quot;</span> + pi);</span><br><span class="line">            assertEquals(<span class="number">3</span>, Double.valueOf(pi).intValue());</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            client.stop(<span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/LivyTest.java">这里</a>及<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/main/java/test/PiJob.java">这里</a>）</p>
+<p>我们曾在<a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a>中介绍过<code>Livy</code>的安全机制。结合当时的原理介绍，我们只需要运行下面的脚本即可以配置好一个安全的<code>Livy</code>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y unzip</span><br><span class="line"><span class="built_in">ln</span> -sv livy-0.5.0-incubating-bin livy</span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; livy/conf/livy.conf &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">livy.impersonation.enabled = true</span></span><br><span class="line"><span class="string">livy.server.auth.type = kerberos</span></span><br><span class="line"><span class="string">livy.server.auth.kerberos.keytab = /hd/conf/hadoop.keytab</span></span><br><span class="line"><span class="string">livy.server.auth.kerberos.principal = HTTP/shd@HADOOP.COM</span></span><br><span class="line"><span class="string">livy.server.launch.kerberos.keytab = /hd/conf/hadoop.keytab</span></span><br><span class="line"><span class="string">livy.server.launch.kerberos.principal = root/shd@HADOOP.COM</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动livy</span></span><br><span class="line"><span class="built_in">cd</span> livy &amp;&amp; ./bin/livy-server start</span><br></pre></td></tr></table></figure>
+<p>运行上面的<code>java</code>测试用例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line"><span class="built_in">cat</span> &gt;&gt;src/test/resources/jaas.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">com.sun.security.jgss.krb5.initiate &#123;</span></span><br><span class="line"><span class="string">  com.sun.security.auth.module.Krb5LoginModule required debug=true</span></span><br><span class="line"><span class="string">  refreshKrb5Config=true</span></span><br><span class="line"><span class="string">  doNotPrompt=true</span></span><br><span class="line"><span class="string">  useKeyTab=true</span></span><br><span class="line"><span class="string">  keyTab=&quot;src/test/resources/root.keytab&quot;</span></span><br><span class="line"><span class="string">  principal=&quot;root&quot;;</span></span><br><span class="line"><span class="string">&#125;;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">cp</span> -v /root/dev/projects/tmp/bigdata_conf/test/src/test/resources&#123;.1,&#125;/spark-pi.jar</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.LivyTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<h2 id="制作docker镜像"><a class="markdownIt-Anchor" href="#制作docker镜像"></a> 制作<code>docker</code>镜像</h2>
+<p>到这里我们常用的几个基础组件的安全配置就介绍完了。为便于重现和复用这样一套环境，我们可以制作一个<code>docker</code>镜像。我这里已经将此镜像制作完成，并上传到了<code>docker hub</code><a href="https://hub.docker.com/repository/docker/brightlgm/bigdata-auth/general">这里</a>，大家可以直接下载使用，或者也参考这里的<code>Dockerfile</code>自行制作镜像。</p>
+<p>有时候由于我们本地的资源不够运行集群的所有组件，我们可以在另一台机器上面通过容器运行此集群，然后通过<code>ssh tunnel</code>的方式将需要的端口映射到本地。这样本地测试时就可以直接连接<code>localhost</code>进行测试了。我也将此镜像制作完成，并上传到了<code>docker hub</code><a href="https://hub.docker.com/repository/docker/brightlgm/bigdata-auth-localhost/general">这里</a>。</p>
+<p>对于<code>localhost</code>模式，我们需要映射的端口如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># kdc</span></span><br><span class="line">ssh -L localhost:1802:localhost:1802 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hbase:</span></span><br><span class="line"><span class="comment"># hbase zookeeper</span></span><br><span class="line">ssh -L localhost:2181:localhost:2181 root@rshd</span><br><span class="line"><span class="comment"># hbase master</span></span><br><span class="line">ssh -L localhost:16000:localhost:16000 root@rshd</span><br><span class="line"><span class="comment"># hbase region server</span></span><br><span class="line">ssh -L localhost:16201:localhost:16201 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hive:</span></span><br><span class="line"><span class="comment"># hive</span></span><br><span class="line">ssh -L localhost:10000:localhost:10000 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hdfs:</span></span><br><span class="line"><span class="comment"># hdfs namenode</span></span><br><span class="line">ssh -L localhost:9000:localhost:9000 root@rshd</span><br><span class="line"><span class="comment"># hdfs datanode</span></span><br><span class="line">sudo ssh -i /root/.ssh/id_rsa -L localhost:1004:localhost:1004 root@rshd -p 12822</span><br><span class="line"></span><br><span class="line"><span class="comment">## test livy</span></span><br><span class="line">ssh -L localhost:8998:localhost:8998 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test spark with hive</span></span><br><span class="line"><span class="comment"># hdfs namenode</span></span><br><span class="line">ssh -L localhost:9000:localhost:9000 root@rshd</span><br><span class="line"><span class="comment"># hdfs datanode</span></span><br><span class="line">sudo ssh -i /Users/gmliao/.ssh/id_rsa -L localhost:1004:localhost:1004 root@rshd -p 12822</span><br><span class="line"><span class="comment"># hive metastore</span></span><br><span class="line">ssh -L localhost:9083:localhost:9083 root@rshd</span><br></pre></td></tr></table></figure>
+<p>对于前面几个组件的运维，我还将它们组织到了一个<code>Makefile</code>中，请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/auth/Makefile">这里</a>。有了这个脚本我们可以通过执行<code>make start-hbase</code>即可启动<code>hbase</code>了。其他的运维工具请参考<code>Makefile</code>源代码。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本系列文章通过以下四个方面较全面的介绍了<code>hadoop</code>的安全机制：</p>
+<ol>
+<li>Kerberos协议介绍及实践</li>
+<li>Kerberos协议发展及Hadoop相关源码分析</li>
+<li>Hadoop安全集群搭建及测试</li>
+<li>周边工具的安全支持</li>
+</ol>
+<p>通过这些介绍，相信大家对于<code>hadoop</code>的安全机制有了一定的了解了。本系列文章也将告一段落。当然我们在实际使用过程中可能还会遇到其他的问题，如有相关问题，欢迎大家留言交流。</p>
+]]></content>
+      <categories>
+        <category>数据</category>
+        <category>大数据</category>
+        <category>安全</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>安全</tag>
+        <tag>hadoop</tag>
+        <tag>kerberos</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hadoop安全认证机制 （三）</title>
     <url>/2019/11/11/hadoop-auth-3/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>系列文章：</p>
@@ -3697,91 +3782,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
 <li>Hadoop官方文档<code>Secure Mode</code>：<a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SecureMode.html">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SecureMode.html</a></li>
 <li>Hadoop官方文档<code>Proxy User</code>：<a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/Superusers.html">https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/Superusers.html</a></li>
 </ul>
-]]></content>
-      <categories>
-        <category>数据</category>
-        <category>大数据</category>
-        <category>安全</category>
-      </categories>
-      <tags>
-        <tag>大数据</tag>
-        <tag>安全</tag>
-        <tag>hadoop</tag>
-        <tag>kerberos</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hadoop安全认证机制 （四）</title>
-    <url>/2019/12/02/hadoop-auth-4/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>系列文章：</p>
-<ul>
-<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
-<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
-<li><a href="/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
-</ul>
-<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
-<h2 id="hive"><a class="markdownIt-Anchor" href="#hive"></a> <code>hive</code></h2>
-<p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
-<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
-<span id="more"></span>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HiveTest</span> &#123;</span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_connect_to_hive_and_execute_query</span><span class="params">()</span> <span class="keyword">throws</span> IOException, SQLException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        org.apache.hadoop.conf.<span class="type">Configuration</span> <span class="variable">conf</span> <span class="operator">=</span> <span class="keyword">new</span></span><br><span class="line">                <span class="title class_">org</span>.apache.hadoop.conf.Configuration();</span><br><span class="line">        conf.set(<span class="string">&quot;hadoop.security.authentication&quot;</span>, <span class="string">&quot;Kerberos&quot;</span>);</span><br><span class="line">        UserGroupInformation.setConfiguration(conf);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> testConfig.hiveUrl();</span><br><span class="line">        <span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> DriverManager.getConnection(url);</span><br><span class="line">        <span class="type">Statement</span> <span class="variable">statement</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line"></span><br><span class="line">        statement.execute(<span class="string">&quot;create database if not exists t&quot;</span>);</span><br><span class="line">        statement.execute(<span class="string">&quot;drop table if exists t.t&quot;</span>);</span><br><span class="line">        statement.execute(<span class="string">&quot;create table t.t (a int)&quot;</span>);</span><br><span class="line">        statement.execute(<span class="string">&quot;insert into table t.t values (1), (2)&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">ResultSet</span> <span class="variable">resultSet</span> <span class="operator">=</span> statement.executeQuery(<span class="string">&quot;desc t.t&quot;</span>);</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="string">&quot;a&quot;</span>, resultSet.getString(<span class="string">&quot;col_name&quot;</span>));</span><br><span class="line">        assertEquals(<span class="string">&quot;int&quot;</span>, resultSet.getString(<span class="string">&quot;data_type&quot;</span>));</span><br><span class="line">        assertEquals(<span class="string">&quot;&quot;</span>, resultSet.getString(<span class="string">&quot;comment&quot;</span>));</span><br><span class="line"></span><br><span class="line">        resultSet = statement.executeQuery(<span class="string">&quot;select * from t.t&quot;</span>);</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="number">1</span>, resultSet.getInt(<span class="string">&quot;a&quot;</span>));</span><br><span class="line">        resultSet.next();</span><br><span class="line">        assertEquals(<span class="number">2</span>, resultSet.getInt(<span class="string">&quot;a&quot;</span>));</span><br><span class="line"></span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/HiveTest.java">这里</a>）</p>
-<p><code>hive</code>的运行时包括两个核心组件，存储元数据的<code>metastore</code>及对外提供<code>sql</code>操作服务<code>hiveserver</code>。在这里我们用使用最广泛<code>mysql</code>作为<code>metastore</code>的存储。</p>
-<p>执行脚本如下，即可搭建并运行<code>metastore</code>及<code>hiveserver</code>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入我们之前创建好的容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it shd bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载、解压、配置</span></span><br><span class="line"><span class="built_in">cd</span> /hd</span><br><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-1.2.2/apache-hive-1.2.2-bin.tar.gz</span><br><span class="line">tar xf apache-hive-1.2.2-bin.tar.gz</span><br><span class="line"><span class="built_in">ln</span> -sv apache-hive-1.2.2-bin hive</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装metastore</span></span><br><span class="line">yum install -y mariadb-server</span><br><span class="line">/usr/libexec/mariadb-prepare-db-dir mariadb.service</span><br><span class="line">/usr/bin/mysqld_safe --basedir=/usr 2&gt;&amp;1 1&gt;hive/hive.metastore.mysql.log &amp;</span><br><span class="line">mysql -uroot -e <span class="string">&quot;create user &#x27;hive&#x27;@&#x27;localhost&#x27; identified by &#x27;123456&#x27;; grant all on *.* to hive@&#x27;localhost&#x27;;&quot;</span></span><br><span class="line"><span class="comment"># 测试metastore连接</span></span><br><span class="line">mysql -uhive -p123456 -e <span class="string">&#x27;select now()&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置、启动hive</span></span><br><span class="line">wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar -O hive/lib/mysql-connector-java-5.1.48.jar</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hive/conf/hive-site.xml -O hive/conf/hive-site.xml</span><br><span class="line"><span class="built_in">cd</span> hive &amp;&amp; bin/hive --service metastore 2&gt;&amp;1 1&gt;hive.metastore.service.log &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用hive的命令行工具测试 (下面的命令需要成功运行)</span></span><br><span class="line"><span class="built_in">cd</span> hive &amp;&amp; bin/beeline</span><br><span class="line">&gt; !connect jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM</span><br><span class="line">Enter username <span class="keyword">for</span> jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM: (这里直接Enter)</span><br><span class="line">Enter password <span class="keyword">for</span> jdbc:hive2://localhost:10000/default;principal=root/shd@HADOOP.COM: (这里直接Enter)</span><br><span class="line">&gt; create database <span class="keyword">if</span> not exists t;</span><br><span class="line">&gt; drop table <span class="keyword">if</span> exists t.t;</span><br><span class="line">&gt; create table t.t (a int);</span><br><span class="line">&gt; insert into table t.t values (1), (2);</span><br><span class="line">&gt; select * from t.t;</span><br></pre></td></tr></table></figure>
-<p>我们这里修改的配置如下：</p>
-<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">hive.server2.authentication</span>=<span class="string">KERBEROS</span></span><br><span class="line"><span class="attr">hive.server2.authentication.kerberos.principal</span>=<span class="string">root/_HOST@HADOOP.COM</span></span><br><span class="line"><span class="attr">hive.server2.authentication.kerberos.keytab</span>=<span class="string">/hd/conf/hadoop.keytab</span></span><br><span class="line"></span><br><span class="line"><span class="attr">hive.metastore.sasl.enabled</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">hive.metastore.kerberos.keytab.file</span>=<span class="string">/hd/conf/hadoop.keytab</span></span><br><span class="line"><span class="attr">hive.metastore.kerberos.principal</span>=<span class="string">root/_HOST@HADOOP.COM</span></span><br><span class="line"></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionURL</span>=<span class="string">jdbc:mysql://localhost/hive_remote?createDatabaseIfNotExist=true</span></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionDriverName</span>=<span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionUserName</span>=<span class="string">hive</span></span><br><span class="line"><span class="attr">javax.jdo.option.ConnectionPassword</span>=<span class="string">123456</span></span><br></pre></td></tr></table></figure>
-<p>运行最初我们定义的测试如下：（接上篇中对应的测试运行部分）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line"><span class="built_in">cat</span> &gt; src/test/resources/hive-site.xml &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span></span><br><span class="line"><span class="string">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&gt;</span></span><br><span class="line"><span class="string">&lt;configuration&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.server2.authentication&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;KERBEROS&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.server2.authentication.kerberos.principal&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;root/shd@HADOOP.COM&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.metastore.sasl.enabled&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;true&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">  &lt;property&gt;</span></span><br><span class="line"><span class="string">    &lt;name&gt;hive.metastore.kerberos.principal&lt;/name&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;root/shd@HADOOP.COM&lt;/value&gt;</span></span><br><span class="line"><span class="string">  &lt;/property&gt;</span></span><br><span class="line"><span class="string">&lt;/configuration&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">mvn -DshdHost=shd -Dtest=test.HiveTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<p>到这里一个安全的<code>hive</code>搭建和测试就完成了。</p>
-<h2 id="hbase"><a class="markdownIt-Anchor" href="#hbase"></a> <code>hbase</code></h2>
-<p><code>hbase</code>是一个分布式大规模数据存储组件，支持随机的、实时的读写超过数十亿行的超大数据库。<code>hbase</code>基于google的论文《Bigtable: A Distributed Storage System for Structured Data》设计实现。我们来看看如何搭建一个安全的<code>hbase</code>数据库。</p>
-<p>对于一个安全<code>hbase</code>的读写，我们可以建立测试如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HbaseTest</span> &#123;</span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_read_write_hbase</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        <span class="type">Configuration</span> <span class="variable">config</span> <span class="operator">=</span> HBaseConfiguration.create();</span><br><span class="line">        config.addResource(<span class="keyword">new</span> <span class="title class_">Path</span>(testConfig.hbaseSiteFilePath()));</span><br><span class="line">        UserGroupInformation.setConfiguration(config);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line"></span><br><span class="line">        <span class="type">TableName</span> <span class="variable">tableName</span> <span class="operator">=</span> TableName.valueOf(<span class="string">&quot;test&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> ConnectionFactory.createConnection(config);</span><br><span class="line">        <span class="type">Admin</span> <span class="variable">admin</span> <span class="operator">=</span> connection.getAdmin();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (admin.tableExists(tableName)) &#123;</span><br><span class="line">            admin.deleteTable(tableName);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">family1</span> <span class="operator">=</span> <span class="string">&quot;Family1&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">family2</span> <span class="operator">=</span> <span class="string">&quot;Family2&quot;</span>;</span><br><span class="line">        <span class="type">HTableDescriptor</span> <span class="variable">tableDescriptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HTableDescriptor</span>(tableName);</span><br><span class="line">        tableDescriptor.addFamily(<span class="keyword">new</span> <span class="title class_">HColumnDescriptor</span>(family1));</span><br><span class="line">        tableDescriptor.addFamily(<span class="keyword">new</span> <span class="title class_">HColumnDescriptor</span>(family2));</span><br><span class="line">        admin.createTable(tableDescriptor);</span><br><span class="line"></span><br><span class="line">        <span class="type">Put</span> <span class="variable">p</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Put</span>(Bytes.toBytes(<span class="string">&quot;row1&quot;</span>));</span><br><span class="line">        <span class="type">String</span> <span class="variable">qualifier1</span> <span class="operator">=</span> <span class="string">&quot;Qualifier1&quot;</span>;</span><br><span class="line">        p.addColumn(family1.getBytes(), qualifier1.getBytes(), <span class="string">&quot;value1&quot;</span>.getBytes());</span><br><span class="line">        p.addColumn(family2.getBytes(), qualifier1.getBytes(), <span class="string">&quot;value2&quot;</span>.getBytes());</span><br><span class="line"></span><br><span class="line">        <span class="type">Table</span> <span class="variable">table</span> <span class="operator">=</span> connection.getTable(tableName);</span><br><span class="line">        table.put(p);</span><br><span class="line"></span><br><span class="line">        <span class="type">Get</span> <span class="variable">g</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Get</span>(Bytes.toBytes(<span class="string">&quot;row1&quot;</span>));</span><br><span class="line"></span><br><span class="line">        assertEquals(<span class="string">&quot;value1&quot;</span>, <span class="keyword">new</span> <span class="title class_">String</span>(table.get(g).getValue(family1.getBytes(), qualifier1.getBytes())));</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/HbaseTest.java">这里</a>）</p>
-<p><code>hbase</code>的运行时包括三个核心组件，存储元数据的<code>Master</code>、存储数据的<code>RegionServers</code>及一个分布式协调器<code>ZooKeeper</code>。在这里，我们将部署<code>ZooKeeper</code>作为一个独立的大数据组件运行，以便将来当我们要引入其他的基于<code>ZooKeeper</code>的组件时可以直接使用。</p>
-<p>运行下面的命令，即可搭建并运行一个安全的<code>ZooKeeper</code>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://archive.apache.org/dist/zookeeper/zookeeper-3.5.5/apache-zookeeper-3.5.5-bin.tar.gz</span><br><span class="line">tar xf /</span><br><span class="line"><span class="built_in">ln</span> -sv apache-zookeeper-3.5.5-bin zookeeper</span><br><span class="line"><span class="comment"># 创建对应的key</span></span><br><span class="line">kadmin.local addprinc -randkey zookeeper/shd@HADOOP.COM</span><br><span class="line">kadmin.local xst -k /hd/conf/zookeeper.keytab zookeeper/shd@HADOOP.COM</span><br><span class="line"><span class="comment"># 配置、启动</span></span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/bin/zkEnv.sh -O zookeeper/bin/zkEnv.sh</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/jaas.conf -O zookeeper/conf/jaas.conf</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/client-jaas.conf -O zookeeper/conf/client-jaas.conf</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/zookeeper/conf/zoo.cfg -O zookeeper/conf/zoo.cfg</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/jaas.conf</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/client-jaas.conf</span><br><span class="line"><span class="built_in">cd</span> zookeeper &amp;&amp; bin/zkServer.sh start</span><br><span class="line"><span class="comment"># 测试如下：</span></span><br><span class="line"><span class="built_in">cd</span> zookeeper &amp;&amp; bin/zkCli.sh</span><br><span class="line">&gt; create /test <span class="built_in">test</span></span><br><span class="line">&gt; get /test</span><br></pre></td></tr></table></figure>
-<p>接下来是<code>hbase</code>，运行命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载、配置hbase</span></span><br><span class="line">wget http://mirrors.tuna.tsinghua.edu.cn/apache/hbase/hbase-1.3.6/hbase-1.3.6-bin.tar.gz</span><br><span class="line">tar xf hbase-1.3.6-bin.tar.gz</span><br><span class="line"><span class="built_in">ln</span> -sv hbase-1.3.6 hbase</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/hbase-site.xml -O hbase/conf/hbase-site.xml</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/hbase-env.sh -O hbase/conf/hbase-env.sh</span><br><span class="line">wget https://raw.githubusercontent.com/gmlove/bigdata_conf/master/auth/hbase/conf/jaas.conf -O hbase/conf/jaas.conf</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;shd&#x27;</span> &gt; hbase/conf/regionservers</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/hbase-site.xml</span><br><span class="line">sed -i <span class="string">&quot;s/__HOST__/shd/g&quot;</span> conf/jaas.conf</span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line"><span class="built_in">cd</span> hbase</span><br><span class="line">./bin/start-hbase.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">./bin/hbase shell</span><br><span class="line">&gt; create <span class="string">&#x27;member&#x27;</span>, <span class="string">&#x27;id&#x27;</span>,<span class="string">&#x27;address&#x27;</span>,<span class="string">&#x27;info&#x27;</span></span><br><span class="line">&gt; put <span class="string">&#x27;member&#x27;</span>, <span class="string">&#x27;debugo&#x27;</span>, <span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;1&#x27;</span></span><br><span class="line">&gt; get <span class="string">&#x27;member&#x27;</span>, <span class="string">&#x27;debugo&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>运行最初我们定义的测试如下：（接上篇中对应的测试运行部分）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line">docker <span class="built_in">cp</span> shd:/hd/hbase/conf/hbase-site.xml ./resources/</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.HbaseTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<p>到这里一个安全的<code>hase</code>搭建和测试就完成了。</p>
-<h2 id="spark"><a class="markdownIt-Anchor" href="#spark"></a> <code>Spark</code></h2>
-<p><code>Spark</code>是一个独立的通用的高性能分布式计算引擎。相比基于<code>MapReduce</code>计算模型的<code>hive</code>，<code>Spark</code>设计了一套高效的<code>DAG</code>来优化计算流，有效的防止了多余的中间数据存储。由于<code>Spark</code>提供了更高的计算效率，它逐渐成了当前最流行的计算框架。</p>
-<p><code>Spark</code>其实是作为一个工具库来与<code>Hadoop</code>大数据集群进行集成的。我们直接依赖<code>Spark</code>的库就可以使用，无需任何配置。</p>
-<p>我们可以建立测试如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SparkTest</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_be_able_to_read_hive_from_spark</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        org.apache.hadoop.conf.<span class="type">Configuration</span> <span class="variable">conf</span> <span class="operator">=</span> <span class="keyword">new</span></span><br><span class="line">                <span class="title class_">org</span>.apache.hadoop.conf.Configuration();</span><br><span class="line">        conf.set(<span class="string">&quot;hadoop.security.authentication&quot;</span>, <span class="string">&quot;Kerberos&quot;</span>);</span><br><span class="line">        UserGroupInformation.setConfiguration(conf);</span><br><span class="line">        UserGroupInformation.loginUserFromKeytab(testConfig.keytabUser(), testConfig.keytabFilePath());</span><br><span class="line">        <span class="type">SparkSession</span> <span class="variable">spark</span> <span class="operator">=</span> SparkSession</span><br><span class="line">                .builder()</span><br><span class="line">                .appName(<span class="string">&quot;Simple Spark Example&quot;</span>)</span><br><span class="line">                .master(<span class="string">&quot;yarn&quot;</span>)</span><br><span class="line">                .enableHiveSupport()</span><br><span class="line">                .config(<span class="string">&quot;spark.sql.warehouse.dir&quot;</span>, testConfig.sparkSqlWarehouseDir())</span><br><span class="line">                .config(<span class="string">&quot;hive.metastore.uris&quot;</span>, testConfig.hiveMetastoreUrl())</span><br><span class="line">                .getOrCreate();</span><br><span class="line"></span><br><span class="line">        spark.sql(<span class="string">&quot;create database if not exists t&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;drop table if exists t.t&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;create table t.t (a int)&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;insert into table t.t values (1), (2)&quot;</span>);</span><br><span class="line">        spark.sql(<span class="string">&quot;desc t.t&quot;</span>).show();</span><br><span class="line">        spark.sql(<span class="string">&quot;select * from t.t&quot;</span>).show();</span><br><span class="line"></span><br><span class="line">        spark.stop();</span><br><span class="line">        spark.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/SparkTest.java">这里</a>）</p>
-<p>运行以上测试：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.SparkTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<p>如果我们想使用<code>spark-shell</code>来交互式的探索<code>spark</code>，则我们需要下载spark并做一定的配置。</p>
-<p>执行脚本如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://archive.apache.org/dist/spark/spark-2.1.0/spark-2.1.0-bin-hadoop2.7.tgz</span><br><span class="line">tar xf spark-2.1.0-bin-hadoop2.7.tgz</span><br><span class="line"><span class="built_in">ln</span> -sv spark-2.1.0-bin-hadoop2.7 spark</span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/hd/hadoop</span><br><span class="line"><span class="built_in">export</span> HIVE_HOME=/hd/hive</span><br><span class="line"><span class="built_in">export</span> HADOOP_CONF_DIR=/hd/hadoop/etc/hadoop</span><br><span class="line"><span class="built_in">cp</span> hive/conf/hive-site.xml spark/conf/</span><br><span class="line">wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar -O spark/jars/mysql-connector-java-5.1.48.jar</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试：（下面的spark程序将能计算出PI的近似值）</span></span><br><span class="line"><span class="built_in">cd</span> spark</span><br><span class="line">./bin/spark-submit \</span><br><span class="line">    --class org.apache.spark.examples.SparkPi \</span><br><span class="line">    --master yarn \</span><br><span class="line">    --deploy-mode cluster \</span><br><span class="line">    --executor-memory 512M \</span><br><span class="line">    --num-executors 1 \</span><br><span class="line">    examples/jars/spark-examples_2.11-2.1.0.jar 1000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行spark-shell进入交互式环境</span></span><br><span class="line">./bin/spark-shell --master yarn</span><br><span class="line">&gt; new org.apache.spark.sql.SQLContext(sc).sql(<span class="string">&quot;show databases&quot;</span>).collectAsList()</span><br></pre></td></tr></table></figure>
-<h2 id="livy"><a class="markdownIt-Anchor" href="#livy"></a> <code>Livy</code></h2>
-<p><code>Livy</code>将运行<code>spark</code>应用的这一能力封装为了一个服务，这样我们就可以更方便的进行统一资源管理。</p>
-<p>对于一个安全的<code>Livy</code>服务，我们可以编写对应的测试如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LivyTest</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Logger</span> <span class="variable">log</span> <span class="operator">=</span> LoggerFactory.getLogger(LivyTest.class);</span><br><span class="line"></span><br><span class="line">    <span class="type">TestConfig</span> <span class="variable">testConfig</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestConfig</span>();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_submit_and_run_job_through_livy</span><span class="params">()</span> <span class="keyword">throws</span> IOException, URISyntaxException, InterruptedException, ExecutionException &#123;</span><br><span class="line">        testConfig.configKerberos();</span><br><span class="line">        <span class="type">LivyClient</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LivyClientBuilder</span>()</span><br><span class="line">                .setURI(<span class="keyword">new</span> <span class="title class_">URI</span>(testConfig.livyUrl()))</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.spnego.enable&quot;</span>, <span class="string">&quot;true&quot;</span>)</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.auth.login.config&quot;</span>, testConfig.jaasConfPath())</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.krb5.conf&quot;</span>, testConfig.krb5FilePath())</span><br><span class="line">                .setConf(<span class="string">&quot;livy.client.http.krb5.debug&quot;</span>, <span class="string">&quot;true&quot;</span>)</span><br><span class="line">                .build();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">piJar</span> <span class="operator">=</span> testConfig.sparkPiJarFilePath();</span><br><span class="line">            log.info(<span class="string">&quot;Uploading &#123;&#125; to the Spark context...&quot;</span>, piJar);</span><br><span class="line">            client.uploadJar(<span class="keyword">new</span> <span class="title class_">File</span>(piJar)).get();</span><br><span class="line"></span><br><span class="line">            <span class="type">int</span> <span class="variable">samples</span> <span class="operator">=</span> <span class="number">10000</span>;</span><br><span class="line">            log.info(<span class="string">&quot;Running PiJob with &#123;&#125; samples...\n&quot;</span>, samples);</span><br><span class="line">            <span class="type">double</span> <span class="variable">pi</span> <span class="operator">=</span> client.submit(<span class="keyword">new</span> <span class="title class_">PiJob</span>(samples)).get();</span><br><span class="line"></span><br><span class="line">            log.info(<span class="string">&quot;Pi is roughly: &quot;</span> + pi);</span><br><span class="line">            assertEquals(<span class="number">3</span>, Double.valueOf(pi).intValue());</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            client.stop(<span class="literal">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>（完整代码请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/test/java/test/LivyTest.java">这里</a>及<a href="https://github.com/gmlove/bigdata_conf/blob/master/test/src/main/java/test/PiJob.java">这里</a>）</p>
-<p>我们曾在<a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a>中介绍过<code>Livy</code>的安全机制。结合当时的原理介绍，我们只需要运行下面的脚本即可以配置好一个安全的<code>Livy</code>:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y unzip</span><br><span class="line"><span class="built_in">ln</span> -sv livy-0.5.0-incubating-bin livy</span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; livy/conf/livy.conf &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">livy.impersonation.enabled = true</span></span><br><span class="line"><span class="string">livy.server.auth.type = kerberos</span></span><br><span class="line"><span class="string">livy.server.auth.kerberos.keytab = /hd/conf/hadoop.keytab</span></span><br><span class="line"><span class="string">livy.server.auth.kerberos.principal = HTTP/shd@HADOOP.COM</span></span><br><span class="line"><span class="string">livy.server.launch.kerberos.keytab = /hd/conf/hadoop.keytab</span></span><br><span class="line"><span class="string">livy.server.launch.kerberos.principal = root/shd@HADOOP.COM</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动livy</span></span><br><span class="line"><span class="built_in">cd</span> livy &amp;&amp; ./bin/livy-server start</span><br></pre></td></tr></table></figure>
-<p>运行上面的<code>java</code>测试用例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> bigdata_conf/test</span><br><span class="line"><span class="built_in">cat</span> &gt;&gt;src/test/resources/jaas.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">com.sun.security.jgss.krb5.initiate &#123;</span></span><br><span class="line"><span class="string">  com.sun.security.auth.module.Krb5LoginModule required debug=true</span></span><br><span class="line"><span class="string">  refreshKrb5Config=true</span></span><br><span class="line"><span class="string">  doNotPrompt=true</span></span><br><span class="line"><span class="string">  useKeyTab=true</span></span><br><span class="line"><span class="string">  keyTab=&quot;src/test/resources/root.keytab&quot;</span></span><br><span class="line"><span class="string">  principal=&quot;root&quot;;</span></span><br><span class="line"><span class="string">&#125;;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">cp</span> -v /root/dev/projects/tmp/bigdata_conf/test/src/test/resources&#123;.1,&#125;/spark-pi.jar</span><br><span class="line">mvn -DshdHost=shd -Dtest=test.LivyTest <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-<h2 id="制作docker镜像"><a class="markdownIt-Anchor" href="#制作docker镜像"></a> 制作<code>docker</code>镜像</h2>
-<p>到这里我们常用的几个基础组件的安全配置就介绍完了。为便于重现和复用这样一套环境，我们可以制作一个<code>docker</code>镜像。我这里已经将此镜像制作完成，并上传到了<code>docker hub</code><a href="https://hub.docker.com/repository/docker/brightlgm/bigdata-auth/general">这里</a>，大家可以直接下载使用，或者也参考这里的<code>Dockerfile</code>自行制作镜像。</p>
-<p>有时候由于我们本地的资源不够运行集群的所有组件，我们可以在另一台机器上面通过容器运行此集群，然后通过<code>ssh tunnel</code>的方式将需要的端口映射到本地。这样本地测试时就可以直接连接<code>localhost</code>进行测试了。我也将此镜像制作完成，并上传到了<code>docker hub</code><a href="https://hub.docker.com/repository/docker/brightlgm/bigdata-auth-localhost/general">这里</a>。</p>
-<p>对于<code>localhost</code>模式，我们需要映射的端口如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># kdc</span></span><br><span class="line">ssh -L localhost:1802:localhost:1802 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hbase:</span></span><br><span class="line"><span class="comment"># hbase zookeeper</span></span><br><span class="line">ssh -L localhost:2181:localhost:2181 root@rshd</span><br><span class="line"><span class="comment"># hbase master</span></span><br><span class="line">ssh -L localhost:16000:localhost:16000 root@rshd</span><br><span class="line"><span class="comment"># hbase region server</span></span><br><span class="line">ssh -L localhost:16201:localhost:16201 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hive:</span></span><br><span class="line"><span class="comment"># hive</span></span><br><span class="line">ssh -L localhost:10000:localhost:10000 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test hdfs:</span></span><br><span class="line"><span class="comment"># hdfs namenode</span></span><br><span class="line">ssh -L localhost:9000:localhost:9000 root@rshd</span><br><span class="line"><span class="comment"># hdfs datanode</span></span><br><span class="line">sudo ssh -i /root/.ssh/id_rsa -L localhost:1004:localhost:1004 root@rshd -p 12822</span><br><span class="line"></span><br><span class="line"><span class="comment">## test livy</span></span><br><span class="line">ssh -L localhost:8998:localhost:8998 root@rshd</span><br><span class="line"></span><br><span class="line"><span class="comment">## test spark with hive</span></span><br><span class="line"><span class="comment"># hdfs namenode</span></span><br><span class="line">ssh -L localhost:9000:localhost:9000 root@rshd</span><br><span class="line"><span class="comment"># hdfs datanode</span></span><br><span class="line">sudo ssh -i /Users/gmliao/.ssh/id_rsa -L localhost:1004:localhost:1004 root@rshd -p 12822</span><br><span class="line"><span class="comment"># hive metastore</span></span><br><span class="line">ssh -L localhost:9083:localhost:9083 root@rshd</span><br></pre></td></tr></table></figure>
-<p>对于前面几个组件的运维，我还将它们组织到了一个<code>Makefile</code>中，请参考<a href="https://github.com/gmlove/bigdata_conf/blob/master/auth/Makefile">这里</a>。有了这个脚本我们可以通过执行<code>make start-hbase</code>即可启动<code>hbase</code>了。其他的运维工具请参考<code>Makefile</code>源代码。</p>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
-<p>本系列文章通过以下四个方面较全面的介绍了<code>hadoop</code>的安全机制：</p>
-<ol>
-<li>Kerberos协议介绍及实践</li>
-<li>Kerberos协议发展及Hadoop相关源码分析</li>
-<li>Hadoop安全集群搭建及测试</li>
-<li>周边工具的安全支持</li>
-</ol>
-<p>通过这些介绍，相信大家对于<code>hadoop</code>的安全机制有了一定的了解了。本系列文章也将告一段落。当然我们在实际使用过程中可能还会遇到其他的问题，如有相关问题，欢迎大家留言交流。</p>
 ]]></content>
       <categories>
         <category>数据</category>
@@ -4299,11 +4299,11 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
         <category>机器学习</category>
       </categories>
       <tags>
+        <tag>AI</tag>
         <tag>Reinforcement Learning</tag>
+        <tag>DQN</tag>
         <tag>MDP</tag>
         <tag>Markov Decision Process</tag>
-        <tag>AI</tag>
-        <tag>DQN</tag>
         <tag>机器学习</tag>
         <tag>算法</tag>
         <tag>强化学习</tag>
@@ -10544,7 +10544,10 @@ from: https://markmap.js.org/repl
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="930-中秋节的月亮"><a class="markdownIt-Anchor" href="#930-中秋节的月亮"></a> 9.30: 中秋节的月亮</h2>
 <p>10小时自驾，在一轮满月的陪伴下到家，终于见到一个月未见的小孩。平常的他10点睡觉，但今天，快到11点了，他还没有睡。</p>
 <p>开门就发现，他满脸堆笑的站在门口，“哦！哦！哦！”高兴地拍手。</p>
-<p>妈妈上前去，想要抱起，小孩有点不知所措，竟然推开妈妈的手，想要保持一点距离。大概在快速成 …</p>
+<p>妈妈上前去，想要抱起，小孩有点不知所措，竟然推开妈妈的手，想要保持一点距离。大概在快速成长的小孩眼里，一个月已经是很长很长的时间了。</p>
+<p>最终他还是投入了妈妈的怀抱。妈妈仔细端详起来，“长高了一点，越来越瘦了”。</p>
+<p>小孩还是那么活泼，感觉有无穷的精力，在屋子里跑来跑去。现在正是语言爆发期，大人说什么，简单的，他也能跟着说。“好多大车车”，“骨头”，“鸡肉”，“丢到垃圾桶”，这些都是他新学到的几句话。</p>
+<p>今天晚上，小孩兴奋了很久，12点才有睡意。</p>
 ]]></content>
       <categories>
         <category>每日一思</category>
