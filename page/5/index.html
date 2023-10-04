@@ -909,7 +909,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/08/reproduce-ml-models-dorn/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/01/05/DDD-in-pipeline-code/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -923,7 +923,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/08/reproduce-ml-models-dorn/" class="post-title-link" itemprop="url">深度学习模型重现 -- DORN</a>
+            <a href="/2020/01/05/DDD-in-pipeline-code/" class="post-title-link" itemprop="url">用DDD思想来编写Pipeline</a>
         </h2>
 
         <div class="post-meta">
@@ -933,7 +933,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-08 21:00:00" itemprop="dateCreated datePublished" datetime="2019-07-08T21:00:00+00:00">2019-07-08</time>
+              <time title="创建时间：2020-01-05 20:00:00" itemprop="dateCreated datePublished" datetime="2020-01-05T20:00:00+00:00">2020-01-05</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -948,12 +948,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                  <a href="/categories/ddd/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ddd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/07/08/reproduce-ml-models-dorn/" class="post-meta-item leancloud_visitors" data-flag-title="深度学习模型重现 -- DORN" title="阅读次数">
+            <span id="/2020/01/05/DDD-in-pipeline-code/" class="post-meta-item leancloud_visitors" data-flag-title="用DDD思想来编写Pipeline" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -965,7 +969,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.7k</span>
+              <span>4.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -984,11 +988,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="dorn模型的重现"><a class="markdownIt-Anchor" href="#dorn模型的重现"></a> DORN模型的重现</h2>
-<p>DORN模型是在单图像深度估计问题上效果非常好的模型，18年刚发布的时候，就同时在KITTI数据集和ScanNet数据集上面取得了<a target="_blank" rel="noopener" href="http://www.robustvision.net/leaderboard.php?benchmark=depth">Robust Vision</a>挑战的第一名。</p>
+          <p>作为我们使用最广泛的CI/CD工具Jenkins，它对于<code>Pipeline as Code</code>的支持却并不能算友好。在多个项目中使用之后，我发现它存在的主要问题有：</p>
+<ul>
+<li>Groovy语言的学习成本</li>
+<li>调试低效</li>
+<li>灵活性差</li>
+</ul>
+<p>Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略括号和行尾分号，并且如果最后一个参数是一个闭包则可以将其写在函数调用之后，这就导致了相对比较怪异的语法出现。比如，刚接触Groovy的人可能不太能一下子理解下面这段代码的工作原理：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a(<span class="number">1</span>) &#123;</span><br><span class="line">    something(<span class="number">123</span>)</span><br><span class="line">    someother <span class="attr">id:</span> <span class="number">1</span>, <span class="attr">message:</span> <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/08/reproduce-ml-models-dorn/#more" rel="contents">
+              <a class="btn" href="/2020/01/05/DDD-in-pipeline-code/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1012,7 +1022,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/08/reproduce-ml-models/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/01/21/spark-performance-tuning-on-billions-of-data/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1026,7 +1036,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/08/reproduce-ml-models/" class="post-title-link" itemprop="url">深度学习模型重现 -- 前奏</a>
+            <a href="/2020/01/21/spark-performance-tuning-on-billions-of-data/" class="post-title-link" itemprop="url">亿级数据Spark应用调优之旅</a>
         </h2>
 
         <div class="post-meta">
@@ -1036,7 +1046,124 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-08 20:03:06" itemprop="dateCreated datePublished" datetime="2019-07-08T20:03:06+00:00">2019-07-08</time>
+              <time title="创建时间：2020-01-21 20:00:00" itemprop="dateCreated datePublished" datetime="2020-01-21T20:00:00+00:00">2020-01-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/01/21/spark-performance-tuning-on-billions-of-data/" class="post-meta-item leancloud_visitors" data-flag-title="亿级数据Spark应用调优之旅" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>14k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>23 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>技术飞速发展，机器学习正在成为各个企业的核心竞争优势之一。除了在处于风口浪尖的计算机视觉方向的应用，可能更能产生直接的价值的一个方向是在智能推荐领域。比如广告推荐，如果我们有一个更有效的算法，更精准的向用户推荐了某个广告，用户的广告点击将为企业直接带来收益。</p>
+<p>然而在推荐领域，我们面临的是与当前的深度学习颇有不同的问题。这些不同主要体现在：</p>
+<ul>
+<li>超大的数据量</li>
+<li>领域专家人工设计的特征</li>
+<li>极致的在线服务性能需求</li>
+</ul>
+<p>为了解决这个技术上非常有挑战的问题，一般情况下，我们要考虑的方案都是借助于大数据的工具。自Google的两篇经典论文发表以来，大数据相关生态发展至今已经十多年过去了，虽然一直都有新的思想的产生，但是很多经典的工具已趋于成熟。大数据的相关工具应对大数据的挑战应当是理所应当的选择。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/21/spark-performance-tuning-on-billions-of-data/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/02/06/DRL-the-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/06/DRL-the-problem/" class="post-title-link" itemprop="url">强化学习入门</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-06 20:00:00" itemprop="dateCreated datePublished" datetime="2020-02-06T20:00:00+00:00">2020-02-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1053,112 +1180,14 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
-            </span>
-
-          
-            <span id="/2019/07/08/reproduce-ml-models/" class="post-meta-item leancloud_visitors" data-flag-title="深度学习模型重现 -- 前奏" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>461</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>作为每天和AI模型打交道的开发者，深度学习模型在不同的框架之间转换一直是一个老生常谈的问题。为了让这个问题变得容易，大家做了很多这样的工作，像是微软推出的<a target="_blank" rel="noopener" href="https://github.com/microsoft/MMdnn">MMdnn</a>工具，号称可以将模型在几乎所有的流行AI框架中转换，又比如Facebook和微软一起推出的<a target="_blank" rel="noopener" href="https://onnx.ai">ONNX</a>不依赖具体框架的中间格式等。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/08/reproduce-ml-models/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/12/reproduce-ml-models-efficientnet/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/12/reproduce-ml-models-efficientnet/" class="post-title-link" itemprop="url">深度学习模型重现 -- EfficientNet的keras实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-12 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-12T20:00:00+00:00">2019-07-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
+                  ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                  <a href="/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/07/12/reproduce-ml-models-efficientnet/" class="post-meta-item leancloud_visitors" data-flag-title="深度学习模型重现 -- EfficientNet的keras实现" title="阅读次数">
+            <span id="/2020/02/06/DRL-the-problem/" class="post-meta-item leancloud_visitors" data-flag-title="强化学习入门" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1170,14 +1199,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>13k</span>
+              <span>7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>21 分钟</span>
+              <span>12 分钟</span>
             </span>
 
         </div>
@@ -1189,10 +1218,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>EfficientNet是谷歌AI科学家们在论文《EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks》中提出的模型。这篇文章不仅提出了这个模型，还系统地研究了模型扩展的问题，大家感兴趣的，可用阅读一下<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1905.11946">论文原文</a>。EfficientNet的亮眼之处在于，其在保持领先的性能的同时，将模型的参数数量和预测速度都提升了一个数量级。请看下图的性能对比：</p>
+          <p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
+<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
+<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
+<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
+<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/12/reproduce-ml-models-efficientnet/#more" rel="contents">
+              <a class="btn" href="/2020/02/06/DRL-the-problem/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1216,7 +1249,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/19/python-json-serializable-lib/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/03/08/new-ways-to-manage-memory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1230,7 +1263,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/19/python-json-serializable-lib/" class="post-title-link" itemprop="url">如何实现一个优雅的Python的Json序列化库</a>
+            <a href="/2020/03/08/new-ways-to-manage-memory/" class="post-title-link" itemprop="url">内存管理的新思路</a>
         </h2>
 
         <div class="post-meta">
@@ -1240,7 +1273,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-19 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-19T20:00:00+00:00">2019-07-19</time>
+              <time title="创建时间：2020-03-08 20:00:00" itemprop="dateCreated datePublished" datetime="2020-03-08T20:00:00+00:00">2020-03-08</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1259,12 +1292,12 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/07/19/python-json-serializable-lib/" class="post-meta-item leancloud_visitors" data-flag-title="如何实现一个优雅的Python的Json序列化库" title="阅读次数">
+            <span id="/2020/03/08/new-ways-to-manage-memory/" class="post-meta-item leancloud_visitors" data-flag-title="内存管理的新思路" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1276,14 +1309,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.4k</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -1295,11 +1328,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="/attaches/2019/2019-07-19-python-json-serializable-lib/serializable.png" alt="python json serializable" /></p>
-<p>在Python的世界里，将一个对象以json格式进行序列化或反序列化一直是一个问题。Python标准库里面提供了json序列化的工具，我们可以简单的用<code>json.dumps</code>来将一个对象序列化。但是这种序列化仅支持python内置的基本类型，对于自定义的类，我们将得到<code>Object of type A is not JSON serializable</code>的错误。</p>
+          <p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
+<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
+<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/07/19/python-json-serializable-lib/#more" rel="contents">
+              <a class="btn" href="/2020/03/08/new-ways-to-manage-memory/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1498,12 +1532,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">638k</span>
+    <span title="站点总字数">637k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:43</span>
+    <span title="站点阅读时长">17:42</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
