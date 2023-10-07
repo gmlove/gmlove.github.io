@@ -1406,21 +1406,6 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
       </tags>
   </entry>
   <entry>
-    <title>强化学习 - MDP</title>
-    <url>/2018/05/06/reinforcement-learning-mdp/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>做一个小demo来演示强化学习的入门问题–MDP问题的解决。</p>
-]]></content>
-      <categories>
-        <category>machine-learning</category>
-      </categories>
-      <tags>
-        <tag>AI</tag>
-        <tag>Reinforcement Learning</tag>
-        <tag>MDP</tag>
-        <tag>Markov Decision Process</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CSS最佳实践</title>
     <url>/2016/01/15/css-best-practise/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h3 id="结构组织"><a class="markdownIt-Anchor" href="#结构组织"></a> 结构组织</h3>
@@ -2532,6 +2517,21 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <tag>Deep Learning</tag>
         <tag>RNN</tag>
         <tag>LSTM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>强化学习 - MDP</title>
+    <url>/2018/05/06/reinforcement-learning-mdp/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>做一个小demo来演示强化学习的入门问题–MDP问题的解决。</p>
+]]></content>
+      <categories>
+        <category>machine-learning</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>Reinforcement Learning</tag>
+        <tag>MDP</tag>
+        <tag>Markov Decision Process</tag>
       </tags>
   </entry>
   <entry>
@@ -4301,9 +4301,9 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       <tags>
         <tag>AI</tag>
         <tag>Reinforcement Learning</tag>
+        <tag>DQN</tag>
         <tag>MDP</tag>
         <tag>Markov Decision Process</tag>
-        <tag>DQN</tag>
         <tag>机器学习</tag>
         <tag>算法</tag>
         <tag>强化学习</tag>
@@ -10544,7 +10544,10 @@ from: https://markmap.js.org/repl
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="930-中秋节的月亮"><a class="markdownIt-Anchor" href="#930-中秋节的月亮"></a> 9.30: 中秋节的月亮</h2>
 <p>10小时自驾，在一轮满月的陪伴下到家，终于见到一个月未见的小孩。平常的他10点睡觉，但今天，快到11点了，他还没有睡。</p>
 <p>开门就发现，他满脸堆笑的站在门口，“哦！哦！哦！”高兴地拍手。</p>
-<p>妈妈上前去，想要抱起，小孩有点不知所措，竟然推开妈妈的手，想要保持一点距离。大概在快速成 …</p>
+<p>妈妈上前去，想要抱起，小孩有点不知所措，竟然推开妈妈的手，想要保持一点距离。大概在快速成长的小孩眼里，一个月已经是很长很长的时间了。</p>
+<p>最终他还是投入了妈妈的怀抱。妈妈仔细端详起来，“长高了一点，越来越瘦了”。</p>
+<p>小孩还是那么活泼，感觉有无穷的精力，在屋子里跑来跑去。现在正是语言爆发期，大人说什么，简单的，他也能跟着说。“好多大车车”，“骨头”，“鸡肉”，“丢到垃圾桶”，这些都是他新学到的几句话。</p>
+<p>今天晚上，小孩兴奋了很久，12点才有睡意。</p>
 ]]></content>
       <categories>
         <category>每日一思</category>
