@@ -8,25 +8,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Getting Started</title>
-    <url>/2015/12/07/2015-get-started/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
-<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>jasmine.any之坑</title>
     <url>/2015/12/08/pitfall-jasmin-any/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any(&#123;premitive type&#125;)</code>，可以考虑使用<code>anything()</code></p>
@@ -68,84 +49,23 @@
       </categories>
   </entry>
   <entry>
-    <title>Maven Tips</title>
-    <url>/2016/03/04/maven-tips/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
-<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
-<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
-<ul>
-<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
-</ul>
-<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
-<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
-<span id="more"></span>
-<ul>
-<li>clean: pre-clean -&gt; clean -&gt; post-clean</li>
-<li>default:
-<ul>
-<li>validate -&gt; initialize -&gt;</li>
-<li>[generate/process-sources -&gt; generate/process-resources] -&gt;</li>
-<li>compile -&gt; process-classes -&gt;</li>
-<li>[generate/process-test-sources -&gt; generate/process-test-resources] -&gt;</li>
-<li>test-compile -&gt; process-test-classes -&gt;</li>
-<li>test -&gt;</li>
-<li>prepare-package -&gt; package -&gt;</li>
-<li>pre-integration-test -&gt; integration-test -&gt; post-integration-test -&gt;</li>
-<li>verify -&gt;</li>
-<li>install -&gt;</li>
-<li>deploy</li>
-</ul>
-</li>
-<li>site: pre-site -&gt; site -&gt; post-site -&gt; site-deploy</li>
-</ul>
-<h3 id="绑定生命周期"><a class="markdownIt-Anchor" href="#绑定生命周期"></a> 绑定生命周期</h3>
-<ul>
-<li>内置绑定</li>
-<li>自定义绑定</li>
-</ul>
-<h2 id="plugins"><a class="markdownIt-Anchor" href="#plugins"></a> Plugins</h2>
-<ul>
-<li>jetty-maven-plugin 热部署</li>
-<li>maven-release-plugin 版本管理</li>
-<li>maven-gpg-plugin 自动进行GPG签名</li>
-<li>maven-resources-plugin 文件过滤</li>
-<li>maven-site-plugin 生成项目站点</li>
-<li>maven-javadoc-plugin</li>
-<li>maven-checkstyle-plugin</li>
-<li>maven-pdm-plugin 源代码分析工具</li>
-<li>maven-changelog-plugin</li>
-<li>cobertura-maven-plugin 测试覆盖率</li>
-</ul>
-<h2 id="仓库"><a class="markdownIt-Anchor" href="#仓库"></a> 仓库</h2>
-<ul>
-<li>公共仓库</li>
-<li>Nexus私服</li>
-</ul>
-<h2 id="版本管理"><a class="markdownIt-Anchor" href="#版本管理"></a> 版本管理</h2>
-<ul>
-<li>快照版：开发中保持版本稳定</li>
-<li>稳定版：
-<ul>
-<li>所有测试通过</li>
-<li>没有快照版本依赖</li>
-<li>没有快照版本插件</li>
-<li>所有代码进入版本控制系统</li>
-</ul>
-</li>
-</ul>
-<h3 id="版本号"><a class="markdownIt-Anchor" href="#版本号"></a> 版本号</h3>
-<p>1.3.4-beta-2</p>
-<p>主版本(架构变更).次版本(较大范围功能变化).增量版本(重大bug修复)-里程碑版本</p>
+    <title>Getting Started</title>
+    <url>/2015/12/07/2015-get-started/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
+<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
 ]]></content>
-      <categories>
-        <category>build tools</category>
-      </categories>
-      <tags>
-        <tag>maven</tag>
-        <tag>java</tag>
-        <tag>pom</tag>
-      </tags>
   </entry>
   <entry>
     <title>CSS最佳实践</title>
@@ -230,6 +150,86 @@
       <tags>
         <tag>CSS</tag>
         <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Maven Tips</title>
+    <url>/2016/03/04/maven-tips/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
+<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
+<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
+<ul>
+<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
+</ul>
+<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
+<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
+<span id="more"></span>
+<ul>
+<li>clean: pre-clean -&gt; clean -&gt; post-clean</li>
+<li>default:
+<ul>
+<li>validate -&gt; initialize -&gt;</li>
+<li>[generate/process-sources -&gt; generate/process-resources] -&gt;</li>
+<li>compile -&gt; process-classes -&gt;</li>
+<li>[generate/process-test-sources -&gt; generate/process-test-resources] -&gt;</li>
+<li>test-compile -&gt; process-test-classes -&gt;</li>
+<li>test -&gt;</li>
+<li>prepare-package -&gt; package -&gt;</li>
+<li>pre-integration-test -&gt; integration-test -&gt; post-integration-test -&gt;</li>
+<li>verify -&gt;</li>
+<li>install -&gt;</li>
+<li>deploy</li>
+</ul>
+</li>
+<li>site: pre-site -&gt; site -&gt; post-site -&gt; site-deploy</li>
+</ul>
+<h3 id="绑定生命周期"><a class="markdownIt-Anchor" href="#绑定生命周期"></a> 绑定生命周期</h3>
+<ul>
+<li>内置绑定</li>
+<li>自定义绑定</li>
+</ul>
+<h2 id="plugins"><a class="markdownIt-Anchor" href="#plugins"></a> Plugins</h2>
+<ul>
+<li>jetty-maven-plugin 热部署</li>
+<li>maven-release-plugin 版本管理</li>
+<li>maven-gpg-plugin 自动进行GPG签名</li>
+<li>maven-resources-plugin 文件过滤</li>
+<li>maven-site-plugin 生成项目站点</li>
+<li>maven-javadoc-plugin</li>
+<li>maven-checkstyle-plugin</li>
+<li>maven-pdm-plugin 源代码分析工具</li>
+<li>maven-changelog-plugin</li>
+<li>cobertura-maven-plugin 测试覆盖率</li>
+</ul>
+<h2 id="仓库"><a class="markdownIt-Anchor" href="#仓库"></a> 仓库</h2>
+<ul>
+<li>公共仓库</li>
+<li>Nexus私服</li>
+</ul>
+<h2 id="版本管理"><a class="markdownIt-Anchor" href="#版本管理"></a> 版本管理</h2>
+<ul>
+<li>快照版：开发中保持版本稳定</li>
+<li>稳定版：
+<ul>
+<li>所有测试通过</li>
+<li>没有快照版本依赖</li>
+<li>没有快照版本插件</li>
+<li>所有代码进入版本控制系统</li>
+</ul>
+</li>
+</ul>
+<h3 id="版本号"><a class="markdownIt-Anchor" href="#版本号"></a> 版本号</h3>
+<p>1.3.4-beta-2</p>
+<p>主版本(架构变更).次版本(较大范围功能变化).增量版本(重大bug修复)-里程碑版本</p>
+]]></content>
+      <categories>
+        <category>build tools</category>
+      </categories>
+      <tags>
+        <tag>maven</tag>
+        <tag>java</tag>
+        <tag>pom</tag>
       </tags>
   </entry>
   <entry>
@@ -2170,23 +2170,6 @@
       </tags>
   </entry>
   <entry>
-    <title>5行代码的自动评论机器人</title>
-    <url>/2017/12/07/automated-comment-on-xiaomi-s-live-stream/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br />
-于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
-<p>直播地址：<a href="https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195">https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195</a></p>
-<p>代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 随机选择一个当前评论列表里面的评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">r</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>((<span class="title class_">Math</span>.<span class="title function_">random</span>() * $(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>).<span class="property">length</span>))</span><br><span class="line"><span class="comment">// 提取选中的评论的内容</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">text</span> = (<span class="params"></span>) =&gt; $($(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>)[<span class="title function_">r</span>()]).<span class="title function_">find</span>(<span class="string">&#x27;.content&#x27;</span>).<span class="title function_">text</span>()</span><br><span class="line"><span class="comment">// 使用选中的内容自动发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">c</span> = (<span class="params"></span>) =&gt; &#123;$(<span class="string">&#x27;#J_chatContent&#x27;</span>).<span class="title function_">val</span>(<span class="title function_">text</span>());$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">attr</span>(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;btn active&#x27;</span>);$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">click</span>();&#125;</span><br><span class="line"><span class="comment">// 生成随机的间隔时间</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">rtime</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">15000</span> + <span class="number">5000</span>)</span><br><span class="line"><span class="comment">// 设置一个计时器定时发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">st</span> = (<span class="params"></span>) =&gt; stt = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="title function_">c</span>(); <span class="title function_">st</span>()&#125;, <span class="title function_">rtime</span>())</span><br><span class="line"><span class="title function_">st</span>();</span><br></pre></td></tr></table></figure>
-<p>以上代码粘贴到控制台执行就可以了。</p>
-]]></content>
-      <categories>
-        <category>小技巧</category>
-      </categories>
-      <tags>
-        <tag>自动化</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OpenShift工作坊</title>
     <url>/2017/10/28/openshift-workshop/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="target"><a class="markdownIt-Anchor" href="#target"></a> Target</h2>
@@ -2579,6 +2562,23 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <tag>OpenShift</tag>
         <tag>PAAS</tag>
         <tag>Cluster</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>5行代码的自动评论机器人</title>
+    <url>/2017/12/07/automated-comment-on-xiaomi-s-live-stream/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br />
+于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
+<p>直播地址：<a href="https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195">https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195</a></p>
+<p>代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 随机选择一个当前评论列表里面的评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">r</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>((<span class="title class_">Math</span>.<span class="title function_">random</span>() * $(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>).<span class="property">length</span>))</span><br><span class="line"><span class="comment">// 提取选中的评论的内容</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">text</span> = (<span class="params"></span>) =&gt; $($(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>)[<span class="title function_">r</span>()]).<span class="title function_">find</span>(<span class="string">&#x27;.content&#x27;</span>).<span class="title function_">text</span>()</span><br><span class="line"><span class="comment">// 使用选中的内容自动发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">c</span> = (<span class="params"></span>) =&gt; &#123;$(<span class="string">&#x27;#J_chatContent&#x27;</span>).<span class="title function_">val</span>(<span class="title function_">text</span>());$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">attr</span>(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;btn active&#x27;</span>);$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">click</span>();&#125;</span><br><span class="line"><span class="comment">// 生成随机的间隔时间</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">rtime</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">15000</span> + <span class="number">5000</span>)</span><br><span class="line"><span class="comment">// 设置一个计时器定时发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">st</span> = (<span class="params"></span>) =&gt; stt = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="title function_">c</span>(); <span class="title function_">st</span>()&#125;, <span class="title function_">rtime</span>())</span><br><span class="line"><span class="title function_">st</span>();</span><br></pre></td></tr></table></figure>
+<p>以上代码粘贴到控制台执行就可以了。</p>
+]]></content>
+      <categories>
+        <category>小技巧</category>
+      </categories>
+      <tags>
+        <tag>自动化</tag>
       </tags>
   </entry>
   <entry>
@@ -3886,86 +3886,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
-    <title>用DDD思想来编写Pipeline</title>
-    <url>/2020/01/05/DDD-in-pipeline-code/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为我们使用最广泛的CI/CD工具Jenkins，它对于<code>Pipeline as Code</code>的支持却并不能算友好。在多个项目中使用之后，我发现它存在的主要问题有：</p>
-<ul>
-<li>Groovy语言的学习成本</li>
-<li>调试低效</li>
-<li>灵活性差</li>
-</ul>
-<p>Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略括号和行尾分号，并且如果最后一个参数是一个闭包则可以将其写在函数调用之后，这就导致了相对比较怪异的语法出现。比如，刚接触Groovy的人可能不太能一下子理解下面这段代码的工作原理：</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">a(<span class="number">1</span>) &#123;</span><br><span class="line">    something(<span class="number">123</span>)</span><br><span class="line">    someother <span class="attr">id:</span> <span class="number">1</span>, <span class="attr">message:</span> <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>看起来似乎是函数定义，但其实这里是一个函数调用，其背后的函数定义为：<code>def a(int i, Closure c);</code> <code>def someother(int id, String message);</code></p>
-<p>注意，这里我并不是要说Groovy语言不是世界上最好的语言，而是想说明对于不常用这门语言的同学而言，由于其不够自然而存在一定的学习门槛。比如我就常常忘记Groovy的语法，而当我要重新开始一个项目时，我不得不又花一定的时间重新学习一下，可气的是这时还得不到多少IDE的辅助。大概也是由于Groovy对于新人入门不算友好，Gradle积极去支持了Kotlin语言。</p>
-<p>至于调试低效，相信写过较复杂的Jenkins <code>pipeline</code>代码同学们已有同感。编写好代码之后，我们很难编写一个针对它的测试。想要测试我们的<code>pipeline</code>代码，我们不得不把<code>pipeline</code>运行起来看看效果，然后为了触发目标代码的执行，我们可能还要在网页上点来点去，花一定的时间操作好几个网页元素。</p>
-<p>说到灵活性差，主要是指对于其他编译工具的集成而言。想要和Jenkins有好的集成，我们不得不编写一个Jenkins插件来实现。所以，我们就看到了大把大把的Jenkins插件。这些插件真的实现了所有原有编译工具提供的特性吗？这些插件质量怎么样，是否存在bug？某一个新的工具是否有插件支持？</p>
-<p>说了这么多，可能有人觉得只是在吐槽而已。这里其实是想给大家分享一下另一种编写<code>pipeline</code>代码的方式，我个人长期使用下来发现更为高效。希望对于有相同困惑的小伙伴们有一定的参考价值。</p>
-<h2 id="适合实现日常编译运维工作的工具与语言"><a class="markdownIt-Anchor" href="#适合实现日常编译运维工作的工具与语言"></a> 适合实现日常编译运维工作的工具与语言</h2>
-<p><code>pipeline</code>完成的工作其实是一些日常的编译运维工作。说到如何支持这些编译运维工作，相信大家最熟悉不过的就是命令行工具了，各种各样的工具几乎都会提供完善的命令行接口。如何组合这些命令行工具来完成这些工作呢？这种场景下，<code>shell</code>应当是比较适合的胶水了。然而<code>shell</code>脚本的功能性却比较弱，比如高级语言里面司空见惯的各种集合功能，在<code>shell</code>里面却没有提供直接的支持。</p>
-<p>这里我经常选用的是一种虽然比较古老，但却能方便的实现大部分编译运维功能的工具：<code>make</code>。其实<code>make</code>工具在<code>c/c++</code>的世界里一直是非常流行的，编译过<code>c/c++</code>项目的同学对于<code>make &amp;&amp; make install</code>命令一定不陌生。<code>make</code>工具支持的<code>Makefile</code>脚本功能是相当丰富的，但作为我们日常使用进行编译运维，通常只需要一个很小的子集就足够了。使用这样的一个功能很小的子集可以有效降低大家的学习成本，让新手亦能迅速上手。</p>
-<p>对于后面要使用的<code>make</code>，我们只需要了解下面几点就够了：</p>
-<ol>
-<li><code>make</code>将一组命令组织成一个<code>task</code>，一个<code>Makefile</code>里面可以存在多个<code>task</code>以支持不同种类的运维工作，<code>task</code>间可以相互依赖。比如:</li>
-</ol>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    mvn clean package <span class="comment"># 注意行首必须为一个或多个tab</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br><span class="line"></span><br><span class="line"><span class="section">build: build-java build-nodejs</span></span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>每一条命令均独立的通过一个子<code>shell</code>去执行，所以命令可以是任意一段合法的<code>shell</code>脚本。</li>
-</ol>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line">modules=a b c</span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    for m in $modules; do \</span><br><span class="line">        cd $$m &amp;&amp; mvn clean package; \</span><br><span class="line">    done  <span class="comment"># 按顺序编译多个模块</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>
-<p><code>make</code>中我们可以定义变量，这些变量可以初始化一个默认值，可以通过调用<code>task</code>时设置值进行覆盖。</p>
-<p>比如上面的<code>Makefile</code>，我们如果调用时使用命令<code>make build-java modules=&quot;a b c d&quot;</code>，那么这个<code>build-java</code>将会去<code>a b c d</code>四个目录下分别执行<code>mvn clean package</code>。</p>
-</li>
-</ol>
-<p>了解了上面这几个<code>make</code>的特性，相信你已经能想象出很多很多的可能了。比如，一个简单的应用部署可以视为编译、打包、上传到目标机器、重启服务的过程。通过覆盖不同的变量，我们就能复用部署脚本，将应用部署到另一个环境。</p>
-<p>我曾经在多个多语言、多工具项目中采用make来进行自动化日常运维工作。几乎在每个项目中，它都给我带来了巨大的效率提升。</p>
-<p>即便我们工作在<code>windows</code>下，也无需担心，因为只要使用git，我们就有了一个随时可用的<code>bash</code>（<code>git-bash</code>），然后配以一个<code>windows</code>下编译的<code>make</code>工具，依赖的环境就搭建好了。这里我会给大家推荐用<a href="https://github.com/bmatzelle/gow">gow</a>，它是一个相比Cygwin轻量得多的常用<code>gnu</code>工具包，只需要10MB左右的空间就够了。</p>
-<p>当然如果我们有条件使用<code>windows</code>提供的<code>linux</code>子系统，那就更简单了。</p>
-<h2 id="用ddd的思路来编写pipeline"><a class="markdownIt-Anchor" href="#用ddd的思路来编写pipeline"></a> 用DDD的思路来编写pipeline</h2>
-<p>从DDD的角度来看，这里我们所要真正解决的问题是搭建一个CI/CD的<code>pipeline</code>，而Jenkins在这里扮演的是CI/CD的某种具体实现工具。如果条件允许，我们完全可以换用其他的具体实现工具来搭建这个<code>pipeline</code>。</p>
-<p>对于Jenkins这个第三方工具，使用DDD的思想，我们要如何处理呢？这里我们可以将其视为一个独立的领域，仔细思考就会发现，这种场景与我们在项目中去使用某个第三方服务是没什么两样的。</p>
-<p>为了确保我们的核心领域<code>pipeline</code>可以独立健康的发展，不为Jenkins这个第三方工具提供的功能所支配，我们首先需要从核心领域出发来定义业务流程。</p>
-<p>对于一个典型的<code>pipeline</code>，我们可以定义这样几个顺序执行的步骤：构建（编译、单元测试、打包） -&gt; 部署到开发环境 -&gt; 运行集成测试 -&gt; 部署到测试环境 -&gt; 部署到高级测试环境 -&gt; 部署到生产环境。</p>
-<p>这里的顺序其实是一个潜在的变更点，因为我们完全可以定义另一条<code>pipeline</code>以支持直接部署到生产环境：构建（编译、单元测试、打包） -&gt; 部署到生产环境。</p>
-<p>于是这里我们可以抽象这样几个通用的领域能力：构建、运行集成测试、部署到某一环境。</p>
-<p>有了这些分析，我们就可以着手编写实现了。用我们上文提到的<code>Makefile</code>脚本来实现这里的领域能力，可以得到类似下面这样的脚本。</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">build:</span></span><br><span class="line">    mvn clean verify package</span><br><span class="line"></span><br><span class="line">TARGET_HOST=1.1.1.1</span><br><span class="line"><span class="section">deploy:</span></span><br><span class="line">    scp target/xxx.jar $&#123;TARGET_HOST&#125;:/app/</span><br><span class="line">    ssh $&#123;TARGET_HOST&#125; <span class="string">&quot;cd /app/ &amp;&amp; sh restart.sh&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">deploy-dev:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.2</span><br><span class="line"></span><br><span class="line"><span class="section">deploy-qa:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.3</span><br><span class="line"></span><br><span class="line"><span class="section">integration-test:</span></span><br><span class="line">    cd src/test/integration &amp;&amp; npm run test</span><br></pre></td></tr></table></figure>
-<p>上述只是一个简单的示例，实际情况可能比这里复杂很多。比如我们可能需要将构建出来的文件发布到一个制品库里面，我们可能需要管理上传制品库的密码。比如我们可能是一个多模块的项目，需要支持多个模块的构建。还比如，我们可能要构建出来的是一个容器镜像。</p>
-<p>但是，无论怎样，通过从核心领域出发来考虑问题，我们定义了几个清晰且相对稳定的接口。</p>
-<p>有了上面实现的领域能力，下一步就是利用Jenkins制作一个的图形化流水线了。到这里再来看需要编写的<code>pipeline</code>代码，我们会发现需要写的<code>pipeline</code>代码已经变得很少了。主要的代码如下：</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(<span class="string">&quot;build&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make build&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&quot;deploy dev&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make deploy-dev&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&quot;integration test&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make integration-test&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>pipeline</code>代码的变少说明我们对第三方工具的依赖变弱了，这正是想要的效果。我们将主要的投资放在了核心域，而不是与第三方的集成。</p>
-<p>到这里我们的<code>pipeline</code>代码就基本编写完成了。回顾一下编写好的代码，我们可以发现这样一些好处：</p>
-<ul>
-<li>减少了大家不熟悉的Groovy代码的编写</li>
-<li>使用大家更为熟悉的<code>shell</code>命令来组织运维脚本，可维护性变高</li>
-<li>测试这些自动运维脚本的成本变低了，比如，我们只需要本地运行一下<code>make build</code>就可以测试<code>build</code>相关脚本是否正确的编写</li>
-<li>核心领域内的功能可以独立的发展，而不会对实现<code>pipeline</code>的Groovy代码有影响（相对稳定的接口）</li>
-<li>设计变得足够灵活，后续如果需要更换Jenkins为另一种工具，这将是很简单的一件事</li>
-<li>使用变得足够灵活，某一天即使Jenkins服务出故障了，我们也可以很轻松的在一台开发机器上面手动去完成必要的运维工作</li>
-</ul>
-<p>以上这些都是DDD的设计思想带给我们的好处。</p>
-<p>回顾整个应用DDD思想的过程，我们按顺序经历了这样几个步骤：识别核心域 -&gt; 从核心领域出发定义领域能力 -&gt; 和其他周边工具进行集成。这是我在应用DDD时的几个主要步骤，虽然本文只是用于解决<code>pipeline</code>这一特定场景下的问题，但是其实这几个步骤在几乎所有场景下都适用的。</p>
-<p>可能很多人觉得DDD的思想是一种必须在很复杂的业务场景下才有用的思想，进而怀疑在这个简单的场景下谈DDD是否会显得大材小用。这样的质疑是可以理解的，我了解过的很多DDD的资料也都是针对复杂业务场景来讨论问题。</p>
-<p>但是，在我看来，DDD思想中以领域为核心的一些观点，其实是无所谓问题的复杂程度的。因为任何一个简单的业务问题，越往后发展越复杂，最终都可能成为一个复杂的问题。比如上传文件的功能，一开始我们可能可以用几行代码就实现了，但是随着系统的发展，我们可能要进一步跟踪进度、支持多文件、做文件类型限制等等，这个功能很容易就变成需要上千行代码才能实现的功能。</p>
-<p>如果DDD仅限于解决复杂问题，那么它就失去了在问题还比较简单时就去解决它的先机。事实恰恰相反，最好的实践DDD的方式就是从一开始就应用这样的设计思想。</p>
-<p>所以，对于任意复杂程度的问题，只要我们应用DDD的思想来进行思考，我们几乎都能从中获益。</p>
-<p>最后，希望这里的分享的一些经验对大家有所帮助。有任何问题，欢迎留言交流。</p>
-<p>相关文章：<a href="/2019/08/08/domain-concept-in-your-code/">代码中的领域</a></p>
-]]></content>
-      <categories>
-        <category>DDD</category>
-        <category>敏捷</category>
-      </categories>
-      <tags>
-        <tag>敏捷</tag>
-        <tag>DDD</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>亿级数据Spark应用调优之旅</title>
     <url>/2020/01/21/spark-performance-tuning-on-billions-of-data/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>技术飞速发展，机器学习正在成为各个企业的核心竞争优势之一。除了在处于风口浪尖的计算机视觉方向的应用，可能更能产生直接的价值的一个方向是在智能推荐领域。比如广告推荐，如果我们有一个更有效的算法，更精准的向用户推荐了某个广告，用户的广告点击将为企业直接带来收益。</p>
@@ -4162,6 +4082,86 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
+    <title>用DDD思想来编写Pipeline</title>
+    <url>/2020/01/05/DDD-in-pipeline-code/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为我们使用最广泛的CI/CD工具Jenkins，它对于<code>Pipeline as Code</code>的支持却并不能算友好。在多个项目中使用之后，我发现它存在的主要问题有：</p>
+<ul>
+<li>Groovy语言的学习成本</li>
+<li>调试低效</li>
+<li>灵活性差</li>
+</ul>
+<p>Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略括号和行尾分号，并且如果最后一个参数是一个闭包则可以将其写在函数调用之后，这就导致了相对比较怪异的语法出现。比如，刚接触Groovy的人可能不太能一下子理解下面这段代码的工作原理：</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">a(<span class="number">1</span>) &#123;</span><br><span class="line">    something(<span class="number">123</span>)</span><br><span class="line">    someother <span class="attr">id:</span> <span class="number">1</span>, <span class="attr">message:</span> <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>看起来似乎是函数定义，但其实这里是一个函数调用，其背后的函数定义为：<code>def a(int i, Closure c);</code> <code>def someother(int id, String message);</code></p>
+<p>注意，这里我并不是要说Groovy语言不是世界上最好的语言，而是想说明对于不常用这门语言的同学而言，由于其不够自然而存在一定的学习门槛。比如我就常常忘记Groovy的语法，而当我要重新开始一个项目时，我不得不又花一定的时间重新学习一下，可气的是这时还得不到多少IDE的辅助。大概也是由于Groovy对于新人入门不算友好，Gradle积极去支持了Kotlin语言。</p>
+<p>至于调试低效，相信写过较复杂的Jenkins <code>pipeline</code>代码同学们已有同感。编写好代码之后，我们很难编写一个针对它的测试。想要测试我们的<code>pipeline</code>代码，我们不得不把<code>pipeline</code>运行起来看看效果，然后为了触发目标代码的执行，我们可能还要在网页上点来点去，花一定的时间操作好几个网页元素。</p>
+<p>说到灵活性差，主要是指对于其他编译工具的集成而言。想要和Jenkins有好的集成，我们不得不编写一个Jenkins插件来实现。所以，我们就看到了大把大把的Jenkins插件。这些插件真的实现了所有原有编译工具提供的特性吗？这些插件质量怎么样，是否存在bug？某一个新的工具是否有插件支持？</p>
+<p>说了这么多，可能有人觉得只是在吐槽而已。这里其实是想给大家分享一下另一种编写<code>pipeline</code>代码的方式，我个人长期使用下来发现更为高效。希望对于有相同困惑的小伙伴们有一定的参考价值。</p>
+<h2 id="适合实现日常编译运维工作的工具与语言"><a class="markdownIt-Anchor" href="#适合实现日常编译运维工作的工具与语言"></a> 适合实现日常编译运维工作的工具与语言</h2>
+<p><code>pipeline</code>完成的工作其实是一些日常的编译运维工作。说到如何支持这些编译运维工作，相信大家最熟悉不过的就是命令行工具了，各种各样的工具几乎都会提供完善的命令行接口。如何组合这些命令行工具来完成这些工作呢？这种场景下，<code>shell</code>应当是比较适合的胶水了。然而<code>shell</code>脚本的功能性却比较弱，比如高级语言里面司空见惯的各种集合功能，在<code>shell</code>里面却没有提供直接的支持。</p>
+<p>这里我经常选用的是一种虽然比较古老，但却能方便的实现大部分编译运维功能的工具：<code>make</code>。其实<code>make</code>工具在<code>c/c++</code>的世界里一直是非常流行的，编译过<code>c/c++</code>项目的同学对于<code>make &amp;&amp; make install</code>命令一定不陌生。<code>make</code>工具支持的<code>Makefile</code>脚本功能是相当丰富的，但作为我们日常使用进行编译运维，通常只需要一个很小的子集就足够了。使用这样的一个功能很小的子集可以有效降低大家的学习成本，让新手亦能迅速上手。</p>
+<p>对于后面要使用的<code>make</code>，我们只需要了解下面几点就够了：</p>
+<ol>
+<li><code>make</code>将一组命令组织成一个<code>task</code>，一个<code>Makefile</code>里面可以存在多个<code>task</code>以支持不同种类的运维工作，<code>task</code>间可以相互依赖。比如:</li>
+</ol>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    mvn clean package <span class="comment"># 注意行首必须为一个或多个tab</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br><span class="line"></span><br><span class="line"><span class="section">build: build-java build-nodejs</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>每一条命令均独立的通过一个子<code>shell</code>去执行，所以命令可以是任意一段合法的<code>shell</code>脚本。</li>
+</ol>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">// Makefile</span><br><span class="line"></span><br><span class="line">modules=a b c</span><br><span class="line"><span class="section">build-java:</span></span><br><span class="line">    for m in $modules; do \</span><br><span class="line">        cd $$m &amp;&amp; mvn clean package; \</span><br><span class="line">    done  <span class="comment"># 按顺序编译多个模块</span></span><br><span class="line"></span><br><span class="line"><span class="section">build-nodejs:</span></span><br><span class="line">    npm run build</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>
+<p><code>make</code>中我们可以定义变量，这些变量可以初始化一个默认值，可以通过调用<code>task</code>时设置值进行覆盖。</p>
+<p>比如上面的<code>Makefile</code>，我们如果调用时使用命令<code>make build-java modules=&quot;a b c d&quot;</code>，那么这个<code>build-java</code>将会去<code>a b c d</code>四个目录下分别执行<code>mvn clean package</code>。</p>
+</li>
+</ol>
+<p>了解了上面这几个<code>make</code>的特性，相信你已经能想象出很多很多的可能了。比如，一个简单的应用部署可以视为编译、打包、上传到目标机器、重启服务的过程。通过覆盖不同的变量，我们就能复用部署脚本，将应用部署到另一个环境。</p>
+<p>我曾经在多个多语言、多工具项目中采用make来进行自动化日常运维工作。几乎在每个项目中，它都给我带来了巨大的效率提升。</p>
+<p>即便我们工作在<code>windows</code>下，也无需担心，因为只要使用git，我们就有了一个随时可用的<code>bash</code>（<code>git-bash</code>），然后配以一个<code>windows</code>下编译的<code>make</code>工具，依赖的环境就搭建好了。这里我会给大家推荐用<a href="https://github.com/bmatzelle/gow">gow</a>，它是一个相比Cygwin轻量得多的常用<code>gnu</code>工具包，只需要10MB左右的空间就够了。</p>
+<p>当然如果我们有条件使用<code>windows</code>提供的<code>linux</code>子系统，那就更简单了。</p>
+<h2 id="用ddd的思路来编写pipeline"><a class="markdownIt-Anchor" href="#用ddd的思路来编写pipeline"></a> 用DDD的思路来编写pipeline</h2>
+<p>从DDD的角度来看，这里我们所要真正解决的问题是搭建一个CI/CD的<code>pipeline</code>，而Jenkins在这里扮演的是CI/CD的某种具体实现工具。如果条件允许，我们完全可以换用其他的具体实现工具来搭建这个<code>pipeline</code>。</p>
+<p>对于Jenkins这个第三方工具，使用DDD的思想，我们要如何处理呢？这里我们可以将其视为一个独立的领域，仔细思考就会发现，这种场景与我们在项目中去使用某个第三方服务是没什么两样的。</p>
+<p>为了确保我们的核心领域<code>pipeline</code>可以独立健康的发展，不为Jenkins这个第三方工具提供的功能所支配，我们首先需要从核心领域出发来定义业务流程。</p>
+<p>对于一个典型的<code>pipeline</code>，我们可以定义这样几个顺序执行的步骤：构建（编译、单元测试、打包） -&gt; 部署到开发环境 -&gt; 运行集成测试 -&gt; 部署到测试环境 -&gt; 部署到高级测试环境 -&gt; 部署到生产环境。</p>
+<p>这里的顺序其实是一个潜在的变更点，因为我们完全可以定义另一条<code>pipeline</code>以支持直接部署到生产环境：构建（编译、单元测试、打包） -&gt; 部署到生产环境。</p>
+<p>于是这里我们可以抽象这样几个通用的领域能力：构建、运行集成测试、部署到某一环境。</p>
+<p>有了这些分析，我们就可以着手编写实现了。用我们上文提到的<code>Makefile</code>脚本来实现这里的领域能力，可以得到类似下面这样的脚本。</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">build:</span></span><br><span class="line">    mvn clean verify package</span><br><span class="line"></span><br><span class="line">TARGET_HOST=1.1.1.1</span><br><span class="line"><span class="section">deploy:</span></span><br><span class="line">    scp target/xxx.jar $&#123;TARGET_HOST&#125;:/app/</span><br><span class="line">    ssh $&#123;TARGET_HOST&#125; <span class="string">&quot;cd /app/ &amp;&amp; sh restart.sh&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">deploy-dev:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.2</span><br><span class="line"></span><br><span class="line"><span class="section">deploy-qa:</span></span><br><span class="line">    make deploy TARGET_HOST=1.1.1.3</span><br><span class="line"></span><br><span class="line"><span class="section">integration-test:</span></span><br><span class="line">    cd src/test/integration &amp;&amp; npm run test</span><br></pre></td></tr></table></figure>
+<p>上述只是一个简单的示例，实际情况可能比这里复杂很多。比如我们可能需要将构建出来的文件发布到一个制品库里面，我们可能需要管理上传制品库的密码。比如我们可能是一个多模块的项目，需要支持多个模块的构建。还比如，我们可能要构建出来的是一个容器镜像。</p>
+<p>但是，无论怎样，通过从核心领域出发来考虑问题，我们定义了几个清晰且相对稳定的接口。</p>
+<p>有了上面实现的领域能力，下一步就是利用Jenkins制作一个的图形化流水线了。到这里再来看需要编写的<code>pipeline</code>代码，我们会发现需要写的<code>pipeline</code>代码已经变得很少了。主要的代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(<span class="string">&quot;build&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make build&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&quot;deploy dev&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make deploy-dev&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&quot;integration test&quot;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&quot;make integration-test&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>pipeline</code>代码的变少说明我们对第三方工具的依赖变弱了，这正是想要的效果。我们将主要的投资放在了核心域，而不是与第三方的集成。</p>
+<p>到这里我们的<code>pipeline</code>代码就基本编写完成了。回顾一下编写好的代码，我们可以发现这样一些好处：</p>
+<ul>
+<li>减少了大家不熟悉的Groovy代码的编写</li>
+<li>使用大家更为熟悉的<code>shell</code>命令来组织运维脚本，可维护性变高</li>
+<li>测试这些自动运维脚本的成本变低了，比如，我们只需要本地运行一下<code>make build</code>就可以测试<code>build</code>相关脚本是否正确的编写</li>
+<li>核心领域内的功能可以独立的发展，而不会对实现<code>pipeline</code>的Groovy代码有影响（相对稳定的接口）</li>
+<li>设计变得足够灵活，后续如果需要更换Jenkins为另一种工具，这将是很简单的一件事</li>
+<li>使用变得足够灵活，某一天即使Jenkins服务出故障了，我们也可以很轻松的在一台开发机器上面手动去完成必要的运维工作</li>
+</ul>
+<p>以上这些都是DDD的设计思想带给我们的好处。</p>
+<p>回顾整个应用DDD思想的过程，我们按顺序经历了这样几个步骤：识别核心域 -&gt; 从核心领域出发定义领域能力 -&gt; 和其他周边工具进行集成。这是我在应用DDD时的几个主要步骤，虽然本文只是用于解决<code>pipeline</code>这一特定场景下的问题，但是其实这几个步骤在几乎所有场景下都适用的。</p>
+<p>可能很多人觉得DDD的思想是一种必须在很复杂的业务场景下才有用的思想，进而怀疑在这个简单的场景下谈DDD是否会显得大材小用。这样的质疑是可以理解的，我了解过的很多DDD的资料也都是针对复杂业务场景来讨论问题。</p>
+<p>但是，在我看来，DDD思想中以领域为核心的一些观点，其实是无所谓问题的复杂程度的。因为任何一个简单的业务问题，越往后发展越复杂，最终都可能成为一个复杂的问题。比如上传文件的功能，一开始我们可能可以用几行代码就实现了，但是随着系统的发展，我们可能要进一步跟踪进度、支持多文件、做文件类型限制等等，这个功能很容易就变成需要上千行代码才能实现的功能。</p>
+<p>如果DDD仅限于解决复杂问题，那么它就失去了在问题还比较简单时就去解决它的先机。事实恰恰相反，最好的实践DDD的方式就是从一开始就应用这样的设计思想。</p>
+<p>所以，对于任意复杂程度的问题，只要我们应用DDD的思想来进行思考，我们几乎都能从中获益。</p>
+<p>最后，希望这里的分享的一些经验对大家有所帮助。有任何问题，欢迎留言交流。</p>
+<p>相关文章：<a href="/2019/08/08/domain-concept-in-your-code/">代码中的领域</a></p>
+]]></content>
+      <categories>
+        <category>DDD</category>
+        <category>敏捷</category>
+      </categories>
+      <tags>
+        <tag>敏捷</tag>
+        <tag>DDD</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>强化学习入门</title>
     <url>/2020/02/06/DRL-the-problem/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
@@ -4311,93 +4311,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
-    <title>内存管理的新思路</title>
-    <url>/2020/03/08/new-ways-to-manage-memory/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
-<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
-<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
-<span id="more"></span>
-<p>由于要服务于线上上亿的用户群，这样的性能还是不够理想，难以直接交付给客户使用。</p>
-<p><code>java</code>语言发展了这么长时间，其性能还是能为人们所认可的。在一些性能测试上面，<code>java</code>几乎可以媲美<code>c++</code>的计算性能，比如<a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/java.html">这里</a>就有一个这样的测试。然而内存管理却一直是<code>java</code>语言一个挑战，即便<code>java</code>已经有相对非常成熟的<code>gc</code>算法了。在编写极致性能需求的服务端程序时，<code>java</code>由于其本身的性能波动，似乎还是难以胜任。</p>
-<p>究竟要如何做高性能的内存管理呢？难道非得像<code>c/c++</code>一样的手动去管理内存吗？</p>
-<h2 id="当前流行内存管理机制"><a class="markdownIt-Anchor" href="#当前流行内存管理机制"></a> 当前流行内存管理机制</h2>
-<p>我们先看看当前流行的编程语言所采用的内存管理机制。以我所接触过的，使用相对广泛的编程语言为例，可以整理如下：</p>
-<ul>
-<li><code>c</code>: 手动进行内存的申请和释放</li>
-<li><code>c++</code>: 通过<code>delete</code>指针，在析构函数中手动释放内存</li>
-<li><code>java</code>及各种基于<code>java</code>的语言: 适时分代<code>gc</code>，多种垃圾回收算法</li>
-<li><code>python</code>: 引用计数，自动触发适时分代回收</li>
-<li><code>obj c / swift</code>: 引用计数或自动引用计数回收，编译期插入引用计数代码</li>
-<li><code>go</code>: 适时分代gc，并行标记清除模式</li>
-<li><code>javascript(v8)</code>: 适时分代gc，并行标记清除模式</li>
-<li><code>php</code>: 以引用计数为基础，适时触发<code>gc</code></li>
-<li><code>lua</code>: 标记清除模式</li>
-</ul>
-<p>可以看到，当前的自动内存管理机制以 <strong>引用计数</strong> 和 <strong>分层并行标记清除</strong> 为主。</p>
-<p>如果内存释放及时，引用计数机制对于程序运行时性能影响会比较小。但每一个对象都需要分配额外的内存去跟踪引用数量，这带来了额外的内存占用。如果没有自动引用计数的机制，在编写代码时，手动管理计数会带来不小的额外负担，内存的及时释放取决于引用计数代码的正确性。</p>
-<p>而对于标记清除式的内存管理，由于其不可避免的会带来程序暂停，且并行标记还需要占用cpu时间，会对程序性能产生较大影响。</p>
-<p>我们的眼光投向了<code>rust</code>。<code>rust</code>是一门没有<code>gc</code>也不使用引用计数（不以此为主）进行内存管理的语言。那它究竟是怎样管理内存呢？它还能让我们像写<code>java</code>代码一样流畅吗？</p>
-<h2 id="内存管理的新思路"><a class="markdownIt-Anchor" href="#内存管理的新思路"></a> 内存管理的新思路</h2>
-<p>回顾一下日常编写代码的过程，在实现某一个函数时，有这样几个要素：入参 函数体 返回值。比如，假设我们有下面这个计算字符串长度的函数：</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">func</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s1</span> = String::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> (s2, len) = <span class="title function_ invoke__">calculate_length</span>(s1);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The length of &#x27;&#123;&#125;&#x27; is &#123;&#125;.&quot;</span>, s2, len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">calculate_length</span>(s: <span class="type">String</span>) <span class="punctuation">-&gt;</span> (<span class="type">String</span>, <span class="type">usize</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">length</span> = s.<span class="title function_ invoke__">len</span>();</span><br><span class="line">    (s, length)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>考虑内存释放这件事，我们会希望：</p>
-<ol>
-<li>对于函数<code>func</code>中的变量<code>s1</code>，由于我们将其作为参数转交给了函数<code>calculate_length</code>，在后续的执行过程，我们就不再希望关心它对应的字符串内存了。</li>
-<li>对于<code>calculate_length</code>函数中的入参<code>s</code>，由于其作为函数值返回，我们不希望在离开函数时释放其对应的内存。</li>
-<li>对于<code>calculate_length</code>函数计算得到的<code>length</code>变量，我们同样不希望在离开函数时释放内存，因为它也是一个返回值。</li>
-<li>对于<code>func</code>从<code>calculate_length</code>函数得到的变量<code>s2</code>和<code>len</code>，我们希望在<code>func</code>函数离开的时候立即释放。</li>
-</ol>
-<p>上述虽然只是一些很简单的想法，但这里面似乎隐藏着一些规律，我们能不能更进一步呢？甚至，我们是不是可以以此规律去设计一种新的内存管理方式呢？事实上，稍加抽象可以得到：</p>
-<ul>
-<li>变量可以属于某个函数，即其所有权为某个函数</li>
-<li>在函数结束的时候，回收函数所持有的所有变量的内存</li>
-<li>在发生子函数调用时，如果我们传入某一变量，该变量的所有权将移交到子函数中去</li>
-<li>在子函数调用返回时，如果有返回一些变量，则这些变量的所有权将回交给当前函数</li>
-</ul>
-<p>这就是<code>rust</code>的内存管理基础。初次接触这种全新的内存管理方式时，不禁让人觉得眼前一亮。这种方式看上去自然而高效，且根本无需独立的垃圾回收器。</p>
-<p>在<code>rust</code>中，我们实际上讨论的是更细致的值（内存）的所有权问题，但基本的观点与上述几点相似。更为严格的，<code>rust</code>中定义了如下几条关于值（内存）的所有权的规则：</p>
-<ul>
-<li>每一个值均存在一个对应的变量，该变量是这个值的所有者</li>
-<li>同一时间每个值只能有一个所有者变量存在</li>
-<li>当所有者变量离开当前可访问的代码范围（可以是一个函数，或一个由括号<code>&#123;&#125;</code>定义的一个范围等）时，该值对应的内存将会被释放</li>
-<li>变量作为函数参数值传递时，值的所有权将移交到函数参数对应的变量中</li>
-<li>函数返回一个变量时，该变量对应的值的所有权将回到上层函数对应的变量中</li>
-</ul>
-<h2 id="延伸"><a class="markdownIt-Anchor" href="#延伸"></a> 延伸</h2>
-<p>实际上，我们在编写代码时，会碰到比上述场景复杂得多的场景。那么这几条原则是否还奏效呢？</p>
-<p>其中一个我们很快会碰到的问题就是，由于存在所有权移交，我们可能需要每次函数调用都返回一些额外的值。如果每个函数都这么写，那可能是一场灾难。因为这将带来不够清晰的函数定义，而这种不清晰将侵入到整个代码库里面去。</p>
-<p><code>rust</code>是如何解决这个问题的呢？这就是<code>rust</code>中的引用和借用的机制。比如我们可以编写如下的代码：</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">func</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s1</span> = String::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">len</span> = <span class="title function_ invoke__">calculate_length</span>(&amp;s1);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The length of &#x27;&#123;&#125;&#x27; is &#123;&#125;.&quot;</span>, s1, len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">calculate_length</span>(s: &amp;<span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">usize</span> &#123;</span><br><span class="line">    s.<span class="title function_ invoke__">len</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过在变量前面增加一个<code>&amp;</code>符号，我们得到了一个称为 <strong>变量引用</strong> 的东西。对于变量引用而言，其对应的值的所有权并不会并发生移交。在函数调用时，我们可以仅仅将某一值的引用传递过去，这个时候发生的事情，称为借用。这里可以类比我们日常生活中借用别人的东西的场景，借用完之后，再归还给他。</p>
-<p>另一个不难想到的问题是：如何去按照面向对象的方式组织数据？事实上，关于值的所有权定义也可以用来解决这个问题。在前面的讨论中，我们以函数作用范围举例，但这里的范围其实可以不只是函数，也可以是某个对象（或结构体，<code>rust</code>中成为<code>struct</code>）。也就是说，我们可以将某一个值作为另一个对象的一部分绑定到该对象上去，这样该值的所有者就变成了这个对象。这个对象本身可以作为一个值绑定到某一个变量中去，从而构成了一个完整的闭环。</p>
-<p>还有一个问题，可能会成为<code>rust</code>的难题，即需要共享某一个值的场景。这时，我们需要让一个值同时属于多个所有者。这跟我们前面提到的<code>rust</code>的单一所有者原则相悖。在这样的场景下，<code>rust</code>定义了一个称为<code>Rc</code>的结构体，它存储的是这个对象的引用及一个引用计数。<code>Rc</code>实际上就是<code>reference count</code>的缩写。这里的内存管理其实就退化为引用计数式的内存管理。</p>
-<p>我们还可以提出更多的问题，比如：多线程的情况下，值（内存）的所有权要怎么变化？如何实现线程同步的锁机制？如何处理循环引用问题？事实上，诸如此类的问题已经被<code>rust</code>的社区及其编写者们思考并实践了多年。<code>rust</code>所特有的所有权特性为解决这些问题提供了全新的思路，大部分问题也都被优雅的解决了。</p>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
-<p>诞生于<code>Mozilla</code>社区的<code>rust</code>程序设计语言为我们带来了全新的内存管理思路。近几年来，<code>rust</code>语言发展迅速，由于其在性能和稳定性可以超越<code>c/c++</code>，在易用性上不输<code>java</code>等高级语言，在高性能服务器端开发领域<code>rust</code>已开始崭露头角。</p>
-<p><code>rust</code>是否可以解决我们的线上特征处理和模型推理的极致性能需求呢？我们正在尝试过程中，同时满怀期待。</p>
-<p>参考：</p>
-<ul>
-<li><a href="https://blog.codingnow.com/2018/10/lua_gc.html">https://blog.codingnow.com/2018/10/lua_gc.html</a></li>
-<li><a href="https://blog.devtang.com/2016/07/30/ios-memory-management/">https://blog.devtang.com/2016/07/30/ios-memory-management/</a></li>
-<li><a href="https://www.cnblogs.com/geaozhang/p/7111961.html">https://www.cnblogs.com/geaozhang/p/7111961.html</a></li>
-<li><a href="https://segmentfault.com/a/1190000018161588">https://segmentfault.com/a/1190000018161588</a></li>
-<li><a href="https://juejin.im/post/5b398981e51d455e2c33136b">https://juejin.im/post/5b398981e51d455e2c33136b</a></li>
-<li><a href="https://doc.rust-lang.org/stable/book/">https://doc.rust-lang.org/stable/book/</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技术</category>
-        <category>rust</category>
-      </categories>
-      <tags>
-        <tag>性能</tag>
-        <tag>高性能</tag>
-        <tag>内存管理</tag>
-        <tag>gc</tag>
-        <tag>垃圾回收</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Rust内建最佳实践</title>
     <url>/2020/03/23/rust-the-good-part/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>在前面的文章中提到我们在一个高性能场景中尝试了<code>rust</code>，那么它的效果如何呢？</p>
@@ -4496,6 +4409,93 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       <tags>
         <tag>性能</tag>
         <tag>高性能</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内存管理的新思路</title>
+    <url>/2020/03/08/new-ways-to-manage-memory/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
+<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
+<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
+<span id="more"></span>
+<p>由于要服务于线上上亿的用户群，这样的性能还是不够理想，难以直接交付给客户使用。</p>
+<p><code>java</code>语言发展了这么长时间，其性能还是能为人们所认可的。在一些性能测试上面，<code>java</code>几乎可以媲美<code>c++</code>的计算性能，比如<a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/java.html">这里</a>就有一个这样的测试。然而内存管理却一直是<code>java</code>语言一个挑战，即便<code>java</code>已经有相对非常成熟的<code>gc</code>算法了。在编写极致性能需求的服务端程序时，<code>java</code>由于其本身的性能波动，似乎还是难以胜任。</p>
+<p>究竟要如何做高性能的内存管理呢？难道非得像<code>c/c++</code>一样的手动去管理内存吗？</p>
+<h2 id="当前流行内存管理机制"><a class="markdownIt-Anchor" href="#当前流行内存管理机制"></a> 当前流行内存管理机制</h2>
+<p>我们先看看当前流行的编程语言所采用的内存管理机制。以我所接触过的，使用相对广泛的编程语言为例，可以整理如下：</p>
+<ul>
+<li><code>c</code>: 手动进行内存的申请和释放</li>
+<li><code>c++</code>: 通过<code>delete</code>指针，在析构函数中手动释放内存</li>
+<li><code>java</code>及各种基于<code>java</code>的语言: 适时分代<code>gc</code>，多种垃圾回收算法</li>
+<li><code>python</code>: 引用计数，自动触发适时分代回收</li>
+<li><code>obj c / swift</code>: 引用计数或自动引用计数回收，编译期插入引用计数代码</li>
+<li><code>go</code>: 适时分代gc，并行标记清除模式</li>
+<li><code>javascript(v8)</code>: 适时分代gc，并行标记清除模式</li>
+<li><code>php</code>: 以引用计数为基础，适时触发<code>gc</code></li>
+<li><code>lua</code>: 标记清除模式</li>
+</ul>
+<p>可以看到，当前的自动内存管理机制以 <strong>引用计数</strong> 和 <strong>分层并行标记清除</strong> 为主。</p>
+<p>如果内存释放及时，引用计数机制对于程序运行时性能影响会比较小。但每一个对象都需要分配额外的内存去跟踪引用数量，这带来了额外的内存占用。如果没有自动引用计数的机制，在编写代码时，手动管理计数会带来不小的额外负担，内存的及时释放取决于引用计数代码的正确性。</p>
+<p>而对于标记清除式的内存管理，由于其不可避免的会带来程序暂停，且并行标记还需要占用cpu时间，会对程序性能产生较大影响。</p>
+<p>我们的眼光投向了<code>rust</code>。<code>rust</code>是一门没有<code>gc</code>也不使用引用计数（不以此为主）进行内存管理的语言。那它究竟是怎样管理内存呢？它还能让我们像写<code>java</code>代码一样流畅吗？</p>
+<h2 id="内存管理的新思路"><a class="markdownIt-Anchor" href="#内存管理的新思路"></a> 内存管理的新思路</h2>
+<p>回顾一下日常编写代码的过程，在实现某一个函数时，有这样几个要素：入参 函数体 返回值。比如，假设我们有下面这个计算字符串长度的函数：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">func</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s1</span> = String::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> (s2, len) = <span class="title function_ invoke__">calculate_length</span>(s1);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The length of &#x27;&#123;&#125;&#x27; is &#123;&#125;.&quot;</span>, s2, len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">calculate_length</span>(s: <span class="type">String</span>) <span class="punctuation">-&gt;</span> (<span class="type">String</span>, <span class="type">usize</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">length</span> = s.<span class="title function_ invoke__">len</span>();</span><br><span class="line">    (s, length)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>考虑内存释放这件事，我们会希望：</p>
+<ol>
+<li>对于函数<code>func</code>中的变量<code>s1</code>，由于我们将其作为参数转交给了函数<code>calculate_length</code>，在后续的执行过程，我们就不再希望关心它对应的字符串内存了。</li>
+<li>对于<code>calculate_length</code>函数中的入参<code>s</code>，由于其作为函数值返回，我们不希望在离开函数时释放其对应的内存。</li>
+<li>对于<code>calculate_length</code>函数计算得到的<code>length</code>变量，我们同样不希望在离开函数时释放内存，因为它也是一个返回值。</li>
+<li>对于<code>func</code>从<code>calculate_length</code>函数得到的变量<code>s2</code>和<code>len</code>，我们希望在<code>func</code>函数离开的时候立即释放。</li>
+</ol>
+<p>上述虽然只是一些很简单的想法，但这里面似乎隐藏着一些规律，我们能不能更进一步呢？甚至，我们是不是可以以此规律去设计一种新的内存管理方式呢？事实上，稍加抽象可以得到：</p>
+<ul>
+<li>变量可以属于某个函数，即其所有权为某个函数</li>
+<li>在函数结束的时候，回收函数所持有的所有变量的内存</li>
+<li>在发生子函数调用时，如果我们传入某一变量，该变量的所有权将移交到子函数中去</li>
+<li>在子函数调用返回时，如果有返回一些变量，则这些变量的所有权将回交给当前函数</li>
+</ul>
+<p>这就是<code>rust</code>的内存管理基础。初次接触这种全新的内存管理方式时，不禁让人觉得眼前一亮。这种方式看上去自然而高效，且根本无需独立的垃圾回收器。</p>
+<p>在<code>rust</code>中，我们实际上讨论的是更细致的值（内存）的所有权问题，但基本的观点与上述几点相似。更为严格的，<code>rust</code>中定义了如下几条关于值（内存）的所有权的规则：</p>
+<ul>
+<li>每一个值均存在一个对应的变量，该变量是这个值的所有者</li>
+<li>同一时间每个值只能有一个所有者变量存在</li>
+<li>当所有者变量离开当前可访问的代码范围（可以是一个函数，或一个由括号<code>&#123;&#125;</code>定义的一个范围等）时，该值对应的内存将会被释放</li>
+<li>变量作为函数参数值传递时，值的所有权将移交到函数参数对应的变量中</li>
+<li>函数返回一个变量时，该变量对应的值的所有权将回到上层函数对应的变量中</li>
+</ul>
+<h2 id="延伸"><a class="markdownIt-Anchor" href="#延伸"></a> 延伸</h2>
+<p>实际上，我们在编写代码时，会碰到比上述场景复杂得多的场景。那么这几条原则是否还奏效呢？</p>
+<p>其中一个我们很快会碰到的问题就是，由于存在所有权移交，我们可能需要每次函数调用都返回一些额外的值。如果每个函数都这么写，那可能是一场灾难。因为这将带来不够清晰的函数定义，而这种不清晰将侵入到整个代码库里面去。</p>
+<p><code>rust</code>是如何解决这个问题的呢？这就是<code>rust</code>中的引用和借用的机制。比如我们可以编写如下的代码：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">func</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">s1</span> = String::<span class="title function_ invoke__">from</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">len</span> = <span class="title function_ invoke__">calculate_length</span>(&amp;s1);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;The length of &#x27;&#123;&#125;&#x27; is &#123;&#125;.&quot;</span>, s1, len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">calculate_length</span>(s: &amp;<span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">usize</span> &#123;</span><br><span class="line">    s.<span class="title function_ invoke__">len</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过在变量前面增加一个<code>&amp;</code>符号，我们得到了一个称为 <strong>变量引用</strong> 的东西。对于变量引用而言，其对应的值的所有权并不会并发生移交。在函数调用时，我们可以仅仅将某一值的引用传递过去，这个时候发生的事情，称为借用。这里可以类比我们日常生活中借用别人的东西的场景，借用完之后，再归还给他。</p>
+<p>另一个不难想到的问题是：如何去按照面向对象的方式组织数据？事实上，关于值的所有权定义也可以用来解决这个问题。在前面的讨论中，我们以函数作用范围举例，但这里的范围其实可以不只是函数，也可以是某个对象（或结构体，<code>rust</code>中成为<code>struct</code>）。也就是说，我们可以将某一个值作为另一个对象的一部分绑定到该对象上去，这样该值的所有者就变成了这个对象。这个对象本身可以作为一个值绑定到某一个变量中去，从而构成了一个完整的闭环。</p>
+<p>还有一个问题，可能会成为<code>rust</code>的难题，即需要共享某一个值的场景。这时，我们需要让一个值同时属于多个所有者。这跟我们前面提到的<code>rust</code>的单一所有者原则相悖。在这样的场景下，<code>rust</code>定义了一个称为<code>Rc</code>的结构体，它存储的是这个对象的引用及一个引用计数。<code>Rc</code>实际上就是<code>reference count</code>的缩写。这里的内存管理其实就退化为引用计数式的内存管理。</p>
+<p>我们还可以提出更多的问题，比如：多线程的情况下，值（内存）的所有权要怎么变化？如何实现线程同步的锁机制？如何处理循环引用问题？事实上，诸如此类的问题已经被<code>rust</code>的社区及其编写者们思考并实践了多年。<code>rust</code>所特有的所有权特性为解决这些问题提供了全新的思路，大部分问题也都被优雅的解决了。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>诞生于<code>Mozilla</code>社区的<code>rust</code>程序设计语言为我们带来了全新的内存管理思路。近几年来，<code>rust</code>语言发展迅速，由于其在性能和稳定性可以超越<code>c/c++</code>，在易用性上不输<code>java</code>等高级语言，在高性能服务器端开发领域<code>rust</code>已开始崭露头角。</p>
+<p><code>rust</code>是否可以解决我们的线上特征处理和模型推理的极致性能需求呢？我们正在尝试过程中，同时满怀期待。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://blog.codingnow.com/2018/10/lua_gc.html">https://blog.codingnow.com/2018/10/lua_gc.html</a></li>
+<li><a href="https://blog.devtang.com/2016/07/30/ios-memory-management/">https://blog.devtang.com/2016/07/30/ios-memory-management/</a></li>
+<li><a href="https://www.cnblogs.com/geaozhang/p/7111961.html">https://www.cnblogs.com/geaozhang/p/7111961.html</a></li>
+<li><a href="https://segmentfault.com/a/1190000018161588">https://segmentfault.com/a/1190000018161588</a></li>
+<li><a href="https://juejin.im/post/5b398981e51d455e2c33136b">https://juejin.im/post/5b398981e51d455e2c33136b</a></li>
+<li><a href="https://doc.rust-lang.org/stable/book/">https://doc.rust-lang.org/stable/book/</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术</category>
+        <category>rust</category>
+      </categories>
+      <tags>
+        <tag>性能</tag>
+        <tag>高性能</tag>
+        <tag>内存管理</tag>
+        <tag>gc</tag>
+        <tag>垃圾回收</tag>
       </tags>
   </entry>
   <entry>
@@ -10544,7 +10544,10 @@ from: https://markmap.js.org/repl
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="930-中秋节的月亮"><a class="markdownIt-Anchor" href="#930-中秋节的月亮"></a> 9.30: 中秋节的月亮</h2>
 <p>10小时自驾，在一轮满月的陪伴下到家，终于见到一个月未见的小孩。平常的他10点睡觉，但今天，快到11点了，他还没有睡。</p>
 <p>开门就发现，他满脸堆笑的站在门口，“哦！哦！哦！”高兴地拍手。</p>
-<p>妈妈上前去，想要抱起，小孩有点不知所措，竟然推开妈妈的手，想要保持一点距离。大概在快速成 …</p>
+<p>妈妈上前去，想要抱起，小孩有点不知所措，竟然推开妈妈的手，想要保持一点距离。大概在快速成长的小孩眼里，一个月已经是很长很长的时间了。</p>
+<p>最终他还是投入了妈妈的怀抱。妈妈仔细端详起来，“长高了一点，越来越瘦了”。</p>
+<p>小孩还是那么活泼，感觉有无穷的精力，在屋子里跑来跑去。现在正是语言爆发期，大人说什么，简单的，他也能跟着说。“好多大车车”，“骨头”，“鸡肉”，“丢到垃圾桶”，这些都是他新学到的几句话。</p>
+<p>今天晚上，小孩兴奋了很久，12点才有睡意。</p>
 ]]></content>
       <categories>
         <category>每日一思</category>
