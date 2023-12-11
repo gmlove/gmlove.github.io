@@ -161,7 +161,7 @@
   </li>
         <li class="menu-item menu-item-每日一思">
 
-    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">15</span></a>
+    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-其他">
@@ -185,7 +185,7 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">132</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">133</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -1050,114 +1050,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/03/08/new-ways-to-manage-memory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/08/new-ways-to-manage-memory/" class="post-title-link" itemprop="url">内存管理的新思路</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-08 20:00:00" itemprop="dateCreated datePublished" datetime="2020-03-08T20:00:00+00:00">2020-03-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/03/08/new-ways-to-manage-memory/" class="post-meta-item leancloud_visitors" data-flag-title="内存管理的新思路" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
-<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
-<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/08/new-ways-to-manage-memory/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/02/06/DRL-the-problem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1245,6 +1137,114 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/02/06/DRL-the-problem/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/03/08/new-ways-to-manage-memory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/08/new-ways-to-manage-memory/" class="post-title-link" itemprop="url">内存管理的新思路</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-08 20:00:00" itemprop="dateCreated datePublished" datetime="2020-03-08T20:00:00+00:00">2020-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/03/08/new-ways-to-manage-memory/" class="post-meta-item leancloud_visitors" data-flag-title="内存管理的新思路" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
+<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
+<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/08/new-ways-to-manage-memory/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1444,7 +1444,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1557,7 +1557,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:43</span>
+    <span title="站点阅读时长">17:44</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1688,7 +1688,7 @@
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?52.js"></script>
+<script src="/js/next-boot.js?53.js"></script>
 
 <script src="/js/bookmark.js"></script>
 
