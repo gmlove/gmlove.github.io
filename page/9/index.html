@@ -141,7 +141,7 @@
   </li>
         <li class="menu-item menu-item-数据">
 
-    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">36</span></a>
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">39</span></a>
 
   </li>
         <li class="menu-item menu-item-机器学习">
@@ -151,22 +151,22 @@
   </li>
         <li class="menu-item menu-item-敏捷">
 
-    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">14</span></a>
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">19</span></a>
 
   </li>
-        <li class="menu-item menu-item-技术">
+        <li class="menu-item menu-item-技术与架构">
 
-    <a href="/tech/" rel="section"><i class="fa fa-quidditch fa-fw"></i>技术<span class="badge">10</span></a>
+    <a href="/arch_tech/" rel="section"><i class="fa fa-warehouse fa-fw"></i>技术与架构<span class="badge">19</span></a>
 
   </li>
-        <li class="menu-item menu-item-架构">
+        <li class="menu-item menu-item-每日一思">
 
-    <a href="/arch/" rel="section"><i class="fa fa-warehouse fa-fw"></i>架构<span class="badge">9</span></a>
+    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-其他">
 
-    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">25</span></a>
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">28</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -185,17 +185,17 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">134</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">49</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">54</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">133</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">145</span></a>
 
   </li>
 
@@ -249,6 +249,934 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/05/16/a-guide-to-write-elegant-etl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/16/a-guide-to-write-elegant-etl/" class="post-title-link" itemprop="url">A Guide to Write Elegant ETL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-16 20:00:00" itemprop="dateCreated datePublished" datetime="2022-05-16T20:00:00+08:00">2022-05-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-05 21:55:34" itemprop="dateModified" datetime="2022-06-05T21:55:34+08:00">2022-06-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/05/16/a-guide-to-write-elegant-etl/" class="post-meta-item leancloud_visitors" data-flag-title="A Guide to Write Elegant ETL" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/attaches/2022/2022-05-16-a-guide-to-write-elegant-etl/elegant.webp" alt="Elegant. Image from https://www.yezibizhi.com/Img-4/100422/111045.shtml" /></p>
+<p>In the <a href="/2022/05/04/a-new-etl-language-easy-sql/">previous post</a>, we talked about a new ETL language – Easy SQL. You may be very curious about how to write ETL in Easy SQL. Let’s take a peek at it today.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/05/16/a-guide-to-write-elegant-etl/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/05/25/neat-syntax-design-of-an-etl-language/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/25/neat-syntax-design-of-an-etl-language/" class="post-title-link" itemprop="url">Neat Syntax Design of an ETL Language (Part 1)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-25 20:00:00" itemprop="dateCreated datePublished" datetime="2022-05-25T20:00:00+08:00">2022-05-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-30 16:10:44" itemprop="dateModified" datetime="2022-05-30T16:10:44+08:00">2022-05-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/05/25/neat-syntax-design-of-an-etl-language/" class="post-meta-item leancloud_visitors" data-flag-title="Neat Syntax Design of an ETL Language (Part 1)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>16 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/attaches/2022/2022-05-25-neat-syntax-design-of-an-etl-language/mind-mapping.png" alt="Easy SQL language features mind Mapping" /></p>
+<p><strong>Previous posts about Easy SQL</strong></p>
+<ul>
+<li><a href="/2022/05/04/a-new-etl-language-easy-sql/">A new ETL language – Easy SQL</a></li>
+<li><a href="/2022/05/16/a-guide-to-write-elegant-etl/">A guide to write elegant ETL</a></li>
+</ul>
+<p>People like to use Scala because Scala provides powerful type inference and embraces various programming paradigms. People like to use Python because it’s clean, out-of-the-box, delicate and expressive. People like to use rust because rust provides modern language features and zero-cost abstract.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/05/25/neat-syntax-design-of-an-etl-language/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/04/02/next-stage-of-agile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/02/next-stage-of-agile/" class="post-title-link" itemprop="url">敏捷的下半场</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-02 20:00:00 / 修改时间：13:08:08" itemprop="dateCreated datePublished" datetime="2022-04-02T20:00:00+08:00">2022-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/04/02/next-stage-of-agile/" class="post-meta-item leancloud_visitors" data-flag-title="敏捷的下半场" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>上周的某一天，我在浏览IT新闻的时候，无意间被一篇来自阿里团队的文章刷屏了。关注的好几个平台都转发了名为“阿里 &amp; 蚂蚁自研 IDE 研发框架 OpenSumi 正式开源”的文章。</p>
+<p>OpenSumi定位是垂直领域的IDE研发框架。请注意，它本身不是IDE，而是一个辅助开发IDE的框架。除了内置常用的开发工具，如资源管理器、编辑器、调试、Git 面板、搜索面板等模块，重要的是，它可以支持开发者通过简单配置就搭建属于自己的本地或云端IDE产品。</p>
+<p>OpenSumi的思路竟和我之前分享的“开发者工作台”的思路如出一辙。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/02/next-stage-of-agile/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/01/22/bigdata-platform-based-on-hdp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/22/bigdata-platform-based-on-hdp/" class="post-title-link" itemprop="url">基于HDP构建企业数据平台</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-22 20:00:00" itemprop="dateCreated datePublished" datetime="2021-01-22T20:00:00+08:00">2021-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-20 15:23:38" itemprop="dateModified" datetime="2021-05-20T15:23:38+08:00">2021-05-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/22/bigdata-platform-based-on-hdp/" class="post-meta-item leancloud_visitors" data-flag-title="基于HDP构建企业数据平台" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="回顾数据平台建设整体思路"><a class="markdownIt-Anchor" href="#回顾数据平台建设整体思路"></a> 回顾数据平台建设整体思路</h2>
+<p>在<a href="http://brightliao.com/2021/01/21/some-thoughts-about-data-platform/">上一篇文章</a>中，我们聊到了对数据平台的理解以及企业数据平台的建设思路。</p>
+<p>经过分析，可以了解到，数据平台应该是一定程度的中心化的系统，是团队对于数据接入、数据建模、数据清洗、数据开发过程的工程化经验的沉淀。</p>
+<p>它可以：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/22/bigdata-platform-based-on-hdp/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/11/26/data-work-roles/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/26/data-work-roles/" class="post-title-link" itemprop="url">那些数据工作中的角色</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-26 20:00:00" itemprop="dateCreated datePublished" datetime="2020-11-26T20:00:00+08:00">2020-11-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-28 21:43:19" itemprop="dateModified" datetime="2021-02-28T21:43:19+08:00">2021-02-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/11/26/data-work-roles/" class="post-meta-item leancloud_visitors" data-flag-title="那些数据工作中的角色" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>数据工作中有一类非常重要的角色，那就是数据分析师。为什么这个角色这么重要呢？因为要是没有这个角色，不管一个企业中的数据管理做得有多么好都没用，无法带来实际的价值。这些数据就像是藏在海底的石油，而数据分析师就是开采海底石油的油井设备。要想让石油用于汽车轮船，需要通过这些设备先将海底的石油抽取出来，经过加工处理，提纯。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/11/26/data-work-roles/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2021/01/21/some-thoughts-about-data-platform/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/21/some-thoughts-about-data-platform/" class="post-title-link" itemprop="url">一些企业数据平台建设的思考</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-21 20:00:00" itemprop="dateCreated datePublished" datetime="2021-01-21T20:00:00+08:00">2021-01-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-28 20:57:58" itemprop="dateModified" datetime="2021-02-28T20:57:58+08:00">2021-02-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/21/some-thoughts-about-data-platform/" class="post-meta-item leancloud_visitors" data-flag-title="一些企业数据平台建设的思考" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我最近接触到不少传统行业的客户，他们都希望构建自己的数据平台。其目的大都是希望通过借鉴互联网公司积累的成熟的技术经验，构建自己的数据能力，最终实现数据驱动型企业。</p>
+<p>数据平台早已不是什么新鲜事物，甚至在当前大家都在谈论数据中台的时候，还显得有点过时。在我看来，其实大家对于数据中台的认识还处于探索的阶段，并没有形成让行业信服的一致的观点。但一提到数据平台，大家对其应该包含的内容还相对比较清楚。所以，本文尝试选择“数据平台”这个可能有点过时但是相对务实一点的词语来组织内容。这里我不想在概念上谈论太多，无论这个东西是什么，它要解决的企业中的数据问题是明确而具体的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/21/some-thoughts-about-data-platform/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/12/27/oracle-data-migration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/27/oracle-data-migration/" class="post-title-link" itemprop="url">Oracle数据迁移实用入门</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-27 20:00:00 / 修改时间：20:57:31" itemprop="dateCreated datePublished" datetime="2020-12-27T20:00:00+08:00">2020-12-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/27/oracle-data-migration/" class="post-meta-item leancloud_visitors" data-flag-title="Oracle数据迁移实用入门" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在一个大型企业中做数据工作，难免要跟各种不同种类的数据库打交道。Oracle，凭借其优异的性能，曾经是很多大型企业标配商业数据库，自然也是我们要重点应对的一种数据库。</p>
+<p>Oracle的数据导入导出是一项基本的技能，但是对于懂数据库却不熟悉Oracle的同学可能会有一定的障碍。正好在最近的一个项目中碰到了这样一个任务，于是研究了一下Oracle的数据导入导出，在这里跟大家分享一下。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/27/oracle-data-migration/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/12/03/data-capability-building-suggestions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/03/data-capability-building-suggestions/" class="post-title-link" itemprop="url">浅谈企业数据能力建设</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-03 20:00:00" itemprop="dateCreated datePublished" datetime="2020-12-03T20:00:00+08:00">2020-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-04 14:47:44" itemprop="dateModified" datetime="2020-12-04T14:47:44+08:00">2020-12-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/12/03/data-capability-building-suggestions/" class="post-meta-item leancloud_visitors" data-flag-title="浅谈企业数据能力建设" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>随着市场的逐步成熟，要想保持企业的长期竞争力，运营和产品改进工作需要越来越精细化。</p>
+<p>比如，在游戏行业，玩家留存率是一个关键指标，为提升留存率，需要精细化的分析玩家是哪一步流失的，根据游戏进程推进过程，按照先后顺序设置关键节点，分析各个节点流失情况数据，可以形成一个玩家流失漏斗。有了玩家流失漏斗，我们可以选择流失率高的环节进行进一步精细化分析，找到流失原因，比如机器适配问题，引导缺乏吸引力问题，数值设计问题等，根据这些原因就可以针对性的在产品和运营侧做改进了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/03/data-capability-building-suggestions/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/05/24/architecture-designing-practise-for-ml-platform-oop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/24/architecture-designing-practise-for-ml-platform-oop/" class="post-title-link" itemprop="url">机器学习平台架构实践--面向对象设计</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-24 20:00:00" itemprop="dateCreated datePublished" datetime="2020-05-24T20:00:00+08:00">2020-05-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-06 18:29:04" itemprop="dateModified" datetime="2020-09-06T18:29:04+08:00">2020-09-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/05/24/architecture-designing-practise-for-ml-platform-oop/" class="post-meta-item leancloud_visitors" data-flag-title="机器学习平台架构实践--面向对象设计" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>面向对象的程序设计思想多年来一直是我们进行软件设计的有效的指导思想。由于我们天生理解大自然的机制就是面向对象的（比如我们到了某一个商店，我们会看到门店、售货员、货架、货架上的货物等等，这些都是一个一个的对象，我们认识整个商店也就是去认识商店中的每个对象。），而面向对象程序设计思想恰好与这一机制相一致，所以一个面向对象设计做得好的系统就很容易为我们所理解。</p>
+<p>对于一个机器学习平台，应该如何实践面向对象程序设计思想呢？</p>
+<h2 id="面向对象的抽象"><a class="markdownIt-Anchor" href="#面向对象的抽象"></a> 面向对象的抽象</h2>
+<p>回顾前面两篇文章的内容，机器学习平台具备这样的架构：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/05/24/architecture-designing-practise-for-ml-platform-oop/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -357,950 +1285,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/07/07/basic-loan-business/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/07/basic-loan-business/" class="post-title-link" itemprop="url">银行贷款业务是怎么一回事？</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-07 20:00:00" itemprop="dateCreated datePublished" datetime="2020-07-07T20:00:00+08:00">2020-07-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-08 10:00:50" itemprop="dateModified" datetime="2020-07-08T10:00:50+08:00">2020-07-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%9A%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">业务</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/07/basic-loan-business/" class="post-meta-item leancloud_visitors" data-flag-title="银行贷款业务是怎么一回事？" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能。不管是商业贷款还是公积金贷款，这里面都是银行在提供贷款业务。对于个人经营需要，企业发展需要，银行贷款就更是少不了了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/07/07/basic-loan-business/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/06/01/node-bpm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/01/node-bpm/" class="post-title-link" itemprop="url">极速软件发布的实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-01 20:00:00" itemprop="dateCreated datePublished" datetime="2020-06-01T20:00:00+08:00">2020-06-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-02 15:12:42" itemprop="dateModified" datetime="2020-06-02T15:12:42+08:00">2020-06-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/" itemprop="url" rel="index"><span itemprop="name">工作流</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E4%BD%9C%E6%B5%81/%E6%95%8F%E6%8D%B7/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/06/01/node-bpm/" class="post-meta-item leancloud_visitors" data-flag-title="极速软件发布的实现" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在当下很多的应用场景中，我们常常会想要应用具有一定的灵活性，以便我们可以在线调整计算逻辑，而不需要重新发布应用。这可能也可以称为以极限的速度发布软件的方式。</p>
-<p><code>AB测试</code>可以说解决了一部分这样的需求，使得我们可以在线的针对部分用户改变应用的行为。但<code>AB测试</code>需要我们预先定义并实现两套逻辑，然后通过线上配置来应用不同的逻辑。显然，在可自定义的程度上，<code>AB测试</code>是非常弱的。如果我们想要更大规模的调整应用的逻辑，<code>AB测试</code>就不够了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/01/node-bpm/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/05/22/architecture-designing-practise-for-ml-platform/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/22/architecture-designing-practise-for-ml-platform/" class="post-title-link" itemprop="url">机器学习平台架构实践--微服务</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-05-22 20:00:00" itemprop="dateCreated datePublished" datetime="2020-05-22T20:00:00+08:00">2020-05-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-23 13:54:57" itemprop="dateModified" datetime="2020-05-23T13:54:57+08:00">2020-05-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/05/22/architecture-designing-practise-for-ml-platform/" class="post-meta-item leancloud_visitors" data-flag-title="机器学习平台架构实践--微服务" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一个项目越复杂，架构的作用就越显得重要。这就跟收拾家里面的东西一样，如果我们只有为数不多的几件物品，即便我们随意摆放，也不会妨碍我们找到想要的东西。但是随着购置的物品越来越多，如果不设置一套摆放规则，那么想找到东西就可能会花费大量的时间，效率低下。在我看来，架构就像这样一套摆放东西的规则。规则设置得好，屋子里面的东西将摆放得井井有条，我们的生活不仅将更高效也将更舒适顺心。</p>
-<p>在最近的一个项目上，我们和客户一起建设了一个机器学习平台。对于某一个机器学习项目，最重要的四个部分是特征处理，模型探索，模型训练与模型推理。构建一个平台的目的是将这四个部分中通用的能力沉淀下来。一个成功的平台可以为新的机器学习项目提供基础设施，让项目快速起步，还可以使得项目组更专注在模型优化上而提升模型迭代效率。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/05/22/architecture-designing-practise-for-ml-platform/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/sense-of-ceremony-and-professional-service/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/02/sense-of-ceremony-and-professional-service/" class="post-title-link" itemprop="url">仪式感与专业服务</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-02 20:00:00 / 修改时间：23:07:15" itemprop="dateCreated datePublished" datetime="2019-12-02T20:00:00+08:00">2019-12-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/12/02/sense-of-ceremony-and-professional-service/" class="post-meta-item leancloud_visitors" data-flag-title="仪式感与专业服务" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>进门，双手帮你脱下外套，挂起。洗发师双手提起一件深色防水的丝质套衫，你伸手，换上。拿起腰带，穿过你的腰，两圈，拉扯一次，拉扯两次，系紧。抹平套衫肩部，拉住袖口，拉扯一次，拉扯两次，展平。拉住套衫底部，拉扯一次，拉扯两次，拉齐。</p>
-<p>将你带到洗头处，你看到一个用于平躺的台面，台面上深色皮质的垫子分为两部分，前面部分可拆卸，上放一块叠起来的深蓝色毛巾，毛巾上面是一朵颜色鲜艳的大荷花。在台面前部放有一个与垫子同样深色皮质的单人凳。</p>
-<p>洗发师伸开右手，将你迎向凳子坐下。介绍洗头服务：我是37号洗发师为您服务，本次洗发50分钟，请您稍坐，我去准备毛巾和其他用品。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/02/sense-of-ceremony-and-professional-service/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/07/20/tdd-for-improving-design/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/20/tdd-for-improving-design/" class="post-title-link" itemprop="url">从改善设计的角度理解TDD</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-20 20:00:00" itemprop="dateCreated datePublished" datetime="2019-07-20T20:00:00+08:00">2019-07-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-08-25 18:12:42" itemprop="dateModified" datetime="2019-08-25T18:12:42+08:00">2019-08-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">tdd</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/07/20/tdd-for-improving-design/" class="post-meta-item leancloud_visitors" data-flag-title="从改善设计的角度理解TDD" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>10 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TDD有很多好处，但是广大程序员却总是难以接受。即便在我们ThoughtWorks，有着非常浓厚的TDD氛围的公司里，接受起来也依然不是一件简单的事情。我曾经见过一些在我们公司工作过一年甚至两年的同事，对TDD的理解都还停留在比较粗浅的认识上，平时的实践也难以跟上。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/20/tdd-for-improving-design/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/12/07/automated-comment-on-xiaomi-s-live-stream/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/12/07/automated-comment-on-xiaomi-s-live-stream/" class="post-title-link" itemprop="url">5行代码的自动评论机器人</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2017-12-07 20:03:06 / 修改时间：20:19:40" itemprop="dateCreated datePublished" datetime="2017-12-07T20:03:06+08:00">2017-12-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">小技巧</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/12/07/automated-comment-on-xiaomi-s-live-stream/" class="post-meta-item leancloud_visitors" data-flag-title="5行代码的自动评论机器人" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>755</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br />
-于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
-<p>直播地址：<a target="_blank" rel="noopener" href="https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195">https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195</a></p>
-<p>代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 随机选择一个当前评论列表里面的评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">r</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>((<span class="title class_">Math</span>.<span class="title function_">random</span>() * $(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>).<span class="property">length</span>))</span><br><span class="line"><span class="comment">// 提取选中的评论的内容</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">text</span> = (<span class="params"></span>) =&gt; $($(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>)[<span class="title function_">r</span>()]).<span class="title function_">find</span>(<span class="string">&#x27;.content&#x27;</span>).<span class="title function_">text</span>()</span><br><span class="line"><span class="comment">// 使用选中的内容自动发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">c</span> = (<span class="params"></span>) =&gt; &#123;$(<span class="string">&#x27;#J_chatContent&#x27;</span>).<span class="title function_">val</span>(<span class="title function_">text</span>());$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">attr</span>(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;btn active&#x27;</span>);$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">click</span>();&#125;</span><br><span class="line"><span class="comment">// 生成随机的间隔时间</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">rtime</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">15000</span> + <span class="number">5000</span>)</span><br><span class="line"><span class="comment">// 设置一个计时器定时发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">st</span> = (<span class="params"></span>) =&gt; stt = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="title function_">c</span>(); <span class="title function_">st</span>()&#125;, <span class="title function_">rtime</span>())</span><br><span class="line"><span class="title function_">st</span>();</span><br></pre></td></tr></table></figure>
-<p>以上代码粘贴到控制台执行就可以了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/10/24/local-openshift-cluster-installation-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/24/local-openshift-cluster-installation-guide/" class="post-title-link" itemprop="url">本地搭建OpenShift集群指南</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-24 14:16:19" itemprop="dateCreated datePublished" datetime="2017-10-24T14:16:19+08:00">2017-10-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2017-11-16 08:40:34" itemprop="dateModified" datetime="2017-11-16T08:40:34+08:00">2017-11-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/devops/" itemprop="url" rel="index"><span itemprop="name">DevOps</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/10/24/local-openshift-cluster-installation-guide/" class="post-meta-item leancloud_visitors" data-flag-title="本地搭建OpenShift集群指南" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>13 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="local-openshift-cluster-installation-guide"><a class="markdownIt-Anchor" href="#local-openshift-cluster-installation-guide"></a> Local Openshift Cluster Installation Guide</h1>
-<h2 id="preparation"><a class="markdownIt-Anchor" href="#preparation"></a> Preparation</h2>
-<h3 id="hosts"><a class="markdownIt-Anchor" href="#hosts"></a> Hosts</h3>
-<ul>
-<li>1 control host, 1 master and 3 nodes</li>
-<li>centos 7</li>
-</ul>
-<h3 id="install-packages-on-control-host"><a class="markdownIt-Anchor" href="#install-packages-on-control-host"></a> Install packages on control host</h3>
-<ul>
-<li>Run <code>yum install -y python2-passlib httpd-tools</code></li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/10/24/local-openshift-cluster-installation-guide/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/10/28/openshift-workshop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/28/openshift-workshop/" class="post-title-link" itemprop="url">OpenShift工作坊</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2017-10-28 23:12:21 / 修改时间：23:41:24" itemprop="dateCreated datePublished" datetime="2017-10-28T23:12:21+08:00">2017-10-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/devops/" itemprop="url" rel="index"><span itemprop="name">DevOps</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/10/28/openshift-workshop/" class="post-meta-item leancloud_visitors" data-flag-title="OpenShift工作坊" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>17 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="target"><a class="markdownIt-Anchor" href="#target"></a> Target</h2>
-<ul>
-<li>A simple nodejs application</li>
-<li>Add mongodb to the application</li>
-<li>CI/CD for the application</li>
-<li>Logging, Monitoring, Debugging</li>
-</ul>
-<h2 id="a-simple-nodejs-application"><a class="markdownIt-Anchor" href="#a-simple-nodejs-application"></a> A simple nodejs application</h2>
-<h3 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h3>
-<p>In this section, We are going to create a nodejs project with mongodb in OpenShift. We assume that you have done all the preparation work listed in the invitation email of this workshop. And there’re some additional steps to  get yourself ready.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/10/28/openshift-workshop/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/10/24/aws-openshift-cluster-installation-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/24/aws-openshift-cluster-installation-guide/" class="post-title-link" itemprop="url">AWS搭建OpenShift集群指南</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-24 14:16:19" itemprop="dateCreated datePublished" datetime="2017-10-24T14:16:19+08:00">2017-10-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2017-10-25 16:05:08" itemprop="dateModified" datetime="2017-10-25T16:05:08+08:00">2017-10-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/devops/" itemprop="url" rel="index"><span itemprop="name">DevOps</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2017/10/24/aws-openshift-cluster-installation-guide/" class="post-meta-item leancloud_visitors" data-flag-title="AWS搭建OpenShift集群指南" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="aws-openshift-cluster-installation-guide"><a class="markdownIt-Anchor" href="#aws-openshift-cluster-installation-guide"></a> AWS Openshift Cluster Installation Guide</h1>
-<p>The main reference is here: <a target="_blank" rel="noopener" href="https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible">https://github.com/openshift/openshift-ansible-contrib/tree/master/reference-architecture/aws-ansible</a></p>
-<h3 id="create"><a class="markdownIt-Anchor" href="#create"></a> Create</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./ose-on-aws.py --region=us-east-2 --keypair=lgm-oc \</span><br><span class="line">    --public-hosted-zone=oc-tw.net --deployment-type=origin --ami=ami-cfdafaaa \</span><br><span class="line">    --github-client-secret=YOUR_SECRET --github-organization=xx \</span><br><span class="line">    --github-client-id=YOUR_ID</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/10/24/aws-openshift-cluster-installation-guide/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1368,20 +1356,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">145</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1476,12 +1464,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">585k</span>
+    <span title="站点总字数">640k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">16:15</span>
+    <span title="站点阅读时长">17:47</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1612,7 +1600,7 @@
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?41.js"></script>
+<script src="/js/next-boot.js?43.js"></script>
 
 <script src="/js/bookmark.js"></script>
 

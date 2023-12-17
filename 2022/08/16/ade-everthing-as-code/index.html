@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前文讨论了敏捷数据工程实践的相关概念。有哪些具体的敏捷数据工程实践呢？本文将分享“代码化一切”的实践。   代码化XX 在应用软件开发中，“代码化一切”被讨论得很多。常见的代码化XX有：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="敏捷数据工程实践--代码化一切">
+<meta property="og:url" content="http://brightliao.com/2022/08/16/ade-everthing-as-code/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="前文讨论了敏捷数据工程实践的相关概念。有哪些具体的敏捷数据工程实践呢？本文将分享“代码化一切”的实践。   代码化XX 在应用软件开发中，“代码化一切”被讨论得很多。常见的代码化XX有：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-08-16-ade-everthing-as-code/everything-as-code.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-08-16-ade-everthing-as-code/from-none-codify-to-codify.png">
+<meta property="article:published_time" content="2022-08-16T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-22T02:13:11.464Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="敏捷">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据工程">
+<meta property="article:tag" content="软件工程">
+<meta property="article:tag" content="EasySQL">
+<meta property="article:tag" content="数据开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2022/2022-08-16-ade-everthing-as-code/everything-as-code.png">
+
+<link rel="canonical" href="http://brightliao.com/2022/08/16/ade-everthing-as-code/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>敏捷数据工程实践--代码化一切 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-数据">
+
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">39</span></a>
+
+  </li>
+        <li class="menu-item menu-item-机器学习">
+
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
+
+  </li>
+        <li class="menu-item menu-item-敏捷">
+
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-技术与架构">
+
+    <a href="/arch_tech/" rel="section"><i class="fa fa-warehouse fa-fw"></i>技术与架构<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-每日一思">
+
+    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-其他">
+
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">28</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search" style="border-bottom: solid 1px #eee; margin-bottom: 8px;">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">134</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">54</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">145</span></a>
+
+  </li>
+
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/08/16/ade-everthing-as-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          敏捷数据工程实践--代码化一切
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-16 20:00:00" itemprop="dateCreated datePublished" datetime="2022-08-16T20:00:00+08:00">2022-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-22 10:13:11" itemprop="dateModified" datetime="2022-08-22T10:13:11+08:00">2022-08-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/08/16/ade-everthing-as-code/" class="post-meta-item leancloud_visitors" data-flag-title="敏捷数据工程实践--代码化一切" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p><a href="/2022/08/10/agile-data-engineering-practices/">前文</a>讨论了敏捷数据工程实践的相关概念。有哪些具体的敏捷数据工程实践呢？本文将分享“代码化一切”的实践。</p>
+<p><img data-src="/attaches/2022/2022-08-16-ade-everthing-as-code/everything-as-code.png" alt="Everything as code" /></p>
+<h2 id="代码化xx"><a class="markdownIt-Anchor" href="#代码化xx"></a> 代码化XX</h2>
+<p>在应用软件开发中，“代码化一切”被讨论得很多。常见的代码化XX有：</p>
+<span id="more"></span>
+<ul>
+<li>配置即代码（Configuration as code）：将配置文件放入代码仓库进行管理，可以实现配置修改的可追溯性。</li>
+<li><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/zh-cn/radar/techniques/infrastructure-as-code">基础设施即代码（Infrastructure as code）</a>：将基础设施需要的通用能力抽象出来，以便可以用代码来定义基础设施。然后将基础设施代码放入代码仓库进行管理，可实现随时可重建的基础设施。通常借助一些工具实现，比如<code>Kubernetes</code>支持用<code>yaml</code>文件代码来定义基于容器的基础设施，<code>Terraform</code>支持用<code>yaml</code>文件代码定义各类基础设施，并通过插件来支持几乎所有的基础设施提供商（如本地服务器、AWS/GCP/Azure云服务等）。</li>
+<li><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/radar/techniques/pipelines-as-code">流水线即代码（Pipeline as code）</a>：避免通过持续集成工具（如Jenkins）的<code>UI</code>上的复杂配置来定义流水线，而是通过代码来定义持续集成流水线。早在2016年就在Thoughtworks的技术雷达上提出，后来得到了各种主流的持续集成工具的支持。比如Jenkins支持用Groovy代码来定义流水线，GitHub Actions/GitLab/Circle CI/Travis CI等支持用<code>yaml</code>代码来定义流水线。</li>
+</ul>
+<p>除了这些，还有更多的“代码化XX”实践，比如：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/radar/techniques/observability-as-code">微服务的可观察性即代码（observability as code）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/radar/techniques/security-policy-as-code">安全策略即代码（Security policy as code）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.thoughtworks.com/radar/techniques/diagrams-as-code">图表即代码（Diagrams as code）</a></li>
+<li>…</li>
+</ul>
+<h2 id="代码化的优势"><a class="markdownIt-Anchor" href="#代码化的优势"></a> 代码化的优势</h2>
+<p>从上面这些“代码化XX”中，我们可以看到一个趋势，似乎我们正在尝试把“一切”代码化。为什么“代码化”这么有吸引力？</p>
+<p>这要追溯到开发人员日常工作方式中。作为一个程序员，开发人员每天做得最多的事情是写代码，最习惯最熟练的工作也是写代码。通过一个熟悉的集成开发环境（IDE）或者文本编辑器，开发人员可以高效的编写、调试代码并完成工作。</p>
+<p>正由于此，现在市场上有大量成熟的帮助开发人员写代码的工具。它们大都支持了数量众多的快捷键，可辅助编写代码的智能代码提示，语法检查等等对代码编写非常友好的功能。开发人员还往往会根据自己的习惯对这些工具进行配置，以便达到最高的编码效率。</p>
+<p>不难看出，正是由于这些工作方式，所以开发人员会更希望以代码化的方式来工作，这也就推动了“代码化一切”这样的工程思想的发展。</p>
+<p>除了可以高效编辑之外，代码化之后还能获得这样一些好处：</p>
+<ul>
+<li>可追踪变更历史记录：开发人员有成熟的代码版本控制工具可用于记录每一次修改内容、修改人、修改时间、注释等。如果有必要，还可以比较任意两个版本的差异。对于诊断问题而言，这无疑是非常高效的。</li>
+<li>可回退到任一版本：由于待开发的功能往往非常逻辑复杂，因此，常常会隐藏一些问题在交付的软件中。如果实现了“代码化”，则可根据需要随时回退到某一个无问题的版本。</li>
+<li>可融入开发人员的日常开发实践：代码化之后，可以更容易的融入到开发团队的日常实践中，比如代码评审Code Review</li>
+</ul>
+<h2 id="非代码化工作方式"><a class="markdownIt-Anchor" href="#非代码化工作方式"></a> 非代码化工作方式</h2>
+<p>如果没有“代码化”，情况会怎样呢？“代码化”的反面常常体现为：</p>
+<ul>
+<li>开发人员通过一个可视化程序设计器辅助进行开发，通常通过拖拽完成</li>
+<li>开发人员通过一个复杂的可视化配置界面，通过提供大量配置来完成开发</li>
+</ul>
+<p>此类工具通常给人一种低门槛高效率进行软件开发的错觉，但是深入使用之后，开发人员往往会觉得开发过程很痛苦且效率也很低。</p>
+<p>在用户界面应用程序开发中，可视化程序设计器被广泛用于所见即所得的界面开发。这一开发方式看上去很美好，但是一旦应用程序逻辑比较复杂之后，常常由于难以调试，无法支持重构且修改成本特别高而降低开发效率。业界将这一反模式称为Smart UI。提供这一开发方式的程序设计器，一般也不会提供代码，开发人员自然也无法享受到代码化之后获得的版本控制能力，难以进行代码评审、历史回溯、版本回滚等。</p>
+<p>通过提供一个复杂配置界面来辅助开发是另一种非代码化的形式。这种方式常常将原本通过简单的代码可以实现的功能，复杂化为一个长长的配置。开发人员不得不去理解每一个配置的意义，配置间的逻辑关系，然后配置一个特别长的且无法纳入版本控制的配置。</p>
+<p>当然，此类工具也有其价值，对于简单场景的开发工作，它们确实可以帮助开发人员快速完成开发。</p>
+<h2 id="非代码化工具的代码化支持"><a class="markdownIt-Anchor" href="#非代码化工具的代码化支持"></a> “非代码化”工具的代码化支持</h2>
+<p>虽然“非代码化”不是一个好的实践，但是市面上很多此类工具往代码化的方向多走了一步，从而使得这一情况得到改善。比如，很多开发工具提供了代码导出的功能，使得开发人员具备了基于代码库进行程序管理的能力（如ant design landing）。另一些工具可以直接连接到代码库，所有的修改都可以保存到代码库中（如Databricks）。还有一些工具，虽然没有提供导出代码的功能，但是却提供了完善的API来获取或者更新配置，开发人员可以利用这样的API间接实现代码化的工作方式（如AWS提供了完善的API来配置各类资源）。</p>
+<p>有代码化能力的程序设计器是一种推荐的开发工具。它不仅可以提供低门槛，同时也兼具了代码化的优势。如果此类工具可以提供一些方式使得开发人员可以进行自定义的抽象和封装，那就更好了。</p>
+<p><img data-src="/attaches/2022/2022-08-16-ade-everthing-as-code/from-none-codify-to-codify.png" alt="From none codification to codification" /></p>
+<h2 id="数据开发中的代码化"><a class="markdownIt-Anchor" href="#数据开发中的代码化"></a> 数据开发中的“代码化”</h2>
+<p>数据开发中，我们一般要面对这样几类开发资源：基础设施、安全配置、ETL代码、ETL任务配置、数据流水线、运维脚本、业务注释等。</p>
+<p>事实上，这些资源均可以很容易的被“代码化”。</p>
+<p><strong>基础设施</strong>可以通过Terraform进行代码化。如果整个系统运行在类似Kubernetes这样的容器平台上，也可以Kubernetes提供的YAML来定义基础设施。</p>
+<p><strong>安全配置</strong>代码化常常需要一定的开发成本，一般可借助于各类安全管理应用提供的API进行代码化。一个推荐的做法如下。首先根据具体的应用场景设计安全管理模型，并据此模型定义（较少的）配置项，然后提供一个程序读取这些配置，并根据安全管理模型生成安全管理工具提供的API所对应的数据，最后调用安全管理工具提供的API完成安全配置的应用。</p>
+<p><strong>ETL</strong>一般以代码的形式存在，大部分的数据开发工具都提供了功能，使得开发者可以用SQL的来开发ETL。但是只有SQL常常难以满足开发需求，比如，我们很难在SQL中发送HTTP请求、打印日志或断点调试。这里可以推荐Thoughtworks开源的<a target="_blank" rel="noopener" href="https://github.com/easysql/easy_sql">Easy SQL</a>，它基于SQL进行语法增强，提供了一种方式使得我们可以更加模块化的组织ETL代码，支持了变量、日志打印、断言、调试、外部函数调用等等功能。有了这些功能，我们可以在ETL代码中完成各式各样的工作，无需再结合其他工具使用，也无需自己编写复杂的代码。</p>
+<p><strong>ETL任务配置</strong>是指ETL任务运行时使用的各类配置。很多数据计算引擎都提供了配置接口，以便我们可以根据需要来配置最适当的计算资源、配置程序运行所需的外部文件、配置算法等。这些配置看起来不起眼，但是也非常重要，因为它们常常可以决定程序运行时性能，而这跟ETL任务的运行时间、稳定性紧密相关。所以，将ETL配置纳入到代码库中管理就显得十分必要。Easy SQL提供了一种能力，使得开发人员可以在ETL文件中定义ETL执行所需的配置，是一种支持将配置与对应的代码放在一起的好的实践。</p>
+<p><strong>数据流水线</strong>常常以一种“非代码化”的方式进行开发。很多调度工具都提供了界面，使得我们可以通过拖拽及配置来完成流水线的开发。比如阿里的Dataworks，Azure的ADF等。以“非代码化”的方式开发流水线的灵活性很差且无法享受到版本控制的优势。一些开源工具提供了代码化能力，比如受到很多数据开发人员喜爱的Airflow，它支持用python代码来定义数据流水线，然后根据流水线定义进行可视化展示。对开发人员更友好的方式是，提供一种自动管理数据流水线的机制，这样开发人员就无需编写流水线了。这是可能的，事实上，完全可以编写一个程序，解析出ETL代码中的输入输出表，然后根据这些信息自动提取ETL间的依赖关系，接着根据这些依赖关系就可以自动生成数据流水线了。</p>
+<p><strong>运维脚本</strong>常常以代码的形式呈现，但是很多数据工具希望将此类脚本纳入工具内部管理。这容易让我们丧失代码化的能力，因为它总是鼓励我们将此类代码配置到工具的UI界面里（可以想象一下在Jenkins还不支持用Groovy编写CI/CD流水线时的使用方式）。</p>
+<p><strong>业务注释</strong>是另一类可以考虑代码化的资源。很多团队将此类信息纳入到一个名为元数据管理的应用中进行管理。元数据管理应用通常可以提供一些基于自然语言的搜索能力，而且可以提供友好的界面展示。这是其优势，但是对于此类信息的维护，就不得不在元数据管理应用中完成。这常常带来另一些问题。比如，当我们重建某些数据库表时，元数据管理应用无法将原来的元数据迁移到新表。还比如，元数据管理应用常常无法提供完善的数据版本管理功能，从而使得我们无法进行版本追溯及回滚。如果将此类业务注释放到代码库中进行管理，就可以享受到代码化的优势，并且，通过调用元数据管理应用的API可以此元数据同步到元数据管理应用，从而我们也能享受到元数据管理应用提供的搜索即友好的数据展示的能力。</p>
+<p>当然，实际项目中可能还有其他一些没有提到的资源类型，这里不在于为所有资源列举代码化方案，而是更多的提供一种代码化一切的建议。当我们发现团队正在以一种非代码化的方式进行数据开发时，可能需要思考有没有什么好的方案可以转变为代码化的方式。这将给我们的开发带来非常多的好处。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文讨论了数据开发中的一个重要敏捷实践–代码化一切。结合敏捷软件开发过程，我们分析了代码化一切的实践所带来的好处，并分析了与代码化相反的做法的缺点。最后，结合数据开发的实际情况，将数据开发过程中涉及的各类资源进行了分类，并为每一类资源提供了代码化的建议。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/08/10/agile-data-engineering-practices/" rel="bookmark">敏捷数据工程实践</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/08/22/ade-code-reusing/" rel="bookmark">敏捷数据工程实践--基于代码的复用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/01/10/ade-ci-cd-per-etl/" rel="bookmark">敏捷数据工程实践--以ETL为单位的CI和CD</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/05/04/a-new-etl-language-easy-sql/" rel="bookmark">A New ETL Language -- Easy SQL</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/05/16/a-guide-to-write-elegant-etl/" rel="bookmark">A Guide to Write Elegant ETL</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%8F%E6%8D%B7/" rel="tag"><i class="fa fa-tag"></i> 敏捷</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 数据工程</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 软件工程</a>
+              <a href="/tags/easysql/" rel="tag"><i class="fa fa-tag"></i> EasySQL</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> 数据开发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/10/agile-data-engineering-practices/" rel="prev" title="敏捷数据工程实践">
+      <i class="fa fa-chevron-left"></i> 敏捷数据工程实践
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/22/ade-code-reusing/" rel="next" title="敏捷数据工程实践--基于代码的复用">
+      敏捷数据工程实践--基于代码的复用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%8C%96xx"><span class="nav-number">1.</span> <span class="nav-text"> 代码化XX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%8C%96%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">2.</span> <span class="nav-text"> 代码化的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E4%BB%A3%E7%A0%81%E5%8C%96%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text"> 非代码化工作方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E4%BB%A3%E7%A0%81%E5%8C%96%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BB%A3%E7%A0%81%E5%8C%96%E6%94%AF%E6%8C%81"><span class="nav-number">4.</span> <span class="nav-text"> “非代码化”工具的代码化支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text"> 数据开发中的“代码化”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">145</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://taoshu.in/" title="https:&#x2F;&#x2F;taoshu.in&#x2F;" rel="noopener" target="_blank">涛叔（温故知新，笔耕不辍）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">640k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">17:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?43.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'd02db87fc7ceca26100e45febb3b533e',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

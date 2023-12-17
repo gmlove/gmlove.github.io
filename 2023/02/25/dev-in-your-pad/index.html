@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="我在一个机场，背上背着一个沉重的背包，等待在一个长长的队伍中。队伍缓慢地向前挪动，这是奔走在路上的旅客在等待安检的队伍。 每次在这样的时刻，身上背包的重量，都在提醒我需要肩负起的重量。 Mac电脑都用上Arm芯片啦！iPad都出Pro版本啦！基于平板电脑打造一个开发环境它不香么？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Android平板打造一个开发环境">
+<meta property="og:url" content="http://brightliao.com/2023/02/25/dev-in-your-pad/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="我在一个机场，背上背着一个沉重的背包，等待在一个长长的队伍中。队伍缓慢地向前挪动，这是奔走在路上的旅客在等待安检的队伍。 每次在这样的时刻，身上背包的重量，都在提醒我需要肩负起的重量。 Mac电脑都用上Arm芯片啦！iPad都出Pro版本啦！基于平板电脑打造一个开发环境它不香么？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/turn-on-remote-tunnel-access.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/remote-tunnel-link.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/easy-sql-in-browser-vscode.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/add-to-home-screen.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/full-screen-vscode.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/forward-port.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/link-for-forwarded-port.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/install-cli.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/start-server-in-cli.png">
+<meta property="article:published_time" content="2023-02-25T12:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-12T15:16:18.964Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="IDE">
+<meta property="article:tag" content="VSCode">
+<meta property="article:tag" content="开发环境">
+<meta property="article:tag" content="远程开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2023/2023-02-25-dev-in-your-pad/turn-on-remote-tunnel-access.png">
+
+<link rel="canonical" href="http://brightliao.com/2023/02/25/dev-in-your-pad/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>基于Android平板打造一个开发环境 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-数据">
+
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">39</span></a>
+
+  </li>
+        <li class="menu-item menu-item-机器学习">
+
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
+
+  </li>
+        <li class="menu-item menu-item-敏捷">
+
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-技术与架构">
+
+    <a href="/arch_tech/" rel="section"><i class="fa fa-warehouse fa-fw"></i>技术与架构<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-每日一思">
+
+    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-其他">
+
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">28</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search" style="border-bottom: solid 1px #eee; margin-bottom: 8px;">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">134</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">54</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">145</span></a>
+
+  </li>
+
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2023/02/25/dev-in-your-pad/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于Android平板打造一个开发环境
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-02-25 20:00:00" itemprop="dateCreated datePublished" datetime="2023-02-25T20:00:00+08:00">2023-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-12 23:16:18" itemprop="dateModified" datetime="2023-03-12T23:16:18+08:00">2023-03-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" itemprop="url" rel="index"><span itemprop="name">开发环境</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/02/25/dev-in-your-pad/" class="post-meta-item leancloud_visitors" data-flag-title="基于Android平板打造一个开发环境" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>我在一个机场，背上背着一个沉重的背包，等待在一个长长的队伍中。队伍缓慢地向前挪动，这是奔走在路上的旅客在等待安检的队伍。</p>
+<p>每次在这样的时刻，身上背包的重量，都在提醒我需要肩负起的重量。</p>
+<p>Mac电脑都用上Arm芯片啦！iPad都出Pro版本啦！基于平板电脑打造一个开发环境它不香么？</p>
+<span id="more"></span>
+<p>出去旅游，在一处停留，无聊的刷着短视频，心里想着还没写完的代码。打开身边的袋子，里面放着一个趁手的可用于写码的平板，拿出来，展开键盘，放在腿上，现在可以开心的把刚刚想到的思路变成现实了。</p>
+<p>屋里有点闷，效率持续降低。没事，带上你的平板电脑，去公园里面找个椅子坐下，将平板电脑放在腿上，展开键盘，就可以继续写刚刚的代码。</p>
+<p>这些美好的故事，都跟这个轻得如同一本书的平板电脑相关。当然，这台平板电脑里面必须要有一个好用的、能实现与电脑差不多功能的开发环境。</p>
+<p>为了达成这一目标，我探索了很多个方案，最终效果基本达到了预期。免费分享给大家。</p>
+<h2 id="首先是平板电脑的选择"><a class="markdownIt-Anchor" href="#首先是平板电脑的选择"></a> 首先是平板电脑的选择。</h2>
+<p>由于我个人对又贵又封闭的iPad系列没什么好感，当前Android平板也是普遍性能过剩，选择Android系列是一个特别适合我这样的经济适用男的方案。</p>
+<p>平板电脑必须配置一个好用的键盘，要不然打字效率低下，你会快速对它失去兴趣。这方面要首推官方的键盘方案。它不仅与平板电脑适配良好，拥有常用的快捷键，而且手感也常常经过了不错的调教。</p>
+<p>这样一来，选择范围就不多了。因为我们主要使用平板电脑中的开发软件，各个品牌的平板在软件的交互体验上其实没什么差别，根据自己喜好的品牌选择一款即可。</p>
+<p>我选择的是小米平板5Pro，配上官方的磁吸键盘，体验还是挺流畅的。目前发现的唯一瑕疵是，有时候打字太快，空格上字速度跟不上，变成了空格。</p>
+<h2 id="第二步是找到一个方案在平板上可以基本达到与电脑上一致的使用体验"><a class="markdownIt-Anchor" href="#第二步是找到一个方案在平板上可以基本达到与电脑上一致的使用体验"></a> 第二步是找到一个方案，在平板上可以基本达到与电脑上一致的使用体验。</h2>
+<p>在平板上运行一个Ubuntu系统是很多人一开始的想法。</p>
+<p>但是要在平板电脑上运行复杂的开发软件，完成编译、打包等一系列特别消耗电脑性能的操作，平板电脑还是显得有点力不从心。况且，还需要在系统中找到各种Arm版本的软件包才行。</p>
+<p>所以，上面的想法不太靠谱。</p>
+<p>对于开发类的软件，有一个趋势是远端开发。比如开发Java程序常用的Intellij IEDA，就支持了Remote模式。VSCode作为一款基于浏览器技术的开发工具，当然也是原生的很好的支持了远程模式。</p>
+<p>我找到的方案就是基于VSCode远端开发的方案。这种方案不仅可以保持与日常开发几乎相同的体验，而且不会过度依赖平板电脑的性能。唯一的缺点可能是对网络要求有点高，不过，在现在这个5G的时代，这也不是太大的问题。</p>
+<p>只需要简简单单的几步操作即可实现：</p>
+<p>1.在电脑中激活VSCode的远程开发模式<br />
+2.将你的电脑端口开放到互联网上<br />
+3.在平板电脑中启动浏览器，访问上述端口即可</p>
+<h2 id="第三步执行方案绕开阻碍拨云见日"><a class="markdownIt-Anchor" href="#第三步执行方案绕开阻碍拨云见日"></a> 第三步，执行方案，绕开阻碍，拨云见日。</h2>
+<p>对于个人使用，VSCode可以通过激活VSCode的远程开发模式，将VSCode启动为一个服务器（参考文档：<a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/remote/vscode-server">这里</a>）。此时只需要打开浏览器即可访问网页版本的VSCode。</p>
+<p>请注意，我们不能将VSCode启动的服务器作为一个公共服务对外发布，微软有相应的权限说明，见<a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/remote/vscode-server#_can-i-host-the-vs-code-server-as-a-service">这里</a>。如果有这样的需求，可以考虑用<a target="_blank" rel="noopener" href="https://github.com/coder/code-server">CodeServer</a> – 一个完全开源的VSCode --作为替代。</p>
+<p>要使用VSCode进行远程开发，需要先安装VSCode。在<a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">这里</a>可以找到各个平台的VSCode安装包，安装好VSCode之后，打开远程隧道访问即可（期间需要登录Github或者微软的账号）。</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/turn-on-remote-tunnel-access.png" alt="Turn on remote tunnel access" /></p>
+<p>打开远程隧道访问之后，VSCode将提示拷贝浏览器链接。拷贝此链接，并在浏览器中打开即可访问到Web版本的VSCode啦！</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/remote-tunnel-link.png" alt="Remote tunnel link" /></p>
+<p>观察打开的链接，会发现它指向了服务器vscode.dev。这是一个公网的链接，可以直接在平板电脑中打开！</p>
+<p>这说明VSCode已经帮我们解决了将本地端口发布到互联网的问题了！</p>
+<p>实际上，之所以这个功能叫远程隧道访问，是因为VSCode通过搭建隧道服务帮我们进行了网络流量转发。当我们用网页版的VSCode做开发时，连接的是微软的服务器，但实际上这些操作将通过网络隧道转发在本地PC（VSCode服务器）上执行。在此不得不感谢微软为大家准备的免费的网络服务！</p>
+<h2 id="在平板电脑中的开发体验"><a class="markdownIt-Anchor" href="#在平板电脑中的开发体验"></a> 在平板电脑中的开发体验</h2>
+<p>如果直接打开平板电脑中的浏览器访问VSCode，体验确实不佳。可以看到浏览器地址栏占据了大块的面积。使用之后，还会发现不少快捷键和浏览器冲突。</p>
+<p>（下面以打开我最近主要在参与的一个开源项目<a target="_blank" rel="noopener" href="https://github.com/easysql/easy_sql">EasySQL</a>为例。）</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/easy-sql-in-browser-vscode.png" alt="Develop EasySQL in browser" /></p>
+<p>想要有更好的体验，可以将Web版本的VSCode安装为一个桌面应用。在浏览器设置中选择“添加到主屏幕”，然后就可以在桌面看到一个名为<code>Code</code>的应用。</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/add-to-home-screen.png" alt="Add VSCode to home screen" /></p>
+<p>打开此应用，可以看到应用已经全屏了，使用体验也要好很多。</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/full-screen-vscode.png" alt="Full-screen VSCode" /></p>
+<p>有没有什么不足之处呢？也有。试用一段时间下来，我发现下面几点体验还不够好，它们多数来自VSCode远程开发模式以及平板电脑键盘的限制：</p>
+<ul>
+<li>插件需要重新安装（服务器版本与桌面版的VSCode的插件是独立的）</li>
+<li>VSCode服务器版本支持的插件不如桌面版丰富，有一些插件无法支持远程使用或功能有限制，具体可参考<a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/editor/vscode-web#_limitations">这里</a></li>
+<li>远程调试功能无法使用</li>
+<li>小米平板键盘没有F1-F12功能键，有不少快捷键无法直接使用</li>
+<li>小米平板的ESC键被系统绑定为回退按键，要触发常规ESC，需要组合任务按键，容易误操作导致应用退出</li>
+</ul>
+<p>最丝滑好用的要算Web前端开发，JavaScript HTML TypeScript等开发体验良好。</p>
+<p>启动在本地的服务也可以通过添加端口转发在平板电脑访问。</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/forward-port.png" alt="Forward port in VSCode" /></p>
+<p>转发端口之后，点击端口对应的Local Address中的浏览器图标，在弹出窗口中可选择复制链接并在浏览器窗口中打开。</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/link-for-forwarded-port.png" alt="Link for forwarded port" /></p>
+<p>一些脚本语言的开发体验与桌面版也基本没有差异，比如Bash、SQL、Python等。</p>
+<p>由于在VSCode中可以打开远程环境中的Terminal，因此可以用它完成的绝大多数日常工作。</p>
+<p>比如，启动一个服务，绑定到云主机，以便在平板电脑上进行远程调试。<br />
+比如，开启远程桌面，从平板电脑中直接访问远程电脑的桌面。</p>
+<p>等等。</p>
+<p>我个人的试用还算有限，期待感兴趣的小伙伴更深入的使用体验分享！</p>
+<h2 id="附录"><a class="markdownIt-Anchor" href="#附录"></a> 附录</h2>
+<h3 id="在命令行打开远程隧道访问"><a class="markdownIt-Anchor" href="#在命令行打开远程隧道访问"></a> 在命令行打开远程隧道访问</h3>
+<p>如果我们不希望远程开发时，还在本地PC运行着一个消耗资源的VSCode界面，此时可以使用VSCode的命令行工具<code>code</code>启动远程隧道服务。</p>
+<p>安装命令行工具很简单，在VSCode的命令查找界面（用快捷键<code>ctrl/cmd + shift + p</code>打开），输入<code>shell</code>，选择<code>Install 'code' command</code>选项即可安装好。</p>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/install-cli.png" alt="Install cli" /></p>
+<p>完成上述步骤之后，使用如下命令，可一键启动VSCode服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code tunnel --accept-server-license-terms</span><br></pre></td></tr></table></figure>
+<p><img data-src="/attaches/2023/2023-02-25-dev-in-your-pad/start-server-in-cli.png" alt="Start code server from cli" /></p>
+<p>启动之后，在浏览器打开命令显示的链接即可在浏览器中打开VSCode了。</p>
+<h3 id="无法连接外网时"><a class="markdownIt-Anchor" href="#无法连接外网时"></a> 无法连接外网时</h3>
+<p>如果我们的PC无法连接外网，但我们想在同一内网使用平板电脑进行远程开发。（比如，在楼下可连接公司wifi的咖啡馆做开发。）</p>
+<p>此时就没法使用微软帮我们准备好的隧道服务，不过也有解法，此时可以用ssh远程的方式进行远程开发。具体的操作可以参考<a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/remote/ssh">这里</a>。</p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/04/02/next-stage-of-agile/" rel="bookmark">敏捷的下半场</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/ide/" rel="tag"><i class="fa fa-tag"></i> IDE</a>
+              <a href="/tags/vscode/" rel="tag"><i class="fa fa-tag"></i> VSCode</a>
+              <a href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" rel="tag"><i class="fa fa-tag"></i> 开发环境</a>
+              <a href="/tags/%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> 远程开发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/12/usb-wifi-in-linux/" rel="prev" title="在Linux系统中用USB无线网卡连接网络">
+      <i class="fa fa-chevron-left"></i> 在Linux系统中用USB无线网卡连接网络
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/26/wechatgpt/" rel="next" title="微信中的智能助手--WeChatGPT">
+      微信中的智能助手--WeChatGPT <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E6%98%AF%E5%B9%B3%E6%9D%BF%E7%94%B5%E8%84%91%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">1.</span> <span class="nav-text"> 首先是平板电脑的选择。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E6%98%AF%E6%89%BE%E5%88%B0%E4%B8%80%E4%B8%AA%E6%96%B9%E6%A1%88%E5%9C%A8%E5%B9%B3%E6%9D%BF%E4%B8%8A%E5%8F%AF%E4%BB%A5%E5%9F%BA%E6%9C%AC%E8%BE%BE%E5%88%B0%E4%B8%8E%E7%94%B5%E8%84%91%E4%B8%8A%E4%B8%80%E8%87%B4%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C"><span class="nav-number">2.</span> <span class="nav-text"> 第二步是找到一个方案，在平板上可以基本达到与电脑上一致的使用体验。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E6%89%A7%E8%A1%8C%E6%96%B9%E6%A1%88%E7%BB%95%E5%BC%80%E9%98%BB%E7%A2%8D%E6%8B%A8%E4%BA%91%E8%A7%81%E6%97%A5"><span class="nav-number">3.</span> <span class="nav-text"> 第三步，执行方案，绕开阻碍，拨云见日。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%B9%B3%E6%9D%BF%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%BC%80%E5%8F%91%E4%BD%93%E9%AA%8C"><span class="nav-number">4.</span> <span class="nav-text"> 在平板电脑中的开发体验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">5.</span> <span class="nav-text"> 附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80%E8%BF%9C%E7%A8%8B%E9%9A%A7%E9%81%93%E8%AE%BF%E9%97%AE"><span class="nav-number">5.1.</span> <span class="nav-text"> 在命令行打开远程隧道访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E6%B3%95%E8%BF%9E%E6%8E%A5%E5%A4%96%E7%BD%91%E6%97%B6"><span class="nav-number">5.2.</span> <span class="nav-text"> 无法连接外网时</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">145</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://taoshu.in/" title="https:&#x2F;&#x2F;taoshu.in&#x2F;" rel="noopener" target="_blank">涛叔（温故知新，笔耕不辍）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">640k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">17:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?43.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'd3189b6ef2ae0cad83f4fba764932c1d',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

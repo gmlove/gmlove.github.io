@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="/attaches/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/attaches/assets/next/pace-theme-minimal.css">
+  <script src="/attaches/assets/next/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="随着数据在越来越多的企业中被应用，数据技术的发展可谓突飞猛进。不仅基于Hadoop的大数据生态在持续完善，我们也能看到很多新兴的分布式技术如潮水般涌现。以下是来自中国信通院《大数据白皮书（2020年）》整理的大数据技术体系图谱：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="敏捷数据工程实践">
+<meta property="og:url" content="http://brightliao.com/2022/08/10/agile-data-engineering-practices/index.html">
+<meta property="og:site_name" content="Bright LGM&#39;s Blog">
+<meta property="og:description" content="随着数据在越来越多的企业中被应用，数据技术的发展可谓突飞猛进。不仅基于Hadoop的大数据生态在持续完善，我们也能看到很多新兴的分布式技术如潮水般涌现。以下是来自中国信通院《大数据白皮书（2020年）》整理的大数据技术体系图谱：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-08-10-agile-data-engineering-practices/data-tech-stack.png">
+<meta property="og:image" content="http://brightliao.com/attaches/2022/2022-08-10-agile-data-engineering-practices/concepts.png">
+<meta property="article:published_time" content="2022-08-10T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-16T04:14:12.027Z">
+<meta property="article:author" content="Bright LGM">
+<meta property="article:tag" content="敏捷">
+<meta property="article:tag" content="数据">
+<meta property="article:tag" content="数据工程">
+<meta property="article:tag" content="软件工程">
+<meta property="article:tag" content="EasySQL">
+<meta property="article:tag" content="数据开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://brightliao.com/attaches/2022/2022-08-10-agile-data-engineering-practices/data-tech-stack.png">
+
+<link rel="canonical" href="http://brightliao.com/2022/08/10/agile-data-engineering-practices/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>敏捷数据工程实践 | Bright LGM's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88944761-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-88944761-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7438a320b8fb9e84348971d3c0cde17d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <link rel="stylesheet" href="/attaches/assets/next/share.min.css">
+
+<link rel="alternate" href="/atom.xml" title="Bright LGM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Bright LGM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Code speaks.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-数据">
+
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">39</span></a>
+
+  </li>
+        <li class="menu-item menu-item-机器学习">
+
+    <a href="/ml/" rel="section"><i class="fa fa-hand-sparkles fa-fw"></i>机器学习<span class="badge">23</span></a>
+
+  </li>
+        <li class="menu-item menu-item-敏捷">
+
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-技术与架构">
+
+    <a href="/arch_tech/" rel="section"><i class="fa fa-warehouse fa-fw"></i>技术与架构<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-每日一思">
+
+    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-其他">
+
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">28</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>RSS</a>
+
+  </li>
+      <li class="menu-item menu-item-search" style="border-bottom: solid 1px #eee; margin-bottom: 8px;">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">134</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">54</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">145</span></a>
+
+  </li>
+
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/gmlove" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2022/08/10/agile-data-engineering-practices/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          敏捷数据工程实践
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-10 20:00:00" itemprop="dateCreated datePublished" datetime="2022-08-10T20:00:00+08:00">2022-08-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-16 12:14:12" itemprop="dateModified" datetime="2022-08-16T12:14:12+08:00">2022-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/08/10/agile-data-engineering-practices/" class="post-meta-item leancloud_visitors" data-flag-title="敏捷数据工程实践" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>随着数据在越来越多的企业中被应用，数据技术的发展可谓突飞猛进。不仅基于<code>Hadoop</code>的大数据生态在持续完善，我们也能看到很多新兴的分布式技术如潮水般涌现。以下是来自中国信通院<a target="_blank" rel="noopener" href="http://www.caict.ac.cn/kxyj/qwfb/bps/202012/P020210208530851510348.pdf">《大数据白皮书（2020年）》</a>整理的大数据技术体系图谱：</p>
+<p><img data-src="/attaches/2022/2022-08-10-agile-data-engineering-practices/data-tech-stack.png" alt="Data Tech Stack" /></p>
+<span id="more"></span>
+<p>虽然数据技术发展飞快，但是对于做数据开发的我们，整个数据项目开发过程还是很痛苦。我们接触过的客户常常这样抱怨：</p>
+<blockquote>
+<p>搞不懂数据怎么算出来的，反正很复杂…<br />
+数据库里面好几百个SQL，代码都很长…<br />
+经常延迟出数据，流水线总是出问题…</p>
+</blockquote>
+<p>这是什么原因呢？我们发现这常常是由于团队的数据工程实践做得不够好。</p>
+<p>要想能够规模化的实施企业数据项目开发，除了数据技术之外，数据工程实践也得跟上。</p>
+<p>本系列文章尝试结合我们在多个客户的多个数据项目的实践，给大家分享一些行之有效的数据工程实践。</p>
+<h2 id="数据工程"><a class="markdownIt-Anchor" href="#数据工程"></a> 数据工程</h2>
+<p>首先，我们需要了解一下什么是数据工程？</p>
+<p>我们一般理解的工程是以解决实际生活中的复杂问题为目标，通常是以团队为单位进行实施，综合利用各种科学知识及经验解决问题（参考<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/%E5%B7%A5%E7%A8%8B%E5%AD%A6">wiki</a>）。软件工程则是在软件开发领域的工程，它综合利用各类软件构建知识、技术工具及经验来构建复杂软件。</p>
+<p>IEEE将软件工程定义为“将系统化的、规范的、可度量的方法用于软件的开发、运行和维护的过程，即将工程化应用于软件开发中”。</p>
+<p>数据工程是在数据开发这个特定的软件开发领域的软件工程，可以定义为<strong>综合利用各类软件构建知识、数据技术及工具、经验来构建复杂的数据产品</strong>。</p>
+<h3 id="数据技术和数据工程"><a class="markdownIt-Anchor" href="#数据技术和数据工程"></a> 数据技术和数据工程</h3>
+<p>数据技术和数据工程不同。如分布式存储技术、分布式计算技术、HTAP混合事务分析处理技术、OLAP技术等是典型的数据技术。这些技术一般会对应多种工具实现，如Hadoop对分布式存储和计算提供了基础实现、Apache Spark则关注在更通用的分布式计算、Hive基于Hadoop实现了分布式数据库、Clickhouse提供OLAP的一个实现等。数据技术一般关注在某一类场景，并为某一类问题提供解决方案。</p>
+<p>如<a target="_blank" rel="noopener" href="https://www.thoughtworks.com/zh-cn/radar/techniques/data-mesh">Data Mesh数据网格</a>，<a target="_blank" rel="noopener" href="https://www.netapp.com/data-fabric/what-is-data-fabric/">Data Fabric数据编织</a>，以及Thoughtworks雷达上提到的<a target="_blank" rel="noopener" href="https://www.thoughtworks.com/zh-cn/radar/techniques/declarative-data-pipeline-definition">Declarative data pipeilne声明式数据流水线</a>、<a target="_blank" rel="noopener" href="https://www.thoughtworks.com/zh-cn/radar/techniques/production-data-in-test-environments">Production data in test env测试环境中的生产数据（不推荐）</a>等则是关注在数据工程领域（这里，我们把数据架构也纳入广义的数据工程范围）。也有一些专注于数据工程的工具。比如<a target="_blank" rel="noopener" href="https://www.thoughtworks.com/zh-cn/radar/tools/dbt">dbt</a>，它对数据项目代码仓库结构，使用的语言及模板等给出了建议。比如Thoughtworks数据团队开源的<a target="_blank" rel="noopener" href="https://github.com/easysql/easy_sql">Easy SQL</a>，它基于SQL定义了一套方便进行工程化数据开发的ETL开发语言，并提供了相关的库和工具。数据工程更关注在数据开发过程，为团队协作、工作方式、代码维护和管理、软件运行和维护等方面提供（多基于经验的）建议。</p>
+<p>对比两者，可以说，数据技术用于解决某个特定的数据计算或管理问题，而数据工程则综合利用各种不同的数据技术构建有业务价值的产品。</p>
+<p>所以，不难发现，即便数据技术可以为数据开发赋能，但是没有数据工程的指导，也很难让我们更高效的交付数据项目。</p>
+<p>数据技术更像武器，而数据工程则关注在如何打造一支有战斗力的军队。要想打胜仗，光有武器还不够，还需要打造一支训练有素且能征善战的军队。</p>
+<h3 id="数据工具与数据工程"><a class="markdownIt-Anchor" href="#数据工具与数据工程"></a> 数据工具与数据工程</h3>
+<p>数据工具是指可以拿来即用的解决某个数据问题的某个软件。它一般是某种数据工程思想或实践的支持软件（也可以是某种数据技术的实现）。比如上述dbt、EasySQL即为此类工具。</p>
+<p>数据工程思想或实践也可以没有（或者暂时还没有）专门的支持工具（事实上大部分都没有），也可以有很多种不同的支持工具（比如上述声明式数据流水线就有很多中工具支持，如Airflow）。</p>
+<p>数据开发领域的相关工具非常多，本系列文章不打算讨论具体的数据工具，而希望讨论一些行之有效的工作方法，即数据工程实践。</p>
+<h2 id="敏捷数据工程"><a class="markdownIt-Anchor" href="#敏捷数据工程"></a> 敏捷数据工程</h2>
+<p>敏捷软件开发方法已经成为应用软件开发的主流工程方法。有大量团队验证了敏捷方法中推荐的实践的有效性。</p>
+<p>数据开发属于一个特定的软件开发领域，大部分的应用软件开发方法可适用于数据开发，敏捷软件开发方法自然也不例外。</p>
+<p>那么，是不是直接将敏捷软件开发方法应用于数据开发就是敏捷数据工程呢？这里面还有几个容易引起争议的术语值得讨论。</p>
+<h3 id="敏捷软件开发与敏捷软件工程"><a class="markdownIt-Anchor" href="#敏捷软件开发与敏捷软件工程"></a> 敏捷软件开发与敏捷软件工程</h3>
+<p>我们常常说“敏捷软件开发”而不是“敏捷软件工程”（百度搜索“敏捷软件工程”只有不到100条结果，而搜索“敏捷软件开发”1000万条结果），这是为什么呢？难道敏捷软件开发并不算一套工程方法？</p>
+<p>事实上，从英文搜索结果上看，如果我们搜索”Agile software development”，Google显示有约480万结果，搜索”Agile software engineering”有约140万结果。可见敏捷软件工程的说法也是符合业界认知的，不过相对少一些。</p>
+<p>从<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B">Wiki</a>上关于软件工程的定义来看，软件工程覆盖很广，核心内容包括了需求、设计、测试、维护、工程管理、开发过程、质量等。敏捷被放在了软件开发过程和方法学中讨论。并指出“敏捷软件开发被认为是软件工程的一个重要的发展”。所以，可以认为敏捷软件开发是软件工程方法的一种，这印证了上述“敏捷软件工程”的表述的合理性。</p>
+<p>为什么“敏捷软件开发”的说法更常见？个人猜测这可能是由于：</p>
+<ol>
+<li>
+<p><a target="_blank" rel="noopener" href="https://agilemanifesto.org/">《敏捷宣言》</a>中明确用了”Agile software development”，即敏捷软件开发，这一表述方式，后续的讨论中多直接引用这一表述。</p>
+</li>
+<li>
+<p>在“敏捷软件开发”最开始被提出之时，其主要针对的对象是传统的瀑布式软件开发方法。在当时，这种软件开发方法基本上等同于软件工程，而敏捷希望跟它撇清关系。</p>
+</li>
+<li>
+<p>传统的软件工程方法来源于传统的广泛应用于建筑、工业制造等领域的工程方法，对于过程定义非常严格。而作为一个轻量级的方法，“敏捷软件开发”的表述可能更不容易让我们联想到重量级的工程过程。</p>
+</li>
+</ol>
+<p>事实上，作为一种软件开发领域的新的思潮，敏捷，已越来越多的覆盖了软件开发的各个方面。软件需求管理中的敏捷是用户故事方法，软件项目管理中的敏捷是Scrum，软件开发中的敏捷是极限编程、TDD、DDD、重构等方法，软件测试中的敏捷是敏捷软件测试、测试左移等方法，此外还有敏捷项目估算、敏捷建模等等。所以，我们可以从广义上定义敏捷软件工程，它是指将敏捷的思想用于软件工程。</p>
+<h3 id="敏捷数据工程-2"><a class="markdownIt-Anchor" href="#敏捷数据工程-2"></a> 敏捷数据工程</h3>
+<p>综合上面的讨论，本系列文章将敏捷数据工程定义为将敏捷软件开发的思想应用于数据开发过程得到的一系列工程方法的合集。</p>
+<h2 id="敏捷数据工程实践"><a class="markdownIt-Anchor" href="#敏捷数据工程实践"></a> 敏捷数据工程实践</h2>
+<p>数据工程内容非常广泛，包括数据需求分析、数仓设计、数据开发过程、数据测试、数据运维、数据项目管理等。本系列文章不打算体系化的介绍所有内容，而是希望挑选一些重要的实践方法做一些分享。</p>
+<p>本系列文章将围绕两部分内容进行探讨：</p>
+<ul>
+<li>将成熟的敏捷软件开发实践应用于数据开发过程，可以得到哪些有效的数据工程实践？</li>
+<li>针对数据开发中那些常见的而应用软件开发较少碰到的问题，应用敏捷的思想可以获得哪些好的实践？</li>
+</ul>
+<h2 id="价值观与原则"><a class="markdownIt-Anchor" href="#价值观与原则"></a> 价值观与原则</h2>
+<p>本系列文章探讨的敏捷数据工程实践遵循敏捷宣言中提及的价值观及原则。重申如下。</p>
+<h3 id="价值观"><a class="markdownIt-Anchor" href="#价值观"></a> 价值观</h3>
+<ul>
+<li>个体和互动高于流程和工具</li>
+<li>工作的软件高于详尽的文档</li>
+<li>客户合作高于合同谈判</li>
+<li>响应变化高于遵循计划</li>
+</ul>
+<p>尽管右项有其价值，我们更重视左项的价值。</p>
+<h3 id="原则"><a class="markdownIt-Anchor" href="#原则"></a> 原则</h3>
+<ul>
+<li>我们最重要的目标，是通过持续不断地及早交付有价值的软件使客户满意。</li>
+<li>欣然面对需求变化，即使在开发后期也一样。为了客户的竞争优势，敏捷过程掌控变化。</li>
+<li>经常地交付可工作的软件，相隔几星期或一两个月，倾向于采取较短的周期。</li>
+<li>业务人员和开发人员必须相互合作，项目中的每一天都不例外。</li>
+<li>激发个体的斗志，以他们为核心搭建项目。提供所需的环境和支援，辅以信任，从而达成目标。</li>
+<li>不论团队内外，传递信息效果最好效率也最高的方式是面对面的交谈。</li>
+<li>可工作的软件是进度的首要度量标准。</li>
+<li>敏捷过程倡导可持续开发。责任人、开发人员和用户要能够共同维持其步调稳定延续。</li>
+<li>坚持不懈地追求技术卓越和良好设计，敏捷能力由此增强。</li>
+<li>以简洁为本，它是极力减少不必要工作量的艺术。</li>
+<li>最好的架构、需求和设计出自自组织团队。</li>
+<li>团队定期地反思如何能提高成效，并依此调整自身的举止表现。</li>
+</ul>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文介绍了敏捷数据工程相关的概念，后续文章将基于这些概念，对敏捷数据工程实践展开讨论。作为总结，可以用一张概念图来概括前面的内容。</p>
+<p><img data-src="/attaches/2022/2022-08-10-agile-data-engineering-practices/concepts.png" alt="Concept Graph" /></p>
+
+    </div>
+
+    
+    
+    
+    <div class="share-component" style="text-align: right;" data-sites="wechat,weibo,douban,qq,linkedin,facebook,twitter" data-description="一键分享到微信，微博，QQ，豆瓣"></div>
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/08/16/ade-everthing-as-code/" rel="bookmark">敏捷数据工程实践--代码化一切</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/08/22/ade-code-reusing/" rel="bookmark">敏捷数据工程实践--基于代码的复用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2023/01/10/ade-ci-cd-per-etl/" rel="bookmark">敏捷数据工程实践--以ETL为单位的CI和CD</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/05/04/a-new-etl-language-easy-sql/" rel="bookmark">A New ETL Language -- Easy SQL</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="/2022/05/16/a-guide-to-write-elegant-etl/" rel="bookmark">A Guide to Write Elegant ETL</a></div>
+    </li>
+  </ul>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat.png">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://www.infoq.cn/u/brightliao/publish">
+            <span class="icon">
+              <i class="fas fa-info"></i>
+            </span>
+
+            <span class="label">InfoQ</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%95%8F%E6%8D%B7/" rel="tag"><i class="fa fa-tag"></i> 敏捷</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> 数据</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 数据工程</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 软件工程</a>
+              <a href="/tags/easysql/" rel="tag"><i class="fa fa-tag"></i> EasySQL</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> 数据开发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/28/modelling-examples/" rel="prev" title="DDD建模案例分享">
+      <i class="fa fa-chevron-left"></i> DDD建模案例分享
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/16/ade-everthing-as-code/" rel="next" title="敏捷数据工程实践--代码化一切">
+      敏捷数据工程实践--代码化一切 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text"> 数据工程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8A%80%E6%9C%AF%E5%92%8C%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 数据技术和数据工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text"> 数据工具与数据工程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%8F%E6%8D%B7%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text"> 敏捷数据工程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%8F%E6%8D%B7%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%8E%E6%95%8F%E6%8D%B7%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text"> 敏捷软件开发与敏捷软件工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%8F%E6%8D%B7%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B-2"><span class="nav-number">2.2.</span> <span class="nav-text"> 敏捷数据工程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%8F%E6%8D%B7%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.</span> <span class="nav-text"> 敏捷数据工程实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%A7%82%E4%B8%8E%E5%8E%9F%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text"> 价值观与原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E8%A7%82"><span class="nav-number">4.1.</span> <span class="nav-text"> 价值观</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%88%99"><span class="nav-number">4.2.</span> <span class="nav-text"> 原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Bright LGM"
+      src="/avatar.png">
+  <p class="site-author-name" itemprop="name">Bright LGM</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">145</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gmlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gmlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat.png" title="WeChat → &#x2F;images&#x2F;wechat.png"><i class="fab fa-wechat fa-fw"></i>WeChat</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:gmliao@thoughtworks.com" title="E-Mail → mailto:gmliao@thoughtworks.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://insights.thoughtworks.cn/" title="https:&#x2F;&#x2F;insights.thoughtworks.cn" rel="noopener" target="_blank">Thoughtworks洞见</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.thoughtworks.com/radar" title="https:&#x2F;&#x2F;www.thoughtworks.com&#x2F;radar" rel="noopener" target="_blank">Thoughtworks技术雷达</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://shaogefenhao.com/" title="https:&#x2F;&#x2F;shaogefenhao.com" rel="noopener" target="_blank">少个分号（DDD思考者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bmpi.dev/" title="https:&#x2F;&#x2F;www.bmpi.dev" rel="noopener" target="_blank">马大伟（被动收入实践者）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://maguangguang.xyz/" title="https:&#x2F;&#x2F;maguangguang.xyz&#x2F;" rel="noopener" target="_blank">麻广广（企业架构设计）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.icodebook.com/" title="http:&#x2F;&#x2F;www.icodebook.com&#x2F;" rel="noopener" target="_blank">爱码叔iCodeBook（软件架构）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://liuranthinking.com/" title="https:&#x2F;&#x2F;liuranthinking.com&#x2F;" rel="noopener" target="_blank">刘冉思辨悟（软件测试与质量沉思）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bylinzi.com/" title="https:&#x2F;&#x2F;www.bylinzi.com" rel="noopener" target="_blank">BY林子（关注质量，不止测试）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://qualityfocus.club/yxn" title="https:&#x2F;&#x2F;qualityfocus.club&#x2F;yxn" rel="noopener" target="_blank">于晓南（QualityFocus）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.niezitalk.com/" title="http:&#x2F;&#x2F;www.niezitalk.com&#x2F;" rel="noopener" target="_blank">聂子云（数字化转型咨询）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.kaifengzhang.com/" title="http:&#x2F;&#x2F;www.kaifengzhang.com&#x2F;" rel="noopener" target="_blank">张凯峰（打造影响力）</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://taoshu.in/" title="https:&#x2F;&#x2F;taoshu.in&#x2F;" rel="noopener" target="_blank">涛叔（温故知新，笔耕不辍）</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">蜀ICP备2022013263号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bright LGM</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">640k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">17:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"4BFdbWUTO8tJBOkCpS2nj4df-gzGzoHsz","app_key":"9jxpPRQJh9dxgB6Ndb1HYuKO","security":false,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        // if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="/attaches/assets/next/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/attaches/assets/next/jquery.min.js"></script>
+  <script src="/attaches/assets/next/jquery.fancybox.min.js"></script>
+  <script src="/attaches/assets/next/medium-zoom.min.js"></script>
+  <script src="/attaches/assets/next/lozad.min.js"></script>
+  <script src="/attaches/assets/next/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+  <script src="/attaches/assets/next/jquery.share.min.js"></script>
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js?43.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('/attaches/assets/next/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<link rel="stylesheet" href="/attaches/assets/next/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('/attaches/assets/next/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '75eb53812430d581cd14',
+      clientSecret: '5f50853e9d5be69ddc4094d7ec896fc6e0f9f14b',
+      repo        : 'gmlove.github.io',
+      owner       : 'gmlove',
+      admin       : ['gmlove'],
+      id          : 'daba68d69d3807bb04710b534db4f34a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -141,7 +141,7 @@
   </li>
         <li class="menu-item menu-item-数据">
 
-    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">36</span></a>
+    <a href="/data/" rel="section"><i class="fa fa-table fa-fw"></i>数据<span class="badge">39</span></a>
 
   </li>
         <li class="menu-item menu-item-机器学习">
@@ -151,22 +151,22 @@
   </li>
         <li class="menu-item menu-item-敏捷">
 
-    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">14</span></a>
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">19</span></a>
 
   </li>
-        <li class="menu-item menu-item-技术">
+        <li class="menu-item menu-item-技术与架构">
 
-    <a href="/tech/" rel="section"><i class="fa fa-quidditch fa-fw"></i>技术<span class="badge">10</span></a>
+    <a href="/arch_tech/" rel="section"><i class="fa fa-warehouse fa-fw"></i>技术与架构<span class="badge">19</span></a>
 
   </li>
-        <li class="menu-item menu-item-架构">
+        <li class="menu-item menu-item-每日一思">
 
-    <a href="/arch/" rel="section"><i class="fa fa-warehouse fa-fw"></i>架构<span class="badge">9</span></a>
+    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-其他">
 
-    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">25</span></a>
+    <a href="/other/" rel="section"><i class="fa fa-wave-square fa-fw"></i>其他<span class="badge">28</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -185,17 +185,17 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">109</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">134</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">49</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">54</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">133</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">145</span></a>
 
   </li>
 
@@ -249,6 +249,334 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/03/08/new-ways-to-manage-memory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/08/new-ways-to-manage-memory/" class="post-title-link" itemprop="url">内存管理的新思路</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-08 20:00:00" itemprop="dateCreated datePublished" datetime="2020-03-08T20:00:00+08:00">2020-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-19 22:38:10" itemprop="dateModified" datetime="2023-06-19T22:38:10+08:00">2023-06-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/03/08/new-ways-to-manage-memory/" class="post-meta-item leancloud_visitors" data-flag-title="内存管理的新思路" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
+<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
+<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/08/new-ways-to-manage-memory/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/01/05/DDD-in-pipeline-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/05/DDD-in-pipeline-code/" class="post-title-link" itemprop="url">用DDD思想来编写Pipeline</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-05 20:00:00" itemprop="dateCreated datePublished" datetime="2020-01-05T20:00:00+08:00">2020-01-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-19 22:37:59" itemprop="dateModified" datetime="2023-06-19T22:37:59+08:00">2023-06-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ddd/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ddd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/01/05/DDD-in-pipeline-code/" class="post-meta-item leancloud_visitors" data-flag-title="用DDD思想来编写Pipeline" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>作为我们使用最广泛的CI/CD工具Jenkins，它对于<code>Pipeline as Code</code>的支持却并不能算友好。在多个项目中使用之后，我发现它存在的主要问题有：</p>
+<ul>
+<li>Groovy语言的学习成本</li>
+<li>调试低效</li>
+<li>灵活性差</li>
+</ul>
+<p>Groovy语言相对而言还是比较小众的。其设计为一种动态类型的语言，这给编译器、IDE的类型推断带来了困难，从而导致较弱的自动代码提示。除此之外，由于Groovy可以在没有歧义的情况下省略括号和行尾分号，并且如果最后一个参数是一个闭包则可以将其写在函数调用之后，这就导致了相对比较怪异的语法出现。比如，刚接触Groovy的人可能不太能一下子理解下面这段代码的工作原理：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a(<span class="number">1</span>) &#123;</span><br><span class="line">    something(<span class="number">123</span>)</span><br><span class="line">    someother <span class="attr">id:</span> <span class="number">1</span>, <span class="attr">message:</span> <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/05/DDD-in-pipeline-code/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/22/its-harder-to-go-downhill/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/12/22/its-harder-to-go-downhill/" class="post-title-link" itemprop="url">上山容易下山难</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-22 20:00:00" itemprop="dateCreated datePublished" datetime="2019-12-22T20:00:00+08:00">2019-12-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-19 22:37:46" itemprop="dateModified" datetime="2023-06-19T22:37:46+08:00">2023-06-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">TDD</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/12/22/its-harder-to-go-downhill/" class="post-meta-item leancloud_visitors" data-flag-title="上山容易下山难" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>昨天和项目组的几个小伙伴去爬山。这次爬山坐标深圳梧桐山。从西北门进山，我们沿着蜿蜒的公路一路而上，历时三小时登顶。下山时不想原路返回，故意选了另一条路。从山上往下看，这条路陡峭得很。不过，对于几个血气方刚的男性，这条路正好。因为大家都觉得上山太简单不过瘾，想挑战一下高难度。于是我们一致同意换路而行。我们走的这条路就是凌云道。</p>
+<p>说起凌云道这条路，真是名副其实。它不仅几乎呈垂直高度下降，而且台阶较窄仅有半脚宽。路两边树丛虽然茂盛，但是都不高大，山下的情形总是能进入眼帘。我一向有点恐高，在这垂直高度近1千米地方往下看，还真是心里有点慌。刚开始下山，小伙伴们见此山势，纷纷停下脚步拍照。得几张无P图片如下，大家可以感受一下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/22/its-harder-to-go-downhill/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1005,351 +1333,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2015/12/08/pitfall-jasmin-any/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2015/12/08/pitfall-jasmin-any/" class="post-title-link" itemprop="url">jasmine.any之坑</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2015-12-08 23:29:47" itemprop="dateCreated datePublished" datetime="2015-12-08T23:29:47+08:00">2015-12-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-19 22:35:18" itemprop="dateModified" datetime="2023-06-19T22:35:18+08:00">2023-06-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2015/12/08/pitfall-jasmin-any/" class="post-meta-item leancloud_visitors" data-flag-title="jasmine.any之坑" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any(&#123;premitive type&#125;)</code>，可以考虑使用<code>anything()</code></p>
-<p>坑位：使用<code>toHaveBeenCalledWith</code>测试函数被调用时的参数。</p>
-<p>当参数列表太长（如：<code>func(p1, p2, p3)&#123;...&#125;</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2015/12/08/pitfall-jasmin-any/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/hadoop-auth-4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/02/hadoop-auth-4/" class="post-title-link" itemprop="url">Hadoop安全认证机制 （四）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-12-02 23:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T23:00:00+08:00">2019-12-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-19 22:33:13" itemprop="dateModified" datetime="2023-06-19T22:33:13+08:00">2023-06-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/12/02/hadoop-auth-4/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （四）" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>15k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>24 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>系列文章：</p>
-<ul>
-<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
-<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
-<li><a href="/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
-</ul>
-<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
-<h2 id="hive"><a class="markdownIt-Anchor" href="#hive"></a> <code>hive</code></h2>
-<p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
-<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/02/hadoop-auth-4/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/11/11/hadoop-auth-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/11/hadoop-auth-3/" class="post-title-link" itemprop="url">Hadoop安全认证机制 （三）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-11 20:00:00" itemprop="dateCreated datePublished" datetime="2019-11-11T20:00:00+08:00">2019-11-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-19 22:33:10" itemprop="dateModified" datetime="2023-06-19T22:33:10+08:00">2023-06-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/11/11/hadoop-auth-3/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （三）" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>16k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>26 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>系列文章：</p>
-<ul>
-<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
-<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
-</ul>
-<p>前面的文章中我们分析了Hadoop安全机制中用到的协议及相关源代码实现，这一篇文章我们主要来看看如何搭建一套安全的Hadoop集群。</p>
-<p>简单起见，我们这里的集群所有的组件将运行在同一台机器上。对于keytab的配置，我们也从简，只配置一个kerberos的service账号供所有服务使用。</p>
-<h2 id="建立测试用例"><a class="markdownIt-Anchor" href="#建立测试用例"></a> 建立测试用例</h2>
-<p>TDD是敏捷最重要的实践之一，可以有效的帮助我们确定目标，验证目标，它可以带领我们走得又快又稳。跟随TDD的思想，我们先从测试的角度来看这个问题。有了前面的基础知识，假设我们已经有了一套安全的Hadoop集群，那么我们应当可以从集群读写文件，运行MapReduce任务。我们可以编写读写文件的测试用例如下：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/11/hadoop-auth-3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1417,20 +1404,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">145</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1525,12 +1512,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">585k</span>
+    <span title="站点总字数">640k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">16:15</span>
+    <span title="站点阅读时长">17:47</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1661,7 +1648,7 @@
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?41.js"></script>
+<script src="/js/next-boot.js?43.js"></script>
 
 <script src="/js/bookmark.js"></script>
 
