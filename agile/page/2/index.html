@@ -151,7 +151,7 @@
   </li>
         <li class="menu-item menu-item-敏捷">
 
-    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">19</span></a>
+    <a href="/agile/" rel="section"><i class="fa fa-skiing fa-fw"></i>敏捷<span class="badge">20</span></a>
 
   </li>
         <li class="menu-item menu-item-技术与架构">
@@ -161,7 +161,7 @@
   </li>
         <li class="menu-item menu-item-每日一思">
 
-    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">16</span></a>
+    <a href="/daily_thought/" rel="section"><i class="fa fa-quidditch fa-fw"></i>每日一思<span class="badge">17</span></a>
 
   </li>
         <li class="menu-item menu-item-其他">
@@ -185,7 +185,7 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">134</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">136</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -249,6 +249,114 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/10/07/after-reading-of-refactoring-v2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/07/after-reading-of-refactoring-v2/" class="post-title-link" itemprop="url">再读重构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-07 20:00:00" itemprop="dateCreated datePublished" datetime="2019-10-07T20:00:00+08:00">2019-10-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-04 21:50:01" itemprop="dateModified" datetime="2022-09-04T21:50:01+08:00">2022-09-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E9%87%8D%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">重构</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2019/10/07/after-reading-of-refactoring-v2/" class="post-meta-item leancloud_visitors" data-flag-title="再读重构" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>《重构–第二版》在我的书单里面待了好长一段时间了，趁着放假有时间读了一遍。这本书作为我司首席科学家老马的大作，同时又有大熊和林丛羽的翻译加持，值得每个人认真的反复的学习。</p>
+<p>重构作为敏捷实践的精髓之一，在我们这个以敏捷为立身之本的公司里应当属于大家信手拈来的基本技能了。虽然说重构的基本思想长期不过时，但是第一版《重构》毕竟已经是20年前的事情了，20年以来软件开发行业兴起了无数新的编程思想、语言、工具、框架等，现在回过头去看第一版，会发现不仅纸质书籍难以买到，而且知识上也总觉得有点脱节。新版本以JavaScript语言作为示例，重新思考并改进了第一版本中的众多重构手法，结合了多年来一些新的观点和思考，带给了我们一套更为丰富完善的重构体系。</p>
+<p>通读一遍本书，很多让我产生共鸣的地方，同时本书让我对于我们日常的一些实践有了新的看法，对于我们经常讨论的一些问题也有了新的结论。下面想摘录一些重要的观点，并分享几点我的理解，与大家一起学习。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/07/after-reading-of-refactoring-v2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1287,7 +1395,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">136</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1395,12 +1503,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">640k</span>
+    <span title="站点总字数">642k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:47</span>
+    <span title="站点阅读时长">17:50</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1531,7 +1639,7 @@
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?43.js"></script>
+<script src="/js/next-boot.js?44.js"></script>
 
 <script src="/js/bookmark.js"></script>
 

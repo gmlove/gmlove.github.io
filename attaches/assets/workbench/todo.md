@@ -1,3 +1,16 @@
+## dot
+dot generate --explain_by_gpt --organize_by_gpt
+dot run 
+
+
+.dot
+- settings.json
+- settings.local.json
+
+
+dot
+
+
 ## TODO:
 
 - √ pg不能生成报告
