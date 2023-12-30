@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2023-12-24T09:20:26.925Z</updated>
+  <updated>2023-12-30T07:10:27.251Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日一思</title>
+    <link href="http://brightliao.com/2023/12/30/daily-thoughts/"/>
+    <id>http://brightliao.com/2023/12/30/daily-thoughts/</id>
+    <published>2023-12-30T20:00:00.000Z</published>
+    <updated>2023-12-30T07:10:27.251Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-12-30-他不害羞"><a class="markdownIt-Anchor" href="#2023-12-30-他不害羞"></a> 2023-12-30: 他不害羞</h2><p>电梯里，他睁着大眼睛，抬起头，目不转睛地望着旁边的阿姨，一直望着阿姨，一直望着阿姨。我们都看着他，忍不住笑。他突然开始朝着阿姨笑，没有发出声音。阿姨也看向他，看他望了很久，也开始对他笑，“小朋友真可爱！”</p><p>电梯里，几位叔叔阿姨一起同行。电梯门开了，叔叔出电梯了。“叔叔拜拜，叔叔拜拜！”他对着电梯门大声说。电梯门又开了。“阿姨拜拜，阿姨拜拜！”电梯里面进来一个人，阿姨没有下电梯。姥姥说，“阿姨还没到。”</p><p>电梯门开了，我们到了。我们走出电梯。“叔叔拜拜，阿姨拜拜，爷爷奶奶拜拜！”</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-12-30-他不害羞&quot;&gt;&lt;a class=&quot;markdownIt-Anchor</summary>
+      
+    
+    
+    
+    <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>每日一思</title>
@@ -35,6 +57,35 @@
     
     <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
     
+    
+  </entry>
+  
+  <entry>
+    <title>成长</title>
+    <link href="http://brightliao.com/2023/12/24/grow/"/>
+    <id>http://brightliao.com/2023/12/24/grow/</id>
+    <published>2023-12-24T20:00:00.000Z</published>
+    <updated>2023-12-24T13:50:05.881Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>他没有做过数据开发，但是对新技术很有兴趣。项目刚开始，正是需要有能力的开发人员加入的时候，他加入了团队。</p><p>将数据实时接入数据平台可以提升数据导入性能。当前已经有一个实现，但是性能问题很突出。在数据量激增时，延迟会变得很高。他接受了这个挑战。</p><p>“搭建一套环境，重现这个性能问题，应该就能解决。”团队初步确定了思路。数据开发用到了很多技术，Oracle、OGG、Kafka、StreamSet、Kudu等等，对于他而言，都是全新的。</p><span id="more"></span><p>接下来几个晚上，他放弃了很多休息时间，学习，学习，学习…</p><p>环境终于搭建好。他构造了一个测试场景：生成数据，导入各个模块，搜集性能数据。问题重现了出来。他开始研究各个模块的实现原理，并着手调整各个模块的配置，快速的反馈让他很容易验证配置修改的效果。终于找到了症结：之前的配置没对，不能将系统性能发挥出来！</p><p>实时数据接入问题解决之后，他开始转到业务开发。这是一个全新的领域，涉及上游十个以上的复杂系统，数百张数据库表，成千上万个字段。</p><p>接下来几周，他放弃了很多休息时间，学习，学习，学习…</p><p>团队通过内部分享来检验大家的学习成果，他欣然参与到每天的业务分享中来。</p><p>数据建模是一个新的领域，开发工具和编码语言也是新的。他领取了一个相对容易的任务，开始工作。经过几天紧张的适应期之后，他顺利搞定了这个任务。</p><p>感觉还不太过瘾，他想要领取一个复杂的任务。他拿到了一个预估需要2到3周才能做完的任务。抽取模型，复用已有模型，简化代码，重新实现，代码重构，数据验证。他投入到这些新的复杂的开发过程中去。他经常一坐下，便是一上午或者一下午不起身。键盘声有节奏地响起，他一会注视屏幕的左边，一会儿又切换到右边。很少看到他上厕所。</p><p>经过两周以上紧张的工作，他搞定了这个复杂的任务。</p><p>下个月上线，团队准备发布之前的实时数据接入功能。在运行一段时间之后，发现另一个问题：某一个组件会不定时的重启，当数据量激增时，这个重启操作将导致延迟增加20分钟以上，这无法接受。</p><p>他主动调查这个问题。</p><p>离上线时间越来越近，这个问题必须要尽快解决。</p><p>他下载了这个开源组件的代码，并搭建了一套编译环境，根据日志中的报错信息，找到相关代码。他仔细阅读研究这部分代码。代码用了一种异步的方式实现，包含了大量的细节，不易理解。他利用了很多休息时间，学习，学习，学习…</p><p>他发现之前的代码实现上有一个小的缺陷。在服务器压力上升时，客户端不仅没有及时停止发送请求，反而发送了更大量的请求。这进一步加剧了服务器压力。最终服务器丢弃了更多的请求，导致客户端超时重启。</p><p>找到问题根源之后，他提出一个方案：可以在发生超时时，先等待一段小的时间，然后再发起请求。这可以降低服务器压力，从而让系统在负载较高时也不至于失败。</p><p>他实现了这个方案，并验证确实有效。</p><p>“你们真是厉害，开源项目的问题也一起改了。要是别的合作商，肯定不会管这个。”在看到他顺利解决了这个问题之后，客户这样说。</p><p>他很喜欢徒步，经常在结束了一周紧张的工作之后，参与到一些周末徒步活动中。每次周末回来，他的精神状态都不错。</p><p>他也喜欢看书，火车上是他读书的理想场所。每次在火车上同行，总是看到他捧着一本书津津有味的读起来。他也经常分享看过的书。有一本毛主席的警卫写的毛主席回忆录，是他极力推荐给我的。</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;他没有做过数据开发，但是对新技术很有兴趣。项目刚开始，正是需要有能力的开发人员加入的时候，他加入了团队。&lt;/p&gt;
+&lt;p&gt;将数据实时接入数据平台可以提升数据导入性能。当前已经有一个实现，但是性能问题很突出。在数据量激增时，延迟会变得很高。他接受了这个挑战。&lt;/p&gt;
+&lt;p&gt;“搭建一套环境，重现这个性能问题，应该就能解决。”团队初步确定了思路。数据开发用到了很多技术，Oracle、OGG、Kafka、StreamSet、Kudu等等，对于他而言，都是全新的。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="敏捷" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/"/>
+    
+    <category term="心态" scheme="http://brightliao.com/categories/%E6%95%8F%E6%8D%B7/%E5%BF%83%E6%80%81/"/>
+    
+    
+    <category term="agile" scheme="http://brightliao.com/tags/agile/"/>
+    
+    <category term="心态" scheme="http://brightliao.com/tags/%E5%BF%83%E6%80%81/"/>
+    
+    <category term="专业服务" scheme="http://brightliao.com/tags/%E4%B8%93%E4%B8%9A%E6%9C%8D%E5%8A%A1/"/>
     
   </entry>
   
@@ -313,14 +364,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-12-24T09:20:26.409Z</updated>
+    <updated>2023-12-30T07:10:26.659Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="1224-童言"><a class="markdownIt-Anchor" href="#1224-童言"></a> 12.24: 童言</h2><p>“小鸡怎么叫？”“小鸡叽jī叽jī叽jī。”</p><p>“小狗怎么叫？”“汪wàng汪wàng”</p><p>“大公鸡怎么叫？”“咯gé咯gē咯gé。”</p><p>“母鸡怎么叫？”“母鸡咯gé咯gē哒dà。”</p><p>“关guán门啦。”在看了很多遍小兔子乖乖的视频之后，他经常这样说。</p><p>有一次，家里人围坐在一起教他说话，一个人说，“妈妈好棒”，另一个人说，“妈妈好笨”，到他嘴里，最终变成了“妈妈好beng！”</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="1230-他不害羞"><a class="markdownIt-Anchor" href="#1230-他不害羞"></a> 12.30: 他不害羞</h2><p>电梯里，他睁着大眼睛，抬起头，目不转睛地望着旁边的阿姨，一直望着阿姨，一直望着阿姨。我们都看着他，忍不住笑。他突然开始朝着阿姨笑，没有发出声音。阿姨也看向他，看他望了很久，也开始对他笑，“小朋友真可爱！”</p><p>电梯里，几位叔叔阿姨一起同行。电梯门开了，叔叔出电梯了。“叔叔拜拜，叔叔拜拜！”他对着电梯门大声说。电梯门又开了。“阿姨拜拜，阿姨拜拜！”电梯里面进来一个人，阿姨没有下电梯。姥姥说，“阿姨还没到。”</p><p>电梯门开了，我们到了。我们走出电梯。“叔叔拜拜，阿姨拜拜，爷爷奶奶拜拜！”</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;1224-童言&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;1230-他不害羞&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href</summary>
       
     
     
@@ -415,62 +466,6 @@
     
     <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>每日一思</title>
-    <link href="http://brightliao.com/2023/07/02/daily-thoughts/"/>
-    <id>http://brightliao.com/2023/07/02/daily-thoughts/</id>
-    <published>2023-07-02T20:00:00.000Z</published>
-    <updated>2023-07-25T14:07:02.666Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-07-02"><a class="markdownIt-Anchor" href="#2023-07-02"></a> 2023-07-02:</h2><p>去过成都环球中心海洋乐园的人一定会惊叹于这片人造海滩的宏伟，400多米的海岸线竟然硬生生的在一个商场里面给造了出来。海洋乐园前几年是封闭运营，必须买票才能进场到海滩边，我去过几次，发现都是门可罗雀的景象，大概是它的高冷向世人阻挡了它的宏伟。今天带上小孩一起来环球中心闲逛，发现海洋乐园竟然开放了，不用买票就可以走到海滩边。作为一个在环球中心闲逛的游客，看到一层一层卷起的巨浪，听着浪花冲向海滩的哗哗声及沙滩上人们的欢呼声，竟也想买张票下水体验一番了。封闭还是开放？到底要如何选择？</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-07-02&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; hre</summary>
-      
-    
-    
-    
-    <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>突破ChatGPT的知识限制</title>
-    <link href="http://brightliao.com/2023/06/02/chatgpt-long-context/"/>
-    <id>http://brightliao.com/2023/06/02/chatgpt-long-context/</id>
-    <published>2023-06-02T20:00:00.000Z</published>
-    <updated>2023-07-25T14:07:02.666Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见<a href="https://brightliao.com/tags/ai/">这里</a>）。</p><p>从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。</p><p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p><p>ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。</p><p>这是此系列的第六篇，突破ChatGPT的知识限制。</p><p><img data-src="/attaches/2023/2023-06-02-chatgpt-long-context/content.png" alt="文章内容" /></p><span id="more"></span><h2 id="chatgpt的局限性"><a class="markdownIt-Anchor" href="#chatgpt的局限性"></a> ChatGPT的局限性</h2><p><a href="https://brightliao.com/2023/05/25/2023-05-25-chatgpt-rlhf/">上一篇</a>文章我们深入分析了ChatGPT如何结合奖励模型和强化学习算法进行自动优化。 OpenAI开放ChatGPT模型给大家使用，随着大家使用越多，产生的对话就越多，ChatGPT就能自动优化得更智能。</p><p>虽然ChatGPT能力很强，但是其局限性也很明显，对于没有纳入训练数据的知识它是不知道的，从而也没法给出我们期望的回复。但由于我们的日常工作往往要基于大量的ChatGPT不知道的背景知识进行判断和决策，所以很多场景我们也没法简单的通过向ChatGPT提问来得到想要的答案。</p><p>如何突破ChatGPT的知识限制，让ChatGPT具备更强大的能力，以便可以更好的辅助我们完成工作？这就是本文想要讨论的问题。</p><h2 id="扩充chatgpt的知识的方法"><a class="markdownIt-Anchor" href="#扩充chatgpt的知识的方法"></a> 扩充ChatGPT的知识的方法</h2><h3 id="基础模型优化"><a class="markdownIt-Anchor" href="#基础模型优化"></a> 基础模型优化</h3><p>如何让ChatGPT认知到这些复杂的背景知识？最简单的想法是把这些知识整理成文本，制作成数据集，然后让ChatGPT进行模型优化。</p><p>如何优化呢？前面ChatGPT模型训练内容我们分析了ChatGPT类模型的训练过程，分为三个阶段：基础语言模型训练、监督微调及指令微调。其中监督微调及指令微调阶段的数据量小，主要是解决模型的指令跟随问题。如果想在ChatGPT之上加入背景知识，看起来应该在基础语言模型训练阶段实施。</p><p>进行基础语言模型调优理论上是可行的，但是实践时会遇到很多问题。比如：</p><ul><li>如果新数据中存在错误、噪音或不准确的信息，将可能对模型的性能产生负面影响</li><li>使用这些新数据进行训练时，必须要非常小心的调整学习率，否则可能让ChatGPT遗忘之前学习到的通用知识，变得更笨</li><li>基础模型优化可能会影响第二和第三阶段的优化结果，使得ChatGPT没法很好的进行问答</li><li>模型本身太大，进行模型调优需要的计算资源更大，以目前的算力成本来看，很难负担得起</li></ul><p>目前来看，这一方法的可操作性不强。当然，在将来某一天，模型优化到一定程度，或者算力成本降低到一定程度时，也许这一方案也变得可行了。</p><h3 id="长上下文支持"><a class="markdownIt-Anchor" href="#长上下文支持"></a> 长上下文支持</h3><p>另一种扩充ChatGPT知识的方案是想办法增加模型的上下文支持能力。模型支持的上下文越长，表示我们可以输入给模型的内容越多，从而可以让ChatGPT基于更多的背景知识回答问题。</p><p>目前ChatGPT可以支持的上下文长度为4k或16k，而GPT-4支持的上下文长度为8k或32k（参考<a href="https://openai.com/pricing">这里</a>）。</p><p>从前面文章对于ChatGPT原理的分析来看，要想将上下文变长并不是一件容易的事。主要的挑战有：</p><ul><li><strong>显存消耗增长</strong>：由于计算自注意力结果时需要计算并保存所有上下文计算出来的中间结果，增加上下文长度会导致模型需要更多的显存来存储这些中间计算结果。</li><li><strong>计算复杂度增加</strong>：随着上下文长度的增加，每一个训练样本的计算复杂度都会增加，计算时间和计算资源的需求也会增加。</li><li><strong>长期依赖问题</strong>：更长的上下文导致信息在序列中的传播路径更长，这可能导致模型难以捕捉到远距离的依赖关系。</li></ul><p>然而，最重要的可能是并没有如此高质量的数据集供模型训练。特别是针对监督微调及指令微调阶段的数据集。</p><p>有很多分析和研究表明（参考<a href="https://juejin.cn/post/7249173717751087164">这里</a>），如果模型在4k上下文的数据集上面训练，是很难直接让它支持超过4k长度上下文的。具体表现就是模型性能严重下降。这就是所谓的<strong>模型的上下文长度外推能力</strong>。</p><p>目前有一些方法来增强模型的外推能力，如文章<a href="https://juejin.cn/post/7249173717751087164">《语言大模型100K上下文窗口的秘诀》</a>中提到的有：</p><ul><li><strong>ALiBi位置编码</strong>: 分两个阶段进行训练，首先在2K个词元的上下文长度上训练基本模型，然后在更长的上下文（例如65K）上进行微调。对于网络模型，则移除位置正弦嵌入，采用线性偏置注意力代替（通过附加一个与当前词元距离具有比例关系的惩罚来修正查询出来的注意力分数）。</li><li><strong>稀疏注意力机制</strong>：基于并非所有长上下文内容都是相互关联的这一假设，在计算注意力分数时仅考虑部分词元，具体实现有<a href="https://paperswithcode.com/method/sliding-window-attention">滑动窗口技术</a>、<a href="https://arxiv.org/abs/2007.14062">BigBird</a>等</li><li><strong>FlashAttention</strong>：在GPU的注意力层实现时，采用IO更高效的优化手段，以便可以支持快速训练与预测</li><li><strong>多查询注意力</strong>：优化模型中间结果缓存，在推理过程中能够显著加快增量注意力分数的计算</li></ul><p>最近的很多模型更新显示业界大家都在尝试实现更长的上下文支持。如：</p><ul><li>Anthropic在5.11日发布新的Cloude模型，表示支持100K上下文</li><li>OpenAI也在近期更新了GPT-3.5及GPT-4模型的上下文长度支持，分别从4K增加到16K和从8K增加到32K</li><li>国内清华系近期开源的ChatGLM2-6B模型的上下文长度从2K扩展到了32K</li></ul><p>显然，这已经是大模型开发厂商们正在努力的方向。</p><h3 id="基于文档搜索的知识扩充"><a class="markdownIt-Anchor" href="#基于文档搜索的知识扩充"></a> 基于文档搜索的知识扩充</h3><p>长上下文固然可以提高模型的背景知识，但在企业应用中，我们往往拥有海量的背景知识，全部依靠长上下文还是显得力不从心。</p><p>为了支持海量背景知识，可以对比参考我们人类解决问题的方法。一种常见的步骤是：</p><ol><li>查找相关文档，进行大量调研</li><li>汇总各类信息形成基本的解决方案</li><li>执行</li></ol><p>可以发现，即便人类所具有的背景知识也是有限的，人类也可以很好的解决问题。这是因为人可以主动的去查找相关信息，然后汇总形成方案。</p><p>这一思路就是基于搜索的思路，它是目前可操作性更强的方案。</p><p>在ChatGPT类的模型中应用搜索机制就变成：</p><ol><li>将所有知识文档搜集起来，然后拆分为小的文档，比如一篇文档2000字</li><li>对每一篇2000字的小文档进行向量化（采用大语言模型将其编码为向量，并使得这个向量与可能的问题具备较高的相关度），然后存储起来</li><li>在用户提出一个问题之后，将问题采用相同的方式编码为向量</li><li>将问题对应的向量与所有知识小文档向量计算相关度，选出相关度最大的几个文档</li><li>将这些选中的小文档提取出来，构造一个提示语传给大语言模型，让大语言模型根据这些上下文回答问题</li></ol><p><img data-src="/attaches/2023/2023-06-02-chatgpt-long-context/langchain-chatglm.png" alt="ChatGPT文档查询，图片来自：https://github.com/imClumsyPanda/langchain-ChatGLM" /></p><p>目前有很多开源库支持以这样的方式来扩充ChatGPT类模型的知识。比如<a href="https://gpt-index.readthedocs.io/en/latest/">LlamaIndex</a>、<a href="https://docs.langchain.com/docs/use-cases/qa-docs">LangChain</a>等。</p><p>它们的主要特点是：</p><ol><li>支持很多直接可用的经过验证文档向量化模型（如OpenAI的<a href="https://platform.openai.com/docs/guides/embeddings/embedding-models">Ada模型</a>、基于LLAMA的各类开源模型等）</li><li>提供多种方式实现上述第4步中的相关文档查找，比如基于向量存储库、基于树索引等</li><li>提供了一些常见的小文档使用模式及对应的上述第5步中的提示语，比如直接组合小文档的方式，基于每个小文档一步一步优化答案的方式，并行基于每个小文档生成回复然后一次性组合的方式等，详见<a href="https://python.langchain.com/docs/modules/chains/document/">这里</a></li></ol><p>一个简单的用LangChain实现的用例只需要几行代码：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.embeddings.openai <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> CharacterTextSplitter</span><br><span class="line"><span class="keyword">from</span> langchain.llms <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA</span><br><span class="line"><span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> TextLoader</span><br><span class="line"></span><br><span class="line">loader = TextLoader(<span class="string">&quot;path/to/your/long-text-doc&quot;</span>)</span><br><span class="line">documents = loader.load()</span><br><span class="line">text_splitter = CharacterTextSplitter(chunk_size=<span class="number">1000</span>, chunk_overlap=<span class="number">0</span>)</span><br><span class="line">texts = text_splitter.split_documents(documents)</span><br><span class="line"></span><br><span class="line">openai_key = <span class="string">&#x27;...&#x27;</span></span><br><span class="line">embeddings = OpenAIEmbeddings(openai_api_key=openai_key)</span><br><span class="line">docsearch = Chroma.from_documents(texts, embeddings)</span><br><span class="line"></span><br><span class="line">docsearch.similarity_search_with_relevance_scores(<span class="string">&#x27;你的问题&#x27;</span>)</span><br><span class="line"></span><br><span class="line">qa = RetrievalQA.from_chain_type(llm=OpenAI(openai_api_key=openai_key), chain_type=<span class="string">&quot;refine&quot;</span>, retriever=docsearch.as_retriever())</span><br><span class="line"></span><br><span class="line">qa.run(<span class="string">&quot;你的问题&quot;</span>)</span><br></pre></td></tr></table></figure><p>虽然看起来基于搜索的方案是目前给大语言模型注入知识的最佳方案，但实际效果却未也必能达到预期。</p><p>从实现原理来看，有很多因素可以导致效果下降，比如大文档切分时将关键的文本句子拆分为了不合理的小文档，文档搜索漏掉了某些关键的文档，搜索出来的相关但非关键的文档排名更靠前，组合得到的提示语过于简单等。</p><p>事实上，人类在决策时大量还是基于记忆而非搜索的知识的，这部分可能只能通过第一种方式（基础模型优化）才能更好的解决。</p><h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2><p>本文分享了ChatGPT类大语言模型在当下应用时的局限性，并分析了改善的方法。虽然目前大语言模型还远未达到完美，但我们可以看到很多聪明的大脑正在为解决这个问题贡献极具创意的方案，相信不久的将来这些问题都会迎刃而解！</p><p>将来的大语言模型的应用会是怎样的？大胆的猜测一下，大概是每个人一个模型，每个团队一个模型，每个公司一个模型吧，这些大语言模型具备不同程度的背景知识，可以更精准更贴心的帮助我们更智慧的解决问题。</p><p>自ChatGPT发布以来，很多人认为这是一个人类走向通用人工智能的突破，也有一些人认为它其实没什么本质的改进。有很多人对自己的职业发展产生了很深的焦虑感，也有很多人感觉触碰到了科幻世界中的未来，还有很多人觉得又是一个可以好好捞一把的机会。</p><p>也许每个人都有必要去了解一下机器学习技术的原理，这样才能形成对它的理性的认知。</p><p>ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。</p><p>这是此系列的第六篇，突破ChatGPT的知识限制。</p><h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2><ul><li>语言大模型100K上下文窗口的秘诀： <a href="https://juejin.cn/post/7249173717751087164">https://juejin.cn/post/7249173717751087164</a></li><li>Transformer升级之路：7、长度外推性与局部注意力：<a href="https://kexue.fm/archives/9431">https://kexue.fm/archives/9431</a></li><li>Transformer升级之路：8、长度外推性与位置鲁棒性: <a href="https://kexue.fm/archives/9444">https://kexue.fm/archives/9444</a></li><li>Transformer升级之路：9、一种全局长度外推的新思路: <a href="https://kexue.fm/archives/9603">https://kexue.fm/archives/9603</a></li><li>The Secret Sauce behind 100K context window in LLMs: <a href="https://blog.gopenai.com/how-to-speed-up-llms-and-use-100k-context-window-all-tricks-in-one-place-ffd40577b4c">https://blog.gopenai.com/how-to-speed-up-llms-and-use-100k-context-window-all-tricks-in-one-place-ffd40577b4c</a></li><li>What are Embeddings: <a href="https://platform.openai.com/docs/guides/embeddings/what-are-embeddings">https://platform.openai.com/docs/guides/embeddings/what-are-embeddings</a></li><li>FlashAttention: <a href="https://shreyansh26.github.io/post/2023-03-26_flash-attention/">https://shreyansh26.github.io/post/2023-03-26_flash-attention/</a></li><li>Fast Transformer Decoding: One Write-Head is All You Need: <a href="https://arxiv.org/abs/1911.02150">https://arxiv.org/abs/1911.02150</a></li><li>LangChain-Question answering over documents: <a href="https://python.langchain.com/docs/use_cases/question_answering.html">https://python.langchain.com/docs/use_cases/question_answering.html</a></li></ul><!--from: https://markmap.js.org/repl# 突破ChatGPT的知识限制## ChatGPT的局限性### 没有纳入训练数据的知识它是不知道## 扩充ChatGPT的知识的方法### 基础模型优化- 实践时会遇到很多问题, 可操作性不强### 长上下文支持#### 示例- Cloude: 100K- GPT-3.5: 4K -> 16K- GPT-4: 8K -> 32K- ChatGLM2-6B: 2K -> 32K#### 方法- ALiBi位置编码- 稀疏注意力机制- FlashAttention- 多查询注意力### 基于文档搜索的知识扩充- LlamaIndex- LangChain- SemanticKernel-->]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;作为一个一直对AI技术很感兴趣的软件开发工程师，早在深度学习开始火起来的15、16年，我也开始了相关技术的学习。当时还组织了公司内部同样有兴趣的同学一起研究，最终的成果汇集成几次社区中的分享以及几篇学习文章（见&lt;a href=&quot;https://brightliao.com/tags/ai/&quot;&gt;这里&lt;/a&gt;）。&lt;/p&gt;
-&lt;p&gt;从去年OpenAI发布ChatGPT以来，AI的能力再次惊艳了世人。在这样的一个时间节点，重新去学习相关技术显得很有必要。&lt;/p&gt;
-&lt;p&gt;ChatGPT的内容很多，我计划采用一个系列，多篇文章来分享学习我自己学习过程中的一些理解。本系列文章，我将站在一个普通开发人员的角度展开，希望对想了解ChatGPT技术原理的普通开发者们有帮助。&lt;/p&gt;
-&lt;p&gt;ChatGPT本身就具备很丰富的知识，所以ChatGPT自身实际上就是一个很好的学习渠道，我也将借助ChatGPT来学习ChatGPT。&lt;/p&gt;
-&lt;p&gt;这是此系列的第六篇，突破ChatGPT的知识限制。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/attaches/2023/2023-06-02-chatgpt-long-context/content.png&quot; alt=&quot;文章内容&quot; /&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="machine-learning" scheme="http://brightliao.com/categories/machine-learning/"/>
-    
-    <category term="ChatGPT" scheme="http://brightliao.com/categories/machine-learning/chatgpt/"/>
-    
-    
-    <category term="AI" scheme="http://brightliao.com/tags/ai/"/>
-    
-    <category term="机器学习" scheme="http://brightliao.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="ML" scheme="http://brightliao.com/tags/ml/"/>
-    
-    <category term="ChatGPT" scheme="http://brightliao.com/tags/chatgpt/"/>
     
   </entry>
   
