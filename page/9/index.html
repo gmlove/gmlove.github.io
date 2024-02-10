@@ -253,7 +253,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/hadoop-auth-4/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/09/10/easy-statistical-test/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -267,7 +267,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/12/02/hadoop-auth-4/" class="post-title-link" itemprop="url">Hadoop安全认证机制 （四）</a>
+            <a href="/2020/09/10/easy-statistical-test/" class="post-title-link" itemprop="url">统计基础-区间估计</a>
         </h2>
 
         <div class="post-meta">
@@ -277,7 +277,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-12-02 23:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T23:00:00+00:00">2019-12-02</time>
+              <time title="创建时间：2020-09-10 20:00:00" itemprop="dateCreated datePublished" datetime="2020-09-10T20:00:00+00:00">2020-09-10</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -296,16 +296,12 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/12/02/hadoop-auth-4/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （四）" title="阅读次数">
+            <span id="/2020/09/10/easy-statistical-test/" class="post-meta-item leancloud_visitors" data-flag-title="统计基础-区间估计" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -317,14 +313,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>15k</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>24 分钟</span>
+              <span>6 分钟</span>
             </span>
 
         </div>
@@ -336,19 +332,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>系列文章：</p>
-<ul>
-<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
-<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
-<li><a href="/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
-</ul>
-<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
-<h2 id="hive"><a class="markdownIt-Anchor" href="#hive"></a> <code>hive</code></h2>
-<p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
-<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
+          <p>如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？</p>
+<p>要回答这里的问题，我们需要有一些基本的统计学知识。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/12/02/hadoop-auth-4/#more" rel="contents">
+              <a class="btn" href="/2020/09/10/easy-statistical-test/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -372,7 +360,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/sense-of-ceremony-and-professional-service/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/09/13/correlation-analysis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -386,7 +374,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/12/02/sense-of-ceremony-and-professional-service/" class="post-title-link" itemprop="url">仪式感与专业服务</a>
+            <a href="/2020/09/13/correlation-analysis/" class="post-title-link" itemprop="url">你的收入和支出相关吗？</a>
         </h2>
 
         <div class="post-meta">
@@ -396,7 +384,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-12-02 20:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T20:00:00+00:00">2019-12-02</time>
+              <time title="创建时间：2020-09-13 20:00:00" itemprop="dateCreated datePublished" datetime="2020-09-13T20:00:00+00:00">2020-09-13</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -411,12 +399,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/12/02/sense-of-ceremony-and-professional-service/" class="post-meta-item leancloud_visitors" data-flag-title="仪式感与专业服务" title="阅读次数">
+            <span id="/2020/09/13/correlation-analysis/" class="post-meta-item leancloud_visitors" data-flag-title="你的收入和支出相关吗？" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -428,14 +420,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
+              <span>2.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -447,12 +439,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>进门，双手帮你脱下外套，挂起。洗发师双手提起一件深色防水的丝质套衫，你伸手，换上。拿起腰带，穿过你的腰，两圈，拉扯一次，拉扯两次，系紧。抹平套衫肩部，拉住袖口，拉扯一次，拉扯两次，展平。拉住套衫底部，拉扯一次，拉扯两次，拉齐。</p>
-<p>将你带到洗头处，你看到一个用于平躺的台面，台面上深色皮质的垫子分为两部分，前面部分可拆卸，上放一块叠起来的深蓝色毛巾，毛巾上面是一朵颜色鲜艳的大荷花。在台面前部放有一个与垫子同样深色皮质的单人凳。</p>
-<p>洗发师伸开右手，将你迎向凳子坐下。介绍洗头服务：我是37号洗发师为您服务，本次洗发50分钟，请您稍坐，我去准备毛巾和其他用品。</p>
+          <p>你的收入和支出相关吗？这是一个很难回答的问题，表面上看好像是相关的，因为随着收入的增长，有了更多的钱，当然可以有更多的支出。但是，很多公司一年才涨一次工资，在这一年内，物价却可能在不停上涨，是不是收入没涨而每个月的支出都在涨呢？</p>
+<p>如何来回答是否相关的问题呢？用统计学的方法，我们可以把收入和支出当做两个变量来对待，然后用数学的方法衡量其相关性。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/12/02/sense-of-ceremony-and-professional-service/#more" rel="contents">
+              <a class="btn" href="/2020/09/13/correlation-analysis/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -476,7 +467,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/22/its-harder-to-go-downhill/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/11/26/data-work-roles/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -490,7 +481,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/12/22/its-harder-to-go-downhill/" class="post-title-link" itemprop="url">上山容易下山难</a>
+            <a href="/2020/11/26/data-work-roles/" class="post-title-link" itemprop="url">那些数据工作中的角色</a>
         </h2>
 
         <div class="post-meta">
@@ -500,7 +491,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-12-22 20:00:00" itemprop="dateCreated datePublished" datetime="2019-12-22T20:00:00+00:00">2019-12-22</time>
+              <time title="创建时间：2020-11-26 20:00:00" itemprop="dateCreated datePublished" datetime="2020-11-26T20:00:00+00:00">2020-11-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -515,16 +506,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">TDD</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/12/22/its-harder-to-go-downhill/" class="post-meta-item leancloud_visitors" data-flag-title="上山容易下山难" title="阅读次数">
+            <span id="/2020/11/26/data-work-roles/" class="post-meta-item leancloud_visitors" data-flag-title="那些数据工作中的角色" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -536,14 +523,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>3.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -555,11 +542,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>昨天和项目组的几个小伙伴去爬山。这次爬山坐标深圳梧桐山。从西北门进山，我们沿着蜿蜒的公路一路而上，历时三小时登顶。下山时不想原路返回，故意选了另一条路。从山上往下看，这条路陡峭得很。不过，对于几个血气方刚的男性，这条路正好。因为大家都觉得上山太简单不过瘾，想挑战一下高难度。于是我们一致同意换路而行。我们走的这条路就是凌云道。</p>
-<p>说起凌云道这条路，真是名副其实。它不仅几乎呈垂直高度下降，而且台阶较窄仅有半脚宽。路两边树丛虽然茂盛，但是都不高大，山下的情形总是能进入眼帘。我一向有点恐高，在这垂直高度近1千米地方往下看，还真是心里有点慌。刚开始下山，小伙伴们见此山势，纷纷停下脚步拍照。得几张无P图片如下，大家可以感受一下：</p>
+          <p>数据工作中有一类非常重要的角色，那就是数据分析师。为什么这个角色这么重要呢？因为要是没有这个角色，不管一个企业中的数据管理做得有多么好都没用，无法带来实际的价值。这些数据就像是藏在海底的石油，而数据分析师就是开采海底石油的油井设备。要想让石油用于汽车轮船，需要通过这些设备先将海底的石油抽取出来，经过加工处理，提纯。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/12/22/its-harder-to-go-downhill/#more" rel="contents">
+              <a class="btn" href="/2020/11/26/data-work-roles/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
