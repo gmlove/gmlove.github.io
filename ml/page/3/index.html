@@ -253,7 +253,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/06/21/dive-into-gan/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/12/02/dl-workshop-rnn-and-lstm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -267,7 +267,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/06/21/dive-into-gan/" class="post-title-link" itemprop="url">深入探索生成对抗网络（一）</a>
+            <a href="/2016/12/02/dl-workshop-rnn-and-lstm/" class="post-title-link" itemprop="url">RNN和LSTM从理论到实践一：词向量</a>
         </h2>
 
         <div class="post-meta">
@@ -277,7 +277,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-06-21 10:55:19" itemprop="dateCreated datePublished" datetime="2017-06-21T10:55:19+00:00">2017-06-21</time>
+              <time title="创建时间：2016-12-02 15:22:40" itemprop="dateCreated datePublished" datetime="2016-12-02T15:22:40+00:00">2016-12-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -297,7 +297,7 @@
             </span>
 
           
-            <span id="/2017/06/21/dive-into-gan/" class="post-meta-item leancloud_visitors" data-flag-title="深入探索生成对抗网络（一）" title="阅读次数">
+            <span id="/2016/12/02/dl-workshop-rnn-and-lstm/" class="post-meta-item leancloud_visitors" data-flag-title="RNN和LSTM从理论到实践一：词向量" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -309,14 +309,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>15k</span>
+              <span>17k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>24 分钟</span>
+              <span>29 分钟</span>
             </span>
 
         </div>
@@ -328,14 +328,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第一部分。</p>
-<h2 id="生成对抗网络介绍"><a class="markdownIt-Anchor" href="#生成对抗网络介绍"></a> 生成对抗网络介绍</h2>
-<h3 id="什么是生成对抗网络"><a class="markdownIt-Anchor" href="#什么是生成对抗网络"></a> 什么是生成对抗网络？</h3>
-<p>从这个名称来看，我们可以了解到，这个网络是用一种对抗方法去生成数据的。和其他的机器学习模型相比，生成对抗网络里面最炫酷的理念莫过于给机器学习引入了对抗。纵观地球上的生物们的成长和发展路线就会发现，物竞天择，适者生存，万物都是在不停的和其他事物对抗中成长和发展的。生成对抗网络就像我们玩下面的格斗游戏一样，我们的学习过程就是，不断找其他对手对抗，在对抗中积累经验，提升自己的技能。</p>
-<p><img src="/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png" alt="fighting game" /></p>
+          <p>本文试图帮大家理解深度学习中的两大重要而基础的模型RNN和LSTM，并结合google在udacity上面关于深度学习的课程习题进行实践。</p>
+<p>近两年深度学习在自然语言处理领域取得了非常好的效果。深度学习模型可以直接进行端到端的训练，而无须进行传统的特征工程过程。在自然语言处理方面，主要的深度学习模型是RNN，以及在RNN之上扩展出来的LSTM。RNN和LSTM也可以广泛用于其他序列处理和预测的机器学习任务。</p>
+<p>RNN，全称为Recurrent Neural Network，常译为循环神经网络，也可译为时序递归神经网络，很多人直接简称为递归神经网络。另一个模型Recursive Neural Network，缩写也同样是RNN，译为递归神经网络。递归神经网络是时序递归神经网络的超集，它还可以包括在结构上有递归的神经网络，但是结构递归神经网络使用远没有时序递归神经网络使用得广泛。</p>
+<p>本文包括四个部分：</p>
+<ul>
+<li>NLP</li>
+<li>单词的向量表示</li>
+<li>RNN和LSTM理论介绍</li>
+<li>训练一个LSTM模型</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/06/21/dive-into-gan/#more" rel="contents">
+              <a class="btn" href="/2016/12/02/dl-workshop-rnn-and-lstm/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -359,7 +364,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/06/26/dive-into-gan-continued/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/12/11/dl-workshop-rnn-and-lstm-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -373,7 +378,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/06/26/dive-into-gan-continued/" class="post-title-link" itemprop="url">深入探索生成对抗网络（二）</a>
+            <a href="/2016/12/11/dl-workshop-rnn-and-lstm-1/" class="post-title-link" itemprop="url">RNN和LSTM从理论到实践二：RNN和LSTM模型</a>
         </h2>
 
         <div class="post-meta">
@@ -383,7 +388,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-06-26 19:19:38" itemprop="dateCreated datePublished" datetime="2017-06-26T19:19:38+00:00">2017-06-26</time>
+              <time title="创建时间：2016-12-11 02:12:51" itemprop="dateCreated datePublished" datetime="2016-12-11T02:12:51+00:00">2016-12-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -400,14 +405,10 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/machine-learning/machine-learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
-                </span>
             </span>
 
           
-            <span id="/2017/06/26/dive-into-gan-continued/" class="post-meta-item leancloud_visitors" data-flag-title="深入探索生成对抗网络（二）" title="阅读次数">
+            <span id="/2016/12/11/dl-workshop-rnn-and-lstm-1/" class="post-meta-item leancloud_visitors" data-flag-title="RNN和LSTM从理论到实践二：RNN和LSTM模型" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -419,14 +420,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>11k</span>
+              <span>15k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>19 分钟</span>
+              <span>25 分钟</span>
             </span>
 
         </div>
@@ -438,11 +439,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第二部分。第一部分在<a href="../21/dive-into-gan/">这里</a></p>
-<p>上一篇中介绍了GAN的历史及发展，详细研究了GAN的模型和思想，还用tensorflow做了一个简单的实现。这一部分我们将看看GAN模型在近两年取得的进步以及未来可能的发展方向。同时，我们还会在上一次实现过的GAN例子上面，做一些增强，让GAN可以根据我们的需要来生成图像。</p>
+          <p>本文是上一篇文章『RNN和LSTM从理论到实践一：词向量』的续文。</p>
+<p>上一章中，我们了解了词向量怎样训练，并跟随udacity上面的例子及问题动手实践了Skip Gram和CBOW模型训练算法。我们也顺带看了一下什么是语言模型，以及基础的n-gram模型是怎么样的。这次我们将要在前面的基础上，看看RNN和LSTM模型是什么样的，并将和大家一起动手去实现一个LSTM模型用于生成一个句子。</p>
+<h2 id="我们的问题"><a class="markdownIt-Anchor" href="#我们的问题"></a> 我们的问题</h2>
+<p>先来看我们的问题，然后让我们带着问题，来学习RNN和LSTM。这次我们要解决的问题是：如何生成一个看起来还不错的句子。</p>
+<p>我们之前介绍过n-gram，那么我们能不能使用n-gram去预测单词，进而生成一个句子呢？我们可以使用频率统计来计算n-gram的语言模型：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2017/06/26/dive-into-gan-continued/#more" rel="contents">
+              <a class="btn" href="/2016/12/11/dl-workshop-rnn-and-lstm-1/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
