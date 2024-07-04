@@ -253,7 +253,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/10/07/after-reading-of-refactoring-v2/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/09/05/programmers-tolerance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -267,7 +267,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/10/07/after-reading-of-refactoring-v2/" class="post-title-link" itemprop="url">再读重构</a>
+            <a href="/2019/09/05/programmers-tolerance/" class="post-title-link" itemprop="url">技术人员的耐心和包容心</a>
         </h2>
 
         <div class="post-meta">
@@ -277,7 +277,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-10-07 20:00:00" itemprop="dateCreated datePublished" datetime="2019-10-07T20:00:00+00:00">2019-10-07</time>
+              <time title="创建时间：2019-09-05 20:00:00" itemprop="dateCreated datePublished" datetime="2019-09-05T20:00:00+00:00">2019-09-05</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -292,16 +292,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E9%87%8D%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">重构</span></a>
+                  <a href="/categories/%E5%BF%83%E6%80%81/" itemprop="url" rel="index"><span itemprop="name">心态</span></a>
                 </span>
             </span>
 
           
-            <span id="/2019/10/07/after-reading-of-refactoring-v2/" class="post-meta-item leancloud_visitors" data-flag-title="再读重构" title="阅读次数">
+            <span id="/2019/09/05/programmers-tolerance/" class="post-meta-item leancloud_visitors" data-flag-title="技术人员的耐心和包容心" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -313,14 +309,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.3k</span>
+              <span>2.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -332,12 +328,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>《重构–第二版》在我的书单里面待了好长一段时间了，趁着放假有时间读了一遍。这本书作为我司首席科学家老马的大作，同时又有大熊和林丛羽的翻译加持，值得每个人认真的反复的学习。</p>
-<p>重构作为敏捷实践的精髓之一，在我们这个以敏捷为立身之本的公司里应当属于大家信手拈来的基本技能了。虽然说重构的基本思想长期不过时，但是第一版《重构》毕竟已经是20年前的事情了，20年以来软件开发行业兴起了无数新的编程思想、语言、工具、框架等，现在回过头去看第一版，会发现不仅纸质书籍难以买到，而且知识上也总觉得有点脱节。新版本以JavaScript语言作为示例，重新思考并改进了第一版本中的众多重构手法，结合了多年来一些新的观点和思考，带给了我们一套更为丰富完善的重构体系。</p>
-<p>通读一遍本书，很多让我产生共鸣的地方，同时本书让我对于我们日常的一些实践有了新的看法，对于我们经常讨论的一些问题也有了新的结论。下面想摘录一些重要的观点，并分享几点我的理解，与大家一起学习。</p>
+          <p>有一个技术人员都知道的很老的段子。如果我们想将一个技术论坛搞火起来，那么我们只需要发一篇帖子“php是世界上最好的语言”。虽然是很老的段子，但是就算现在我也常常能听到有人谈论它。很有意思的一个段子。</p>
+<p>不仅仅是在论坛中，在我们日常的团队合作中，其实也常常有这样的事情。回忆一下我的 Code Review 活动，是不是常常有某一行代码引起了大家的广泛讨论，把整个会议给“搞火”了？大家可能就一个问题讨论很久，争执不下。</p>
+<p>对于这样的讨论，如果大家能心平气和，互相理解，可能能较快的达成一致。但是事实上常常会出现这样的情况，双方争论很久争执不下，后来可能有人说，“这你都不知道啊”，或者“这我理解不了，你这里明显有问题”，或者“你说的都好，我用我的方式”，或者“你这里就明显是在<code>#define true=false</code>”等等。在这样的讨论中，我们比较容易情绪化（可能没有情绪化这么严重，但是这里姑且先用这个词），最后本来应该心平气和的讨论演变成了针对某个个人的互怼，或者直接拒绝交流。一旦情况变成这样，那么不仅讨论效率会大大下降，而且常常在相互心中产生芥蒂，影响后面的高效合作。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/07/after-reading-of-refactoring-v2/#more" rel="contents">
+              <a class="btn" href="/2019/09/05/programmers-tolerance/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1279,7 +1275,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/03/08/new-ways-to-manage-memory/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/02/06/DRL-the-problem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1293,7 +1289,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/03/08/new-ways-to-manage-memory/" class="post-title-link" itemprop="url">内存管理的新思路</a>
+            <a href="/2020/02/06/DRL-the-problem/" class="post-title-link" itemprop="url">强化学习入门</a>
         </h2>
 
         <div class="post-meta">
@@ -1303,7 +1299,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-03-08 20:00:00" itemprop="dateCreated datePublished" datetime="2020-03-08T20:00:00+00:00">2020-03-08</time>
+              <time title="创建时间：2020-02-06 20:00:00" itemprop="dateCreated datePublished" datetime="2020-02-06T20:00:00+00:00">2020-02-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1318,16 +1314,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
+                  <a href="/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/03/08/new-ways-to-manage-memory/" class="post-meta-item leancloud_visitors" data-flag-title="内存管理的新思路" title="阅读次数">
+            <span id="/2020/02/06/DRL-the-problem/" class="post-meta-item leancloud_visitors" data-flag-title="强化学习入门" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1339,14 +1335,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.9k</span>
+              <span>7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
+              <span>12 分钟</span>
             </span>
 
         </div>
@@ -1358,12 +1354,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
-<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
-<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
+          <p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
+<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
+<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
+<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
+<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/03/08/new-ways-to-manage-memory/#more" rel="contents">
+              <a class="btn" href="/2020/02/06/DRL-the-problem/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1562,7 +1560,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">642k</span>
+    <span title="站点总字数">643k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
