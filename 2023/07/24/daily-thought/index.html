@@ -23,15 +23,15 @@
     var CONFIG = {"hostname":"brightliao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="7.8: 堵车 早上 8 点 10 分，还是按照以往的时间出门。昨晚下了雨，路上湿漉漉的。 拐过一个路口，来到了另一条路，通过这条路可以上主路。 刚一进这条路就发现已经堵得水泄不通了。车子只能慢慢蠕行，每次挪动不到一个车位的距离，挪动之后就得停下来等。 经过无数次挪动之后，看到了一点进度，到了一家吃串串的餐饮店。我感觉不太对，虽然以前这条路也堵，但是今天也太离谱了。以往三分钟的路今天竟然走了十五">
+  <meta name="description" content="7.9: 简单架构 有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表 问题：中间过程太多，流程太长，涉及技">
 <meta property="og:type" content="article">
 <meta property="og:title" content="每日一思">
 <meta property="og:url" content="http://brightliao.com/2023/07/24/daily-thought/index.html">
 <meta property="og:site_name" content="Bright LGM&#39;s Blog">
-<meta property="og:description" content="7.8: 堵车 早上 8 点 10 分，还是按照以往的时间出门。昨晚下了雨，路上湿漉漉的。 拐过一个路口，来到了另一条路，通过这条路可以上主路。 刚一进这条路就发现已经堵得水泄不通了。车子只能慢慢蠕行，每次挪动不到一个车位的距离，挪动之后就得停下来等。 经过无数次挪动之后，看到了一点进度，到了一家吃串串的餐饮店。我感觉不太对，虽然以前这条路也堵，但是今天也太离谱了。以往三分钟的路今天竟然走了十五">
+<meta property="og:description" content="7.9: 简单架构 有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表 问题：中间过程太多，流程太长，涉及技">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-07-24T20:00:00.000Z">
-<meta property="article:modified_time" content="2024-07-08T05:00:24.905Z">
+<meta property="article:modified_time" content="2024-07-09T01:30:26.646Z">
 <meta property="article:author" content="Bright LGM">
 <meta name="twitter:card" content="summary">
 
@@ -288,7 +288,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-08 05:00:24" itemprop="dateModified" datetime="2024-07-08T05:00:24+00:00">2024-07-08</time>
+                <time title="修改时间：2024-07-09 01:30:26" itemprop="dateModified" datetime="2024-07-09T01:30:26+00:00">2024-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,7 +313,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>251</span>
+              <span>272</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -332,13 +332,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="78-堵车"><a class="markdownIt-Anchor" href="#78-堵车"></a> 7.8: 堵车</h2>
-<p>早上 8 点 10 分，还是按照以往的时间出门。昨晚下了雨，路上湿漉漉的。</p>
-<p>拐过一个路口，来到了另一条路，通过这条路可以上主路。</p>
-<p>刚一进这条路就发现已经堵得水泄不通了。车子只能慢慢蠕行，每次挪动不到一个车位的距离，挪动之后就得停下来等。</p>
-<p>经过无数次挪动之后，看到了一点进度，到了一家吃串串的餐饮店。我感觉不太对，虽然以前这条路也堵，但是今天也太离谱了。以往三分钟的路今天竟然走了十五分钟！</p>
-<p>没办法，到这里也只能硬着头皮继续往前挪了。经历了差不多半小时，终于才上了主路。</p>
-<p>上主路的路口，有一个交警正在指挥交通。</p>
+        <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="79-简单架构"><a class="markdownIt-Anchor" href="#79-简单架构"></a> 7.9: 简单架构</h2>
+<p>有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表</p>
+<p>问题：中间过程太多，流程太长，涉及技术组件也多；为保证上述流程可稳定工作，还需要额外的 iceberg 表小文件优化程序；iceberg 表中的数据没有使用，无必要且存在浪费</p>
+<p>优化：直接使用一个 spark 程序消费 kafka 数据写入 hive 表。</p>
 
     </div>
 
@@ -463,7 +460,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#78-%E5%A0%B5%E8%BD%A6"><span class="nav-number">1.</span> <span class="nav-text"> 7.8: 堵车</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#79-%E7%AE%80%E5%8D%95%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text"> 7.9: 简单架构</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
