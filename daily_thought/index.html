@@ -284,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-09 01:30:27" itemprop="dateModified" datetime="2024-07-09T01:30:27+00:00">2024-07-09</time>
+                <time title="修改时间：2024-07-10 02:20:25" itemprop="dateModified" datetime="2024-07-10T02:20:25+00:00">2024-07-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,7 +309,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>537</span>
+              <span>787</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -328,7 +328,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-09-简单架构"><a class="markdownIt-Anchor" href="#2024-07-09-简单架构"></a> 2024-07-09: 简单架构</h2>
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-10-团队会议"><a class="markdownIt-Anchor" href="#2024-07-10-团队会议"></a> 2024-07-10: 团队会议</h2>
+<p>早上项目团队站立会议。由于团队分散在各地，会议在线上进行。由团队成员轮流组织，今天轮到一位小伙伴，他在团队中已经工作了几个月了。</p>
+<p>打开项目看板，他开始组织大家更新自己的工作。</p>
+<p>站会按照角色及人员的顺序进行。点击人员列表，他开始找人。</p>
+<p>“A 来更新一下吧”，他说道。等了一会，没人回应。会议室陷入了安静。“A 下项目了”，终于有人接着补充道。</p>
+<p>鼠标移动到 B 旁边，停下来，犹豫着要不要往前。时间过去了约有 10 秒钟，终于跳过了 B。B 是一个非当前角色的人。接着，他找到了正确的人，会议继续。</p>
+<h2 id="2024-07-09-简单架构"><a class="markdownIt-Anchor" href="#2024-07-09-简单架构"></a> 2024-07-09: 简单架构</h2>
 <p>有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表</p>
 <p>问题：中间过程太多，流程太长，涉及技术组件也多；为保证上述流程可稳定工作，还需要额外的 iceberg 表小文件优化程序；iceberg 表中的数据没有使用，无必要且存在浪费</p>
 <p>优化：直接使用一个 spark 程序消费 kafka 数据写入 hive 表。</p>
