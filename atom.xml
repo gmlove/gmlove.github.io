@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2024-07-10T02:20:25.362Z</updated>
+  <updated>2024-07-12T05:10:28.185Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="http://brightliao.com/2024/07/08/daily-thoughts/"/>
     <id>http://brightliao.com/2024/07/08/daily-thoughts/</id>
     <published>2024-07-08T20:00:00.000Z</published>
-    <updated>2024-07-10T02:20:25.362Z</updated>
+    <updated>2024-07-12T05:10:28.185Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-10-团队会议"><a class="markdownIt-Anchor" href="#2024-07-10-团队会议"></a> 2024-07-10: 团队会议</h2><p>早上项目团队站立会议。由于团队分散在各地，会议在线上进行。由团队成员轮流组织，今天轮到一位小伙伴，他在团队中已经工作了几个月了。</p><p>打开项目看板，他开始组织大家更新自己的工作。</p><p>站会按照角色及人员的顺序进行。点击人员列表，他开始找人。</p><p>“A 来更新一下吧”，他说道。等了一会，没人回应。会议室陷入了安静。“A 下项目了”，终于有人接着补充道。</p><p>鼠标移动到 B 旁边，停下来，犹豫着要不要往前。时间过去了约有 10 秒钟，终于跳过了 B。B 是一个非当前角色的人。接着，他找到了正确的人，会议继续。</p><h2 id="2024-07-09-简单架构"><a class="markdownIt-Anchor" href="#2024-07-09-简单架构"></a> 2024-07-09: 简单架构</h2><p>有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表</p><p>问题：中间过程太多，流程太长，涉及技术组件也多；为保证上述流程可稳定工作，还需要额外的 iceberg 表小文件优化程序；iceberg 表中的数据没有使用，无必要且存在浪费</p><p>优化：直接使用一个 spark 程序消费 kafka 数据写入 hive 表。</p><h2 id="2024-07-08-堵车"><a class="markdownIt-Anchor" href="#2024-07-08-堵车"></a> 2024-07-08: 堵车</h2><p>早上 8 点 10 分，还是按照以往的时间出门。昨晚下了雨，路上湿漉漉的。</p><p>拐过一个路口，来到了另一条路，通过这条路可以上主路。</p><p>刚一进这条路就发现已经堵得水泄不通了。车子只能慢慢蠕行，每次挪动不到一个车位的距离，挪动之后就得停下来等。</p><p>经过无数次挪动之后，看到了一点进度，到了一家吃串串的餐饮店。我感觉不太对，虽然以前这条路也堵，但是今天也太离谱了。以往三分钟的路今天竟然走了十五分钟！</p><p>没办法，到这里也只能硬着头皮继续往前挪了。经历了差不多半小时，终于才上了主路。</p><p>上主路的路口，有一个交警正在指挥交通。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-12-数据开发的反直觉性字段重命名"><a class="markdownIt-Anchor" href="#2024-07-12-数据开发的反直觉性字段重命名"></a> 2024-07-12: 数据开发的反直觉性：字段重命名</h2><p>小 A 觉得从上游数据源接入的数据字段命名不太合理，于是根据自己的理解将字段名重新映射为了一个新的名字。</p><p>数据 etl 基于这个新名字开发完了。</p><p>客户想要验证这个 etl 的正确性，于是从源系统中提取出明细数据让小 A 进行核对。</p><p>小 A 拿到数据之后，也自己提取了一份明细数据。两边一对比，小 A 就后悔了，因为客户提的明细数据的字段名全部是源系统的字段名，而小 A 则使用的是映射之后的名字。小 A 不得不重新做一次映射。</p><p>小 A 发现数据对不上，于是找到上游系统提数的人沟通。小 A 把自己的实现口径展示给对方看，对方看后，问道：“这个字段是什么？对应源系统的什么字段？”于是，小 A 又不得不去解释字段与原字段的对应关系。</p><p>小 A 感叹：这字段名映射，真不值！</p><h2 id="2024-07-10-团队会议"><a class="markdownIt-Anchor" href="#2024-07-10-团队会议"></a> 2024-07-10: 团队会议</h2><p>早上项目团队站立会议。由于团队分散在各地，会议在线上进行。由团队成员轮流组织，今天轮到一位小伙伴，他在团队中已经工作了几个月了。</p><p>打开项目看板，他开始组织大家更新自己的工作。</p><p>站会按照角色及人员的顺序进行。点击人员列表，他开始找人。</p><p>“A 来更新一下吧”，他说道。等了一会，没人回应。会议室陷入了安静。“A 下项目了”，终于有人接着补充道。</p><p>鼠标移动到 B 旁边，停下来，犹豫着要不要往前。时间过去了约有 10 秒钟，终于跳过了 B。B 是一个非当前角色的人。接着，他找到了正确的人，会议继续。</p><h2 id="2024-07-09-简单架构"><a class="markdownIt-Anchor" href="#2024-07-09-简单架构"></a> 2024-07-09: 简单架构</h2><p>有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表</p><p>问题：中间过程太多，流程太长，涉及技术组件也多；为保证上述流程可稳定工作，还需要额外的 iceberg 表小文件优化程序；iceberg 表中的数据没有使用，无必要且存在浪费</p><p>优化：直接使用一个 spark 程序消费 kafka 数据写入 hive 表。</p><h2 id="2024-07-08-堵车"><a class="markdownIt-Anchor" href="#2024-07-08-堵车"></a> 2024-07-08: 堵车</h2><p>早上 8 点 10 分，还是按照以往的时间出门。昨晚下了雨，路上湿漉漉的。</p><p>拐过一个路口，来到了另一条路，通过这条路可以上主路。</p><p>刚一进这条路就发现已经堵得水泄不通了。车子只能慢慢蠕行，每次挪动不到一个车位的距离，挪动之后就得停下来等。</p><p>经过无数次挪动之后，看到了一点进度，到了一家吃串串的餐饮店。我感觉不太对，虽然以前这条路也堵，但是今天也太离谱了。以往三分钟的路今天竟然走了十五分钟！</p><p>没办法，到这里也只能硬着头皮继续往前挪了。经历了差不多半小时，终于才上了主路。</p><p>上主路的路口，有一个交警正在指挥交通。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2024-07-10-团队会议&quot;&gt;&lt;a class=&quot;markdownIt-Anchor</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2024-07-12-数据开发的反直觉性字段重命名&quot;&gt;&lt;a class=&quot;markdow</summary>
       
     
     
@@ -408,14 +408,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2024-07-10T02:20:24.351Z</updated>
+    <updated>2024-07-12T05:10:26.885Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="710-团队会议"><a class="markdownIt-Anchor" href="#710-团队会议"></a> 7.10: 团队会议</h2><p>早上项目团队站立会议。由于团队分散在各地，会议在线上进行。由团队成员轮流组织，今天轮到一位小伙伴，他在团队中已经工作了几个月了。</p><p>打开项目看板，他开始组织大家更新自己的工作。</p><p>站会按照角色及人员的顺序进行。点击人员列表，他开始找人。</p><p>“A 来更新一下吧”，他说道。等了一会，没人回应。会议室陷入了安静。“A 下项目了”，终于有人接着补充道。</p><p>鼠标移动到 B 旁边，停下来，犹豫着要不要往前。时间过去了约有 10 秒钟，终于跳过了 B。B 是一个非当前角色的人。接着，他找到了正确的人，会议继续。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="712-数据开发的反直觉性字段重命名"><a class="markdownIt-Anchor" href="#712-数据开发的反直觉性字段重命名"></a> 7.12: 数据开发的反直觉性：字段重命名</h2><p>小 A 觉得从上游数据源接入的数据字段命名不太合理，于是根据自己的理解将字段名重新映射为了一个新的名字。</p><p>数据 etl 基于这个新名字开发完了。</p><p>客户想要验证这个 etl 的正确性，于是从源系统中提取出明细数据让小 A 进行核对。</p><p>小 A 拿到数据之后，也自己提取了一份明细数据。两边一对比，小 A 就后悔了，因为客户提的明细数据的字段名全部是源系统的字段名，而小 A 则使用的是映射之后的名字。小 A 不得不重新做一次映射。</p><p>小 A 发现数据对不上，于是找到上游系统提数的人沟通。小 A 把自己的实现口径展示给对方看，对方看后，问道：“这个字段是什么？对应源系统的什么字段？”于是，小 A 又不得不去解释字段与原字段的对应关系。</p><p>小 A 感叹：这字段名映射，真不值！</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;710-团队会议&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;712-数据开发的反直觉性字段重命名&quot;&gt;&lt;a class=&quot;markdownIt-Anc</summary>
       
     
     
