@@ -284,7 +284,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-12 05:10:26" itemprop="dateModified" datetime="2024-07-12T05:10:26+00:00">2024-07-12</time>
+                <time title="修改时间：2024-07-13 13:30:24" itemprop="dateModified" datetime="2024-07-13T13:30:24+00:00">2024-07-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -309,7 +309,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>325</span>
+              <span>275</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -328,13 +328,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="712-数据开发的反直觉性字段重命名"><a class="markdownIt-Anchor" href="#712-数据开发的反直觉性字段重命名"></a> 7.12: 数据开发的反直觉性：字段重命名</h2>
-<p>小 A 觉得从上游数据源接入的数据字段命名不太合理，于是根据自己的理解将字段名重新映射为了一个新的名字。</p>
-<p>数据 etl 基于这个新名字开发完了。</p>
-<p>客户想要验证这个 etl 的正确性，于是从源系统中提取出明细数据让小 A 进行核对。</p>
-<p>小 A 拿到数据之后，也自己提取了一份明细数据。两边一对比，小 A 就后悔了，因为客户提的明细数据的字段名全部是源系统的字段名，而小 A 则使用的是映射之后的名字。小 A 不得不重新做一次映射。</p>
-<p>小 A 发现数据对不上，于是找到上游系统提数的人沟通。小 A 把自己的实现口径展示给对方看，对方看后，问道：“这个字段是什么？对应源系统的什么字段？”于是，小 A 又不得不去解释字段与原字段的对应关系。</p>
-<p>小 A 感叹：这字段名映射，真不值！</p>
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="713-做事"><a class="markdownIt-Anchor" href="#713-做事"></a> 7.13: 做事</h2>
+<p>小 A 在实现一个需求的时候，发现接口文档中的设计不太合理，返回的数据结构不是平台标准的结构。</p>
+<p>如果完全按照文档完成，则需要引入没必要的定制，徒增了复杂性。于是，小 A 按照平台标准结构进行实现。</p>
+<p>需求实现完成之后，小 A 在预定时间之前，提前将接口调用方式发送给下游。</p>
+<p>下游在集成的时候，发现与文档对不上，提出质疑。小 A 与下游沟通，坚持采用平台标准的结构。</p>
+<p>小 A 强调说，之前的文档只是一个设计文档，而不是最终的接口文档。最终的接口文档必须是双方根据实际情况进行实现，双方协调，集成之后，才最终确定的。</p>
+<p>朱熹说，大凡做事底人，多是先其大纲，其他节目可因则因。</p>
 
       
     </div>
@@ -1485,7 +1485,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">644k</span>
+    <span title="站点总字数">645k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
