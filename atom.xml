@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2024-07-13T13:30:26.358Z</updated>
+  <updated>2024-07-15T02:20:26.779Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日一思</title>
+    <link href="http://brightliao.com/2024/07/15/daily-thoughts/"/>
+    <id>http://brightliao.com/2024/07/15/daily-thoughts/</id>
+    <published>2024-07-15T20:00:00.000Z</published>
+    <updated>2024-07-15T02:20:26.779Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-15-晚餐"><a class="markdownIt-Anchor" href="#2024-07-15-晚餐"></a> 2024-07-15: 晚餐</h2><p>晚上，去吃饭。</p><p>走进餐厅，服务员将我们引导到了预先订好的包间。包间内，沿墙一圈贴着气球，有一个位置，上方贴着“happy birthday”字样气球。</p><p>一家人落座。她看看位置，对着我说，“来，你坐这里，气球正下方。”</p><p>刚一落座，蛋糕已送到，一个身穿蓝色制服送餐装的小姑娘提着蛋糕和一个方盒子进来。她打开蛋糕盒，点上蜡烛。接着打开方盒子，原来里面是音响和话筒。拿出话筒，她开始主持吹蜡烛吃蛋糕的仪式。</p><p>生日快乐的音乐响起，房间里面弥漫着温馨的空气。</p><p>还有唱歌的节目，欢快的声音响起。接着是跳舞，小姑娘示意大家一起来。平常几乎不参与这些活动的她，走过去，跟着小姑娘的手势和舞步动起来。她的动作偶尔慢半拍，但总能快速跟上小姑娘的节奏。</p><p>接着，有人提着一捧花送过来，红黄相间的玫瑰里面穿插着一些红色的纸牌。仔细一看原来是彩票。将彩票分给大家一起刮，这里有三十，这里有二十，这里还有三十，最后竟然刮出了 100 块钱。</p><p>大家开始吃饭，快吃完的时候，她说，还有一个礼物。递给我一个红色的盒子。我小心翼翼打开，里面有什么东西快速弹了出来。我赶紧关上盒子，结果还是有不少东西洒了出来。仔细一看，周围都是红红的百元纸币。</p><p>我还记得一件事。晚饭刚开始的时候，她转头向小孩说，“晚上要跟爸爸怎么说？”两岁半的小孩子，咧着嘴，歪着头，说，“爸爸生日快乐！”</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2024-07-15-晚餐&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; </summary>
+      
+    
+    
+    
+    <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>每日一思</title>
@@ -408,14 +430,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2024-07-13T13:30:24.722Z</updated>
+    <updated>2024-07-15T02:20:26.223Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="713-做事"><a class="markdownIt-Anchor" href="#713-做事"></a> 7.13: 做事</h2><p>小 A 在实现一个需求的时候，发现接口文档中的设计不太合理，返回的数据结构不是平台标准的结构。</p><p>如果完全按照文档完成，则需要引入没必要的定制，徒增了复杂性。于是，小 A 按照平台标准结构进行实现。</p><p>需求实现完成之后，小 A 在预定时间之前，提前将接口调用方式发送给下游。</p><p>下游在集成的时候，发现与文档对不上，提出质疑。小 A 与下游沟通，坚持采用平台标准的结构。</p><p>小 A 强调说，之前的文档只是一个设计文档，而不是最终的接口文档。最终的接口文档必须是双方根据实际情况进行实现，双方协调，集成之后，才最终确定的。</p><p>朱熹说，大凡做事底人，多是先其大纲，其他节目可因则因。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="715-晚餐"><a class="markdownIt-Anchor" href="#715-晚餐"></a> 7.15: 晚餐</h2><p>晚上，去吃饭。</p><p>走进餐厅，服务员将我们引导到了预先订好的包间。包间内，沿墙一圈贴着气球，有一个位置，上方贴着“happy birthday”字样气球。</p><p>一家人落座。她看看位置，对着我说，“来，你坐这里，气球正下方。”</p><p>刚一落座，蛋糕已送到，一个身穿蓝色制服送餐装的小姑娘提着蛋糕和一个方盒子进来。她打开蛋糕盒，点上蜡烛。接着打开方盒子，原来里面是音响和话筒。拿出话筒，她开始主持吹蜡烛吃蛋糕的仪式。</p><p>生日快乐的音乐响起，房间里面弥漫着温馨的空气。</p><p>还有唱歌的节目，欢快的声音响起。接着是跳舞，小姑娘示意大家一起来。平常几乎不参与这些活动的她，走过去，跟着小姑娘的手势和舞步动起来。她的动作偶尔慢半拍，但总能快速跟上小姑娘的节奏。</p><p>接着，有人提着一捧花送过来，红黄相间的玫瑰里面穿插着一些红色的纸牌。仔细一看原来是彩票。将彩票分给大家一起刮，这里有三十，这里有二十，这里还有三十，最后竟然刮出了 100 块钱。</p><p>大家开始吃饭，快吃完的时候，她说，还有一个礼物。递给我一个红色的盒子。我小心翼翼打开，里面有什么东西快速弹了出来。我赶紧关上盒子，结果还是有不少东西洒了出来。仔细一看，周围都是红红的百元纸币。</p><p>我还记得一件事。晚饭刚开始的时候，她转头向小孩说，“晚上要跟爸爸怎么说？”两岁半的小孩子，咧着嘴，歪着头，说，“爸爸生日快乐！”</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;713-做事&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;715-晚餐&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#</summary>
       
     
     
@@ -438,28 +460,6 @@
       
       
     <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-07-30-技术卡上的方案&quot;&gt;&lt;a class=&quot;markdownIt-Anc</summary>
-      
-    
-    
-    
-    <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>每日一思</title>
-    <link href="http://brightliao.com/2023/07/17/daily-thoughts/"/>
-    <id>http://brightliao.com/2023/07/17/daily-thoughts/</id>
-    <published>2023-07-17T20:00:00.000Z</published>
-    <updated>2023-07-25T14:07:02.666Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-07-23-天真与成长"><a class="markdownIt-Anchor" href="#2023-07-23-天真与成长"></a> 2023-07-23: 天真与成长</h2><p>以前我们家小孩每次出电梯到时候都要给一起乘电梯的人表达再见，扬起手挥一挥，然后嘴巴里面不停的说着拜拜拜拜。碰到热心的邻居，也会笑着回复他跟他拜拜。他因此收获了无数人的喜欢。我们都说他是小社牛。</p><p>最近出差回来慢慢发现他已经越来越少表现出这样的行为了。</p><p>为什么会这样？可能是因为成长。这几个月是他智力高速发展的几个月，慢慢地他开始与我们能有更多的互动了。他学会了走路，能认识身边的人，还能说几句简单的话，还会自己吃葡萄并把葡萄皮吐出来丢到垃圾桶。他似乎已经开始以一个自主的主体参与世界的活动了。</p><p>随着快速的成长，原来天真的小社牛真的要慢慢变成理性的社会人？当我们成长之后，还有多少儿时的天真可以保留下来？</p><h2 id="2023-07-22-看代码没有信心的时候就去搞懂业务"><a class="markdownIt-Anchor" href="#2023-07-22-看代码没有信心的时候就去搞懂业务"></a> 2023-07-22: 看代码没有信心的时候，就去搞懂业务</h2><p>遗留代码的维护是件令人头疼的事。我们常常要面对多年以前的杂乱无章的代码，它们可能非常长，各类名称可能毫无意义，可能几乎没有文档。</p><p>如果直接从代码入手，妄图从代码中发现真理，那可能要落入一个爬不出去的陷阱。满是细节的代码就像是一片迷雾森林，你在其中绕来绕去也找不到一条清晰的出路。</p><p>换个思路出发会更容易，那就是从业务出发。事先可以完全抛离代码，只是从业务角度去理解当时的需求和目的。业务角度的需求和目的就像是一个个灯塔，可以为我们指引方向，而有了方向，在就不至于迷失在满是细节的迷雾森林。</p><h2 id="2023-07-21-依赖干系人管理"><a class="markdownIt-Anchor" href="#2023-07-21-依赖干系人管理"></a> 2023-07-21: 依赖干系人管理</h2><p>项目里面的干系人可以按照利益相关性和权利大小分为四个象限，对于利益相关度高权利低的人，通常采取的策略是随时告知。</p><p>但如果这些人是你的依赖方，就需要谨慎，因为有可能他们不依赖你，你依赖他们，你的成败需要他们支持，而他们的成败不需要你的支持。</p><p>此时，由于他们可能不关心你的项目，所以告知的意义未必大。你找他们协助，他们有可能善意的提供帮助，但绝没有直接的义务。</p><p>如何处理？一是以各种方式表达感谢搞好关系，二就是上升到利益相关度高权利高的干系人协助处理。</p><h2 id="2023-07-20-食不知味的感觉"><a class="markdownIt-Anchor" href="#2023-07-20-食不知味的感觉"></a> 2023-07-20: 食不知味的感觉</h2><p>酒店的早餐算是十分丰盛了，超过二十种食材随意挑选。然而，最近越来越发现面对这么多丰盛的食物却不知道选哪种。常常随意拿几个，狼吞虎咽下肚，事后竟然连这些美味的味道都回忆不起来了。</p><p>是什么原因？大概是因为早餐太急，想一想，好像很久很久没有一个早上能什么事都不想，什么安排也不做，就仅仅是吃早餐。完全放松下来，认认真真做这件事，细嚼慢咽品味每一粒米饭和每一片蔬菜的味道。</p><h2 id="2023-07-18-从业务入手讲方案"><a class="markdownIt-Anchor" href="#2023-07-18-从业务入手讲方案"></a> 2023-07-18: 从业务入手讲方案</h2><p>当需要为一个复杂系统提供方案时，需要从业务角度理解问题，不要陷入具体细节。抽象的上层业务模型通常是简单而一致的，这就是主线，基于这个主线就可以给出技术上合理的方案。</p><p>财务系统可能涉及几千个科目，每个科目的取数逻辑就是细节，非常多。但是财务统计本身是很简单的，就是简单的求和、取余额等。设计系统时，需要抓住这个主线，避免陷入细节。</p><h2 id="2023-07-17-应对数据开发复杂性有没有更好的方案"><a class="markdownIt-Anchor" href="#2023-07-17-应对数据开发复杂性有没有更好的方案"></a> 2023-07-17: 应对数据开发复杂性有没有更好的方案？</h2><p>DataMesh数据网格的思路是让业务系统开发团队来提供数据产品供下游消费。这些数据产品往往是聚合了很多数据表得到的一个可以隐藏底层复杂性的数据宽表。</p><p>由于这些中间数据产品来自于该系统的开发团队，而他们天然具备对该系统业务和数据的深刻认知，所以维护起来天然是得心应手的。</p><p>对于数据开发团队，他们基于这些中间数据产品去构建集成的数据分析报表。在报表开发过程中可以将知识限定于构建集成报表的范围，不至于扩大到各个复杂的底层系统中。</p><p>经过这样的职责划分，不至于让数据开发团队知识过载，各团队可以各司其职将最终的数据产品构建出来。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-07-23-天真与成长&quot;&gt;&lt;a class=&quot;markdownIt-Ancho</summary>
       
     
     
