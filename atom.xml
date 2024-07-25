@@ -6,7 +6,7 @@
   <link href="http://brightliao.com/atom.xml" rel="self"/>
   
   <link href="http://brightliao.com/"/>
-  <updated>2024-07-17T11:30:27.276Z</updated>
+  <updated>2024-07-25T01:20:25.877Z</updated>
   <id>http://brightliao.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日一思</title>
+    <link href="http://brightliao.com/2024/07/25/daily-thoughts/"/>
+    <id>http://brightliao.com/2024/07/25/daily-thoughts/</id>
+    <published>2024-07-25T20:00:00.000Z</published>
+    <updated>2024-07-25T01:20:25.877Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-25-t恤衫"><a class="markdownIt-Anchor" href="#2024-07-25-t恤衫"></a> 2024-07-25: T恤衫</h2><p>打开衣柜，在叠起来的一摞 T 恤衫里面翻找，一件自己买的，一件公司文化衫，又一件公司文化衫，还有一件公司文化衫。</p><p>穿什么呢？抽出一件背过来叠起的黑色 T 恤，打开一看，是公司文化衫。这一件应该有三年以上了，前面印的 disruptive thinking 及机器人图案已经开裂并快要掉落下来了。</p><p>旧了。算了，换一件吧，我把它放了回去。正准备开始继续找，又犹豫了，还是这件吧，不知道还能穿几回！</p><p>穿上这件文化衫准备出门，在门口的镜子面前停了一下，衣服上面的图案的色彩还是鲜艳的。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2024-07-25-t恤衫&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
+      
+    
+    
+    
+    <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>每日一思</title>
@@ -430,36 +452,14 @@
     <link href="http://brightliao.com/2023/07/24/daily-thought/"/>
     <id>http://brightliao.com/2023/07/24/daily-thought/</id>
     <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2024-07-24T05:00:25.523Z</updated>
+    <updated>2024-07-25T01:20:25.109Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="717-烦恼"><a class="markdownIt-Anchor" href="#717-烦恼"></a> 7.17: 烦恼</h2><p>周末，躺在沙发上看电视剧。时间过得飞快，一晃三个小时过去了。看电视当时的满足感随着节目的结束一起结束。</p><p>还有一件事情迟迟没有决定。电视剧转移了注意力，可以让人短暂地将它抛诸脑后。但是事情一直存在，短暂的回避之后，它又冒了出来。开始后悔，自责。</p><p>人的烦恼常常在于不能决定，反复纠结，迟迟没有行动。</p><p>做 A，没有照顾到 B。做 B，担心 C。做 C，又担心 D。似乎没有完美的方案。</p><p>那么，还要不要行动？如何行动？</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;717-烦恼&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#</summary>
-      
-    
-    
-    
-    <category term="每日一思" scheme="http://brightliao.com/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E6%80%9D/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>每日一思</title>
-    <link href="http://brightliao.com/2023/07/24/daily-thoughts/"/>
-    <id>http://brightliao.com/2023/07/24/daily-thoughts/</id>
-    <published>2023-07-24T20:00:00.000Z</published>
-    <updated>2023-07-30T01:40:27.808Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2023-07-30-技术卡上的方案"><a class="markdownIt-Anchor" href="#2023-07-30-技术卡上的方案"></a> 2023-07-30: 技术卡上的方案</h2><p>数据开发项目很多故事卡偏技术，比如数据接人，它并不直接产出用户价值（数据计算结果），而是用于支持其他直接产生价值的卡。</p><p>这类故事卡，一般称为技术卡。要如何描述其内容？</p><p>一般敏捷开发故事卡中会用“作为…我想要…以便…”这样的描述来阐明故事卡的背景、场景、目的及价值。对于实现方式的描述通常是模糊的，以便可以在团队中发生更多讨论，从而促进更好的技术建模。</p><p>但在技术卡中，是否要进行更清晰的实现方式（方案）描述？</p><p>技术上有很多要求来自团队技术规范，相比故事卡这类纵向需求，技术规范可以理解为横向需求，即每个故事卡都需要遵循的需求。比如整体架构、数据分层、关键命名等等。</p><p>已有的规范应该是每一个开发人员都需要熟悉的，没有的规范则应该通过每张故事卡去建立或完善。</p><p>因此，技术卡的描述应该涉及一部分实现方式，主要关于规范的部分，也可分为两类：</p><ul><li><p>来自通用技术规范的需求，可链接到技术规范文档对应章节</p></li><li><p>通用技术规范未提及部分，视团队成员能力情况确定是否由经验更丰富的成员事先调研梳理并描述</p></li></ul><p>第二部分中，前期调研程度应该适当，并快速完成，否则调研完就开发完，那开发就没有意义了。</p><h2 id="2023-07-29-看起来复杂的问题往往原因很简单"><a class="markdownIt-Anchor" href="#2023-07-29-看起来复杂的问题往往原因很简单"></a> 2023-07-29: 看起来复杂的问题往往原因很简单</h2><p>这两天团队碰到一个看起来非常棘手的问题。问题表现是：在一个分布式环境中，某些数据操作只有一部分成功，另一部分则总是失败。</p><p>在花费了大量精力观察和调试问题之后，团队总结出规律：某两个节点的数据操作总是失败，其他节点正常；针对这两个节点，如果手动发起操作可以成功，自动发起则总是超时。</p><p>虽然发现了规律，但还是令人很疑惑。</p><p>最后团队集思广益，终于找到原因，简单到不能再简单：这两个节点没有配置主机名解析，一直连接不上。</p><p>启发：</p><ul><li><p>需要在技术上理解分布式组件工作原理</p></li><li><p>分布式组件设计上应该在出错时输出更有效的日志</p></li><li><p>锲而不舍的精神，相信复杂问题背后的原因往往很简单</p></li></ul><h2 id="2023-07-28-重新思考标记问题"><a class="markdownIt-Anchor" href="#2023-07-28-重新思考标记问题"></a> 2023-07-28: 重新思考标记问题</h2><p>在继续读《西方哲学史讲演录》的同时，我意识到每个哲学家的观点具有很强的推理性质。如果只看到一个结论，而没有推理过程，那结论就不可理解。</p><p>比如，英国经验论的基本原则是：凡在理智之中的无不先在感觉之中。这有什么问题？应该如何看待？逻辑上讲，至少存在一个反例，对于第一个睁开眼看世界的人来说，世界的存在可以在理智之中，但却没有先在感觉之中。因为他无法凭借经验（还没有）证明这个世界在他睁眼以前就已经客观存在了。</p><p>回到笔记上，如果只标记结论，而没有标记推理，那标记就是无用的，而要标记推理，那就将标记整本书，也是无用的。</p><p>这大概就是为什么我之前有不想做标记的想法。</p><h2 id="2023-07-27-规则"><a class="markdownIt-Anchor" href="#2023-07-27-规则"></a> 2023-07-27: 规则</h2><p>这世界有很多奇怪的规则，它存在着，即便奇怪也是合理。</p><p>规则限定了游戏参与者的范围，你要是没法适应，那就没有资格入局。</p><p>自命清高者，多数饿死于沙滩上。在这个内卷的时代，拼的不只是能力。或者，在无法改变规则时，适应它也是一种能力。</p><h2 id="2023-07-26-少即是多"><a class="markdownIt-Anchor" href="#2023-07-26-少即是多"></a> 2023-07-26: 少即是多</h2><p>最近在一次团队活动中，有人分享关于写作的问题，提到一个如何让文字更简洁的办法，很有启发。</p><p>如何做？那就是在写完之后，问自己一个问题，如果删一个字给你100块，你会删哪个？当你通过这个办法把内容删到无法再删的时候，就足够精简了。</p><p>从读者的视角看，内容简洁已经成为当今这个知识爆炸的快节奏时代的必需品。但是从写作者的视角来看，很多时候都是越写越多。很多作者都恨不能把自己知道的都写进去，生怕遗漏某个细节。</p><p>然而内容的用户是读者，从用户体验的角度讲，作者在写作时应该要保持克制，时刻提醒自己，少即是多。</p><h2 id="2023-07-25-工作的节奏"><a class="markdownIt-Anchor" href="#2023-07-25-工作的节奏"></a> 2023-07-25: 工作的节奏</h2><p>在专业软件服务公司工作很容易形成一种节奏感。</p><p>我们都是以项目制为单位进行团队组织的。项目一般会定期更替，这是较长期的节奏。项目内部我们以敏捷迭代的方式展开，这是短期的节奏。</p><p>节奏就像持续不断的音乐节拍，有起有伏，井井有条，让人乐在其中。</p><p>有的时候，节奏却也像是时钟的滴答，背后的齿轮机械而固定地转动，一成不变，永无止境，让人感觉枯燥无聊。</p><p>人生也许就是需要有略显枯燥的大的节奏，以便可以在一个框架中前进，而不至于偏离方向。同时，大的节奏并不意味着无聊，因为在大的节奏期间我们可以尽情发挥。这就像音乐，高低不同的音符伴随着规律的节奏形成了打动人心的篇章。</p><h2 id="2023-07-24-有时读书不想做标记"><a class="markdownIt-Anchor" href="#2023-07-24-有时读书不想做标记"></a> 2023-07-24: 有时读书不想做标记</h2><p>最近在读赵林老师的《西方哲学史讲演录》，这是一本哲学通识类的书籍。内容清晰而精彩，作为一个没什么哲学背景的普通人，也能轻松读下来并抓住哲学思想发展过程中的重点。</p><p>全书内容非常精彩，随处都洋溢着老师对于当时那个时代哲学思想的深刻理解和剖析。读书过程中我在很多精彩处都通过标记做了一下笔记，希望能通过这些标记记住这些精彩的部分。但过一段时间之后再回过来看这些标记，发现之前认为精彩的部分竟然不那么精彩了，甚至看不懂了。只看一个片段时，已是失去了当时看到对应章节的理解和心情。</p><p>然而，当我重新开始全文读下标记部分对应的那一章节之后，我发现之前的感觉又都回来了。哲学思想发展的脉络，其历史背景，优势和局限性又清晰的呈现在了眼前。</p><p>也许有时候没有必要做标记，因为到处都是精彩的内容。如果认为通过标记可以把书读薄，那很可能将错过那些精彩的内容。</p>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="725-t恤衫"><a class="markdownIt-Anchor" href="#725-t恤衫"></a> 7.25: T恤衫</h2><p>打开衣柜，在叠起来的一摞 T 恤衫里面翻找，一件自己买的，一件公司文化衫，又一件公司文化衫，还有一件公司文化衫。</p><p>穿什么呢？抽出一件背过来叠起的黑色 T 恤，打开一看，是公司文化衫。这一件应该有三年以上了，前面印的 disruptive thinking 及机器人图案已经开裂并快要掉落下来了。</p><p>旧了。算了，换一件吧，我把它放了回去。正准备开始继续找，又犹豫了，还是这件吧，不知道还能穿几回！</p><p>穿上这件文化衫准备出门，在门口的镜子面前停了一下，衣服上面的图案的色彩还是鲜艳的。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;2023-07-30-技术卡上的方案&quot;&gt;&lt;a class=&quot;markdownIt-Anc</summary>
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text&amp;#x2F;css&quot; href=&quot;/attaches/assets/katex/katex.min.css&quot;&gt;&lt;h2 id=&quot;725-t恤衫&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;</summary>
       
     
     
