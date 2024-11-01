@@ -253,7 +253,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/09/10/easy-statistical-test/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/hadoop-auth-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -267,7 +267,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/10/easy-statistical-test/" class="post-title-link" itemprop="url">统计基础-区间估计</a>
+            <a href="/2019/12/02/hadoop-auth-4/" class="post-title-link" itemprop="url">Hadoop安全认证机制 （四）</a>
         </h2>
 
         <div class="post-meta">
@@ -277,7 +277,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-09-10 20:00:00" itemprop="dateCreated datePublished" datetime="2020-09-10T20:00:00+00:00">2020-09-10</time>
+              <time title="创建时间：2019-12-02 23:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T23:00:00+00:00">2019-12-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -296,12 +296,16 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">安全</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/09/10/easy-statistical-test/" class="post-meta-item leancloud_visitors" data-flag-title="统计基础-区间估计" title="阅读次数">
+            <span id="/2019/12/02/hadoop-auth-4/" class="post-meta-item leancloud_visitors" data-flag-title="Hadoop安全认证机制 （四）" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -313,14 +317,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.9k</span>
+              <span>15k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
+              <span>24 分钟</span>
             </span>
 
         </div>
@@ -332,11 +336,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>如果我们想知道一所办公楼的所有人员的平均身高，该怎么做？大家应该都能想到，我们可以通过统计抽样的办法，随机去调查一些人的身高，然后通过这些人的平均身高去估计所有人员的平均身高。但这里还有一个问题，这里抽样得到的平均身高准吗？有多准呢？</p>
-<p>要回答这里的问题，我们需要有一些基本的统计学知识。</p>
+          <p>系列文章：</p>
+<ul>
+<li><a href="/2019/10/27/hadoop-auth/">Hadoop安全认证机制 (一)</a></li>
+<li><a href="/2019/10/30/hadoop-auth-2/">Hadoop安全认证机制 (二)</a></li>
+<li><a href="/2019/11/11/hadoop-auth-3/">Hadoop安全认证机制 (三)</a></li>
+</ul>
+<p>前面的文章中，我们搭建了一套安全的<code>hadoop</code>集群，并建立了一个对应的测试。结合相关的基础知识，我们应该对安全的<code>hadoop</code>集群有了一定的认识。本文主要关注如何将大数据其他组件安全地与<code>hadoop</code>进行集成。我们将关注这几个组件：<code>hive</code> <code>hbase</code> <code>spark</code> <code>livy</code>。</p>
+<h2 id="hive"><a class="markdownIt-Anchor" href="#hive"></a> <code>hive</code></h2>
+<p>首先来看<code>hive</code>，<code>hive</code>是最初由<code>facebook</code>发起的基于<code>hadoop</code>大数据架构的数据仓库。<code>hive</code>直接将<code>hdfs</code>变为了一个支持<code>sql</code>的数据存储。时至今日，<code>hive</code>已成为企业大数据最基础的组件之一，各种上层的组件均和<code>hive</code>有良好的集成。</p>
+<p>采用跟之前同样的思路，我们先来建立一个测试，如下：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/09/10/easy-statistical-test/#more" rel="contents">
+              <a class="btn" href="/2019/12/02/hadoop-auth-4/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -360,7 +372,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/09/13/correlation-analysis/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/02/sense-of-ceremony-and-professional-service/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -374,7 +386,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/09/13/correlation-analysis/" class="post-title-link" itemprop="url">你的收入和支出相关吗？</a>
+            <a href="/2019/12/02/sense-of-ceremony-and-professional-service/" class="post-title-link" itemprop="url">仪式感与专业服务</a>
         </h2>
 
         <div class="post-meta">
@@ -384,7 +396,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-09-13 20:00:00" itemprop="dateCreated datePublished" datetime="2020-09-13T20:00:00+00:00">2020-09-13</time>
+              <time title="创建时间：2019-12-02 20:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T20:00:00+00:00">2019-12-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -399,16 +411,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
+                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/09/13/correlation-analysis/" class="post-meta-item leancloud_visitors" data-flag-title="你的收入和支出相关吗？" title="阅读次数">
+            <span id="/2019/12/02/sense-of-ceremony-and-professional-service/" class="post-meta-item leancloud_visitors" data-flag-title="仪式感与专业服务" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -420,14 +428,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -439,11 +447,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>你的收入和支出相关吗？这是一个很难回答的问题，表面上看好像是相关的，因为随着收入的增长，有了更多的钱，当然可以有更多的支出。但是，很多公司一年才涨一次工资，在这一年内，物价却可能在不停上涨，是不是收入没涨而每个月的支出都在涨呢？</p>
-<p>如何来回答是否相关的问题呢？用统计学的方法，我们可以把收入和支出当做两个变量来对待，然后用数学的方法衡量其相关性。</p>
+          <p>进门，双手帮你脱下外套，挂起。洗发师双手提起一件深色防水的丝质套衫，你伸手，换上。拿起腰带，穿过你的腰，两圈，拉扯一次，拉扯两次，系紧。抹平套衫肩部，拉住袖口，拉扯一次，拉扯两次，展平。拉住套衫底部，拉扯一次，拉扯两次，拉齐。</p>
+<p>将你带到洗头处，你看到一个用于平躺的台面，台面上深色皮质的垫子分为两部分，前面部分可拆卸，上放一块叠起来的深蓝色毛巾，毛巾上面是一朵颜色鲜艳的大荷花。在台面前部放有一个与垫子同样深色皮质的单人凳。</p>
+<p>洗发师伸开右手，将你迎向凳子坐下。介绍洗头服务：我是37号洗发师为您服务，本次洗发50分钟，请您稍坐，我去准备毛巾和其他用品。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/09/13/correlation-analysis/#more" rel="contents">
+              <a class="btn" href="/2019/12/02/sense-of-ceremony-and-professional-service/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -467,7 +476,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/11/26/data-work-roles/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/12/22/its-harder-to-go-downhill/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -481,7 +490,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/11/26/data-work-roles/" class="post-title-link" itemprop="url">那些数据工作中的角色</a>
+            <a href="/2019/12/22/its-harder-to-go-downhill/" class="post-title-link" itemprop="url">上山容易下山难</a>
         </h2>
 
         <div class="post-meta">
@@ -491,7 +500,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-11-26 20:00:00" itemprop="dateCreated datePublished" datetime="2020-11-26T20:00:00+00:00">2020-11-26</time>
+              <time title="创建时间：2019-12-22 20:00:00" itemprop="dateCreated datePublished" datetime="2019-12-22T20:00:00+00:00">2019-12-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -506,12 +515,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">数据</span></a>
+                  <a href="/categories/tdd/" itemprop="url" rel="index"><span itemprop="name">TDD</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tdd/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/11/26/data-work-roles/" class="post-meta-item leancloud_visitors" data-flag-title="那些数据工作中的角色" title="阅读次数">
+            <span id="/2019/12/22/its-harder-to-go-downhill/" class="post-meta-item leancloud_visitors" data-flag-title="上山容易下山难" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -523,14 +536,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.2k</span>
+              <span>2.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -542,10 +555,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>数据工作中有一类非常重要的角色，那就是数据分析师。为什么这个角色这么重要呢？因为要是没有这个角色，不管一个企业中的数据管理做得有多么好都没用，无法带来实际的价值。这些数据就像是藏在海底的石油，而数据分析师就是开采海底石油的油井设备。要想让石油用于汽车轮船，需要通过这些设备先将海底的石油抽取出来，经过加工处理，提纯。</p>
+          <p>昨天和项目组的几个小伙伴去爬山。这次爬山坐标深圳梧桐山。从西北门进山，我们沿着蜿蜒的公路一路而上，历时三小时登顶。下山时不想原路返回，故意选了另一条路。从山上往下看，这条路陡峭得很。不过，对于几个血气方刚的男性，这条路正好。因为大家都觉得上山太简单不过瘾，想挑战一下高难度。于是我们一致同意换路而行。我们走的这条路就是凌云道。</p>
+<p>说起凌云道这条路，真是名副其实。它不仅几乎呈垂直高度下降，而且台阶较窄仅有半脚宽。路两边树丛虽然茂盛，但是都不高大，山下的情形总是能进入眼帘。我一向有点恐高，在这垂直高度近1千米地方往下看，还真是心里有点慌。刚开始下山，小伙伴们见此山势，纷纷停下脚步拍照。得几张无P图片如下，大家可以感受一下：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/11/26/data-work-roles/#more" rel="contents">
+              <a class="btn" href="/2019/12/22/its-harder-to-go-downhill/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -673,7 +687,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/01/15/css-best-practise/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/01/16/dl-workshop-massive-network-tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -687,7 +701,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/01/15/css-best-practise/" class="post-title-link" itemprop="url">CSS最佳实践</a>
+            <a href="/2017/01/16/dl-workshop-massive-network-tips/" class="post-title-link" itemprop="url">大规模Tensorflow网络的一些技巧</a>
         </h2>
 
         <div class="post-meta">
@@ -697,7 +711,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-01-15 10:29:29" itemprop="dateCreated datePublished" datetime="2016-01-15T10:29:29+00:00">2016-01-15</time>
+              <time title="创建时间：2017-01-16 19:45:53" itemprop="dateCreated datePublished" datetime="2017-01-16T19:45:53+00:00">2017-01-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -712,12 +726,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
             </span>
 
           
-            <span id="/2016/01/15/css-best-practise/" class="post-meta-item leancloud_visitors" data-flag-title="CSS最佳实践" title="阅读次数">
+            <span id="/2017/01/16/dl-workshop-massive-network-tips/" class="post-meta-item leancloud_visitors" data-flag-title="大规模Tensorflow网络的一些技巧" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -729,14 +743,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
+              <span>7.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>13 分钟</span>
             </span>
 
         </div>
@@ -748,12 +762,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="结构组织"><a class="markdownIt-Anchor" href="#结构组织"></a> 结构组织</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">css</span><br><span class="line"> |-[业务类文件夹]</span><br><span class="line"> |-[通用类-样式重置].css</span><br><span class="line"> |-[通用类-公用组件].css</span><br><span class="line"> |-[通用类-ie兼容].css</span><br></pre></td></tr></table></figure>
-<h3 id="css样式排序"><a class="markdownIt-Anchor" href="#css样式排序"></a> css样式排序</h3>
+          <p>今天给大家分享一下，在网络规模越来越大时，我们会遇到什么问题，以及如何使用tensorflow来应对。下面将会给大家分享一些有用的tips。</p>
+<h2 id="大规模网络的特征"><a class="markdownIt-Anchor" href="#大规模网络的特征"></a> 大规模网络的特征</h2>
+<p>首先我们来看一下用什么来衡量网络规模。</p>
+<p>下图是alexnet的网络结构图，在2012年的imagenet图像分类挑战中，alexnet取得了80.2%的top-5正确率。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2016/01/15/css-best-practise/#more" rel="contents">
+              <a class="btn" href="/2017/01/16/dl-workshop-massive-network-tips/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -777,7 +792,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/03/04/maven-tips/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/03/01/recognize-house-number/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -791,7 +806,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/03/04/maven-tips/" class="post-title-link" itemprop="url">Maven Tips</a>
+            <a href="/2017/03/01/recognize-house-number/" class="post-title-link" itemprop="url">识别门牌号的移动应用</a>
         </h2>
 
         <div class="post-meta">
@@ -801,7 +816,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-03-04 04:21:46" itemprop="dateCreated datePublished" datetime="2016-03-04T04:21:46+00:00">2016-03-04</time>
+              <time title="创建时间：2017-03-01 21:22:13" itemprop="dateCreated datePublished" datetime="2017-03-01T21:22:13+00:00">2017-03-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -816,12 +831,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/build-tools/" itemprop="url" rel="index"><span itemprop="name">build tools</span></a>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
             </span>
 
           
-            <span id="/2016/03/04/maven-tips/" class="post-meta-item leancloud_visitors" data-flag-title="Maven Tips" title="阅读次数">
+            <span id="/2017/03/01/recognize-house-number/" class="post-meta-item leancloud_visitors" data-flag-title="识别门牌号的移动应用" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -833,14 +848,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
+              <span>3.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -852,18 +867,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
-<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
-<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
-<ul>
-<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
-</ul>
-<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
-<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
+          <p>今天给大家分享一个tensorflow的机器学习应用实例。我们将能看到如何针对特定的问题设计网络结构、设计损失函数，应用一些技巧来简化和拆分问题。还将演示如何将模型导出并部署到Android上，可以让我们感受到tensorflow强大的跨平台特性。</p>
+<h2 id="问题导入"><a class="markdownIt-Anchor" href="#问题导入"></a> 问题导入</h2>
+<h3 id="提取门牌号进行地图标注"><a class="markdownIt-Anchor" href="#提取门牌号进行地图标注"></a> 提取门牌号进行地图标注</h3>
+<p>先让我们来看看我们要解决的问题。这个问题的应用场景来源于地图应用，如果能在地图上标注门牌号信息，这样就可以通过文本搜索找到地图中对应的位置了，事实上google地图就是通过训练这样的机器学习模型来进行地图信息标注的。要解决这个问题，可以读取google街景中的照片数据，然后训练一个机器学习模型来提取门牌号信息。如下图所示，当我们可以识别图片中的门牌号&quot;42&quot;了，我们就可以在地图上面进行标注了。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2016/03/04/maven-tips/#more" rel="contents">
+              <a class="btn" href="/2017/03/01/recognize-house-number/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -887,7 +897,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/03/08/ghost-space-in-less/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/04/15/understanding-gradients-of-conv2d-in-experiments/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -901,7 +911,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/03/08/ghost-space-in-less/" class="post-title-link" itemprop="url">Less -- 诡异的空格</a>
+            <a href="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/" class="post-title-link" itemprop="url">理解Conv2d及其梯度的计算过程</a>
         </h2>
 
         <div class="post-meta">
@@ -911,7 +921,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-03-08 09:19:49" itemprop="dateCreated datePublished" datetime="2016-03-08T09:19:49+00:00">2016-03-08</time>
+              <time title="创建时间：2017-04-15 11:48:56" itemprop="dateCreated datePublished" datetime="2017-04-15T11:48:56+00:00">2017-04-15</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -926,12 +936,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
             </span>
 
           
-            <span id="/2016/03/08/ghost-space-in-less/" class="post-meta-item leancloud_visitors" data-flag-title="Less -- 诡异的空格" title="阅读次数">
+            <span id="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/" class="post-meta-item leancloud_visitors" data-flag-title="理解Conv2d及其梯度的计算过程" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -943,14 +953,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>601</span>
+              <span>4.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -962,11 +972,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Original:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.a &#123;</span><br><span class="line">    &amp;.a-b &#123;</span><br><span class="line">        &amp;:hover &#123;</span><br><span class="line">            background-color: #5cb85c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.a-c &#123;</span><br><span class="line">    &amp;:extend(.a .a-b:hover);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>在当前深度学习领域中，卷积神经网络在图像处理、语音处理等方面都表现出了优异的性能，得到了广泛的认可。作为深度神经网络中的一个基础算法，有很多资料介绍了卷积实现原理，但是不少人在学习之后，还是对其及其梯度的计算过程细节不够清楚。在这里，我想分享几个自己做过的小试验来加深大家对卷积及其梯度计算过程的理解。</p>
+<h2 id="卷积计算过程"><a class="markdownIt-Anchor" href="#卷积计算过程"></a> 卷积计算过程</h2>
+<p>在卷积神经网络中，卷积计算过程可以通过下面的动图（来自<a target="_blank" rel="noopener" href="https://docs.google.com/presentation/d/1TVixw6ItiZ8igjp6U17tcgoFrLSaHWQmMOwjlgQY9co/pub?slide=id.g1245051c73_0_2184">此处</a>）来理解：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2016/03/08/ghost-space-in-less/#more" rel="contents">
+              <a class="btn" href="/2017/04/15/understanding-gradients-of-conv2d-in-experiments/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -990,7 +1001,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/03/08/pitfall-clearfix-with-table-display/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/06/21/dive-into-gan/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1004,7 +1015,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/03/08/pitfall-clearfix-with-table-display/" class="post-title-link" itemprop="url">在Clearfix中使用`display:table`</a>
+            <a href="/2017/06/21/dive-into-gan/" class="post-title-link" itemprop="url">深入探索生成对抗网络（一）</a>
         </h2>
 
         <div class="post-meta">
@@ -1014,7 +1025,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-03-08 09:22:40" itemprop="dateCreated datePublished" datetime="2016-03-08T09:22:40+00:00">2016-03-08</time>
+              <time title="创建时间：2017-06-21 10:55:19" itemprop="dateCreated datePublished" datetime="2017-06-21T10:55:19+00:00">2017-06-21</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1029,12 +1040,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
             </span>
 
           
-            <span id="/2016/03/08/pitfall-clearfix-with-table-display/" class="post-meta-item leancloud_visitors" data-flag-title="在Clearfix中使用`display:table`" title="阅读次数">
+            <span id="/2017/06/21/dive-into-gan/" class="post-meta-item leancloud_visitors" data-flag-title="深入探索生成对抗网络（一）" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1046,14 +1057,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
+              <span>15k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>24 分钟</span>
             </span>
 
         </div>
@@ -1065,12 +1076,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>当子元素是浮动布局时，父元素无法获取到正确的宽高，这种情况常常使用clearfix方案来解决。</p>
-<p>** 示例如下：**</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span> <span class="comment">&lt;!-- 父元素无法获取到正确的尺寸 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;float:left; width:100px; height:100px;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+          <p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第一部分。</p>
+<h2 id="生成对抗网络介绍"><a class="markdownIt-Anchor" href="#生成对抗网络介绍"></a> 生成对抗网络介绍</h2>
+<h3 id="什么是生成对抗网络"><a class="markdownIt-Anchor" href="#什么是生成对抗网络"></a> 什么是生成对抗网络？</h3>
+<p>从这个名称来看，我们可以了解到，这个网络是用一种对抗方法去生成数据的。和其他的机器学习模型相比，生成对抗网络里面最炫酷的理念莫过于给机器学习引入了对抗。纵观地球上的生物们的成长和发展路线就会发现，物竞天择，适者生存，万物都是在不停的和其他事物对抗中成长和发展的。生成对抗网络就像我们玩下面的格斗游戏一样，我们的学习过程就是，不断找其他对手对抗，在对抗中积累经验，提升自己的技能。</p>
+<p><img src="/attaches/2017/2017-06-21-dive-into-gan/fighting-game.png" alt="fighting game" /></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2016/03/08/pitfall-clearfix-with-table-display/#more" rel="contents">
+              <a class="btn" href="/2017/06/21/dive-into-gan/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1094,7 +1107,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/03/14/bluetooth-summary/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/06/26/dive-into-gan-continued/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1108,7 +1121,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/03/14/bluetooth-summary/" class="post-title-link" itemprop="url">蓝牙知识学习</a>
+            <a href="/2017/06/26/dive-into-gan-continued/" class="post-title-link" itemprop="url">深入探索生成对抗网络（二）</a>
         </h2>
 
         <div class="post-meta">
@@ -1118,7 +1131,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-03-14 08:53:40" itemprop="dateCreated datePublished" datetime="2016-03-14T08:53:40+00:00">2016-03-14</time>
+              <time title="创建时间：2017-06-26 19:19:38" itemprop="dateCreated datePublished" datetime="2017-06-26T19:19:38+00:00">2017-06-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1133,12 +1146,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iot/" itemprop="url" rel="index"><span itemprop="name">IoT</span></a>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/machine-learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
                 </span>
             </span>
 
           
-            <span id="/2016/03/14/bluetooth-summary/" class="post-meta-item leancloud_visitors" data-flag-title="蓝牙知识学习" title="阅读次数">
+            <span id="/2017/06/26/dive-into-gan-continued/" class="post-meta-item leancloud_visitors" data-flag-title="深入探索生成对抗网络（二）" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1150,14 +1167,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>133</span>
+              <span>11k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>19 分钟</span>
             </span>
 
         </div>
@@ -1169,22 +1186,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><ul>
-<li>工作过程：</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    StandBy(待机)</span><br><span class="line">Inqury(查询)      Page(寻呼)</span><br><span class="line">    Authentication(配对)</span><br><span class="line">    Connection(连接)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>
-<p>连接状态：</p>
-<ul>
-<li>活动状态：正在通信</li>
-<li>监听状态：随时准备通信</li>
-<li>保持状态：仅仅定时器工作，无法通信</li>
-<li>休眠模式：能耗最低，偶尔监听和检查网络信息</li>
-</ul>
-</li>
-</ul>
-
+          <p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第二部分。第一部分在<a href="../21/dive-into-gan/">这里</a></p>
+<p>上一篇中介绍了GAN的历史及发展，详细研究了GAN的模型和思想，还用tensorflow做了一个简单的实现。这一部分我们将看看GAN模型在近两年取得的进步以及未来可能的发展方向。同时，我们还会在上一次实现过的GAN例子上面，做一些增强，让GAN可以根据我们的需要来生成图像。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/06/26/dive-into-gan-continued/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1203,7 +1214,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2016/03/17/opengl-summary/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2017/10/24/local-openshift-cluster-installation-guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -1217,7 +1228,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/03/17/opengl-summary/" class="post-title-link" itemprop="url">Opengl知识学习</a>
+            <a href="/2017/10/24/local-openshift-cluster-installation-guide/" class="post-title-link" itemprop="url">本地搭建OpenShift集群指南</a>
         </h2>
 
         <div class="post-meta">
@@ -1227,7 +1238,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-03-17 13:04:39" itemprop="dateCreated datePublished" datetime="2016-03-17T13:04:39+00:00">2016-03-17</time>
+              <time title="创建时间：2017-10-24 14:16:19" itemprop="dateCreated datePublished" datetime="2017-10-24T14:16:19+00:00">2017-10-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1242,12 +1253,12 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+                  <a href="/categories/devops/" itemprop="url" rel="index"><span itemprop="name">DevOps</span></a>
                 </span>
             </span>
 
           
-            <span id="/2016/03/17/opengl-summary/" class="post-meta-item leancloud_visitors" data-flag-title="Opengl知识学习" title="阅读次数">
+            <span id="/2017/10/24/local-openshift-cluster-installation-guide/" class="post-meta-item leancloud_visitors" data-flag-title="本地搭建OpenShift集群指南" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -1259,14 +1270,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>373</span>
+              <span>7.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>13 分钟</span>
             </span>
 
         </div>
@@ -1278,15 +1289,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="opengl-es-shading-language"><a class="markdownIt-Anchor" href="#opengl-es-shading-language"></a> opengl es shading language</h2>
-<p>种类</p>
+          <h1 id="local-openshift-cluster-installation-guide"><a class="markdownIt-Anchor" href="#local-openshift-cluster-installation-guide"></a> Local Openshift Cluster Installation Guide</h1>
+<h2 id="preparation"><a class="markdownIt-Anchor" href="#preparation"></a> Preparation</h2>
+<h3 id="hosts"><a class="markdownIt-Anchor" href="#hosts"></a> Hosts</h3>
 <ul>
-<li>类型：vec2 vec3 vec4 mat2 mat3 mat4 int float</li>
-<li>结构体：</li>
+<li>1 control host, 1 master and 3 nodes</li>
+<li>centos 7</li>
+</ul>
+<h3 id="install-packages-on-control-host"><a class="markdownIt-Anchor" href="#install-packages-on-control-host"></a> Install packages on control host</h3>
+<ul>
+<li>Run <code>yum install -y python2-passlib httpd-tools</code></li>
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2016/03/17/opengl-summary/#more" rel="contents">
+              <a class="btn" href="/2017/10/24/local-openshift-cluster-installation-guide/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1490,7 +1506,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:57</span>
+    <span title="站点阅读时长">17:56</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
