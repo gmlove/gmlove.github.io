@@ -253,7 +253,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/03/08/new-ways-to-manage-memory/">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/02/06/DRL-the-problem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/avatar.png">
@@ -267,7 +267,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/03/08/new-ways-to-manage-memory/" class="post-title-link" itemprop="url">内存管理的新思路</a>
+            <a href="/2020/02/06/DRL-the-problem/" class="post-title-link" itemprop="url">强化学习入门</a>
         </h2>
 
         <div class="post-meta">
@@ -277,7 +277,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-03-08 20:00:00" itemprop="dateCreated datePublished" datetime="2020-03-08T20:00:00+00:00">2020-03-08</time>
+              <time title="创建时间：2020-02-06 20:00:00" itemprop="dateCreated datePublished" datetime="2020-02-06T20:00:00+00:00">2020-02-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -292,16 +292,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine-learning</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%8A%80%E6%9C%AF/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
+                  <a href="/categories/machine-learning/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
                 </span>
             </span>
 
           
-            <span id="/2020/03/08/new-ways-to-manage-memory/" class="post-meta-item leancloud_visitors" data-flag-title="内存管理的新思路" title="阅读次数">
+            <span id="/2020/02/06/DRL-the-problem/" class="post-meta-item leancloud_visitors" data-flag-title="强化学习入门" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -313,14 +313,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.9k</span>
+              <span>7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
+              <span>12 分钟</span>
             </span>
 
         </div>
@@ -332,12 +332,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在最近的一个客户项目上，为了做性能优化，我们花了大量的时间，然而最终结果还是不够理想。我们的场景是实现特征处理过程和机器学习模型线上推理服务。由于用户量巨大，我们需要做到2万的TPS，每个请求需要在30ms内返回，且每个请求中包括对1000个项目的处理过程。</p>
-<p>我们所使用的技术栈是<code>spring</code>和<code>grpc</code>。在经过极致的代码优化及内存调优之后，运行在一台<code>32GB</code>内存<code>64核</code>CPU的服务器上，我们发现<code>90%</code>的请求可以在<code>25ms</code>完成。但是如果观察<code>99%</code>的分位线时，响应时间就下降到了<code>70ms</code>，有时候还可能超过<code>100ms</code>。</p>
-<p>为什么会出现上面这么明显的波动呢？问题出在<code>java</code>的<code>gc</code>上。其实对于<code>gc</code>，我们已经非常仔细的做过调优了，整个过程没有<code>full gc</code>的发生。然而，在持续的压力测试下，<code>java</code>的<code>young gc</code>却在频繁的工作。由于处理的数据量过大，新生代的<code>gc</code>几乎每秒都会触发一次，每次释放<code>5GB</code>内存，耗时<code>30ms</code>左后。</p>
+          <p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
+<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
+<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
+<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
+<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/03/08/new-ways-to-manage-memory/#more" rel="contents">
+              <a class="btn" href="/2020/02/06/DRL-the-problem/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1139,6 +1141,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/07/07/basic-loan-business/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/07/basic-loan-business/" class="post-title-link" itemprop="url">银行贷款业务是怎么一回事？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-07 20:00:00" itemprop="dateCreated datePublished" datetime="2020-07-07T20:00:00+00:00">2020-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%B8%9A%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">业务</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/07/07/basic-loan-business/" class="post-meta-item leancloud_visitors" data-flag-title="银行贷款业务是怎么一回事？" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能。不管是商业贷款还是公积金贷款，这里面都是银行在提供贷款业务。对于个人经营需要，企业发展需要，银行贷款就更是少不了了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/07/07/basic-loan-business/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/08/22/data-analyst-mindset/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1249,108 +1353,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/08/22/data-analyst-mindset/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2020/07/07/basic-loan-business/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/07/basic-loan-business/" class="post-title-link" itemprop="url">银行贷款业务是怎么一回事？</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-07 20:00:00" itemprop="dateCreated datePublished" datetime="2020-07-07T20:00:00+00:00">2020-07-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-25 14:07:02" itemprop="dateModified" datetime="2023-07-25T14:07:02+00:00">2023-07-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%9A%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">业务</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/07/07/basic-loan-business/" class="post-meta-item leancloud_visitors" data-flag-title="银行贷款业务是怎么一回事？" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能。不管是商业贷款还是公积金贷款，这里面都是银行在提供贷款业务。对于个人经营需要，企业发展需要，银行贷款就更是少不了了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/07/07/basic-loan-business/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1554,7 +1556,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:57</span>
+    <span title="站点阅读时长">17:56</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
