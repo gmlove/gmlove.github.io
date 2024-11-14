@@ -1,73 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>开篇</title>
-    <url>/2015/12/08/first-blog/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>用markdown来写博客简直不要太爽！</p>
-<p>有了这种黑客技，不得不说很激发写博客的热情，试试看吧！</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>jasmine.any之坑</title>
-    <url>/2015/12/08/pitfall-jasmin-any/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any(&#123;premitive type&#125;)</code>，可以考虑使用<code>anything()</code></p>
-<p>坑位：使用<code>toHaveBeenCalledWith</code>测试函数被调用时的参数。</p>
-<p>当参数列表太长（如：<code>func(p1, p2, p3)&#123;...&#125;</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。</p>
-<span id="more"></span>
-<p>坑点示例：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">it</span>(<span class="string">&quot;why any(Number) can not be replaced by any(Object)?&quot;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> foo = jasmine.<span class="title function_">createSpy</span>(<span class="string">&#x27;foo&#x27;</span>);</span><br><span class="line">  <span class="title function_">foo</span>(<span class="number">12</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;&#125;);</span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(jasmine.<span class="title function_">any</span>(<span class="title class_">Number</span>), jasmine.<span class="title function_">any</span>(<span class="title class_">Function</span>));</span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(jasmine.<span class="title function_">any</span>(<span class="title class_">Object</span>), jasmine.<span class="title function_">any</span>(<span class="title class_">Function</span>)); <span class="comment">// will fail</span></span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(<span class="number">2</span>, jasmine.<span class="title function_">any</span>(<span class="title class_">Object</span>)); <span class="comment">// will fail</span></span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(jasmine.<span class="title function_">anything</span>(), jasmine.<span class="title function_">anything</span>());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> A = <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="keyword">new</span> <span class="title function_">A</span>();</span><br><span class="line">  <span class="title function_">expect</span>(a).<span class="title function_">toEqual</span>(jasmine.<span class="title function_">any</span>(<span class="title class_">Object</span>));</span><br><span class="line">  <span class="title function_">expect</span>(a).<span class="title function_">toEqual</span>(jasmine.<span class="title function_">any</span>(A));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>原因：<code>jasmine</code>使用强类型进行验证匹配。对应的验证关系</p>
-<ul>
-<li>String -&gt; any(String) / anything()</li>
-<li>Number -&gt; any(Number) / anything()</li>
-<li>Boolean -&gt; any(Boolean) / anything()</li>
-<li>null -&gt; any(Object)</li>
-<li>Function -&gt; any(Function) / anything()</li>
-<li>Object -&gt; any(Object) / anything()</li>
-</ul>
-<p>关于Javascript的类型，参考<code>w3schol</code>的官方解释：</p>
-<blockquote>
-<p>ECMAScript 有 5 种原始类型（primitive type），即 Undefined、Null、Boolean、Number 和 String。</p>
-</blockquote>
-<blockquote>
-<p>对变量或值调用 typeof 运算符将返回下列值之一：</p>
-</blockquote>
-<blockquote>
-<blockquote>
-<ul>
-<li>undefined - 如果变量是 Undefined 类型的</li>
-<li>boolean - 如果变量是 Boolean 类型的</li>
-<li>number - 如果变量是 Number 类型的</li>
-<li>string - 如果变量是 String 类型的</li>
-<li>object - 如果变量是一种引用类型或 Null 类型的</li>
-</ul>
-</blockquote>
-</blockquote>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Getting Started</title>
-    <url>/2015/12/07/2015-get-started/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
-<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>CSS最佳实践</title>
     <url>/2016/01/15/css-best-practise/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h3 id="结构组织"><a class="markdownIt-Anchor" href="#结构组织"></a> 结构组织</h3>
@@ -260,6 +193,25 @@
       </tags>
   </entry>
   <entry>
+    <title>程序员的自我修养</title>
+    <url>/2016/03/09/self-cultivation-of-a-programmer/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="像她一样你也可以30岁成为外企高管"><a class="markdownIt-Anchor" href="#像她一样你也可以30岁成为外企高管"></a> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&amp;mid=403753929&amp;idx=1&amp;sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&amp;srcid=0308IQMxPuvTg7yLZXe89MJO">像她一样，你也可以30岁成为外企高管</a></h2>
+<ul>
+<li>跳出舒适区 - 找比你厉害的人聊天</li>
+<li>假装自信</li>
+</ul>
+<ul>
+<li>Too complicated, can you send out an email about this?</li>
+<li>If you feel it’s your fault, think twice before you raise it.</li>
+<li>Try to spend some time finding every thing in the document before ask.</li>
+<li>Ask yourself after a communication if this is a success one.</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>personal</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>在Clearfix中使用`display:table`</title>
     <url>/2016/03/08/pitfall-clearfix-with-table-display/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>当子元素是浮动布局时，父元素无法获取到正确的宽高，这种情况常常使用clearfix方案来解决。</p>
@@ -280,25 +232,6 @@
       </categories>
       <tags>
         <tag>css</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>程序员的自我修养</title>
-    <url>/2016/03/09/self-cultivation-of-a-programmer/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="像她一样你也可以30岁成为外企高管"><a class="markdownIt-Anchor" href="#像她一样你也可以30岁成为外企高管"></a> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MjY3OTgwMA==&amp;mid=403753929&amp;idx=1&amp;sn=a0e8f99a3bbed8ae9aa1ddb21ba30960&amp;srcid=0308IQMxPuvTg7yLZXe89MJO">像她一样，你也可以30岁成为外企高管</a></h2>
-<ul>
-<li>跳出舒适区 - 找比你厉害的人聊天</li>
-<li>假装自信</li>
-</ul>
-<ul>
-<li>Too complicated, can you send out an email about this?</li>
-<li>If you feel it’s your fault, think twice before you raise it.</li>
-<li>Try to spend some time finding every thing in the document before ask.</li>
-<li>Ask yourself after a communication if this is a success one.</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>personal</tag>
       </tags>
   </entry>
   <entry>
@@ -2597,6 +2530,73 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
       </tags>
   </entry>
   <entry>
+    <title>开篇</title>
+    <url>/2015/12/08/first-blog/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>用markdown来写博客简直不要太爽！</p>
+<p>有了这种黑客技，不得不说很激发写博客的热情，试试看吧！</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>jasmine.any之坑</title>
+    <url>/2015/12/08/pitfall-jasmin-any/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any(&#123;premitive type&#125;)</code>，可以考虑使用<code>anything()</code></p>
+<p>坑位：使用<code>toHaveBeenCalledWith</code>测试函数被调用时的参数。</p>
+<p>当参数列表太长（如：<code>func(p1, p2, p3)&#123;...&#125;</code>）的时候，往往只需要验证某一部分参数正确性，这个时候使用<code>any()</code>。</p>
+<span id="more"></span>
+<p>坑点示例：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">it</span>(<span class="string">&quot;why any(Number) can not be replaced by any(Object)?&quot;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> foo = jasmine.<span class="title function_">createSpy</span>(<span class="string">&#x27;foo&#x27;</span>);</span><br><span class="line">  <span class="title function_">foo</span>(<span class="number">12</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;&#125;);</span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(jasmine.<span class="title function_">any</span>(<span class="title class_">Number</span>), jasmine.<span class="title function_">any</span>(<span class="title class_">Function</span>));</span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(jasmine.<span class="title function_">any</span>(<span class="title class_">Object</span>), jasmine.<span class="title function_">any</span>(<span class="title class_">Function</span>)); <span class="comment">// will fail</span></span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(<span class="number">2</span>, jasmine.<span class="title function_">any</span>(<span class="title class_">Object</span>)); <span class="comment">// will fail</span></span><br><span class="line">  <span class="title function_">expect</span>(foo).<span class="title function_">toHaveBeenCalledWith</span>(jasmine.<span class="title function_">anything</span>(), jasmine.<span class="title function_">anything</span>());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> A = <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="keyword">new</span> <span class="title function_">A</span>();</span><br><span class="line">  <span class="title function_">expect</span>(a).<span class="title function_">toEqual</span>(jasmine.<span class="title function_">any</span>(<span class="title class_">Object</span>));</span><br><span class="line">  <span class="title function_">expect</span>(a).<span class="title function_">toEqual</span>(jasmine.<span class="title function_">any</span>(A));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>原因：<code>jasmine</code>使用强类型进行验证匹配。对应的验证关系</p>
+<ul>
+<li>String -&gt; any(String) / anything()</li>
+<li>Number -&gt; any(Number) / anything()</li>
+<li>Boolean -&gt; any(Boolean) / anything()</li>
+<li>null -&gt; any(Object)</li>
+<li>Function -&gt; any(Function) / anything()</li>
+<li>Object -&gt; any(Object) / anything()</li>
+</ul>
+<p>关于Javascript的类型，参考<code>w3schol</code>的官方解释：</p>
+<blockquote>
+<p>ECMAScript 有 5 种原始类型（primitive type），即 Undefined、Null、Boolean、Number 和 String。</p>
+</blockquote>
+<blockquote>
+<p>对变量或值调用 typeof 运算符将返回下列值之一：</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<ul>
+<li>undefined - 如果变量是 Undefined 类型的</li>
+<li>boolean - 如果变量是 Boolean 类型的</li>
+<li>number - 如果变量是 Number 类型的</li>
+<li>string - 如果变量是 String 类型的</li>
+<li>object - 如果变量是一种引用类型或 Null 类型的</li>
+</ul>
+</blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Getting Started</title>
+    <url>/2015/12/07/2015-get-started/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
+<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>深度学习模型重现 -- DORN</title>
     <url>/2019/07/08/reproduce-ml-models-dorn/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="dorn模型的重现"><a class="markdownIt-Anchor" href="#dorn模型的重现"></a> DORN模型的重现</h2>
@@ -3063,6 +3063,81 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
+    <title>从改善设计的角度理解TDD (2)</title>
+    <url>/2019/08/18/tdd-for-improving-design-2/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：</p>
+<ol>
+<li>TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。</li>
+<li>先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。</li>
+<li>由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试覆盖率不够带来的质量问题了。</li>
+</ol>
+<p>TDD给我们编写代码带来的好处多多，我前面有一篇<a href="/2019/07/20/tdd-for-improving-design/">文章</a>主要分析了如何从改善设计的角度理解TDD，相信大家能感受到TDD给改善程序设计带来的好处。这里我想再次分享一个用TDD改善设计的例子，我们将从中看到不用TDD时我们的代码可能会变成什么样，而用了TDD又将变成什么样。</p>
+<span id="more"></span>
+<h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
+<p>有这样一个需求，我们需要定义一个有向无环图将一组小的<code>Task</code>组织成一个功能更强大的<code>Job</code>，然后执行<code>Job</code>按照任务（<code>Task</code>）先后关系运行这个图。其实我们能找到很多用这样的方式来编排任务的开源工具，比如下面这些。</p>
+<p><img data-src="/attaches/2019/2019-08-18-tdd-for-improving-design-2/workflow-tools.png" alt="Workflow工具" /></p>
+<p>我们还希望以后能编写一个UI界面来辅助用户快速的编排任务，用户可以以拖拉拽的方式可视化的编排，可以灵活的配置任务参数，同时系统将自动的校验用户指定的及任务间传递的参数。</p>
+<p>基本的需求就是这样，在了解了这些之后，我们来分别看看直接进行设计和用TDD进行辅助设计会是什么样子的。</p>
+<h2 id="直接设计"><a class="markdownIt-Anchor" href="#直接设计"></a> 直接设计</h2>
+<p>分析上述需求，如果我们想在用户编排任务的时候进行参数校验，那么我们必须在每个任务运行之前就有办法获取到各种参数和返回值的类型信息，它们将包括任务的可配置参数、任务的入参、任务的返回值等。由于这些参数都是针对某个具体的任务来定义的，我们可以设计任务的几个接口来获取这些类型信息。我们暂定只需要上述三种类型信息，可以得到如下的接口设计：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Task</span> &#123;</span><br><span class="line">    TypeOfSomeConfigurationType <span class="title function_">getConfigurationMeta</span><span class="params">()</span>;</span><br><span class="line">    TypeOfSomeInputType <span class="title function_">getInputMeta</span><span class="params">()</span>;</span><br><span class="line">    TypeOfSomeResultType <span class="title function_">getResultMeta</span><span class="params">()</span>;</span><br><span class="line">    SomeResultType <span class="title function_">execute</span><span class="params">(SomeInputType input, SomeConfigurationType config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的<code>SomeXXXType</code>应该是什么呢？为了支持灵活的配置，这里我们需要一个非常灵活的数据结构。稍加思索大家应该就能想到我们可以用<code>Map</code>。我们可以定义一个<code>Map&lt;String, Object&gt;</code>的类型来存储任意键值，这时候，对<code>SomeConfigurationType</code>而言，<code>key</code>是配置的名字，配置的值可以是任意的一个对象；对于<code>TypeOfSomeConfigurationType</code>而言，它应该是一个<code>Map&lt;String, Class&lt;?&gt;&gt;</code>类型，<code>key</code>与配置的名字一致，值用于描述配置的值的类型。其他的<code>SomeInputType</code>和<code>SomeResultType</code>均可以这样定义。到这里我们可能还会有点小小的自豪，问题很简单啊，引入一个<code>Map</code>数据结构就完美解决了。这个时候我们的<code>Task</code>接口会设计成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Task</span> &#123;</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getConfigurationMeta();</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getInputMeta();</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getResultMeta();</span><br><span class="line">    Map&lt;String, Object&gt; <span class="title function_">execute</span><span class="params">(Map&lt;String, Object&gt; input, Map&lt;String, Object&gt; config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>仔细观察上面的接口，好像没那么干净，但似乎也挑不出什么毛病。<code>Map</code>看起来对于<code>Task</code>的实现会有一些干扰，因为<code>Task</code>实现里面势必会引入一些必要的强制类型转换的工作。能否避免这样的比较脏的类型转换代码呢？我们思考了一下，可能可以提供一些Utilities工具类来进行一些支持，或者编写一个<code>AbstractTask</code>抽象类，将一些公共的逻辑放到抽象类中进行复用。总体上感觉问题应该出在需要支持 <strong>灵活的配置</strong> 这样的需求上。由于需求是要保证灵活性，我们就只能将接口定义成这样。</p>
+<p>如何将任务组织成为一个有向无环图呢？这看起来也不是难事，先定义一个DAG，然后一个节点一个节点往里面塞数据就可以了。同时为了支持有向无环图的执行我们可以定义一个<code>execute</code>方法。这个时候我们的<code>Job</code>类大概会设计成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Job</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addTask</span><span class="params">(Task task, Task... subTasks)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Map&lt;String, Object&gt; input, Map&lt;String, Object&gt; config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里基本的设计就差不多完成了。我们会隐约感受到一些不够<code>clean</code>的设计，但是似乎难以控制。为了尽快实现功能，先这样定吧。</p>
+<h2 id="tdd驱动设计"><a class="markdownIt-Anchor" href="#tdd驱动设计"></a> TDD驱动设计</h2>
+<p>如果我们用TDD的思想来驱动开发，情况会是什么样呢？</p>
+<p>按照TDD解决问题的思路，我们要先编写一个测试。那么第一个测试要怎么写呢？分析一下需求可以发现，我们的目标是要实现一个DAG任务运行框架。那么我们的测试目标应当就是这个框架。这个框架需要实现的功能是：</p>
+<ol>
+<li>允许用户自定义一些<code>Task</code>；</li>
+<li>允许用户将这些<code>Task</code>组织成一个有向无环图；</li>
+<li>提供接口运行这个图。在测试的代码中，我们需要模拟这个框架的使用方式，提供输入，然后验证输出。</li>
+</ol>
+<p>于是这个测试的实现就会包含这样几个步骤：</p>
+<ol>
+<li>定义<code>Task</code>；</li>
+<li>将<code>Task</code>组织成一个有向无环图；</li>
+<li>利用框架运行这个图；</li>
+<li>检查运行结果是否是我们想要的。</li>
+</ol>
+<p>我们可以先编写测试模板代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JobSchedulerTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_run_the_defined_job_and_output_the_expected_result</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// define tasks</span></span><br><span class="line">        <span class="comment">// create dag</span></span><br><span class="line">        <span class="comment">// execute dag</span></span><br><span class="line">        <span class="comment">// verify execution result</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如何定义<code>Task</code>呢？<code>Task</code>需要保持足够的灵活性，以便可以支持任意可能的配置，同时<code>Task</code>要暴露接口让框架获取到输入、配置以及输出的元数据信息（类型信息）以便支持参数校验。由于我们使用<code>Java</code>这样的静态类型语言，事实上我们可以认为这些元数据信息是自动提供的。那么一个理想的<code>Task</code>就应该定义成下面这样：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimpleCalculationTask</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> CalculationResult <span class="title function_">execute</span><span class="params">(CalculationInput input, CalculationConfig config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的<code>Task</code>定义我们应该会比较满意，因为它只有一个接口，并且这个接口非常简洁而又有明确的类型信息。要实现这样的接口也应该是非常容易的。比如在测试中我们可以设计一个非常简单的加法任务，它不仅要输出加法的结果，还会附带输出获取到的输入参数，同时我们可以配置加法在什么区间可以按正常工作，而在另一个区间直接输出<code>-1</code>。这样的加法任务可以实现如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AdderTask</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderInput</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> right;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right)</span> &#123; <span class="built_in">this</span>.left = left; <span class="built_in">this</span>.right = right; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderConfig</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> maxSupportedValue;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> minSupportedValue;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> maxSupportedValue, <span class="type">int</span> minSupportedValue)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.maxSupportedValue = maxSupportedValue; <span class="built_in">this</span>.minSupportedValue = minSupportedValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderResult</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> right;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> result;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right)</span> &#123; <span class="built_in">this</span>.left = left; <span class="built_in">this</span>.right = right; <span class="built_in">this</span>.result = result; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderInput</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> right;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right)</span> &#123; <span class="built_in">this</span>.left = left; <span class="built_in">this</span>.right = right; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> AdderResult <span class="title function_">execute</span><span class="params">(AdderInput input, AdderConfig config)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> input.left + input.right;</span><br><span class="line">        <span class="keyword">return</span> result &gt; config.maxSupportedValue || result &lt; config.minSupportedValue</span><br><span class="line">                ? <span class="keyword">new</span> <span class="title class_">AdderResult</span>(input.left, input.right, -<span class="number">1</span>)</span><br><span class="line">                : <span class="keyword">new</span> <span class="title class_">AdderResult</span>(input.left, input.right, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了这样的定义之后，我们需要想办法将任务组织成一个有向无环图。怎样才能方便的构造这个图呢？最好有一个调度器，可以在某个任务后安排其他任务，也可以安排几个并行执行的任务，而我们需要提供一种方式来构造下游任务的参数。按照这样的想法可以得到下面这样的测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JobSchedulerTest</span> &#123;</span><br><span class="line">    Job <span class="title function_">createJob</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">TaskScheduler</span> <span class="variable">scheduler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskScheduler</span>();</span><br><span class="line">        <span class="type">Job</span> <span class="variable">job</span> <span class="operator">=</span> scheduler.scheduleTask(<span class="keyword">new</span> <span class="title class_">AdderTask</span>())</span><br><span class="line">            .next(<span class="keyword">new</span> <span class="title class_">AdderTask</span>(), adderResult -&gt; </span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">AdderInput</span>(adderResult.left, adderResult.result));</span><br><span class="line">        job = scheduler.scheduleParallelTask(job, <span class="keyword">new</span> <span class="title class_">AdderTask</span>())</span><br><span class="line">            .next(<span class="keyword">new</span> <span class="title class_">AdderTask</span>(), (jobAdderResult, taskAdderResult) -&gt; </span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">AdderInput</span>(jobAdderResult.result, taskAdderResult.result));</span><br><span class="line">        <span class="keyword">return</span> job;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_run_the_defined_job_and_output_the_expected_result</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Job</span> <span class="variable">job</span> <span class="operator">=</span> createJob();</span><br><span class="line">        <span class="comment">// execute dag</span></span><br><span class="line">        <span class="comment">// verify execution result</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在写完这些代码的时候，我们发现设计更为丰满了。其实到这里主要的设计就可以算完成了，后续的代码在逻辑上比较直接，为避免赘述我们就不继续了。</p>
+<h2 id="回顾"><a class="markdownIt-Anchor" href="#回顾"></a> 回顾</h2>
+<p>回顾两种方式产生的设计，不言而喻，TDD驱动出来的设计比直接设计出来的设计要易于使用得多，而且干净得多。不知道大家有没有被TDD给我们带来的强大能力所惊艳到呢？至少我是被惊艳到了。除了设计在易用性和干净程度上，事实上上面直接设计出来的东西还忽略了一部分功能，试想在运行时，我们如何将任务的参数进行上下串联呢？这是因为如果我们直接开始设计，由于一开始很难考虑清楚所有的情况，我们总是容易漏掉一些东西。而TDD由于是先从使用上面来定义设计应该有的接口和互操作方式，这使得我们更不容易漏掉这样的关键步骤。</p>
+<p>我们经常听到说TDD可以带来十倍效率提升，一开始有人一定会觉得这有点夸大，难以相信。但是在这个例子里TDD带来的收益可以说是非常巨大，说十倍效率提升我觉得也不过分。我们可以尝试比较一下。如果我们用直接设计的方式得到最终的设计，那么后续我们在开发和调试<code>Task</code>的时候，我们将面临这样的问题：</p>
+<ol>
+<li><code>Task</code>的实现代码中充斥着大量的类型检查和强制类型转换；</li>
+<li>阅读代码时，如果没有文档，我们无法知道某个<code>Task</code>究竟需要怎样的参数，因为全都是<code>String</code>和<code>Object</code>，必须要将<code>Task</code>运行起来通过断点的方式才能知道到底是什么；</li>
+<li>如果有某个<code>Task</code>的详尽的文档，我们还需要维护文档和实现的一致性。</li>
+</ol>
+<p>单论这三点，我们就将消耗大量的时间。而用TDD驱动出来的对使用者友好的设计，类型检查在创建DAG的时候就可以自动完成，我们也无需维护文档，代码也更清晰可读。而TDD带来的测试质量保护网给我们节省的时间就更不用说了。</p>
+<p>我们再次来回顾一下TDD的实践过程。由于TDD要先写测试，这就使得我们不得不在写代码之前（设计之前）先从使用者的角度思考如何使用（如何设计），因而我们也就自然的得到了易于使用的（好的）设计。上面的思考过程可以印证TDD如何驱动出更好的设计的过程，我们先后从使用者的角度思考了如何定义<code>Task</code>，从使用者的角度思考了如何构造DAG。这是两个非常关键的设计，这两个设计将给后续实现新的<code>Task</code>，调试<code>Task</code>带来巨大的便利。</p>
+<p>当我们熟练使用TDD之后，实践TDD其实是一件非常愉快的事情。你将清晰的定义出需求，自然的写出更好的代码，同时TDD天然的测试屏障给我们的每行代码的正确性都带来了信心。我们不再会直接写出100行没有测试的代码，然后心里非常虚，然后还需要通过端到端启动应用这样非常低效的方式来验证代码正确性，而在修改了代码之后我们还不得不重复这样枯燥无聊的步骤。TDD可以让我们变成一个快乐的程序员。</p>
+<p>最后，我想重复一下第一篇<a href="/2019/07/20/tdd-for-improving-design/">文章</a>最后一段的内容：</p>
+<p>通过上面的经验的分享，不知道大家是不是更认可和接受TDD了呢？但是要熟练运用起来，关键还是在于刻意的去练习。每天的日常工作都是机会，希望大家能保持开放的心态，严格要求自己，遇到问题多讨论交流。当团队中所有人都会TDD，代码能力都上去了的时候，我们才能说我们是一个高效的团队，我们能做高质量的产品。所以，加油吧！</p>
+]]></content>
+      <categories>
+        <category>tdd</category>
+        <category>敏捷</category>
+      </categories>
+      <tags>
+        <tag>agile</tag>
+        <tag>敏捷</tag>
+        <tag>tdd</tag>
+        <tag>测试</tag>
+        <tag>质量</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>代码中的领域</title>
     <url>/2019/08/08/domain-concept-in-your-code/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>随着微服务和DDD的兴起，领域这个词逐渐成为了一个大家每天讨论中的高频词。对于经验稍欠缺的同学们，刚接触领域这个词，总会感觉有点神秘。到底什么算是一个领域呢？我们经常在谈论领域模型、领域服务、领域事件、领域边界等等，如果对领域概念没有一个清晰的认识，在接受这些相关概念上想必也会遇到阻碍。本文将结合我个人的理解以及一些实践经验来谈谈对这个概念的理解，希望能帮助大家更好的认识领域，进而更好的理解和运用相关的概念，最终更好的指导软件开发实践。</p>
@@ -3145,81 +3220,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
         <tag>架构</tag>
         <tag>DDD</tag>
         <tag>领域</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>从改善设计的角度理解TDD (2)</title>
-    <url>/2019/08/18/tdd-for-improving-design-2/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>在文章开始之前，我们先回顾一下TDD带来的好处。当我们理解TDD之后我们至少会发现下面这三点：</p>
-<ol>
-<li>TDD是一种更加自然的编程方式，因为我们总是要先弄清需求再编写代码，而这跟TDD先写测试（通过测试清晰的定义需求）再写实现的顺序是完全一致的。</li>
-<li>先写测试还要求我们站在使用者的角度来编写测试，这样我们可以自然的驱动出来更好的设计。</li>
-<li>由于TDD天然的特性，测试在编写代码之前就有了，自然我们也就无需担心测试覆盖率不够带来的质量问题了。</li>
-</ol>
-<p>TDD给我们编写代码带来的好处多多，我前面有一篇<a href="/2019/07/20/tdd-for-improving-design/">文章</a>主要分析了如何从改善设计的角度理解TDD，相信大家能感受到TDD给改善程序设计带来的好处。这里我想再次分享一个用TDD改善设计的例子，我们将从中看到不用TDD时我们的代码可能会变成什么样，而用了TDD又将变成什么样。</p>
-<span id="more"></span>
-<h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
-<p>有这样一个需求，我们需要定义一个有向无环图将一组小的<code>Task</code>组织成一个功能更强大的<code>Job</code>，然后执行<code>Job</code>按照任务（<code>Task</code>）先后关系运行这个图。其实我们能找到很多用这样的方式来编排任务的开源工具，比如下面这些。</p>
-<p><img data-src="/attaches/2019/2019-08-18-tdd-for-improving-design-2/workflow-tools.png" alt="Workflow工具" /></p>
-<p>我们还希望以后能编写一个UI界面来辅助用户快速的编排任务，用户可以以拖拉拽的方式可视化的编排，可以灵活的配置任务参数，同时系统将自动的校验用户指定的及任务间传递的参数。</p>
-<p>基本的需求就是这样，在了解了这些之后，我们来分别看看直接进行设计和用TDD进行辅助设计会是什么样子的。</p>
-<h2 id="直接设计"><a class="markdownIt-Anchor" href="#直接设计"></a> 直接设计</h2>
-<p>分析上述需求，如果我们想在用户编排任务的时候进行参数校验，那么我们必须在每个任务运行之前就有办法获取到各种参数和返回值的类型信息，它们将包括任务的可配置参数、任务的入参、任务的返回值等。由于这些参数都是针对某个具体的任务来定义的，我们可以设计任务的几个接口来获取这些类型信息。我们暂定只需要上述三种类型信息，可以得到如下的接口设计：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Task</span> &#123;</span><br><span class="line">    TypeOfSomeConfigurationType <span class="title function_">getConfigurationMeta</span><span class="params">()</span>;</span><br><span class="line">    TypeOfSomeInputType <span class="title function_">getInputMeta</span><span class="params">()</span>;</span><br><span class="line">    TypeOfSomeResultType <span class="title function_">getResultMeta</span><span class="params">()</span>;</span><br><span class="line">    SomeResultType <span class="title function_">execute</span><span class="params">(SomeInputType input, SomeConfigurationType config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的<code>SomeXXXType</code>应该是什么呢？为了支持灵活的配置，这里我们需要一个非常灵活的数据结构。稍加思索大家应该就能想到我们可以用<code>Map</code>。我们可以定义一个<code>Map&lt;String, Object&gt;</code>的类型来存储任意键值，这时候，对<code>SomeConfigurationType</code>而言，<code>key</code>是配置的名字，配置的值可以是任意的一个对象；对于<code>TypeOfSomeConfigurationType</code>而言，它应该是一个<code>Map&lt;String, Class&lt;?&gt;&gt;</code>类型，<code>key</code>与配置的名字一致，值用于描述配置的值的类型。其他的<code>SomeInputType</code>和<code>SomeResultType</code>均可以这样定义。到这里我们可能还会有点小小的自豪，问题很简单啊，引入一个<code>Map</code>数据结构就完美解决了。这个时候我们的<code>Task</code>接口会设计成下面这样：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Task</span> &#123;</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getConfigurationMeta();</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getInputMeta();</span><br><span class="line">    Map&lt;String, Class&lt;?&gt;&gt; getResultMeta();</span><br><span class="line">    Map&lt;String, Object&gt; <span class="title function_">execute</span><span class="params">(Map&lt;String, Object&gt; input, Map&lt;String, Object&gt; config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>仔细观察上面的接口，好像没那么干净，但似乎也挑不出什么毛病。<code>Map</code>看起来对于<code>Task</code>的实现会有一些干扰，因为<code>Task</code>实现里面势必会引入一些必要的强制类型转换的工作。能否避免这样的比较脏的类型转换代码呢？我们思考了一下，可能可以提供一些Utilities工具类来进行一些支持，或者编写一个<code>AbstractTask</code>抽象类，将一些公共的逻辑放到抽象类中进行复用。总体上感觉问题应该出在需要支持 <strong>灵活的配置</strong> 这样的需求上。由于需求是要保证灵活性，我们就只能将接口定义成这样。</p>
-<p>如何将任务组织成为一个有向无环图呢？这看起来也不是难事，先定义一个DAG，然后一个节点一个节点往里面塞数据就可以了。同时为了支持有向无环图的执行我们可以定义一个<code>execute</code>方法。这个时候我们的<code>Job</code>类大概会设计成下面这样：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Job</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addTask</span><span class="params">(Task task, Task... subTasks)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Map&lt;String, Object&gt; input, Map&lt;String, Object&gt; config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>到这里基本的设计就差不多完成了。我们会隐约感受到一些不够<code>clean</code>的设计，但是似乎难以控制。为了尽快实现功能，先这样定吧。</p>
-<h2 id="tdd驱动设计"><a class="markdownIt-Anchor" href="#tdd驱动设计"></a> TDD驱动设计</h2>
-<p>如果我们用TDD的思想来驱动开发，情况会是什么样呢？</p>
-<p>按照TDD解决问题的思路，我们要先编写一个测试。那么第一个测试要怎么写呢？分析一下需求可以发现，我们的目标是要实现一个DAG任务运行框架。那么我们的测试目标应当就是这个框架。这个框架需要实现的功能是：</p>
-<ol>
-<li>允许用户自定义一些<code>Task</code>；</li>
-<li>允许用户将这些<code>Task</code>组织成一个有向无环图；</li>
-<li>提供接口运行这个图。在测试的代码中，我们需要模拟这个框架的使用方式，提供输入，然后验证输出。</li>
-</ol>
-<p>于是这个测试的实现就会包含这样几个步骤：</p>
-<ol>
-<li>定义<code>Task</code>；</li>
-<li>将<code>Task</code>组织成一个有向无环图；</li>
-<li>利用框架运行这个图；</li>
-<li>检查运行结果是否是我们想要的。</li>
-</ol>
-<p>我们可以先编写测试模板代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JobSchedulerTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_run_the_defined_job_and_output_the_expected_result</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// define tasks</span></span><br><span class="line">        <span class="comment">// create dag</span></span><br><span class="line">        <span class="comment">// execute dag</span></span><br><span class="line">        <span class="comment">// verify execution result</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如何定义<code>Task</code>呢？<code>Task</code>需要保持足够的灵活性，以便可以支持任意可能的配置，同时<code>Task</code>要暴露接口让框架获取到输入、配置以及输出的元数据信息（类型信息）以便支持参数校验。由于我们使用<code>Java</code>这样的静态类型语言，事实上我们可以认为这些元数据信息是自动提供的。那么一个理想的<code>Task</code>就应该定义成下面这样：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimpleCalculationTask</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> CalculationResult <span class="title function_">execute</span><span class="params">(CalculationInput input, CalculationConfig config)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样的<code>Task</code>定义我们应该会比较满意，因为它只有一个接口，并且这个接口非常简洁而又有明确的类型信息。要实现这样的接口也应该是非常容易的。比如在测试中我们可以设计一个非常简单的加法任务，它不仅要输出加法的结果，还会附带输出获取到的输入参数，同时我们可以配置加法在什么区间可以按正常工作，而在另一个区间直接输出<code>-1</code>。这样的加法任务可以实现如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AdderTask</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderInput</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> right;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right)</span> &#123; <span class="built_in">this</span>.left = left; <span class="built_in">this</span>.right = right; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderConfig</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> maxSupportedValue;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> minSupportedValue;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> maxSupportedValue, <span class="type">int</span> minSupportedValue)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.maxSupportedValue = maxSupportedValue; <span class="built_in">this</span>.minSupportedValue = minSupportedValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderResult</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> right;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> result;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right)</span> &#123; <span class="built_in">this</span>.left = left; <span class="built_in">this</span>.right = right; <span class="built_in">this</span>.result = result; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">AdderInput</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> left;</span><br><span class="line">        <span class="keyword">public</span> <span class="type">int</span> right;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AdderInput</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right)</span> &#123; <span class="built_in">this</span>.left = left; <span class="built_in">this</span>.right = right; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> AdderResult <span class="title function_">execute</span><span class="params">(AdderInput input, AdderConfig config)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> input.left + input.right;</span><br><span class="line">        <span class="keyword">return</span> result &gt; config.maxSupportedValue || result &lt; config.minSupportedValue</span><br><span class="line">                ? <span class="keyword">new</span> <span class="title class_">AdderResult</span>(input.left, input.right, -<span class="number">1</span>)</span><br><span class="line">                : <span class="keyword">new</span> <span class="title class_">AdderResult</span>(input.left, input.right, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有了这样的定义之后，我们需要想办法将任务组织成一个有向无环图。怎样才能方便的构造这个图呢？最好有一个调度器，可以在某个任务后安排其他任务，也可以安排几个并行执行的任务，而我们需要提供一种方式来构造下游任务的参数。按照这样的想法可以得到下面这样的测试代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JobSchedulerTest</span> &#123;</span><br><span class="line">    Job <span class="title function_">createJob</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">TaskScheduler</span> <span class="variable">scheduler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskScheduler</span>();</span><br><span class="line">        <span class="type">Job</span> <span class="variable">job</span> <span class="operator">=</span> scheduler.scheduleTask(<span class="keyword">new</span> <span class="title class_">AdderTask</span>())</span><br><span class="line">            .next(<span class="keyword">new</span> <span class="title class_">AdderTask</span>(), adderResult -&gt; </span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">AdderInput</span>(adderResult.left, adderResult.result));</span><br><span class="line">        job = scheduler.scheduleParallelTask(job, <span class="keyword">new</span> <span class="title class_">AdderTask</span>())</span><br><span class="line">            .next(<span class="keyword">new</span> <span class="title class_">AdderTask</span>(), (jobAdderResult, taskAdderResult) -&gt; </span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">AdderInput</span>(jobAdderResult.result, taskAdderResult.result));</span><br><span class="line">        <span class="keyword">return</span> job;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">should_run_the_defined_job_and_output_the_expected_result</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Job</span> <span class="variable">job</span> <span class="operator">=</span> createJob();</span><br><span class="line">        <span class="comment">// execute dag</span></span><br><span class="line">        <span class="comment">// verify execution result</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>在写完这些代码的时候，我们发现设计更为丰满了。其实到这里主要的设计就可以算完成了，后续的代码在逻辑上比较直接，为避免赘述我们就不继续了。</p>
-<h2 id="回顾"><a class="markdownIt-Anchor" href="#回顾"></a> 回顾</h2>
-<p>回顾两种方式产生的设计，不言而喻，TDD驱动出来的设计比直接设计出来的设计要易于使用得多，而且干净得多。不知道大家有没有被TDD给我们带来的强大能力所惊艳到呢？至少我是被惊艳到了。除了设计在易用性和干净程度上，事实上上面直接设计出来的东西还忽略了一部分功能，试想在运行时，我们如何将任务的参数进行上下串联呢？这是因为如果我们直接开始设计，由于一开始很难考虑清楚所有的情况，我们总是容易漏掉一些东西。而TDD由于是先从使用上面来定义设计应该有的接口和互操作方式，这使得我们更不容易漏掉这样的关键步骤。</p>
-<p>我们经常听到说TDD可以带来十倍效率提升，一开始有人一定会觉得这有点夸大，难以相信。但是在这个例子里TDD带来的收益可以说是非常巨大，说十倍效率提升我觉得也不过分。我们可以尝试比较一下。如果我们用直接设计的方式得到最终的设计，那么后续我们在开发和调试<code>Task</code>的时候，我们将面临这样的问题：</p>
-<ol>
-<li><code>Task</code>的实现代码中充斥着大量的类型检查和强制类型转换；</li>
-<li>阅读代码时，如果没有文档，我们无法知道某个<code>Task</code>究竟需要怎样的参数，因为全都是<code>String</code>和<code>Object</code>，必须要将<code>Task</code>运行起来通过断点的方式才能知道到底是什么；</li>
-<li>如果有某个<code>Task</code>的详尽的文档，我们还需要维护文档和实现的一致性。</li>
-</ol>
-<p>单论这三点，我们就将消耗大量的时间。而用TDD驱动出来的对使用者友好的设计，类型检查在创建DAG的时候就可以自动完成，我们也无需维护文档，代码也更清晰可读。而TDD带来的测试质量保护网给我们节省的时间就更不用说了。</p>
-<p>我们再次来回顾一下TDD的实践过程。由于TDD要先写测试，这就使得我们不得不在写代码之前（设计之前）先从使用者的角度思考如何使用（如何设计），因而我们也就自然的得到了易于使用的（好的）设计。上面的思考过程可以印证TDD如何驱动出更好的设计的过程，我们先后从使用者的角度思考了如何定义<code>Task</code>，从使用者的角度思考了如何构造DAG。这是两个非常关键的设计，这两个设计将给后续实现新的<code>Task</code>，调试<code>Task</code>带来巨大的便利。</p>
-<p>当我们熟练使用TDD之后，实践TDD其实是一件非常愉快的事情。你将清晰的定义出需求，自然的写出更好的代码，同时TDD天然的测试屏障给我们的每行代码的正确性都带来了信心。我们不再会直接写出100行没有测试的代码，然后心里非常虚，然后还需要通过端到端启动应用这样非常低效的方式来验证代码正确性，而在修改了代码之后我们还不得不重复这样枯燥无聊的步骤。TDD可以让我们变成一个快乐的程序员。</p>
-<p>最后，我想重复一下第一篇<a href="/2019/07/20/tdd-for-improving-design/">文章</a>最后一段的内容：</p>
-<p>通过上面的经验的分享，不知道大家是不是更认可和接受TDD了呢？但是要熟练运用起来，关键还是在于刻意的去练习。每天的日常工作都是机会，希望大家能保持开放的心态，严格要求自己，遇到问题多讨论交流。当团队中所有人都会TDD，代码能力都上去了的时候，我们才能说我们是一个高效的团队，我们能做高质量的产品。所以，加油吧！</p>
-]]></content>
-      <categories>
-        <category>tdd</category>
-        <category>敏捷</category>
-      </categories>
-      <tags>
-        <tag>agile</tag>
-        <tag>敏捷</tag>
-        <tag>tdd</tag>
-        <tag>测试</tag>
-        <tag>质量</tag>
       </tags>
   </entry>
   <entry>
@@ -3711,6 +3711,37 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
+    <title>仪式感与专业服务</title>
+    <url>/2019/12/02/sense-of-ceremony-and-professional-service/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>进门，双手帮你脱下外套，挂起。洗发师双手提起一件深色防水的丝质套衫，你伸手，换上。拿起腰带，穿过你的腰，两圈，拉扯一次，拉扯两次，系紧。抹平套衫肩部，拉住袖口，拉扯一次，拉扯两次，展平。拉住套衫底部，拉扯一次，拉扯两次，拉齐。</p>
+<p>将你带到洗头处，你看到一个用于平躺的台面，台面上深色皮质的垫子分为两部分，前面部分可拆卸，上放一块叠起来的深蓝色毛巾，毛巾上面是一朵颜色鲜艳的大荷花。在台面前部放有一个与垫子同样深色皮质的单人凳。</p>
+<p>洗发师伸开右手，将你迎向凳子坐下。介绍洗头服务：我是37号洗发师为您服务，本次洗发50分钟，请您稍坐，我去准备毛巾和其他用品。</p>
+<span id="more"></span>
+<p>洗发师离开片刻即推着一个装满深色毛巾及洗护用品的篮子过来。拉起你的衣服领口，从脊梁处开始，一只手拉住，另一只手用虎口夹住你的衣领往你的胸前划去，展平。另一边，展平。拉起你的领口，将一张防水薄巾塞入，伸手向两边抚平。将薄巾往两边肩部有节奏的轻拉，轻拉，数次。拉住薄巾在肩部的两角，有节奏的往下拉，一次，两次，三次。轻抚肩部薄巾，展平。轻抚后背衣服，展平。</p>
+<p>洗发师双手抹上精油，拍手，抹匀。双手向你的肩部及颈部抹去，抹匀精油。以肩部肌肉为中心，使劲，用手掌从上往下刮去。略感疼痛。左右两边各数次。找准肩胛骨附近穴位，按压。另起几式复杂难以描述的手法，揉，刮，按压。循环，5分钟。</p>
+<p>起身整理台面，端起垫子前部带荷花的台面，放到后部长垫下面镂空处。台面端起后出现一个水槽，内有一个可折叠的头垫，翻起。在长垫末端放置一个长条枕头状的软垫。伸手将你迎向垫子躺下，前后调整好位置，头靠在水槽里面的头垫上，脚脖子架在末端软垫上。拿来鞋套，帮你套上。拉起两边的深紫色帘子。随即取来一条热毛巾，抬起腰部，放在腰部下面垫起。你感到腰部背后一阵暖流。</p>
+<p>洗发师坐回水槽前面的凳子，手指沾上精油，在你眼前或以拍打浪花的手势将精油往下甩，或以折扇展开的手势将精油扩散至整个面部。一边散精油，一边引导道：此精油有安神，放松的功效，深呼吸，放松，深呼吸，放松，深呼吸，放松。待你照做之后，一种特殊的香味出现，你感到整个头部弥漫在这样的香气之中。</p>
+<p>洗发师开始按摩头部，自额头正中开始往上，用双手大拇指按压，一边按压一边挪动，直到头顶。一轮，两轮。左右两边找准穴位，一揉一按。循环数次。以拇指为轴心，用折扇展开的手势依次打开每一个手指，指尖有节奏的敲击你的头部。循环此手法，从头顶开始往两侧移动，一次，两次，三次。手指向下移动，找准后颈窝两边肌肉，用拇指及虎口来回刮揉。略感疼痛。另起几式复杂难以描述的手法，揉，刮，按压。循环，10分钟。</p>
+<p>抹上洗发水，采用之前头部按摩类似的手法，一边按摩一边清洗。10分钟，清洗两次。</p>
+<p>清洗干净之后，冲水。随即抹上另一种洗发水，这次却大不相同，你感觉头皮有一种暖流流动，整个头皮都发热起来。洗发师介绍道：这是本店特色头皮温泉浴，是以生姜为原料特制的一种洗发水，可以温暖头皮，放松肌肉，夏季我们将更换为一种以薄荷为原料的洗发水，可以凉爽头皮。配以轻柔的按摩之后，热水冲净。</p>
+<p>至此洗发完毕。洗发师双手捋住头发，捋干大部余水。轻声道：请稍候，我去取颈敷毛巾和眼敷毛巾。片刻而归，将颈敷毛巾架在你的后颈，将眼敷毛巾放在你的双眼之上。你闭上双眼感受来自后颈和眼部的热流。洗发师走到长垫右边中间坐下，从肩部向下到手掌依次按压整个手臂。拉起你的手腕，放松手掌，你的手指自然下垂，洗发师依次拉伸你的每一个手指，砰，砰，砰，几声清脆的声音。拉起你的整条手臂，往下，往上，往后，提拉，三次。换左手手臂，重复上面的手法。</p>
+<p>按摩手臂完毕，休息一分钟，洗发师将你扶起，用毛巾擦干头发余水，将你迎向外面的理发师。整个洗发服务完毕。</p>
+<p>每次到这家理发店理发后，都有一种浑身舒畅的感觉。不禁叹服于他们服务的专业，也因身边能有这样高质量的服务而暗喜。古时将相能享受到的服务也不过如此吧。</p>
+<p>回想整个服务过程，为什么让人觉得专业呢？我想主要来自于细节和节奏感。他们讲究细节和节奏感，因此要在洗发之前不遗余力帮你整理好衣衫；因此要将垫子分为两部分，并配以荷花点缀；因此要以软垫垫上你的脚脖子，以热毛巾垫上你的后腰，又以热毛巾热敷你的后颈和双眼；因此要创造一套头皮温泉浴让你眼前一亮，特别惊喜。这样的服务，用无微不至形容亦不为过。</p>
+<p>细节和节奏感的把握有效的营造了一种仪式感。就像婚礼现场，大家都细心打扮，西装革履，整齐的端立于红毯两旁，牧师的宣言在教堂内回荡。就像升旗仪式，举旗，正步，肃穆，注视。</p>
+<p>这样的仪式感让人觉得专业。联想我们的敏捷软件开发。打开我们公司首页，你将看到，ThoughtWorks对外提供的是professional service，专业服务。阅读几本经典敏捷书籍之后，你将能看到，我们将敏捷里面的活动称为ceremony，仪式。敏捷软件交付服务应该就是这样一种有仪式感的专业服务。</p>
+<p>敏捷的仪式感于我是随时引用的敏捷宣言，是retro的时候跟大家一起有节奏感的自信的诵读“我们坚信。。。”，是坚持测试坚持tdd，是对完美设计的不懈追求和对技术卓越的不懈追求，是对产品质量的高要求，是对缺陷的零容忍，是谦虚的态度，是以客户价值和用户价值为导向的建议，还有很多。。。极限编程指导我们迈向敏捷，其实也是在指导我们提供极致的专业服务，难道不是吗？</p>
+]]></content>
+      <categories>
+        <category>敏捷</category>
+      </categories>
+      <tags>
+        <tag>敏捷</tag>
+        <tag>仪式感</tag>
+        <tag>专业服务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hadoop安全认证机制 （四）</title>
     <url>/2019/12/02/hadoop-auth-4/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>系列文章：</p>
@@ -3793,37 +3824,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
         <tag>安全</tag>
         <tag>hadoop</tag>
         <tag>kerberos</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>仪式感与专业服务</title>
-    <url>/2019/12/02/sense-of-ceremony-and-professional-service/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>进门，双手帮你脱下外套，挂起。洗发师双手提起一件深色防水的丝质套衫，你伸手，换上。拿起腰带，穿过你的腰，两圈，拉扯一次，拉扯两次，系紧。抹平套衫肩部，拉住袖口，拉扯一次，拉扯两次，展平。拉住套衫底部，拉扯一次，拉扯两次，拉齐。</p>
-<p>将你带到洗头处，你看到一个用于平躺的台面，台面上深色皮质的垫子分为两部分，前面部分可拆卸，上放一块叠起来的深蓝色毛巾，毛巾上面是一朵颜色鲜艳的大荷花。在台面前部放有一个与垫子同样深色皮质的单人凳。</p>
-<p>洗发师伸开右手，将你迎向凳子坐下。介绍洗头服务：我是37号洗发师为您服务，本次洗发50分钟，请您稍坐，我去准备毛巾和其他用品。</p>
-<span id="more"></span>
-<p>洗发师离开片刻即推着一个装满深色毛巾及洗护用品的篮子过来。拉起你的衣服领口，从脊梁处开始，一只手拉住，另一只手用虎口夹住你的衣领往你的胸前划去，展平。另一边，展平。拉起你的领口，将一张防水薄巾塞入，伸手向两边抚平。将薄巾往两边肩部有节奏的轻拉，轻拉，数次。拉住薄巾在肩部的两角，有节奏的往下拉，一次，两次，三次。轻抚肩部薄巾，展平。轻抚后背衣服，展平。</p>
-<p>洗发师双手抹上精油，拍手，抹匀。双手向你的肩部及颈部抹去，抹匀精油。以肩部肌肉为中心，使劲，用手掌从上往下刮去。略感疼痛。左右两边各数次。找准肩胛骨附近穴位，按压。另起几式复杂难以描述的手法，揉，刮，按压。循环，5分钟。</p>
-<p>起身整理台面，端起垫子前部带荷花的台面，放到后部长垫下面镂空处。台面端起后出现一个水槽，内有一个可折叠的头垫，翻起。在长垫末端放置一个长条枕头状的软垫。伸手将你迎向垫子躺下，前后调整好位置，头靠在水槽里面的头垫上，脚脖子架在末端软垫上。拿来鞋套，帮你套上。拉起两边的深紫色帘子。随即取来一条热毛巾，抬起腰部，放在腰部下面垫起。你感到腰部背后一阵暖流。</p>
-<p>洗发师坐回水槽前面的凳子，手指沾上精油，在你眼前或以拍打浪花的手势将精油往下甩，或以折扇展开的手势将精油扩散至整个面部。一边散精油，一边引导道：此精油有安神，放松的功效，深呼吸，放松，深呼吸，放松，深呼吸，放松。待你照做之后，一种特殊的香味出现，你感到整个头部弥漫在这样的香气之中。</p>
-<p>洗发师开始按摩头部，自额头正中开始往上，用双手大拇指按压，一边按压一边挪动，直到头顶。一轮，两轮。左右两边找准穴位，一揉一按。循环数次。以拇指为轴心，用折扇展开的手势依次打开每一个手指，指尖有节奏的敲击你的头部。循环此手法，从头顶开始往两侧移动，一次，两次，三次。手指向下移动，找准后颈窝两边肌肉，用拇指及虎口来回刮揉。略感疼痛。另起几式复杂难以描述的手法，揉，刮，按压。循环，10分钟。</p>
-<p>抹上洗发水，采用之前头部按摩类似的手法，一边按摩一边清洗。10分钟，清洗两次。</p>
-<p>清洗干净之后，冲水。随即抹上另一种洗发水，这次却大不相同，你感觉头皮有一种暖流流动，整个头皮都发热起来。洗发师介绍道：这是本店特色头皮温泉浴，是以生姜为原料特制的一种洗发水，可以温暖头皮，放松肌肉，夏季我们将更换为一种以薄荷为原料的洗发水，可以凉爽头皮。配以轻柔的按摩之后，热水冲净。</p>
-<p>至此洗发完毕。洗发师双手捋住头发，捋干大部余水。轻声道：请稍候，我去取颈敷毛巾和眼敷毛巾。片刻而归，将颈敷毛巾架在你的后颈，将眼敷毛巾放在你的双眼之上。你闭上双眼感受来自后颈和眼部的热流。洗发师走到长垫右边中间坐下，从肩部向下到手掌依次按压整个手臂。拉起你的手腕，放松手掌，你的手指自然下垂，洗发师依次拉伸你的每一个手指，砰，砰，砰，几声清脆的声音。拉起你的整条手臂，往下，往上，往后，提拉，三次。换左手手臂，重复上面的手法。</p>
-<p>按摩手臂完毕，休息一分钟，洗发师将你扶起，用毛巾擦干头发余水，将你迎向外面的理发师。整个洗发服务完毕。</p>
-<p>每次到这家理发店理发后，都有一种浑身舒畅的感觉。不禁叹服于他们服务的专业，也因身边能有这样高质量的服务而暗喜。古时将相能享受到的服务也不过如此吧。</p>
-<p>回想整个服务过程，为什么让人觉得专业呢？我想主要来自于细节和节奏感。他们讲究细节和节奏感，因此要在洗发之前不遗余力帮你整理好衣衫；因此要将垫子分为两部分，并配以荷花点缀；因此要以软垫垫上你的脚脖子，以热毛巾垫上你的后腰，又以热毛巾热敷你的后颈和双眼；因此要创造一套头皮温泉浴让你眼前一亮，特别惊喜。这样的服务，用无微不至形容亦不为过。</p>
-<p>细节和节奏感的把握有效的营造了一种仪式感。就像婚礼现场，大家都细心打扮，西装革履，整齐的端立于红毯两旁，牧师的宣言在教堂内回荡。就像升旗仪式，举旗，正步，肃穆，注视。</p>
-<p>这样的仪式感让人觉得专业。联想我们的敏捷软件开发。打开我们公司首页，你将看到，ThoughtWorks对外提供的是professional service，专业服务。阅读几本经典敏捷书籍之后，你将能看到，我们将敏捷里面的活动称为ceremony，仪式。敏捷软件交付服务应该就是这样一种有仪式感的专业服务。</p>
-<p>敏捷的仪式感于我是随时引用的敏捷宣言，是retro的时候跟大家一起有节奏感的自信的诵读“我们坚信。。。”，是坚持测试坚持tdd，是对完美设计的不懈追求和对技术卓越的不懈追求，是对产品质量的高要求，是对缺陷的零容忍，是谦虚的态度，是以客户价值和用户价值为导向的建议，还有很多。。。极限编程指导我们迈向敏捷，其实也是在指导我们提供极致的专业服务，难道不是吗？</p>
-]]></content>
-      <categories>
-        <category>敏捷</category>
-      </categories>
-      <tags>
-        <tag>敏捷</tag>
-        <tag>仪式感</tag>
-        <tag>专业服务</tag>
       </tags>
   </entry>
   <entry>
@@ -3963,155 +3963,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       <tags>
         <tag>敏捷</tag>
         <tag>DDD</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>强化学习入门</title>
-    <url>/2020/02/06/DRL-the-problem/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
-<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
-<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
-<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
-<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
-<span id="more"></span>
-<p>为了简化问题，我们可以像下面这样建模这个世界和智能体。我们可以认为在某一个时刻整个世界处于状态<code>S1</code>，当智能体进行了某一个行动之后，这个世界的状态变化为了<code>S2</code>。智能体之所以能够做出这一行动，是因为其心中有一个目标，并且从这个世界中得到了一定的反馈。</p>
-<p>举个例子。比如我们想要喝水（目标），身边有一个杯子和一个饮水机（状态S1），我们会观察杯子和饮水机的位置，再伸手去拿取杯子（行动），然后将杯子靠近（反馈）饮水机，到达饮水机出水位置之后（状态S2），饮水机开始出水，之后我们再将杯子举到嘴边就能喝到水了。</p>
-<p>这个简单的模型可以图示如下：</p>
-<p><img data-src="/attaches/2020/2020-02-06-DRL-the-problem/mdp.png" alt="Markov Decision Process" /></p>
-<p>智能体（<code>Agent</code>）通过观察这个世界（<code>Environment</code>）的状态（<code>State: s</code>），经过智能决策，开展了一些行动（<code>Actions: a</code>），这些行动进而引起了这个世界的状态变化。智能体从这些变化的状态中获得关于之前行动的反馈（<code>Reward: r</code>），从而指导后续的行动决策。就这样，整个世界周而复始的一直循环下去。</p>
-<p>考虑这个模型，由于有因果律的存在，是不是知道了<code>S1</code>这个初始状态及智能体做出的行动<code>A</code>之后，我们就可以直接计算下一状态<code>S2</code>了呢？理论是可行的，但实际情况要更复杂一些，因为状态实在太多太多了，我们通常无法直接建模所有的状态。这时，我们可以用统计学的方式来解决这个问题。我们可以认为在我们做出某一行动之后，这个世界的状态只是有一定概率会转换为<code>S2</code>，同时也有一定的概率会转换为<code>S2_1</code>等等。这样就算我们建模的状态不全，也是可以相对较好的描述这个系统。</p>
-<p>引入统计学的思维，也就引入了不确定性，虽然如此，但是却带来了更合理的描述系统的方式和系统层面的确定性。</p>
-<p>以上描述的这一模型，在强化学习的世界里，我们称作Markov决策过程，简称MDP（Markov Decision Process）。这里面的不确定性也就是Markov特性。</p>
-<p>有了这个模型之后，我们就可以从数学上来研究这个问题了。强化学习研究的正是如何在这样的一个数学模型的基础上去实现一个有效的算法来进行智能决策。</p>
-<h2 id="一个小例子"><a class="markdownIt-Anchor" href="#一个小例子"></a> 一个小例子</h2>
-<p>我们可以设计一个简单的小游戏来辅助解决这个问题。</p>
-<p><img data-src="/attaches/2020/2020-02-06-DRL-the-problem/grid-world.png" alt="Grid World" /></p>
-<p>如上图，机器人（智能体）可以在这样的网格中移动：</p>
-<ul>
-<li>绿色格子代表机器人可以移动到的位置</li>
-<li>灰色格子表示有障碍物，机器人不能移动到那个位置</li>
-<li>红色格子表示一个陷进，如果机器人移动到此，游戏失败</li>
-<li>黄色格子代表一个出口，如果机器人移动到此，游戏成功</li>
-</ul>
-<p>这个游戏中的MDP，可以描述为如下：</p>
-<ol>
-<li>系统状态：格子位置，机器人位置</li>
-<li>机器人可执行的动作：向上下左右四个方向移动</li>
-<li>状态转换概率：如果机器人向某个方向移动，它移动到对应方向的格子的概率假设为<code>0.7</code>（如果无法移动到对应方向的位置，则留在原格子的概率为<code>0.7</code>），移动到其他位置的概率为<code>0.3/n</code>，<code>n</code>为其他可转换到的状态的数量。</li>
-</ol>
-<p>状态转换概率举例如下（假设我们对格子进行编码，编码方式与excel表格的编码方式一致，从<code>A1</code>到<code>E3</code>。）：</p>
-<ol>
-<li>假设机器人在位置<code>A2</code>，如果其向上移动，有<code>70%</code>的概率会移动到<code>A1</code>，分别有<code>15%</code>的概率会移动到<code>A2</code>（留在原位）和<code>A3</code></li>
-<li>假设机器人在位置<code>A2</code>，如果其向左或向右移动，有<code>70%</code>的的概率会留在原位<code>A2</code>，分别有<code>15%</code>的概率会移动到<code>A1</code>和<code>A3</code></li>
-</ol>
-<p>我们的算法要解决的问题是，在任意绿色格子里面放置一个机器人，算法可以指导机器人一步一步到达位置<code>E1</code>（成功完成游戏）。</p>
-<h2 id="方案与算法"><a class="markdownIt-Anchor" href="#方案与算法"></a> 方案与算法</h2>
-<p>为了实现一个智能算法解决上述机器人走格子问题，我们可以考虑给每个格子定义一个价值。这个价值表示到达这个格子后有多大可能性能成功完成游戏。</p>
-<p>观察这个游戏可以发现，<code>D1</code>的价值应该高于<code>C1</code>，<code>C1</code>的价值应该高于<code>B1</code>。</p>
-<p>如果可以计算出每个格子的价值，我们是不是就解决了这个问题了呢？因为，无论机器人处于哪个位置，它只需要往价值比当前格子更高的格子方向走即可。</p>
-<p>现在问题转化为如何定义和计算这个价值。</p>
-<p>我们先将我们的目标数值化。由于到达出口格子即成功，如果机器人能到达此处，我们就给智能体反馈奖励<code>1</code>。同理，如果到达陷进格子，反馈奖励<code>-1</code>，到达绿色格子则奖励<code>0</code>。</p>
-<p>这个时候我们来看格子<code>D1</code>。如果机器人在此处，它可以往四个方向移动。如果右移，有<code>70%</code>的概率可以到达出口，获得奖励<code>1</code>。如果往其他三个方向走，则分别有<code>10%</code>的概率会到达出口，获得奖励<code>1</code>。</p>
-<p>经过以上的分析可以发现，我们其实可以将概率与奖励相乘来代表某个移动方向的价值。得到如下的价值数值：</p>
-<ul>
-<li>向右移动：<code>0.7 * 1 = 0.7</code></li>
-<li>向上/下/左移动：<code>0.1 * 1 = 0.1</code></li>
-</ul>
-<p>这里的数值我们可以定义为动作价值。有了这个动作价值，要计算某个格子的价值，我们其实可以直接用最大的动作价值来表示，即：<code>max([0.7, 0.1, 0.1, 0.1]) = 0.7</code>。</p>
-<p>如果要计算格子<code>C1</code>的价值呢？这时，虽然达到格子<code>D1</code>的奖励为0，但是我们可以利用刚计算好的<code>D1</code>的价值。还是按照前面的方式进行计算：</p>
-<ul>
-<li>向右移动：<code>0.7 * (0 + 0.7) = 0.49</code></li>
-<li>向上/下/左移动：<code>0.1 * (0 + 0.7) = 0.07</code></li>
-<li>格子价值：<code>max([0.49, 0.07, 0.07, 0.07]) = 0.49</code></li>
-</ul>
-<p>到这里，一个简单的算法呼之欲出。我们只需要找到所有有奖励的位置，然后从那里开始去计算其他所有位置的奖励，好像这个问题就解决了。</p>
-<p>实际情况会稍微复杂一些。因为我们可能有很多个位置都存在奖励，而且这些奖励的多少可能由于任务定义而不一样。这里更实际一些的算法是利用多次迭代来实现。</p>
-<p>为了不失一般性，我们可以定义公式：</p>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">Q^*(s, a) = \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
-<p>（表示每个动作的价值，其中：<code>s</code>表示当前状态；<code>a</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>的概率；<code>R(s, a, s')</code>表示表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>得到的奖励）</p>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi>max</mi><mo>⁡</mo></mo><mi>a</mi></munder><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V^*(s) = \max\limits_a Q^*(s, a)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.45em;vertical-align:-0.7em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43056em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span></span>
-<p>（表示每个格子的价值，其中：<code>s</code>表示当前状态，<code>a</code>表示动作）</p>
-<p>一般而言，我们会引入一个额外的γ参数，对下一个状态的价值打一定的折扣，这是因为当前获得的奖励一般会优于下一个状态的价值的，毕竟下一个状态的价值只是一个估计值。这时，上述第一个公式变为：</p>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">Q^*(s, a) = \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
-<p>于是，我们的算法就可以描述为：</p>
-<ul>
-<li>对每一个状态，初始化 <code>V := 0</code></li>
-<li>循环，直到<code>V</code>收敛：
-<ul>
-<li>对每一个状态，</li>
-</ul>
-</li>
-</ul>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi>max</mi><mo>⁡</mo></mo><mi>a</mi></munder><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">V^*(s) = \max\limits_a \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43056em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
-<p>这里为判断<code>V</code>是否收敛，我们可以检查当前这次迭代是否会更新<code>V</code>的值。</p>
-<p>用<code>javascript</code>代码实现，主要代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title class_">MDPVISolver</span>.<span class="property">solve</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> values = m.<span class="title function_">zeroArray</span>([<span class="variable language_">this</span>.<span class="property">states</span>.<span class="property">length</span>]);</span><br><span class="line">    <span class="keyword">var</span> valuesNew = values;</span><br><span class="line">    <span class="keyword">var</span> iterations = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> qValuesAll = [];</span><br><span class="line">        values = valuesNew;</span><br><span class="line">        valuesNew = [];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="variable language_">this</span>.<span class="property">states</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">var</span> state = <span class="variable language_">this</span>.<span class="property">states</span>[i];</span><br><span class="line">            <span class="keyword">var</span> qValues = <span class="variable language_">this</span>.<span class="title function_">qValues</span>(values, state);</span><br><span class="line">            qValuesAll.<span class="title function_">push</span>(qValues);</span><br><span class="line">            <span class="keyword">var</span> value = <span class="variable language_">this</span>.<span class="title function_">value</span>(qValues);</span><br><span class="line">            valuesNew.<span class="title function_">push</span>(value);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;finished iteration &#x27;</span> + (++iterations));</span><br><span class="line">        <span class="comment">// console.log(&#x27;values: &#x27;, values);</span></span><br><span class="line">    &#125; <span class="keyword">while</span>(!<span class="variable language_">this</span>.<span class="title function_">converged</span>(values, valuesNew));    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里我已经实现了上述的游戏的一个Demo，见<a href="/examples/mdp/grid-world.html">这里</a>。完整代码见<a href="https://github.com/gmlove/gmlove.github.io/blob/source/source/examples/mdp/grid-world.js">这里</a>865行到890行。</p>
-<p>上述算法就是强化学习里面的经典算法 <strong>价值迭代</strong> 算法了。而我们上面定义<code>V</code>的迭代形式的公式就是著名的 Bellman 公式了，其最初由 Richard Bellman 提出。</p>
-<h2 id="另一个思路"><a class="markdownIt-Anchor" href="#另一个思路"></a> 另一个思路</h2>
-<p>上述算法存在一个问题，我们最后得到的是一系列状态价值（每个格子的价值），为了得到我们想要的行动，我们还需要根据根据状态价值，计算行动价值，即上述<code>Q(s, a)</code>。使用上有所不便。</p>
-<p>那么有没有办法改进呢？再来思考一下这个问题的目标，实际上我们想要找到一种指导机器人行动的策略。这里的策略可以表示为：在任意一个位置，算法可以给出一个恰当的行动。</p>
-<p>我们能不能直接去衡量某一个策略的价值呢？因为一旦有了这个策略的价值，我们就可以考虑直接去优化这个策略，而不是去对所有的状态计算价值。</p>
-<p>对于某一策略，由于其可以基于当前状态指导我们作出行动，我们可以定义它为一个 <strong>输入为状态</strong> <strong>输出为行动</strong> 的函数，即<code>π: a = π(s)</code></p>
-<p>既然这样，参考价值迭代算法中的状态价值（格子价值）定义，我们可以定义策略价值函数为：</p>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>π</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>π</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">V^\pi(s) = \sum_{s&#x27;} T(s, \pi(s), s&#x27;)[R(s, \pi(s), s&#x27;) + \gamma*V^\pi(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
-<p>（策略<code>π</code>的价值，其中：<code>s</code>表示当前状态；<code>a = π(s)</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, π(s), s')</code>表示在状态<code>s</code>，执行动作<code>a=π(s)</code>转换到状态<code>s'</code>的概率；<code>R(s, π(s), s')</code>表示在状态<code>s</code>，执行动作<code>a=π(s)</code>转换到状态<code>s'</code>得到的奖励）</p>
-<p>上面的公式是一个迭代形式的定义，既然如此，我们可以参考之前的<strong>状态价值迭代算法</strong>，迭代计算这个策略的价值，最后这个价值可能会收敛到某个具体的值。</p>
-<p>然而就算我们可以计算策略的价值，我们如何得到一个有效的策略呢？如果没有策略，我们其实也无从计算其价值。</p>
-<p>能不能随机初始化一个策略？有了这个策略，我们就可以计算其价值。然后我们可以想办法看看能不能得到一个更好的策略。</p>
-<p>对于以上解决问题的思路，我第一次看到的时候，也不禁暗暗赞叹。事实上，这就是我这里想要给大家介绍的另一个强化学习经典算法：<strong>策略迭代</strong> 算法。</p>
-<p>如何根据一个策略寻找更优策略？可以这样做：</p>
-<ul>
-<li>计算在当前策略下，哪一个行动能得到最大价值</li>
-<li>选择价值最大的行动作为新策略的行动</li>
-</ul>
-<p>用公式表述如下：</p>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi mathvariant="normal">arg max</mi><mo>⁡</mo></mo><mi>a</mi></munder><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">\pi_{i+1}(s) = \argmax\limits_a \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^\pi(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
-<p>（下一个（第<code>i+1</code>个）更优策略<code>π(i+1)</code>，其中：<code>s</code>表示当前状态；<code>a = π(s)</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>的概率；<code>R(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>得到的奖励）</p>
-<p>到这里，这个 <strong>策略迭代</strong> 算法就差不多完成了。用<code>javascript</code>代码实现，主要代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title class_">MDPPISolver</span>.<span class="property">solve</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> policy = <span class="variable language_">this</span>.<span class="title function_">randomPolicy</span>();</span><br><span class="line">    <span class="keyword">var</span> policyNew = policy;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        policy = policyNew;</span><br><span class="line">        values = <span class="variable language_">this</span>.<span class="title function_">solveForPolicy</span>(policy);</span><br><span class="line">        policyNew = <span class="variable language_">this</span>.<span class="title function_">improvePolicy</span>(values, policy);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!<span class="variable language_">this</span>.<span class="title function_">converged</span>(policy, policyNew));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>完整代码见<a href="https://github.com/gmlove/gmlove.github.io/blob/source/source/examples/mdp/grid-world.js">这里</a>932行到1024行。</p>
-<h2 id="扩展"><a class="markdownIt-Anchor" href="#扩展"></a> 扩展</h2>
-<h3 id="状态空间降维"><a class="markdownIt-Anchor" href="#状态空间降维"></a> 状态空间降维</h3>
-<p>虽然我们可以用上述两个经典算法解决这个问题，但是它们的效率是很低的，算法复杂度用大O计算法可以表示为<code>O(a*s*s)</code>。对于这个非常简单的问题，计算速度尚能接受，但是如果我们考虑一些更复杂的问题，就会发现这里的状态<code>s</code>的取值空间可能会非常大。</p>
-<p>比如对于下面这个吃豆子的游戏，这里的状态数量为：</p>
-<pre><code>    状态数量 = 格子数量 * N (N为每个格子的可能状态：比如是否有吃豆人、是否有豆子、是否有敌人及敌人的类型等等)
-</code></pre>
-<p><img data-src="/attaches/2020/2020-02-06-DRL-the-problem/pac-man.png" alt="Pacman" /></p>
-<p>过大的状态空间就导致上述经典算法实际无法执行，也就无法满足实际需求。</p>
-<p>一个可能的优化手段是人为的设计一些特征来表示某个状态<code>s</code>，这样就实现了对<code>s</code>进行降维的操作。比如对于上面吃豆子的游戏，我们可以建模这样几个特征：</p>
-<ul>
-<li>离最近的豆子的方向和距离</li>
-<li>离每个敌人的方向和距离</li>
-<li>敌人的移动速度和方向</li>
-</ul>
-<p>有了这样的很小的状态空间，上述算法就可以执行了。</p>
-<h3 id="深度强化学习dqn"><a class="markdownIt-Anchor" href="#深度强化学习dqn"></a> 深度强化学习<code>DQN</code></h3>
-<p>有了上述状态空间降维的办法，我们可以考虑是不是可以用一个深度神经网络来替代人工特征的过程呢？当然是可以的，这就是前几年 <code>Deep Mind</code> 轰动学界和产业界的关于 <strong>深度强化学习</strong> 的论文中的内容了。</p>
-<p><code>DQN</code>的全称是<code>Deep Q-Network</code>，它的核心是一个<code>Q</code>值迭代的算法。<code>Q</code>值迭代公式就是我们 <strong>价值迭代</strong> 公式中的关于行动价值的公式的一个迭代形式。算法也是不断迭代直到收敛。</p>
-<p>我在另一篇文章中有关于<code>DQN</code>的更多内容。详情见<a href="/2016/12/05/let-machine-play-games/">这里</a>。</p>
-<h3 id="更多的问题"><a class="markdownIt-Anchor" href="#更多的问题"></a> 更多的问题</h3>
-<p>考虑一个更实际的问题，上述经典算法假设我们知道了状态转移函数<code>T</code>。但实际上当前世界可能对于我们是全新的，<code>T</code>对于我们而言当然也是未知的。这个时候有什么办法呢？一个简单的思路是我们可以通过不断在这个世界中进行探索，去了解这个世界的运作方式，也就是不断的弄清了这个<code>T</code>函数。在强化学习的研究中，抽象一下这个过程，即通过不断采样来近似估计<code>T</code>函数。</p>
-<p>另一个实际的问题是，有时候我们可能无法执行这么多次探索，或者每次探索的成本太高以至于负担不起。这时，一个有效的思路是，我们可以从别人的经验中学习，或者通过看电影读书进行学习。当前的强化学习方法也在这个方向上进行了很多探索。</p>
-<p>对于如何高效的进行学习，还有一个思路，那就是，我们能否模仿某个已有的不错的行动策略呢？比如，假设我们希望训练机器人做家务，那么是不是可以通过演示一遍给机器人看，然后机器人通过模仿进行学习呢？这就是模仿学习思路去解决这个问题。</p>
-<p>关于这个领域，我们还可以想出更多的问题，比如，如何让机器人自己去探索解决问题的方法？如何处理连续的动作（文章开始时提到的喝水的例子，这里移动双手的过程其实就是连续动作决策的过程）？如何自动设置奖励甚至不设置奖励？很多越来越难问题被一个一个提出，同时又正在被不断提出的新思路一个一个攻克。</p>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
-<p>总结起来，强化学习其实就是关于如何学习的研究。这个领域发展至今能解决的问题其实还比较有限，我们离最终的通用人工智能的路还很长。同时，很多新的有挑战性的问题不断被提出来，被大家研究，很多创新的解决问题的思路也不断被发掘出来。正是我们对这个领域充满热情，才导致了这个领域如此蓬勃的发展。相信终有一天这个问题能被我们人类攻克。</p>
-]]></content>
-      <categories>
-        <category>machine-learning</category>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>AI</tag>
-        <tag>Reinforcement Learning</tag>
-        <tag>DQN</tag>
-        <tag>MDP</tag>
-        <tag>Markov Decision Process</tag>
-        <tag>机器学习</tag>
-        <tag>算法</tag>
-        <tag>强化学习</tag>
-        <tag>深度强化学习</tag>
       </tags>
   </entry>
   <entry>
@@ -4304,10 +4155,159 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </categories>
       <tags>
         <tag>大数据</tag>
-        <tag>机器学习</tag>
         <tag>Spark</tag>
+        <tag>机器学习</tag>
         <tag>性能</tag>
         <tag>性能优化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>强化学习入门</title>
+    <url>/2020/02/06/DRL-the-problem/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>自机器学习重新火起来开始，深度强化学习就一直是科研的一大热点，也是最有可能实现通用人工智能的一个分支。然而对于没有强化学习基础的同学们，如果直接去学习深度强化学习，想必会碰到很多问题。本文尝试普及一下最基础的强化学习算法，并以一个小例子来辅助大家理解。</p>
+<h2 id="问题定义"><a class="markdownIt-Anchor" href="#问题定义"></a> 问题定义</h2>
+<p>强化学习究竟研究的是一个什么样的问题，让其具有实现通用人工智能的潜力？</p>
+<p>这个问题与我们认识世界的方式相关。我们都知道这个世界时刻在变化着，而每件事物的变化，势必是由其他一系列事物导致的。这就是我们所普遍认识的世界，一个由因果律定义的世界。由于有因果律的存在，我们就有可能根据某个当前世界的状态，计算后一时刻世界的状态。</p>
+<p>而我们人类，作为一个智能体，通过观察这个世界，并进行各种各样的自主行动，来在这个世界中生存，并影响这个世界。通用人工智能的实现，就是期望能通过计算机模拟人类这样的智能体进行各种各样的行动决策。</p>
+<span id="more"></span>
+<p>为了简化问题，我们可以像下面这样建模这个世界和智能体。我们可以认为在某一个时刻整个世界处于状态<code>S1</code>，当智能体进行了某一个行动之后，这个世界的状态变化为了<code>S2</code>。智能体之所以能够做出这一行动，是因为其心中有一个目标，并且从这个世界中得到了一定的反馈。</p>
+<p>举个例子。比如我们想要喝水（目标），身边有一个杯子和一个饮水机（状态S1），我们会观察杯子和饮水机的位置，再伸手去拿取杯子（行动），然后将杯子靠近（反馈）饮水机，到达饮水机出水位置之后（状态S2），饮水机开始出水，之后我们再将杯子举到嘴边就能喝到水了。</p>
+<p>这个简单的模型可以图示如下：</p>
+<p><img data-src="/attaches/2020/2020-02-06-DRL-the-problem/mdp.png" alt="Markov Decision Process" /></p>
+<p>智能体（<code>Agent</code>）通过观察这个世界（<code>Environment</code>）的状态（<code>State: s</code>），经过智能决策，开展了一些行动（<code>Actions: a</code>），这些行动进而引起了这个世界的状态变化。智能体从这些变化的状态中获得关于之前行动的反馈（<code>Reward: r</code>），从而指导后续的行动决策。就这样，整个世界周而复始的一直循环下去。</p>
+<p>考虑这个模型，由于有因果律的存在，是不是知道了<code>S1</code>这个初始状态及智能体做出的行动<code>A</code>之后，我们就可以直接计算下一状态<code>S2</code>了呢？理论是可行的，但实际情况要更复杂一些，因为状态实在太多太多了，我们通常无法直接建模所有的状态。这时，我们可以用统计学的方式来解决这个问题。我们可以认为在我们做出某一行动之后，这个世界的状态只是有一定概率会转换为<code>S2</code>，同时也有一定的概率会转换为<code>S2_1</code>等等。这样就算我们建模的状态不全，也是可以相对较好的描述这个系统。</p>
+<p>引入统计学的思维，也就引入了不确定性，虽然如此，但是却带来了更合理的描述系统的方式和系统层面的确定性。</p>
+<p>以上描述的这一模型，在强化学习的世界里，我们称作Markov决策过程，简称MDP（Markov Decision Process）。这里面的不确定性也就是Markov特性。</p>
+<p>有了这个模型之后，我们就可以从数学上来研究这个问题了。强化学习研究的正是如何在这样的一个数学模型的基础上去实现一个有效的算法来进行智能决策。</p>
+<h2 id="一个小例子"><a class="markdownIt-Anchor" href="#一个小例子"></a> 一个小例子</h2>
+<p>我们可以设计一个简单的小游戏来辅助解决这个问题。</p>
+<p><img data-src="/attaches/2020/2020-02-06-DRL-the-problem/grid-world.png" alt="Grid World" /></p>
+<p>如上图，机器人（智能体）可以在这样的网格中移动：</p>
+<ul>
+<li>绿色格子代表机器人可以移动到的位置</li>
+<li>灰色格子表示有障碍物，机器人不能移动到那个位置</li>
+<li>红色格子表示一个陷进，如果机器人移动到此，游戏失败</li>
+<li>黄色格子代表一个出口，如果机器人移动到此，游戏成功</li>
+</ul>
+<p>这个游戏中的MDP，可以描述为如下：</p>
+<ol>
+<li>系统状态：格子位置，机器人位置</li>
+<li>机器人可执行的动作：向上下左右四个方向移动</li>
+<li>状态转换概率：如果机器人向某个方向移动，它移动到对应方向的格子的概率假设为<code>0.7</code>（如果无法移动到对应方向的位置，则留在原格子的概率为<code>0.7</code>），移动到其他位置的概率为<code>0.3/n</code>，<code>n</code>为其他可转换到的状态的数量。</li>
+</ol>
+<p>状态转换概率举例如下（假设我们对格子进行编码，编码方式与excel表格的编码方式一致，从<code>A1</code>到<code>E3</code>。）：</p>
+<ol>
+<li>假设机器人在位置<code>A2</code>，如果其向上移动，有<code>70%</code>的概率会移动到<code>A1</code>，分别有<code>15%</code>的概率会移动到<code>A2</code>（留在原位）和<code>A3</code></li>
+<li>假设机器人在位置<code>A2</code>，如果其向左或向右移动，有<code>70%</code>的的概率会留在原位<code>A2</code>，分别有<code>15%</code>的概率会移动到<code>A1</code>和<code>A3</code></li>
+</ol>
+<p>我们的算法要解决的问题是，在任意绿色格子里面放置一个机器人，算法可以指导机器人一步一步到达位置<code>E1</code>（成功完成游戏）。</p>
+<h2 id="方案与算法"><a class="markdownIt-Anchor" href="#方案与算法"></a> 方案与算法</h2>
+<p>为了实现一个智能算法解决上述机器人走格子问题，我们可以考虑给每个格子定义一个价值。这个价值表示到达这个格子后有多大可能性能成功完成游戏。</p>
+<p>观察这个游戏可以发现，<code>D1</code>的价值应该高于<code>C1</code>，<code>C1</code>的价值应该高于<code>B1</code>。</p>
+<p>如果可以计算出每个格子的价值，我们是不是就解决了这个问题了呢？因为，无论机器人处于哪个位置，它只需要往价值比当前格子更高的格子方向走即可。</p>
+<p>现在问题转化为如何定义和计算这个价值。</p>
+<p>我们先将我们的目标数值化。由于到达出口格子即成功，如果机器人能到达此处，我们就给智能体反馈奖励<code>1</code>。同理，如果到达陷进格子，反馈奖励<code>-1</code>，到达绿色格子则奖励<code>0</code>。</p>
+<p>这个时候我们来看格子<code>D1</code>。如果机器人在此处，它可以往四个方向移动。如果右移，有<code>70%</code>的概率可以到达出口，获得奖励<code>1</code>。如果往其他三个方向走，则分别有<code>10%</code>的概率会到达出口，获得奖励<code>1</code>。</p>
+<p>经过以上的分析可以发现，我们其实可以将概率与奖励相乘来代表某个移动方向的价值。得到如下的价值数值：</p>
+<ul>
+<li>向右移动：<code>0.7 * 1 = 0.7</code></li>
+<li>向上/下/左移动：<code>0.1 * 1 = 0.1</code></li>
+</ul>
+<p>这里的数值我们可以定义为动作价值。有了这个动作价值，要计算某个格子的价值，我们其实可以直接用最大的动作价值来表示，即：<code>max([0.7, 0.1, 0.1, 0.1]) = 0.7</code>。</p>
+<p>如果要计算格子<code>C1</code>的价值呢？这时，虽然达到格子<code>D1</code>的奖励为0，但是我们可以利用刚计算好的<code>D1</code>的价值。还是按照前面的方式进行计算：</p>
+<ul>
+<li>向右移动：<code>0.7 * (0 + 0.7) = 0.49</code></li>
+<li>向上/下/左移动：<code>0.1 * (0 + 0.7) = 0.07</code></li>
+<li>格子价值：<code>max([0.49, 0.07, 0.07, 0.07]) = 0.49</code></li>
+</ul>
+<p>到这里，一个简单的算法呼之欲出。我们只需要找到所有有奖励的位置，然后从那里开始去计算其他所有位置的奖励，好像这个问题就解决了。</p>
+<p>实际情况会稍微复杂一些。因为我们可能有很多个位置都存在奖励，而且这些奖励的多少可能由于任务定义而不一样。这里更实际一些的算法是利用多次迭代来实现。</p>
+<p>为了不失一般性，我们可以定义公式：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">Q^*(s, a) = \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>（表示每个动作的价值，其中：<code>s</code>表示当前状态；<code>a</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>的概率；<code>R(s, a, s')</code>表示表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>得到的奖励）</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi>max</mi><mo>⁡</mo></mo><mi>a</mi></munder><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V^*(s) = \max\limits_a Q^*(s, a)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.45em;vertical-align:-0.7em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43056em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span></span></span></span></span>
+<p>（表示每个格子的价值，其中：<code>s</code>表示当前状态，<code>a</code>表示动作）</p>
+<p>一般而言，我们会引入一个额外的γ参数，对下一个状态的价值打一定的折扣，这是因为当前获得的奖励一般会优于下一个状态的价值的，毕竟下一个状态的价值只是一个估计值。这时，上述第一个公式变为：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">Q^*(s, a) = \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>于是，我们的算法就可以描述为：</p>
+<ul>
+<li>对每一个状态，初始化 <code>V := 0</code></li>
+<li>循环，直到<code>V</code>收敛：
+<ul>
+<li>对每一个状态，</li>
+</ul>
+</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi>max</mi><mo>⁡</mo></mo><mi>a</mi></munder><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mo>∗</mo></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">V^*(s) = \max\limits_a \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^*(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43056em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">max</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.738696em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>这里为判断<code>V</code>是否收敛，我们可以检查当前这次迭代是否会更新<code>V</code>的值。</p>
+<p>用<code>javascript</code>代码实现，主要代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title class_">MDPVISolver</span>.<span class="property">solve</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> values = m.<span class="title function_">zeroArray</span>([<span class="variable language_">this</span>.<span class="property">states</span>.<span class="property">length</span>]);</span><br><span class="line">    <span class="keyword">var</span> valuesNew = values;</span><br><span class="line">    <span class="keyword">var</span> iterations = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> qValuesAll = [];</span><br><span class="line">        values = valuesNew;</span><br><span class="line">        valuesNew = [];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="variable language_">this</span>.<span class="property">states</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">var</span> state = <span class="variable language_">this</span>.<span class="property">states</span>[i];</span><br><span class="line">            <span class="keyword">var</span> qValues = <span class="variable language_">this</span>.<span class="title function_">qValues</span>(values, state);</span><br><span class="line">            qValuesAll.<span class="title function_">push</span>(qValues);</span><br><span class="line">            <span class="keyword">var</span> value = <span class="variable language_">this</span>.<span class="title function_">value</span>(qValues);</span><br><span class="line">            valuesNew.<span class="title function_">push</span>(value);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;finished iteration &#x27;</span> + (++iterations));</span><br><span class="line">        <span class="comment">// console.log(&#x27;values: &#x27;, values);</span></span><br><span class="line">    &#125; <span class="keyword">while</span>(!<span class="variable language_">this</span>.<span class="title function_">converged</span>(values, valuesNew));    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我已经实现了上述的游戏的一个Demo，见<a href="/examples/mdp/grid-world.html">这里</a>。完整代码见<a href="https://github.com/gmlove/gmlove.github.io/blob/source/source/examples/mdp/grid-world.js">这里</a>865行到890行。</p>
+<p>上述算法就是强化学习里面的经典算法 <strong>价值迭代</strong> 算法了。而我们上面定义<code>V</code>的迭代形式的公式就是著名的 Bellman 公式了，其最初由 Richard Bellman 提出。</p>
+<h2 id="另一个思路"><a class="markdownIt-Anchor" href="#另一个思路"></a> 另一个思路</h2>
+<p>上述算法存在一个问题，我们最后得到的是一系列状态价值（每个格子的价值），为了得到我们想要的行动，我们还需要根据根据状态价值，计算行动价值，即上述<code>Q(s, a)</code>。使用上有所不便。</p>
+<p>那么有没有办法改进呢？再来思考一下这个问题的目标，实际上我们想要找到一种指导机器人行动的策略。这里的策略可以表示为：在任意一个位置，算法可以给出一个恰当的行动。</p>
+<p>我们能不能直接去衡量某一个策略的价值呢？因为一旦有了这个策略的价值，我们就可以考虑直接去优化这个策略，而不是去对所有的状态计算价值。</p>
+<p>对于某一策略，由于其可以基于当前状态指导我们作出行动，我们可以定义它为一个 <strong>输入为状态</strong> <strong>输出为行动</strong> 的函数，即<code>π: a = π(s)</code></p>
+<p>既然这样，参考价值迭代算法中的状态价值（格子价值）定义，我们可以定义策略价值函数为：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>π</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>π</mi><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">V^\pi(s) = \sum_{s&#x27;} T(s, \pi(s), s&#x27;)[R(s, \pi(s), s&#x27;) + \gamma*V^\pi(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>（策略<code>π</code>的价值，其中：<code>s</code>表示当前状态；<code>a = π(s)</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, π(s), s')</code>表示在状态<code>s</code>，执行动作<code>a=π(s)</code>转换到状态<code>s'</code>的概率；<code>R(s, π(s), s')</code>表示在状态<code>s</code>，执行动作<code>a=π(s)</code>转换到状态<code>s'</code>得到的奖励）</p>
+<p>上面的公式是一个迭代形式的定义，既然如此，我们可以参考之前的<strong>状态价值迭代算法</strong>，迭代计算这个策略的价值，最后这个价值可能会收敛到某个具体的值。</p>
+<p>然而就算我们可以计算策略的价值，我们如何得到一个有效的策略呢？如果没有策略，我们其实也无从计算其价值。</p>
+<p>能不能随机初始化一个策略？有了这个策略，我们就可以计算其价值。然后我们可以想办法看看能不能得到一个更好的策略。</p>
+<p>对于以上解决问题的思路，我第一次看到的时候，也不禁暗暗赞叹。事实上，这就是我这里想要给大家介绍的另一个强化学习经典算法：<strong>策略迭代</strong> 算法。</p>
+<p>如何根据一个策略寻找更优策略？可以这样做：</p>
+<ul>
+<li>计算在当前策略下，哪一个行动能得到最大价值</li>
+<li>选择价值最大的行动作为新策略的行动</li>
+</ul>
+<p>用公式表述如下：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo><mi mathvariant="normal">arg max</mi><mo>⁡</mo></mo><mi>a</mi></munder><munder><mo>∑</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></munder><mi>T</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">[</mo><mi>R</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo>+</mo><mi>γ</mi><mo>∗</mo><msup><mi>V</mi><mi>π</mi></msup><mo stretchy="false">(</mo><msup><mi>s</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">\pi_{i+1}(s) = \argmax\limits_a \sum_{s&#x27;} T(s, a, s&#x27;)[R(s, a, s&#x27;) + \gamma*V^\pi(s&#x27;)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.3439900000000002em;vertical-align:-1.2939850000000002em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.43055999999999994em;"><span style="top:-2.20556em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop"><span class="mord mathrm">a</span><span class="mord mathrm">r</span><span class="mord mathrm" style="margin-right:0.01389em;">g</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.89444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8560149999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2939850000000002em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6597200000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.051892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span>
+<p>（下一个（第<code>i+1</code>个）更优策略<code>π(i+1)</code>，其中：<code>s</code>表示当前状态；<code>a = π(s)</code>表示动作；<code>s'</code>表示下一个状态；<code>T(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>的概率；<code>R(s, a, s')</code>表示在状态<code>s</code>，执行动作<code>a</code>转换到状态<code>s'</code>得到的奖励）</p>
+<p>到这里，这个 <strong>策略迭代</strong> 算法就差不多完成了。用<code>javascript</code>代码实现，主要代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title class_">MDPPISolver</span>.<span class="property">solve</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> policy = <span class="variable language_">this</span>.<span class="title function_">randomPolicy</span>();</span><br><span class="line">    <span class="keyword">var</span> policyNew = policy;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        policy = policyNew;</span><br><span class="line">        values = <span class="variable language_">this</span>.<span class="title function_">solveForPolicy</span>(policy);</span><br><span class="line">        policyNew = <span class="variable language_">this</span>.<span class="title function_">improvePolicy</span>(values, policy);</span><br><span class="line">    &#125; <span class="keyword">while</span> (!<span class="variable language_">this</span>.<span class="title function_">converged</span>(policy, policyNew));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完整代码见<a href="https://github.com/gmlove/gmlove.github.io/blob/source/source/examples/mdp/grid-world.js">这里</a>932行到1024行。</p>
+<h2 id="扩展"><a class="markdownIt-Anchor" href="#扩展"></a> 扩展</h2>
+<h3 id="状态空间降维"><a class="markdownIt-Anchor" href="#状态空间降维"></a> 状态空间降维</h3>
+<p>虽然我们可以用上述两个经典算法解决这个问题，但是它们的效率是很低的，算法复杂度用大O计算法可以表示为<code>O(a*s*s)</code>。对于这个非常简单的问题，计算速度尚能接受，但是如果我们考虑一些更复杂的问题，就会发现这里的状态<code>s</code>的取值空间可能会非常大。</p>
+<p>比如对于下面这个吃豆子的游戏，这里的状态数量为：</p>
+<pre><code>    状态数量 = 格子数量 * N (N为每个格子的可能状态：比如是否有吃豆人、是否有豆子、是否有敌人及敌人的类型等等)
+</code></pre>
+<p><img data-src="/attaches/2020/2020-02-06-DRL-the-problem/pac-man.png" alt="Pacman" /></p>
+<p>过大的状态空间就导致上述经典算法实际无法执行，也就无法满足实际需求。</p>
+<p>一个可能的优化手段是人为的设计一些特征来表示某个状态<code>s</code>，这样就实现了对<code>s</code>进行降维的操作。比如对于上面吃豆子的游戏，我们可以建模这样几个特征：</p>
+<ul>
+<li>离最近的豆子的方向和距离</li>
+<li>离每个敌人的方向和距离</li>
+<li>敌人的移动速度和方向</li>
+</ul>
+<p>有了这样的很小的状态空间，上述算法就可以执行了。</p>
+<h3 id="深度强化学习dqn"><a class="markdownIt-Anchor" href="#深度强化学习dqn"></a> 深度强化学习<code>DQN</code></h3>
+<p>有了上述状态空间降维的办法，我们可以考虑是不是可以用一个深度神经网络来替代人工特征的过程呢？当然是可以的，这就是前几年 <code>Deep Mind</code> 轰动学界和产业界的关于 <strong>深度强化学习</strong> 的论文中的内容了。</p>
+<p><code>DQN</code>的全称是<code>Deep Q-Network</code>，它的核心是一个<code>Q</code>值迭代的算法。<code>Q</code>值迭代公式就是我们 <strong>价值迭代</strong> 公式中的关于行动价值的公式的一个迭代形式。算法也是不断迭代直到收敛。</p>
+<p>我在另一篇文章中有关于<code>DQN</code>的更多内容。详情见<a href="/2016/12/05/let-machine-play-games/">这里</a>。</p>
+<h3 id="更多的问题"><a class="markdownIt-Anchor" href="#更多的问题"></a> 更多的问题</h3>
+<p>考虑一个更实际的问题，上述经典算法假设我们知道了状态转移函数<code>T</code>。但实际上当前世界可能对于我们是全新的，<code>T</code>对于我们而言当然也是未知的。这个时候有什么办法呢？一个简单的思路是我们可以通过不断在这个世界中进行探索，去了解这个世界的运作方式，也就是不断的弄清了这个<code>T</code>函数。在强化学习的研究中，抽象一下这个过程，即通过不断采样来近似估计<code>T</code>函数。</p>
+<p>另一个实际的问题是，有时候我们可能无法执行这么多次探索，或者每次探索的成本太高以至于负担不起。这时，一个有效的思路是，我们可以从别人的经验中学习，或者通过看电影读书进行学习。当前的强化学习方法也在这个方向上进行了很多探索。</p>
+<p>对于如何高效的进行学习，还有一个思路，那就是，我们能否模仿某个已有的不错的行动策略呢？比如，假设我们希望训练机器人做家务，那么是不是可以通过演示一遍给机器人看，然后机器人通过模仿进行学习呢？这就是模仿学习思路去解决这个问题。</p>
+<p>关于这个领域，我们还可以想出更多的问题，比如，如何让机器人自己去探索解决问题的方法？如何处理连续的动作（文章开始时提到的喝水的例子，这里移动双手的过程其实就是连续动作决策的过程）？如何自动设置奖励甚至不设置奖励？很多越来越难问题被一个一个提出，同时又正在被不断提出的新思路一个一个攻克。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>总结起来，强化学习其实就是关于如何学习的研究。这个领域发展至今能解决的问题其实还比较有限，我们离最终的通用人工智能的路还很长。同时，很多新的有挑战性的问题不断被提出来，被大家研究，很多创新的解决问题的思路也不断被发掘出来。正是我们对这个领域充满热情，才导致了这个领域如此蓬勃的发展。相信终有一天这个问题能被我们人类攻克。</p>
+]]></content>
+      <categories>
+        <category>machine-learning</category>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>AI</tag>
+        <tag>Reinforcement Learning</tag>
+        <tag>DQN</tag>
+        <tag>MDP</tag>
+        <tag>Markov Decision Process</tag>
+        <tag>机器学习</tag>
+        <tag>算法</tag>
+        <tag>强化学习</tag>
+        <tag>深度强化学习</tag>
       </tags>
   </entry>
   <entry>
@@ -4986,46 +4986,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
-    <title>银行贷款业务是怎么一回事？</title>
-    <url>/2020/07/07/basic-loan-business/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能。不管是商业贷款还是公积金贷款，这里面都是银行在提供贷款业务。对于个人经营需要，企业发展需要，银行贷款就更是少不了了。</p>
-<span id="more"></span>
-<p>我们多数人办理贷款，是怎么做的呢？比如我之前买房，首先是向售楼部的销售打听贷款的首付款数额，然后就是东拼西凑首付款，再之后就是让销售帮忙办理首付款支付。一刷卡，好不容易凑齐的几十万，人生中银行卡余额最多一次，一下子清零。接着就是等着办银行贷款了，我们先按销售说的去准备好收入证明、各种身份证件等，销售一通知，我们就去银行了。接着就是签名按手印，签名按手印，签名按手印。贷款材料一大摞，我们也不知道是啥，反正银行说在哪里签名，我们就在哪里签名，说在哪里按手印，我们就按。接下来，就等贷款下来了，又有某一天，销售一通知，说是要开始还款了。然后我们就每个月定期向银行卡里面存多少多少钱，银行也每个月从里面划走多少多少钱。</p>
-<p>不少人稀里糊涂的在办着贷款，某一天突然一拍大腿，想起来，我的100万贷款怎么从来没有打到过我的银行卡里呢？曾经还以为这么大的数额可以炫耀一把，结果钱的影子都没看到！</p>
-<p>那么银行的贷款业务究竟是怎么运作的呢？我们稀里糊涂签字按手印的都是什么内容？为什么贷款之后，钱都从来没有进入过我们的账号呢？今天我们就一起来了解一下银行贷款业务。</p>
-<p>银行是帮我们管钱的机构，有了银行，我们就可以把钱存进去，从而不用操心如何在自己家保管的事情了。即便哪天家里失盗了，发生火灾了，我们的资金仍然是安全的。除此之外，钱存银行还能有一点点利息。</p>
-<p>既然我们把钱都存进了银行，那么银行就变成了一个大型的金库。这样一个金库它是如何盈利的呢？没错，就是靠贷款了。贷款作为银行最主要的一个盈利渠道，是银行赖以生存的基础。一般而言，我们把钱存银行的利息是很少的，活期存款的年利率只有少的可怜的0.3%，即便定期一年的存款通常也只有百分之一点几。而贷款的利率就高了，一般年利率在百分之五左右，根据不同贷款的数额、时间、还贷风险有所不同。这里的差值就是银行的利润空间了。</p>
-<p>贷款业务是如何进行的呢？一般而言，我们可以简单的将贷款分为三个阶段，即贷前贷中贷后。我们去提交贷款申请，银行进行贷款审批就是贷前发生的活动。银行贷款审批完成之后，就进入到贷中，我们要和银行签订贷款合同，银行根据约定的时间进行放款。银行放贷之后，就是我们按照合同约定进行还款了，这即是贷后。</p>
-<p>这么一说好像也挺简单。如果我们每个人都遵纪守法，诚信借贷，银行就是躺着赚钱啊。</p>
-<p>但是问题关键也就在这里，每个人都遵纪守法诚信借贷这是一个很强的前提。以前跟亲戚朋友借钱，还得考虑个人的信誉、形象及情感维护，该还的钱必须得还，要不然自己就被大家孤立了，以后再有困难就难以解决了。但是现在跟银行借钱，就不一样了，银行对于我们而言是一个没有感情的赚钱机器，拿着我们存进去的钱去放贷赚利差。那么，是不是我借了银行的钱不还也是合理的呢？反正银行通过我存进去的钱已经赚了很多了。另一个方面，就算这次我没还银行钱，下次说不定我还可以换家银行贷款呢！所以，银行贷款业务中，要让大家自主的去讲诚信，只是一个美好的愿望。如果没有合理的手段去进行限制，贷款业务就面临巨大风险。</p>
-<p>这里的贷款风险，我们称作是信用风险。银行的贷款业务有很大一部分内容都是在讲如何降低信用风险带来的影响。</p>
-<p>从贷前申请开始，我们要准备很多材料，到贷中我们要在一叠很厚的材料上面按几十个手印，这其实都是在通过各种各样的机制来降低信用风险。</p>
-<p>在申请贷款时，我们通常要准备好身份证、户口本、工资收入证明、投资收入证明、财产证明、财产共有人信息等材料，如果有抵押物的，需要提供抵押物的所有权证明，如果有质押物的，需要提供质押物的处置权证明，如果有担保人保证，需要提供担保人的基本情况、经济收入、财产证明等。这些材料均需要权威机构才能出具，个人伪造的成本是很高的。银行在得到这些证明材料之后，就可以一定程度上判断借款人的还贷能力了。</p>
-<p>申请贷款另一个重要的问题是借款人需要有明确的合理的贷款用途。比如，房贷，用途很明显就是买房，车贷就是买车，个人由于商业经营需要购买生产资料，比如贷款购买口罩机生产口罩，也是合理的贷款用途。</p>
-<p>银行得知了贷款用途、贷款金额就能基本确定贷款信息的真实性。得知了借款人提供的材料，就能基本判断借款人的还款能力。有了这些信息就可以初步判断是否可以放贷了。对于这些材料的检查核验，及对贷款资格的初步确认称为贷款初审。</p>
-<p>毕竟前面的材料都是借款人提供的，如果有假怎么办呢？所以银行进行贷款贷前调查也是很重要的一步。贷前调查一般会根据实际情况采用与借款人面谈或实地调查的方式进行。面谈的时候，可以根据借款人的语气、陈述的内容是否与提交的材料一致对贷款的真实性进行判断。比如，如果以住房作为抵押，面谈时，借款人连房子的面积、朝向都不能明确的说出，那么就很大程度上存在伪造材料的可能，如果面谈没有发现问题，实地调查则可以进一步确认房子是不是存在，是不是完好等。</p>
-<p>经过贷款的初审及调查之后，银行对这笔贷款申请就更有信心了。接下来进入贷款审查和审批阶段。通常，在贷款审查阶段，银行审查人员需要审查借款人是否有资格和条件，贷款金额、期限是否符合规定，借款人提供的材料是否完整、合法、有效，初审及调查得出的分析结论是否合理等等。这里其实就是安排另一个人来对于前面步骤提交的资料进一步核实。多一个人多一双眼睛，就可能发现潜藏得更深的问题。审查没有发现问题，就可以提交审批人员进行贷款审批了。在贷款审批时，审批人员不仅要考虑审查结论，还需要结合国家政策、可行性、经济性方面综合考虑是否发放贷款。比如，现在银行存款不够，资金不足，或者国家正在严控此类贷款，那么即便前面的材料都是真实有效的，也可以拒绝贷款。由于贷款审批是银行决定是否发放贷款的最后一个关键步骤，所以根据不同的贷款金额，审批通常需要具有较高级别的人员才有权限操作。为了做好最后一环，审批阶段还可以通过多人审批来综合更多人的意见，从而降低风险。</p>
-<p>在前面一系列的调查、审查、审批阶段之后，如果确认可以贷款，那贷前步骤就完成了。进入贷中，贷中主要的流程就是签订合同及放款。</p>
-<p>为了防止违约，贷款合同的内容要事无巨细，清晰的写明双方的诚信承诺、贷款资金用途、贷款金额、贷款利率、支付方式、还款方式等。还需要明确的指出各方的权利和义务，违约责任等。这里的内容非常多，这也就是为什么我们要签字按手印重复数十遍了。对于合同的内容，作为一个诚信借款人，我们自信能按约定还款，一般也不会过多关注。这里材料太多，而且我们也没有专业的法律知识，就算我们能慢慢花时间看材料，通常也难以发现问题。有人会担心银行会不会偷偷在合同里面增加一些对他们有利的条款。其实国家法律对于合同的合理性有很严格的说明，贷款领域的法律更是非常完善，银行想在这方面欺诈借款人是比较难的。而且银行业没有必要因为某一笔贷款砸了自己的口碑。作为借款人，在这里我们主要会关心贷款的利率，它决定了我们要还多少钱，其他的只需要对于大致的违约责任有所认识就够了。比如，放贷不还，银行可以收回房子拍卖，有抵押物，银行也可以将抵押物拍卖偿债。</p>
-<p>放款阶段是最激动人心的了，因为马上银行卡里面就会多一大笔钱。然而，很多时候我们可能根本见不到贷款来的钱。银行为了保证我们按照申请的用途使用贷款，原则上会直接将贷款发放到我们的交易对象账户。比如，房贷的发放，贷款直接进入了开发商的账户，车贷也直接进入了汽车经销商的账户。这一原则在多数情况下直接避免了我们把贷款用于其他用途。想想看，一旦我们自己账户里面多了一笔钱，其实银行是很难控制贷款用途的，因为我们可能可以随时将钱取出来或转账到其他地方。这一贷款发放方式叫做贷款人受托支付。如果受托支付由于某种原因无法进行，那么才有可能贷款进入自己的账户，这种情况虽然允许，但是有很多的限制，比如个人消费类贷款交易金额不超过30万，经营性贷款金额不超过50万等。</p>
-<p>贷款业务的最后一个阶段就是贷后，贷后阶段主要涉及借款人按期进行还款。对于一个正常还款的贷款，银行在这一阶段几乎不需要做任何事情。但是作为银行的主营业务，银行的贷款数量是巨大的，一旦贷款多了，违约的情况也就司空见惯了。所以，在贷后阶段，银行还有很多事情要做。首先就是定期检查，银行需要跟踪了解借款人基本还贷能力的变化情况。比如，做生意亏了，工作没了，贷款就可能还不上了。再比如，房价暴跌也可能导致借款人违约，因为借款人可能会发现需要还银行的贷款都可以拿来再买一套房子了，那为啥要还款呢，让银行收回房子算了。所以借款人的还贷能力和还贷意愿定期跟踪是银行贷款业务的重要一环。除此之外，在贷后阶段，一旦有贷款违约发生，银行还需要根据合同的约定进行违约追偿，包括抵押物拍卖，向保证人追偿等。对于尚有还款意愿，只是暂时还款困难的，可能需要定期催收，包括以短信形式、上门的形式、司法诉讼的形式等。</p>
-<p>贷后阶段还有一类常见的活动，就是贷款变更。比如，我们在贷款之后，生意大赚，一夜暴富，或者工作升迁，彩票中奖等等，有钱了，那也就不需要再按期还贷了，我们一次性还了它。这里的贷款变更，通常会包括贷款主体变更，即借款人变更，借款期限调整，比如提前还款或者贷款展期，还款方式变更，比如以前是等额本息，现在想调成等额本金等等。只要我们和银行达成了一致，贷款变更通常可以通过重新签订合同等方式比较容易的完成。</p>
-<p>贷后阶段，银行还需要为借款人保管其提交的资料。这涉及档案管理工作，包括档案的归档登记、借阅管理、移交和接管等。</p>
-<p>在合同期结束，借款人按期还款完毕，整个贷款就结束了，借款人从银行取档案材料回家。</p>
-<p>以上就是银行贷款业务的大致内容了，用一张图可以概括如下：</p>
-<p><img data-src="/attaches/2020/2020-07-07-basic-loan-business/loan-process.png" alt="loan process" /></p>
-<p>到这里，大家应该对银行的贷款业务有了一定的了解了。随着时代经济的发展，银行贷款跟我们的关系可谓越来越密切，同时，贷款其实也对整个社会的发展意义重大，它不仅可以让我们提前住上新房，解决我们暂时的经营困境，还有力的促进了整个社会资源更合理的配置，提升了社会效率。可以说整个社会的发展繁荣离不开银行贷款。对于我们自身而言，合理的利用贷款，也能为我们建设更美好的幸福生活添砖加瓦。</p>
-]]></content>
-      <categories>
-        <category>业务</category>
-      </categories>
-      <tags>
-        <tag>金融</tag>
-        <tag>业务</tag>
-        <tag>贷款</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据分析思维</title>
     <url>/2020/08/22/data-analyst-mindset/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>以下是一组某电商应用消费数据，你能从中看出什么？</p>
@@ -5169,6 +5129,46 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       <tags>
         <tag>数据</tag>
         <tag>数据分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>银行贷款业务是怎么一回事？</title>
+    <url>/2020/07/07/basic-loan-business/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>说起银行贷款，我们绝大多数人应该都用过这个业务。比如，我们上大学，不少人办理过国家助学贷款。看这个贷款名字，好像跟银行没什么关系。但其实办理过这个贷款的同学都知道，这个贷款是我们跟银行产生的一个借贷关系。我们需要跟银行签订贷款合同，毕业后还款也是向银行还款。只不过因为是助学性质，国家会有一定的优惠贴息。再比如，我们买房，现在房价很高，对于一个主要靠自己的收入作为买房资金来源的同学，不贷款几乎不可能。不管是商业贷款还是公积金贷款，这里面都是银行在提供贷款业务。对于个人经营需要，企业发展需要，银行贷款就更是少不了了。</p>
+<span id="more"></span>
+<p>我们多数人办理贷款，是怎么做的呢？比如我之前买房，首先是向售楼部的销售打听贷款的首付款数额，然后就是东拼西凑首付款，再之后就是让销售帮忙办理首付款支付。一刷卡，好不容易凑齐的几十万，人生中银行卡余额最多一次，一下子清零。接着就是等着办银行贷款了，我们先按销售说的去准备好收入证明、各种身份证件等，销售一通知，我们就去银行了。接着就是签名按手印，签名按手印，签名按手印。贷款材料一大摞，我们也不知道是啥，反正银行说在哪里签名，我们就在哪里签名，说在哪里按手印，我们就按。接下来，就等贷款下来了，又有某一天，销售一通知，说是要开始还款了。然后我们就每个月定期向银行卡里面存多少多少钱，银行也每个月从里面划走多少多少钱。</p>
+<p>不少人稀里糊涂的在办着贷款，某一天突然一拍大腿，想起来，我的100万贷款怎么从来没有打到过我的银行卡里呢？曾经还以为这么大的数额可以炫耀一把，结果钱的影子都没看到！</p>
+<p>那么银行的贷款业务究竟是怎么运作的呢？我们稀里糊涂签字按手印的都是什么内容？为什么贷款之后，钱都从来没有进入过我们的账号呢？今天我们就一起来了解一下银行贷款业务。</p>
+<p>银行是帮我们管钱的机构，有了银行，我们就可以把钱存进去，从而不用操心如何在自己家保管的事情了。即便哪天家里失盗了，发生火灾了，我们的资金仍然是安全的。除此之外，钱存银行还能有一点点利息。</p>
+<p>既然我们把钱都存进了银行，那么银行就变成了一个大型的金库。这样一个金库它是如何盈利的呢？没错，就是靠贷款了。贷款作为银行最主要的一个盈利渠道，是银行赖以生存的基础。一般而言，我们把钱存银行的利息是很少的，活期存款的年利率只有少的可怜的0.3%，即便定期一年的存款通常也只有百分之一点几。而贷款的利率就高了，一般年利率在百分之五左右，根据不同贷款的数额、时间、还贷风险有所不同。这里的差值就是银行的利润空间了。</p>
+<p>贷款业务是如何进行的呢？一般而言，我们可以简单的将贷款分为三个阶段，即贷前贷中贷后。我们去提交贷款申请，银行进行贷款审批就是贷前发生的活动。银行贷款审批完成之后，就进入到贷中，我们要和银行签订贷款合同，银行根据约定的时间进行放款。银行放贷之后，就是我们按照合同约定进行还款了，这即是贷后。</p>
+<p>这么一说好像也挺简单。如果我们每个人都遵纪守法，诚信借贷，银行就是躺着赚钱啊。</p>
+<p>但是问题关键也就在这里，每个人都遵纪守法诚信借贷这是一个很强的前提。以前跟亲戚朋友借钱，还得考虑个人的信誉、形象及情感维护，该还的钱必须得还，要不然自己就被大家孤立了，以后再有困难就难以解决了。但是现在跟银行借钱，就不一样了，银行对于我们而言是一个没有感情的赚钱机器，拿着我们存进去的钱去放贷赚利差。那么，是不是我借了银行的钱不还也是合理的呢？反正银行通过我存进去的钱已经赚了很多了。另一个方面，就算这次我没还银行钱，下次说不定我还可以换家银行贷款呢！所以，银行贷款业务中，要让大家自主的去讲诚信，只是一个美好的愿望。如果没有合理的手段去进行限制，贷款业务就面临巨大风险。</p>
+<p>这里的贷款风险，我们称作是信用风险。银行的贷款业务有很大一部分内容都是在讲如何降低信用风险带来的影响。</p>
+<p>从贷前申请开始，我们要准备很多材料，到贷中我们要在一叠很厚的材料上面按几十个手印，这其实都是在通过各种各样的机制来降低信用风险。</p>
+<p>在申请贷款时，我们通常要准备好身份证、户口本、工资收入证明、投资收入证明、财产证明、财产共有人信息等材料，如果有抵押物的，需要提供抵押物的所有权证明，如果有质押物的，需要提供质押物的处置权证明，如果有担保人保证，需要提供担保人的基本情况、经济收入、财产证明等。这些材料均需要权威机构才能出具，个人伪造的成本是很高的。银行在得到这些证明材料之后，就可以一定程度上判断借款人的还贷能力了。</p>
+<p>申请贷款另一个重要的问题是借款人需要有明确的合理的贷款用途。比如，房贷，用途很明显就是买房，车贷就是买车，个人由于商业经营需要购买生产资料，比如贷款购买口罩机生产口罩，也是合理的贷款用途。</p>
+<p>银行得知了贷款用途、贷款金额就能基本确定贷款信息的真实性。得知了借款人提供的材料，就能基本判断借款人的还款能力。有了这些信息就可以初步判断是否可以放贷了。对于这些材料的检查核验，及对贷款资格的初步确认称为贷款初审。</p>
+<p>毕竟前面的材料都是借款人提供的，如果有假怎么办呢？所以银行进行贷款贷前调查也是很重要的一步。贷前调查一般会根据实际情况采用与借款人面谈或实地调查的方式进行。面谈的时候，可以根据借款人的语气、陈述的内容是否与提交的材料一致对贷款的真实性进行判断。比如，如果以住房作为抵押，面谈时，借款人连房子的面积、朝向都不能明确的说出，那么就很大程度上存在伪造材料的可能，如果面谈没有发现问题，实地调查则可以进一步确认房子是不是存在，是不是完好等。</p>
+<p>经过贷款的初审及调查之后，银行对这笔贷款申请就更有信心了。接下来进入贷款审查和审批阶段。通常，在贷款审查阶段，银行审查人员需要审查借款人是否有资格和条件，贷款金额、期限是否符合规定，借款人提供的材料是否完整、合法、有效，初审及调查得出的分析结论是否合理等等。这里其实就是安排另一个人来对于前面步骤提交的资料进一步核实。多一个人多一双眼睛，就可能发现潜藏得更深的问题。审查没有发现问题，就可以提交审批人员进行贷款审批了。在贷款审批时，审批人员不仅要考虑审查结论，还需要结合国家政策、可行性、经济性方面综合考虑是否发放贷款。比如，现在银行存款不够，资金不足，或者国家正在严控此类贷款，那么即便前面的材料都是真实有效的，也可以拒绝贷款。由于贷款审批是银行决定是否发放贷款的最后一个关键步骤，所以根据不同的贷款金额，审批通常需要具有较高级别的人员才有权限操作。为了做好最后一环，审批阶段还可以通过多人审批来综合更多人的意见，从而降低风险。</p>
+<p>在前面一系列的调查、审查、审批阶段之后，如果确认可以贷款，那贷前步骤就完成了。进入贷中，贷中主要的流程就是签订合同及放款。</p>
+<p>为了防止违约，贷款合同的内容要事无巨细，清晰的写明双方的诚信承诺、贷款资金用途、贷款金额、贷款利率、支付方式、还款方式等。还需要明确的指出各方的权利和义务，违约责任等。这里的内容非常多，这也就是为什么我们要签字按手印重复数十遍了。对于合同的内容，作为一个诚信借款人，我们自信能按约定还款，一般也不会过多关注。这里材料太多，而且我们也没有专业的法律知识，就算我们能慢慢花时间看材料，通常也难以发现问题。有人会担心银行会不会偷偷在合同里面增加一些对他们有利的条款。其实国家法律对于合同的合理性有很严格的说明，贷款领域的法律更是非常完善，银行想在这方面欺诈借款人是比较难的。而且银行业没有必要因为某一笔贷款砸了自己的口碑。作为借款人，在这里我们主要会关心贷款的利率，它决定了我们要还多少钱，其他的只需要对于大致的违约责任有所认识就够了。比如，放贷不还，银行可以收回房子拍卖，有抵押物，银行也可以将抵押物拍卖偿债。</p>
+<p>放款阶段是最激动人心的了，因为马上银行卡里面就会多一大笔钱。然而，很多时候我们可能根本见不到贷款来的钱。银行为了保证我们按照申请的用途使用贷款，原则上会直接将贷款发放到我们的交易对象账户。比如，房贷的发放，贷款直接进入了开发商的账户，车贷也直接进入了汽车经销商的账户。这一原则在多数情况下直接避免了我们把贷款用于其他用途。想想看，一旦我们自己账户里面多了一笔钱，其实银行是很难控制贷款用途的，因为我们可能可以随时将钱取出来或转账到其他地方。这一贷款发放方式叫做贷款人受托支付。如果受托支付由于某种原因无法进行，那么才有可能贷款进入自己的账户，这种情况虽然允许，但是有很多的限制，比如个人消费类贷款交易金额不超过30万，经营性贷款金额不超过50万等。</p>
+<p>贷款业务的最后一个阶段就是贷后，贷后阶段主要涉及借款人按期进行还款。对于一个正常还款的贷款，银行在这一阶段几乎不需要做任何事情。但是作为银行的主营业务，银行的贷款数量是巨大的，一旦贷款多了，违约的情况也就司空见惯了。所以，在贷后阶段，银行还有很多事情要做。首先就是定期检查，银行需要跟踪了解借款人基本还贷能力的变化情况。比如，做生意亏了，工作没了，贷款就可能还不上了。再比如，房价暴跌也可能导致借款人违约，因为借款人可能会发现需要还银行的贷款都可以拿来再买一套房子了，那为啥要还款呢，让银行收回房子算了。所以借款人的还贷能力和还贷意愿定期跟踪是银行贷款业务的重要一环。除此之外，在贷后阶段，一旦有贷款违约发生，银行还需要根据合同的约定进行违约追偿，包括抵押物拍卖，向保证人追偿等。对于尚有还款意愿，只是暂时还款困难的，可能需要定期催收，包括以短信形式、上门的形式、司法诉讼的形式等。</p>
+<p>贷后阶段还有一类常见的活动，就是贷款变更。比如，我们在贷款之后，生意大赚，一夜暴富，或者工作升迁，彩票中奖等等，有钱了，那也就不需要再按期还贷了，我们一次性还了它。这里的贷款变更，通常会包括贷款主体变更，即借款人变更，借款期限调整，比如提前还款或者贷款展期，还款方式变更，比如以前是等额本息，现在想调成等额本金等等。只要我们和银行达成了一致，贷款变更通常可以通过重新签订合同等方式比较容易的完成。</p>
+<p>贷后阶段，银行还需要为借款人保管其提交的资料。这涉及档案管理工作，包括档案的归档登记、借阅管理、移交和接管等。</p>
+<p>在合同期结束，借款人按期还款完毕，整个贷款就结束了，借款人从银行取档案材料回家。</p>
+<p>以上就是银行贷款业务的大致内容了，用一张图可以概括如下：</p>
+<p><img data-src="/attaches/2020/2020-07-07-basic-loan-business/loan-process.png" alt="loan process" /></p>
+<p>到这里，大家应该对银行的贷款业务有了一定的了解了。随着时代经济的发展，银行贷款跟我们的关系可谓越来越密切，同时，贷款其实也对整个社会的发展意义重大，它不仅可以让我们提前住上新房，解决我们暂时的经营困境，还有力的促进了整个社会资源更合理的配置，提升了社会效率。可以说整个社会的发展繁荣离不开银行贷款。对于我们自身而言，合理的利用贷款，也能为我们建设更美好的幸福生活添砖加瓦。</p>
+]]></content>
+      <categories>
+        <category>业务</category>
+      </categories>
+      <tags>
+        <tag>金融</tag>
+        <tag>业务</tag>
+        <tag>贷款</tag>
       </tags>
   </entry>
   <entry>
@@ -10676,7 +10676,13 @@ from: https://markmap.js.org/repl
 <p>团队早会，轮到他更新昨日的工作内容。</p>
 <p>如往常一样，他保持着端正的坐姿，双手放在桌子下面。转头面向电视会议屏幕，身体往前倾。</p>
 <p>“嘿嘿嘿”，他短暂地停了约有 0.5 秒钟，咧着嘴，“嘿嘿嘿”。</p>
-<p>“我昨天没什么更新，在整理交接的文档。”他停了约有 1 秒钟，“但我这边也没有人可以交接 …</p>
+<p>“我昨天没什么更新，在整理交接的文档。”他停了约有 1 秒钟，“但我这边也没有人可以交接。”</p>
+<p>“我这边今天最后一天了，以后的测试就靠大家自己了。”</p>
+<p>会议室很安静，一点声音也没有。一秒，两秒。</p>
+<p>主持人终于切换到下一个人。</p>
+<p>明天，他的座位就空了，每次早上一到办公室的时候都能见到的身影从明天开始就见不到了。</p>
+<p>明天，他的座位就空了，经常下班还能瞥见到的忙碌的身影从明天开始就见不到了。</p>
+<p>以后，非工作时间的会议也总是能保持准时参加的身影也见不到了。</p>
 ]]></content>
       <categories>
         <category>每日一思</category>
