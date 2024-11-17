@@ -8,6 +8,25 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Getting Started</title>
+    <url>/2015/12/07/2015-get-started/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
+<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>jasmine.any之坑</title>
     <url>/2015/12/08/pitfall-jasmin-any/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>坑说：<code>Jasmine</code>的<code>any(Object)</code>不能替代<code>any(&#123;premitive type&#125;)</code>，可以考虑使用<code>anything()</code></p>
@@ -49,23 +68,84 @@
       </categories>
   </entry>
   <entry>
-    <title>Getting Started</title>
-    <url>/2015/12/07/2015-get-started/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
-<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
+    <title>Maven Tips</title>
+    <url>/2016/03/04/maven-tips/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
+<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
+<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
+<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
+<ul>
+<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
+</ul>
+<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
+<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
+<span id="more"></span>
+<ul>
+<li>clean: pre-clean -&gt; clean -&gt; post-clean</li>
+<li>default:
+<ul>
+<li>validate -&gt; initialize -&gt;</li>
+<li>[generate/process-sources -&gt; generate/process-resources] -&gt;</li>
+<li>compile -&gt; process-classes -&gt;</li>
+<li>[generate/process-test-sources -&gt; generate/process-test-resources] -&gt;</li>
+<li>test-compile -&gt; process-test-classes -&gt;</li>
+<li>test -&gt;</li>
+<li>prepare-package -&gt; package -&gt;</li>
+<li>pre-integration-test -&gt; integration-test -&gt; post-integration-test -&gt;</li>
+<li>verify -&gt;</li>
+<li>install -&gt;</li>
+<li>deploy</li>
+</ul>
+</li>
+<li>site: pre-site -&gt; site -&gt; post-site -&gt; site-deploy</li>
+</ul>
+<h3 id="绑定生命周期"><a class="markdownIt-Anchor" href="#绑定生命周期"></a> 绑定生命周期</h3>
+<ul>
+<li>内置绑定</li>
+<li>自定义绑定</li>
+</ul>
+<h2 id="plugins"><a class="markdownIt-Anchor" href="#plugins"></a> Plugins</h2>
+<ul>
+<li>jetty-maven-plugin 热部署</li>
+<li>maven-release-plugin 版本管理</li>
+<li>maven-gpg-plugin 自动进行GPG签名</li>
+<li>maven-resources-plugin 文件过滤</li>
+<li>maven-site-plugin 生成项目站点</li>
+<li>maven-javadoc-plugin</li>
+<li>maven-checkstyle-plugin</li>
+<li>maven-pdm-plugin 源代码分析工具</li>
+<li>maven-changelog-plugin</li>
+<li>cobertura-maven-plugin 测试覆盖率</li>
+</ul>
+<h2 id="仓库"><a class="markdownIt-Anchor" href="#仓库"></a> 仓库</h2>
+<ul>
+<li>公共仓库</li>
+<li>Nexus私服</li>
+</ul>
+<h2 id="版本管理"><a class="markdownIt-Anchor" href="#版本管理"></a> 版本管理</h2>
+<ul>
+<li>快照版：开发中保持版本稳定</li>
+<li>稳定版：
+<ul>
+<li>所有测试通过</li>
+<li>没有快照版本依赖</li>
+<li>没有快照版本插件</li>
+<li>所有代码进入版本控制系统</li>
+</ul>
+</li>
+</ul>
+<h3 id="版本号"><a class="markdownIt-Anchor" href="#版本号"></a> 版本号</h3>
+<p>1.3.4-beta-2</p>
+<p>主版本(架构变更).次版本(较大范围功能变化).增量版本(重大bug修复)-里程碑版本</p>
 ]]></content>
+      <categories>
+        <category>build tools</category>
+      </categories>
+      <tags>
+        <tag>maven</tag>
+        <tag>java</tag>
+        <tag>pom</tag>
+      </tags>
   </entry>
   <entry>
     <title>CSS最佳实践</title>
@@ -150,86 +230,6 @@
       <tags>
         <tag>CSS</tag>
         <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Maven Tips</title>
-    <url>/2016/03/04/maven-tips/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="配置文件"><a class="markdownIt-Anchor" href="#配置文件"></a> 配置文件</h2>
-<h3 id="继承和聚合"><a class="markdownIt-Anchor" href="#继承和聚合"></a> 继承和聚合</h3>
-<h3 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h3>
-<p>内置、POM属性、自定义属性、settings属性、Java系统属性、环境变量</p>
-<ul>
-<li>finalName: 配置最终生成的war包的文件名，可以用于替换默认的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>j</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mo>−</mo></mrow><annotation encoding="application/x-tex">{project.artifactId}-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord">.</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">a</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.07847em;">I</span><span class="mord mathdefault">d</span></span><span class="mord">−</span></span></span></span>{project.version}，便于发布的时候生成合适的路径</li>
-</ul>
-<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
-<h3 id="三套独立生命周期"><a class="markdownIt-Anchor" href="#三套独立生命周期"></a> 三套独立生命周期</h3>
-<span id="more"></span>
-<ul>
-<li>clean: pre-clean -&gt; clean -&gt; post-clean</li>
-<li>default:
-<ul>
-<li>validate -&gt; initialize -&gt;</li>
-<li>[generate/process-sources -&gt; generate/process-resources] -&gt;</li>
-<li>compile -&gt; process-classes -&gt;</li>
-<li>[generate/process-test-sources -&gt; generate/process-test-resources] -&gt;</li>
-<li>test-compile -&gt; process-test-classes -&gt;</li>
-<li>test -&gt;</li>
-<li>prepare-package -&gt; package -&gt;</li>
-<li>pre-integration-test -&gt; integration-test -&gt; post-integration-test -&gt;</li>
-<li>verify -&gt;</li>
-<li>install -&gt;</li>
-<li>deploy</li>
-</ul>
-</li>
-<li>site: pre-site -&gt; site -&gt; post-site -&gt; site-deploy</li>
-</ul>
-<h3 id="绑定生命周期"><a class="markdownIt-Anchor" href="#绑定生命周期"></a> 绑定生命周期</h3>
-<ul>
-<li>内置绑定</li>
-<li>自定义绑定</li>
-</ul>
-<h2 id="plugins"><a class="markdownIt-Anchor" href="#plugins"></a> Plugins</h2>
-<ul>
-<li>jetty-maven-plugin 热部署</li>
-<li>maven-release-plugin 版本管理</li>
-<li>maven-gpg-plugin 自动进行GPG签名</li>
-<li>maven-resources-plugin 文件过滤</li>
-<li>maven-site-plugin 生成项目站点</li>
-<li>maven-javadoc-plugin</li>
-<li>maven-checkstyle-plugin</li>
-<li>maven-pdm-plugin 源代码分析工具</li>
-<li>maven-changelog-plugin</li>
-<li>cobertura-maven-plugin 测试覆盖率</li>
-</ul>
-<h2 id="仓库"><a class="markdownIt-Anchor" href="#仓库"></a> 仓库</h2>
-<ul>
-<li>公共仓库</li>
-<li>Nexus私服</li>
-</ul>
-<h2 id="版本管理"><a class="markdownIt-Anchor" href="#版本管理"></a> 版本管理</h2>
-<ul>
-<li>快照版：开发中保持版本稳定</li>
-<li>稳定版：
-<ul>
-<li>所有测试通过</li>
-<li>没有快照版本依赖</li>
-<li>没有快照版本插件</li>
-<li>所有代码进入版本控制系统</li>
-</ul>
-</li>
-</ul>
-<h3 id="版本号"><a class="markdownIt-Anchor" href="#版本号"></a> 版本号</h3>
-<p>1.3.4-beta-2</p>
-<p>主版本(架构变更).次版本(较大范围功能变化).增量版本(重大bug修复)-里程碑版本</p>
-]]></content>
-      <categories>
-        <category>build tools</category>
-      </categories>
-      <tags>
-        <tag>maven</tag>
-        <tag>java</tag>
-        <tag>pom</tag>
       </tags>
   </entry>
   <entry>
@@ -1777,151 +1777,6 @@
       </tags>
   </entry>
   <entry>
-    <title>本地搭建OpenShift集群指南</title>
-    <url>/2017/10/24/local-openshift-cluster-installation-guide/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h1 id="local-openshift-cluster-installation-guide"><a class="markdownIt-Anchor" href="#local-openshift-cluster-installation-guide"></a> Local Openshift Cluster Installation Guide</h1>
-<h2 id="preparation"><a class="markdownIt-Anchor" href="#preparation"></a> Preparation</h2>
-<h3 id="hosts"><a class="markdownIt-Anchor" href="#hosts"></a> Hosts</h3>
-<ul>
-<li>1 control host, 1 master and 3 nodes</li>
-<li>centos 7</li>
-</ul>
-<h3 id="install-packages-on-control-host"><a class="markdownIt-Anchor" href="#install-packages-on-control-host"></a> Install packages on control host</h3>
-<ul>
-<li>Run <code>yum install -y python2-passlib httpd-tools</code></li>
-</ul>
-<span id="more"></span>
-<h3 id="install-and-config-dns-on-control-host"><a class="markdownIt-Anchor" href="#install-and-config-dns-on-control-host"></a> Install and config dns on control host</h3>
-<ul>
-<li>Run <code>yum install etcd</code></li>
-<li>Download or build skydns and run <code>./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53</code></li>
-<li>Create dns items</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.192&quot;&#125;&#x27;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.73&quot;&#125;&#x27;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.93&quot;&#125;&#x27;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.76&quot;&#125;&#x27;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Configure node dns file <code>/etc/resolv.conf</code> with contents:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
-<ul>
-<li>On every node, run <code>hostname node*.oc.tw</code> to correct the hostname (make it the same as it’s dns name)</li>
-</ul>
-<h2 id="installation"><a class="markdownIt-Anchor" href="#installation"></a> Installation</h2>
-<ul>
-<li>clone openshift repo: <code>git clone https://github.com/openshift/openshift-ansible.git</code></li>
-<li>Prepare hosts file with contents</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Create OSEv3 group that contains the masters and nodes groups</span><br><span class="line">[OSEv3:children]</span><br><span class="line">masters</span><br><span class="line">nodes</span><br><span class="line">etcd</span><br><span class="line">nfs</span><br><span class="line"></span><br><span class="line"># Set variables common for all OSEv3 hosts</span><br><span class="line">[OSEv3:vars]</span><br><span class="line"># SSH user, this user should allow ssh based auth without requiring a password</span><br><span class="line">ansible_ssh_user=root</span><br><span class="line">openshift_deployment_type=origin</span><br><span class="line">openshift_release=3.6.0</span><br><span class="line">openshift_disable_check=disk_availability,docker_storage,memory_availability,docker_image_availability,package_availability,package_version</span><br><span class="line">openshift_metrics_install_metrics=true</span><br><span class="line">openshift_master_default_subdomain=apps.oc.tw</span><br><span class="line">openshift_logging_install_logging=true</span><br><span class="line">openshift_master_cluster_public_hostname=master.oc.tw</span><br><span class="line">openshift_hosted_registry_storage_kind=nfs</span><br><span class="line">openshift_hosted_registry_storage_access_modes=[&#x27;ReadWriteMany&#x27;]</span><br><span class="line">openshift_hosted_registry_storage_nfs_directory=/exports</span><br><span class="line">openshift_hosted_registry_storage_nfs_options=&#x27;*(rw,root_squash)&#x27;</span><br><span class="line">openshift_hosted_registry_storage_volume_name=registry</span><br><span class="line">openshift_hosted_registry_storage_volume_size=10Gi</span><br><span class="line">openshift_logging_storage_kind=nfs</span><br><span class="line">openshift_logging_storage_access_modes=[&#x27;ReadWriteOnce&#x27;]</span><br><span class="line">openshift_logging_storage_nfs_directory=/exports</span><br><span class="line">openshift_logging_storage_nfs_options=&#x27;*(rw,root_squash)&#x27;</span><br><span class="line">openshift_logging_storage_volume_name=logging</span><br><span class="line">openshift_logging_storage_volume_size=10Gi</span><br><span class="line">openshift_metrics_storage_kind=nfs</span><br><span class="line">openshift_metrics_storage_access_modes=[&#x27;ReadWriteOnce&#x27;]</span><br><span class="line">openshift_metrics_storage_nfs_directory=/exports</span><br><span class="line">openshift_metrics_storage_nfs_options=&#x27;*(rw,root_squash)&#x27;</span><br><span class="line">openshift_metrics_storage_volume_name=metrics</span><br><span class="line">openshift_metrics_storage_volume_size=10Gi</span><br><span class="line"></span><br><span class="line">openshift_master_identity_providers=[&#123;&#x27;name&#x27;:&#x27;htpasswd_auth&#x27;,&#x27;login&#x27;:&#x27;true&#x27;,&#x27;challenge&#x27;:&#x27;true&#x27;,&#x27;kind&#x27;:&#x27;HTPasswdPasswordIdentityProvider&#x27;,&#x27;filename&#x27;:&#x27;/etc/origin/master/htpasswd&#x27;&#125;]</span><br><span class="line"></span><br><span class="line"># host group for masters</span><br><span class="line">[masters]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line"># host group for nodes, includes region info</span><br><span class="line">[nodes]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;infra&#x27;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;primary&#x27;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br><span class="line">node3.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;primary&#x27;&#125;&quot; openshift_public_hostname=node3.oc.tw</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line">[nfs]</span><br><span class="line">master.oc.tw</span><br></pre></td></tr></table></figure>
-<ul>
-<li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/byo/config.yml</code> to install</li>
-<li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/adhoc/uninstall.yml</code> to uninstall. (ensure configurations are all removed, by checking <code>/etc/origin</code> folder on every node)</li>
-</ul>
-<h3 id="networkmanager-must-be-installed"><a class="markdownIt-Anchor" href="#networkmanager-must-be-installed"></a> NetworkManager must be installed</h3>
-<ul>
-<li>install NetworkManager on each node: run <code>yum install -y NetworkManager &amp;&amp; systemctl enable NetworkManager &amp;&amp; systemctl start NetworkManager</code> and <code>hostname master.oc.tw</code> to correct the hostname</li>
-<li>pay attention to master/node restarting, since it will reconfigure the hostname, quickly run <code>hostname master.oc.tw</code> when you found out that (maybe configure NetworkManager to assign a static hostname will work as well)</li>
-</ul>
-<h3 id="cannot-find-file-etcoriginnoderesolvconf"><a class="markdownIt-Anchor" href="#cannot-find-file-etcoriginnoderesolvconf"></a> Cannot find file <code>/etc/origin/node/resolv.conf</code></h3>
-<ul>
-<li>Create resolv.conf on each node: <code>cp /etc/resolv.conf /etc/origin/node/resolv.conf</code></li>
-</ul>
-<h3 id="cannot-resolve-external-dns-eg-githubcom-from-container"><a class="markdownIt-Anchor" href="#cannot-resolve-external-dns-eg-githubcom-from-container"></a> Cannot resolve external dns (eg. <a href="http://github.com">github.com</a>) from container</h3>
-<ul>
-<li>edit file <code>/etc/dnsmasq.d/origin-dns.conf</code> to add <code>server=10.202.129.100</code></li>
-<li>restart dnsmasq: <code>systemctl restart dnsmasq.service</code></li>
-</ul>
-<h3 id="sti-builder-cannot-push-image-to-docker-registrydefaultsvc5000-no-route-to-host"><a class="markdownIt-Anchor" href="#sti-builder-cannot-push-image-to-docker-registrydefaultsvc5000-no-route-to-host"></a> sti builder cannot push image to <code>docker-registry.default.svc:5000</code> (no route to host)</h3>
-<ul>
-<li>edit file /etc/resolve.conf on node with contents:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
-<h3 id="oc-get-nodes-on-master-raise-certificate-issue"><a class="markdownIt-Anchor" href="#oc-get-nodes-on-master-raise-certificate-issue"></a> <code>oc get nodes</code> on master raise certificate issue</h3>
-<ul>
-<li>run <code>cp -v /etc/origin/master/admin.kubeconfig .kube/config</code> to copy the config to your local</li>
-</ul>
-<h3 id="common-ways-to-debug"><a class="markdownIt-Anchor" href="#common-ways-to-debug"></a> Common ways to debug</h3>
-<ul>
-<li><code>systemctl status *.service</code></li>
-<li><code>journalctl -xe</code></li>
-<li><code>journalctl --unit dnsmasq</code></li>
-</ul>
-<h2 id="nfs-pv-configuration"><a class="markdownIt-Anchor" href="#nfs-pv-configuration"></a> nfs pv configuration</h2>
-<h3 id="errors-from-oc-describe-pv-pv0001"><a class="markdownIt-Anchor" href="#errors-from-oc-describe-pv-pv0001"></a> Errors from <code>oc describe pv pv0001</code></h3>
-<blockquote>
-<p>Recycle failed: unexpected error creating recycler pod:  pods “recycler-for-pv0001” is forbidden: service account openshift-infra/pv-recycler-controller was not found, retry after the service account is created</p>
-</blockquote>
-<ul>
-<li>Create sa: <code>oc create sa pv-recycler-controller -n openshift-infra</code></li>
-<li>Config scc:<br />
-<code>oadm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:pv-recycler-controller</code></li>
-</ul>
-<h3 id="create-nfs-pv"><a class="markdownIt-Anchor" href="#create-nfs-pv"></a> Create nfs pv</h3>
-<ul>
-<li>Edit <code>/etc/exports.d/openshift-ansible.exports</code>, add lines like <code>/exports/pvs/pv0001 *(rw,root_squash)</code></li>
-<li>Run: <code>mv /exports/pvs/pv0001 &amp;&amp; chown nfsnobody:nfsnobody /exports/pv0001 &amp;&amp; chmod 777 /exports/pv0001</code></li>
-<li>Ensure mount in nodes work well by run <code>mount -t nfs master.oc.tw:/exports/pvs/pv0001 ./t</code></li>
-<li>Create <code>pv.yml</code> with below and run <code>oc create -f pv.yml</code> to create pv:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv0005</span><br><span class="line">spec:</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 10Gi</span><br><span class="line">  accessModes:</span><br><span class="line">  - ReadWriteOnce</span><br><span class="line">  nfs:</span><br><span class="line">    path: /exports/pvs/pv0005</span><br><span class="line">    server: master.oc.tw</span><br><span class="line">  persistentVolumeReclaimPolicy: Recycle</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Debug:
-<ul>
-<li><code>ps aux | grep mount</code> on node to see if it succeeded</li>
-<li><code>oc describe po/xxx</code> on master to see the status of the container</li>
-</ul>
-</li>
-</ul>
-<h2 id="local-service-dns-resolution"><a class="markdownIt-Anchor" href="#local-service-dns-resolution"></a> Local service dns resolution</h2>
-<ul>
-<li>Find router node: <code>oc project default &amp;&amp; oc get all</code> to find router pod and <code>oc describe po/router-1-gsm7v</code> to find the node and record IP of that node</li>
-<li>Edit local hosts file <code>/etc/hosts</code> and add contents<br />
-10.202.128.77 <a href="http://kibana.apps.oc.tw">kibana.apps.oc.tw</a> <a href="http://hawkular-metrics.apps.oc.tw">hawkular-metrics.apps.oc.tw</a> <a href="http://nodejs-mongo-persistent-test.apps.oc.tw">nodejs-mongo-persistent-test.apps.oc.tw</a></li>
-</ul>
-<h2 id="logging-issue"><a class="markdownIt-Anchor" href="#logging-issue"></a> Logging issue</h2>
-<p>EFK stack use kubernetes DaemonSet to schecule <code>logging-fluentd-xx</code> pod on every node to collect container logs.</p>
-<ul>
-<li>List DaemonSet <code>oc get ds</code> and make sure the pods count is the same as node count</li>
-<li>Verify the DaemonSet settings <code>oc edit ds/logging-fluentd</code>. Check <code>nodeSelector</code> property.</li>
-<li>Rsh into one of the fluentd pods, and check <code>run.sh</code> to find what is been done.</li>
-<li>Add environment variables to help debug, edit the DaemonSet <code>oc edit ds/logging-fluentd</code> and add environment variables <code>ENABLE_MONITOR_AGENT=true;ENABLE_MONITOR_AGENT=true</code> (Refer <a href="https://docs.fluentd.org/v0.12/articles/monitoring">here</a>)</li>
-</ul>
-<h2 id="common-management-tasks"><a class="markdownIt-Anchor" href="#common-management-tasks"></a> Common management tasks</h2>
-<ul>
-<li>Login as admin: ssh into master and you’ll be admin directly when you run <code>oc</code> commands</li>
-<li>Add user through htpasswd: run <code>htpasswd -b /etc/origin/master/htpasswd admin admin</code> on master</li>
-<li>Add project to user: <code>oadm policy add-role-to-user admin gmliao -n logging</code></li>
-</ul>
-<h2 id="node-management"><a class="markdownIt-Anchor" href="#node-management"></a> Node Management</h2>
-<h3 id="add-node"><a class="markdownIt-Anchor" href="#add-node"></a> Add node</h3>
-<p>Refer here: <a href="https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced">https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced</a></p>
-<ul>
-<li>Add <code>new_nodes</code> or <code>new_masters</code> to <code>[OSEv3:vars]</code> section</li>
-<li>Add a new section:</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[new_nodes]</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;infra&#x27;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;primary&#x27;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Run installation: <code>ansible-playbook -i hosts ~/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml</code></li>
-<li>Move nodes configured in <code>[new_nodes]</code> section to <code>[nodes]</code> section</li>
-</ul>
-<h3 id="remove-node"><a class="markdownIt-Anchor" href="#remove-node"></a> Remove node</h3>
-<p>Refer here: <a href="https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes">https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes</a></p>
-<h2 id="reference"><a class="markdownIt-Anchor" href="#reference"></a> Reference</h2>
-<ul>
-<li><a href="https://docs.openshift.org/latest/install_config/install/advanced_install.html">https://docs.openshift.org/latest/install_config/install/advanced_install.html</a></li>
-<li><a href="https://kubernetes.io/docs/setup/">https://kubernetes.io/docs/setup/</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>DevOps</category>
-      </categories>
-      <tags>
-        <tag>kubernetes</tag>
-        <tag>DevOps</tag>
-        <tag>OpenShift</tag>
-        <tag>PAAS</tag>
-        <tag>Cluster</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深入探索生成对抗网络（二）</title>
     <url>/2017/06/26/dive-into-gan-continued/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>最近在研究生成对抗网络，也对内对外做过一些分享。这里把分享过的内容整理一下，如有不对的地方，欢迎留言指出。也欢迎大家留言交流。这里是关于生成对抗网络的第二部分。第一部分在<a href="../21/dive-into-gan/">这里</a></p>
@@ -2132,6 +1987,151 @@
       </tags>
   </entry>
   <entry>
+    <title>本地搭建OpenShift集群指南</title>
+    <url>/2017/10/24/local-openshift-cluster-installation-guide/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h1 id="local-openshift-cluster-installation-guide"><a class="markdownIt-Anchor" href="#local-openshift-cluster-installation-guide"></a> Local Openshift Cluster Installation Guide</h1>
+<h2 id="preparation"><a class="markdownIt-Anchor" href="#preparation"></a> Preparation</h2>
+<h3 id="hosts"><a class="markdownIt-Anchor" href="#hosts"></a> Hosts</h3>
+<ul>
+<li>1 control host, 1 master and 3 nodes</li>
+<li>centos 7</li>
+</ul>
+<h3 id="install-packages-on-control-host"><a class="markdownIt-Anchor" href="#install-packages-on-control-host"></a> Install packages on control host</h3>
+<ul>
+<li>Run <code>yum install -y python2-passlib httpd-tools</code></li>
+</ul>
+<span id="more"></span>
+<h3 id="install-and-config-dns-on-control-host"><a class="markdownIt-Anchor" href="#install-and-config-dns-on-control-host"></a> Install and config dns on control host</h3>
+<ul>
+<li>Run <code>yum install etcd</code></li>
+<li>Download or build skydns and run <code>./skydns -machines=http://127.0.0.1:2379 -addr=0.0.0.0:53</code></li>
+<li>Create dns items</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/master -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.192&quot;&#125;&#x27;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node1 -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.73&quot;&#125;&#x27;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node2 -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.93&quot;&#125;&#x27;</span><br><span class="line">curl -XPUT http://127.0.0.1:2379/v2/keys/skydns/tw/oc/node3 -d value=&#x27;&#123;&quot;host&quot;:&quot;10.202.128.76&quot;&#125;&#x27;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Configure node dns file <code>/etc/resolv.conf</code> with contents:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
+<ul>
+<li>On every node, run <code>hostname node*.oc.tw</code> to correct the hostname (make it the same as it’s dns name)</li>
+</ul>
+<h2 id="installation"><a class="markdownIt-Anchor" href="#installation"></a> Installation</h2>
+<ul>
+<li>clone openshift repo: <code>git clone https://github.com/openshift/openshift-ansible.git</code></li>
+<li>Prepare hosts file with contents</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Create OSEv3 group that contains the masters and nodes groups</span><br><span class="line">[OSEv3:children]</span><br><span class="line">masters</span><br><span class="line">nodes</span><br><span class="line">etcd</span><br><span class="line">nfs</span><br><span class="line"></span><br><span class="line"># Set variables common for all OSEv3 hosts</span><br><span class="line">[OSEv3:vars]</span><br><span class="line"># SSH user, this user should allow ssh based auth without requiring a password</span><br><span class="line">ansible_ssh_user=root</span><br><span class="line">openshift_deployment_type=origin</span><br><span class="line">openshift_release=3.6.0</span><br><span class="line">openshift_disable_check=disk_availability,docker_storage,memory_availability,docker_image_availability,package_availability,package_version</span><br><span class="line">openshift_metrics_install_metrics=true</span><br><span class="line">openshift_master_default_subdomain=apps.oc.tw</span><br><span class="line">openshift_logging_install_logging=true</span><br><span class="line">openshift_master_cluster_public_hostname=master.oc.tw</span><br><span class="line">openshift_hosted_registry_storage_kind=nfs</span><br><span class="line">openshift_hosted_registry_storage_access_modes=[&#x27;ReadWriteMany&#x27;]</span><br><span class="line">openshift_hosted_registry_storage_nfs_directory=/exports</span><br><span class="line">openshift_hosted_registry_storage_nfs_options=&#x27;*(rw,root_squash)&#x27;</span><br><span class="line">openshift_hosted_registry_storage_volume_name=registry</span><br><span class="line">openshift_hosted_registry_storage_volume_size=10Gi</span><br><span class="line">openshift_logging_storage_kind=nfs</span><br><span class="line">openshift_logging_storage_access_modes=[&#x27;ReadWriteOnce&#x27;]</span><br><span class="line">openshift_logging_storage_nfs_directory=/exports</span><br><span class="line">openshift_logging_storage_nfs_options=&#x27;*(rw,root_squash)&#x27;</span><br><span class="line">openshift_logging_storage_volume_name=logging</span><br><span class="line">openshift_logging_storage_volume_size=10Gi</span><br><span class="line">openshift_metrics_storage_kind=nfs</span><br><span class="line">openshift_metrics_storage_access_modes=[&#x27;ReadWriteOnce&#x27;]</span><br><span class="line">openshift_metrics_storage_nfs_directory=/exports</span><br><span class="line">openshift_metrics_storage_nfs_options=&#x27;*(rw,root_squash)&#x27;</span><br><span class="line">openshift_metrics_storage_volume_name=metrics</span><br><span class="line">openshift_metrics_storage_volume_size=10Gi</span><br><span class="line"></span><br><span class="line">openshift_master_identity_providers=[&#123;&#x27;name&#x27;:&#x27;htpasswd_auth&#x27;,&#x27;login&#x27;:&#x27;true&#x27;,&#x27;challenge&#x27;:&#x27;true&#x27;,&#x27;kind&#x27;:&#x27;HTPasswdPasswordIdentityProvider&#x27;,&#x27;filename&#x27;:&#x27;/etc/origin/master/htpasswd&#x27;&#125;]</span><br><span class="line"></span><br><span class="line"># host group for masters</span><br><span class="line">[masters]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line"># host group for nodes, includes region info</span><br><span class="line">[nodes]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;infra&#x27;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;primary&#x27;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br><span class="line">node3.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;primary&#x27;&#125;&quot; openshift_public_hostname=node3.oc.tw</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">master.oc.tw openshift_public_hostname=master.oc.tw</span><br><span class="line"></span><br><span class="line">[nfs]</span><br><span class="line">master.oc.tw</span><br></pre></td></tr></table></figure>
+<ul>
+<li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/byo/config.yml</code> to install</li>
+<li>run <code>ansible-playbook -i ./hosts ~/openshift-ansible/playbooks/adhoc/uninstall.yml</code> to uninstall. (ensure configurations are all removed, by checking <code>/etc/origin</code> folder on every node)</li>
+</ul>
+<h3 id="networkmanager-must-be-installed"><a class="markdownIt-Anchor" href="#networkmanager-must-be-installed"></a> NetworkManager must be installed</h3>
+<ul>
+<li>install NetworkManager on each node: run <code>yum install -y NetworkManager &amp;&amp; systemctl enable NetworkManager &amp;&amp; systemctl start NetworkManager</code> and <code>hostname master.oc.tw</code> to correct the hostname</li>
+<li>pay attention to master/node restarting, since it will reconfigure the hostname, quickly run <code>hostname master.oc.tw</code> when you found out that (maybe configure NetworkManager to assign a static hostname will work as well)</li>
+</ul>
+<h3 id="cannot-find-file-etcoriginnoderesolvconf"><a class="markdownIt-Anchor" href="#cannot-find-file-etcoriginnoderesolvconf"></a> Cannot find file <code>/etc/origin/node/resolv.conf</code></h3>
+<ul>
+<li>Create resolv.conf on each node: <code>cp /etc/resolv.conf /etc/origin/node/resolv.conf</code></li>
+</ul>
+<h3 id="cannot-resolve-external-dns-eg-githubcom-from-container"><a class="markdownIt-Anchor" href="#cannot-resolve-external-dns-eg-githubcom-from-container"></a> Cannot resolve external dns (eg. <a href="http://github.com">github.com</a>) from container</h3>
+<ul>
+<li>edit file <code>/etc/dnsmasq.d/origin-dns.conf</code> to add <code>server=10.202.129.100</code></li>
+<li>restart dnsmasq: <code>systemctl restart dnsmasq.service</code></li>
+</ul>
+<h3 id="sti-builder-cannot-push-image-to-docker-registrydefaultsvc5000-no-route-to-host"><a class="markdownIt-Anchor" href="#sti-builder-cannot-push-image-to-docker-registrydefaultsvc5000-no-route-to-host"></a> sti builder cannot push image to <code>docker-registry.default.svc:5000</code> (no route to host)</h3>
+<ul>
+<li>edit file /etc/resolve.conf on node with contents:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">search oc.tw default.svc cluster.local</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver 10.202.129.100</span><br></pre></td></tr></table></figure>
+<h3 id="oc-get-nodes-on-master-raise-certificate-issue"><a class="markdownIt-Anchor" href="#oc-get-nodes-on-master-raise-certificate-issue"></a> <code>oc get nodes</code> on master raise certificate issue</h3>
+<ul>
+<li>run <code>cp -v /etc/origin/master/admin.kubeconfig .kube/config</code> to copy the config to your local</li>
+</ul>
+<h3 id="common-ways-to-debug"><a class="markdownIt-Anchor" href="#common-ways-to-debug"></a> Common ways to debug</h3>
+<ul>
+<li><code>systemctl status *.service</code></li>
+<li><code>journalctl -xe</code></li>
+<li><code>journalctl --unit dnsmasq</code></li>
+</ul>
+<h2 id="nfs-pv-configuration"><a class="markdownIt-Anchor" href="#nfs-pv-configuration"></a> nfs pv configuration</h2>
+<h3 id="errors-from-oc-describe-pv-pv0001"><a class="markdownIt-Anchor" href="#errors-from-oc-describe-pv-pv0001"></a> Errors from <code>oc describe pv pv0001</code></h3>
+<blockquote>
+<p>Recycle failed: unexpected error creating recycler pod:  pods “recycler-for-pv0001” is forbidden: service account openshift-infra/pv-recycler-controller was not found, retry after the service account is created</p>
+</blockquote>
+<ul>
+<li>Create sa: <code>oc create sa pv-recycler-controller -n openshift-infra</code></li>
+<li>Config scc:<br />
+<code>oadm policy add-scc-to-user hostmount-anyuid system:serviceaccount:openshift-infra:pv-recycler-controller</code></li>
+</ul>
+<h3 id="create-nfs-pv"><a class="markdownIt-Anchor" href="#create-nfs-pv"></a> Create nfs pv</h3>
+<ul>
+<li>Edit <code>/etc/exports.d/openshift-ansible.exports</code>, add lines like <code>/exports/pvs/pv0001 *(rw,root_squash)</code></li>
+<li>Run: <code>mv /exports/pvs/pv0001 &amp;&amp; chown nfsnobody:nfsnobody /exports/pv0001 &amp;&amp; chmod 777 /exports/pv0001</code></li>
+<li>Ensure mount in nodes work well by run <code>mount -t nfs master.oc.tw:/exports/pvs/pv0001 ./t</code></li>
+<li>Create <code>pv.yml</code> with below and run <code>oc create -f pv.yml</code> to create pv:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv0005</span><br><span class="line">spec:</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 10Gi</span><br><span class="line">  accessModes:</span><br><span class="line">  - ReadWriteOnce</span><br><span class="line">  nfs:</span><br><span class="line">    path: /exports/pvs/pv0005</span><br><span class="line">    server: master.oc.tw</span><br><span class="line">  persistentVolumeReclaimPolicy: Recycle</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Debug:
+<ul>
+<li><code>ps aux | grep mount</code> on node to see if it succeeded</li>
+<li><code>oc describe po/xxx</code> on master to see the status of the container</li>
+</ul>
+</li>
+</ul>
+<h2 id="local-service-dns-resolution"><a class="markdownIt-Anchor" href="#local-service-dns-resolution"></a> Local service dns resolution</h2>
+<ul>
+<li>Find router node: <code>oc project default &amp;&amp; oc get all</code> to find router pod and <code>oc describe po/router-1-gsm7v</code> to find the node and record IP of that node</li>
+<li>Edit local hosts file <code>/etc/hosts</code> and add contents<br />
+10.202.128.77 <a href="http://kibana.apps.oc.tw">kibana.apps.oc.tw</a> <a href="http://hawkular-metrics.apps.oc.tw">hawkular-metrics.apps.oc.tw</a> <a href="http://nodejs-mongo-persistent-test.apps.oc.tw">nodejs-mongo-persistent-test.apps.oc.tw</a></li>
+</ul>
+<h2 id="logging-issue"><a class="markdownIt-Anchor" href="#logging-issue"></a> Logging issue</h2>
+<p>EFK stack use kubernetes DaemonSet to schecule <code>logging-fluentd-xx</code> pod on every node to collect container logs.</p>
+<ul>
+<li>List DaemonSet <code>oc get ds</code> and make sure the pods count is the same as node count</li>
+<li>Verify the DaemonSet settings <code>oc edit ds/logging-fluentd</code>. Check <code>nodeSelector</code> property.</li>
+<li>Rsh into one of the fluentd pods, and check <code>run.sh</code> to find what is been done.</li>
+<li>Add environment variables to help debug, edit the DaemonSet <code>oc edit ds/logging-fluentd</code> and add environment variables <code>ENABLE_MONITOR_AGENT=true;ENABLE_MONITOR_AGENT=true</code> (Refer <a href="https://docs.fluentd.org/v0.12/articles/monitoring">here</a>)</li>
+</ul>
+<h2 id="common-management-tasks"><a class="markdownIt-Anchor" href="#common-management-tasks"></a> Common management tasks</h2>
+<ul>
+<li>Login as admin: ssh into master and you’ll be admin directly when you run <code>oc</code> commands</li>
+<li>Add user through htpasswd: run <code>htpasswd -b /etc/origin/master/htpasswd admin admin</code> on master</li>
+<li>Add project to user: <code>oadm policy add-role-to-user admin gmliao -n logging</code></li>
+</ul>
+<h2 id="node-management"><a class="markdownIt-Anchor" href="#node-management"></a> Node Management</h2>
+<h3 id="add-node"><a class="markdownIt-Anchor" href="#add-node"></a> Add node</h3>
+<p>Refer here: <a href="https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced">https://docs.openshift.org/latest/install_config/adding_hosts_to_existing_cluster.html#adding-nodes-advanced</a></p>
+<ul>
+<li>Add <code>new_nodes</code> or <code>new_masters</code> to <code>[OSEv3:vars]</code> section</li>
+<li>Add a new section:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[new_nodes]</span><br><span class="line">node1.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;infra&#x27;&#125;&quot; openshift_public_hostname=node1.oc.tw</span><br><span class="line">node2.oc.tw openshift_node_labels=&quot;&#123;&#x27;region&#x27;:&#x27;primary&#x27;&#125;&quot; openshift_public_hostname=node2.oc.tw</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Run installation: <code>ansible-playbook -i hosts ~/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml</code></li>
+<li>Move nodes configured in <code>[new_nodes]</code> section to <code>[nodes]</code> section</li>
+</ul>
+<h3 id="remove-node"><a class="markdownIt-Anchor" href="#remove-node"></a> Remove node</h3>
+<p>Refer here: <a href="https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes">https://docs.openshift.org/latest/admin_guide/manage_nodes.html#deleting-nodes</a></p>
+<h2 id="reference"><a class="markdownIt-Anchor" href="#reference"></a> Reference</h2>
+<ul>
+<li><a href="https://docs.openshift.org/latest/install_config/install/advanced_install.html">https://docs.openshift.org/latest/install_config/install/advanced_install.html</a></li>
+<li><a href="https://kubernetes.io/docs/setup/">https://kubernetes.io/docs/setup/</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>DevOps</category>
+      </categories>
+      <tags>
+        <tag>kubernetes</tag>
+        <tag>DevOps</tag>
+        <tag>OpenShift</tag>
+        <tag>PAAS</tag>
+        <tag>Cluster</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>AWS搭建OpenShift集群指南</title>
     <url>/2017/10/24/aws-openshift-cluster-installation-guide/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h1 id="aws-openshift-cluster-installation-guide"><a class="markdownIt-Anchor" href="#aws-openshift-cluster-installation-guide"></a> AWS Openshift Cluster Installation Guide</h1>
@@ -2167,23 +2167,6 @@
         <tag>OpenShift</tag>
         <tag>PAAS</tag>
         <tag>Cluster</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>5行代码的自动评论机器人</title>
-    <url>/2017/12/07/automated-comment-on-xiaomi-s-live-stream/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br />
-于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
-<p>直播地址：<a href="https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195">https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195</a></p>
-<p>代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 随机选择一个当前评论列表里面的评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">r</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>((<span class="title class_">Math</span>.<span class="title function_">random</span>() * $(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>).<span class="property">length</span>))</span><br><span class="line"><span class="comment">// 提取选中的评论的内容</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">text</span> = (<span class="params"></span>) =&gt; $($(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>)[<span class="title function_">r</span>()]).<span class="title function_">find</span>(<span class="string">&#x27;.content&#x27;</span>).<span class="title function_">text</span>()</span><br><span class="line"><span class="comment">// 使用选中的内容自动发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">c</span> = (<span class="params"></span>) =&gt; &#123;$(<span class="string">&#x27;#J_chatContent&#x27;</span>).<span class="title function_">val</span>(<span class="title function_">text</span>());$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">attr</span>(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;btn active&#x27;</span>);$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">click</span>();&#125;</span><br><span class="line"><span class="comment">// 生成随机的间隔时间</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">rtime</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">15000</span> + <span class="number">5000</span>)</span><br><span class="line"><span class="comment">// 设置一个计时器定时发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">st</span> = (<span class="params"></span>) =&gt; stt = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="title function_">c</span>(); <span class="title function_">st</span>()&#125;, <span class="title function_">rtime</span>())</span><br><span class="line"><span class="title function_">st</span>();</span><br></pre></td></tr></table></figure>
-<p>以上代码粘贴到控制台执行就可以了。</p>
-]]></content>
-      <categories>
-        <category>小技巧</category>
-      </categories>
-      <tags>
-        <tag>自动化</tag>
       </tags>
   </entry>
   <entry>
@@ -2579,6 +2562,23 @@ We created a monitor service already: <a href="http://grafana-openshift-infra.13
         <tag>OpenShift</tag>
         <tag>PAAS</tag>
         <tag>Cluster</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>5行代码的自动评论机器人</title>
+    <url>/2017/12/07/automated-comment-on-xiaomi-s-live-stream/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>又到小米发布会了，这次发布会将从发布评论的人里面选人，每分钟送一台小米手机。<br />
+于是写了几行代码自动发评论，省去了手工的麻烦。娱乐一下，碰个运气。</p>
+<p>直播地址：<a href="https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195">https://hd.mi.com/x/12041b/index.html?client_id=180100041086&amp;masid=17409.0195</a></p>
+<p>代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 随机选择一个当前评论列表里面的评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">r</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>((<span class="title class_">Math</span>.<span class="title function_">random</span>() * $(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>).<span class="property">length</span>))</span><br><span class="line"><span class="comment">// 提取选中的评论的内容</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">text</span> = (<span class="params"></span>) =&gt; $($(<span class="string">&#x27;.livechat-list-wrapper .list li&#x27;</span>)[<span class="title function_">r</span>()]).<span class="title function_">find</span>(<span class="string">&#x27;.content&#x27;</span>).<span class="title function_">text</span>()</span><br><span class="line"><span class="comment">// 使用选中的内容自动发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">c</span> = (<span class="params"></span>) =&gt; &#123;$(<span class="string">&#x27;#J_chatContent&#x27;</span>).<span class="title function_">val</span>(<span class="title function_">text</span>());$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">attr</span>(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;btn active&#x27;</span>);$(<span class="string">&#x27;#J_sendChatBtn&#x27;</span>).<span class="title function_">click</span>();&#125;</span><br><span class="line"><span class="comment">// 生成随机的间隔时间</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">rtime</span> = (<span class="params"></span>) =&gt; <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">15000</span> + <span class="number">5000</span>)</span><br><span class="line"><span class="comment">// 设置一个计时器定时发评论</span></span><br><span class="line"><span class="keyword">var</span> <span class="title function_">st</span> = (<span class="params"></span>) =&gt; stt = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="title function_">c</span>(); <span class="title function_">st</span>()&#125;, <span class="title function_">rtime</span>())</span><br><span class="line"><span class="title function_">st</span>();</span><br></pre></td></tr></table></figure>
+<p>以上代码粘贴到控制台执行就可以了。</p>
+]]></content>
+      <categories>
+        <category>小技巧</category>
+      </categories>
+      <tags>
+        <tag>自动化</tag>
       </tags>
   </entry>
   <entry>
@@ -4612,6 +4612,84 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
       </tags>
   </entry>
   <entry>
+    <title>CTR技术解读 -- 概览</title>
+    <url>/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为机器学习的一个细分领域，CTR预估一直以来都是研究的一大热点。之所以成为研究的热点，是因为推荐领域巨大的商业价值。无论是我们每天通信用的微信QQ，还是我们每天搜索用的Google百度，或者是娱乐用的抖音斗鱼，广告在这些产品的收入中都占据着非常重要的组成部分，广告收入的背后是广告推荐引擎在发挥作用。除了广告，我们网上购物时的物品推荐，看新闻时的新闻推荐，听音乐时的音乐推荐等等，这些都是推荐引擎发挥作用的地方。在这些地方，推荐引擎都产生了巨大的价值。</p>
+<p>对于如此重要的一个领域，我们做机器学习的小伙伴多多少少都需要了解一下。下面我将结合一个项目上的实际案例，来分享一下整个CTR的研究和应用情况。我将尝试尽可能用通俗易懂的语言，使得只要有一些基本的机器学习知识就能理解文章内容。文章将从应用角度出发，重点关注基本原理及工程实现而弱化更偏理论的公式推导等。</p>
+<p>本系列文章将分为以下几个部分：</p>
+<ul>
+<li>概览：背景，研究的问题，技术架构及演进，一个小的例子</li>
+<li>传统模型：协同过滤、LR模型及其应用</li>
+<li>Embedding、深度学习模型及其应用</li>
+<li>FM与DeepFM</li>
+<li>DCN及其他深度模型</li>
+<li>基于LSTM的模型：DIN、DIEN及DSIN</li>
+<li>多任务模型</li>
+</ul>
+<span id="more"></span>
+<h2 id="ctr"><a class="markdownIt-Anchor" href="#ctr"></a> CTR</h2>
+<p>CTR的全称是Click-Through Rate，即点击率。这里的点击当然就是指点击推荐的内容，如视频、音乐、新闻、广告等。</p>
+<p>如何进行推荐呢？从结果来看，我们希望算法能输出一个推荐内容的列表，这个列表按照一定的规则（比如用户感兴趣的程度、最大化盈利）进行排序。为了计算这个列表，用户点击某个内容的概率将是一个重要的输入。所以，CTR预估成为了推荐领域的最重要的部分之一。事实上，CTR预估的准确程度很大程度上影响着推荐结果的好坏。</p>
+<h2 id="主流推荐系统架构"><a class="markdownIt-Anchor" href="#主流推荐系统架构"></a> 主流推荐系统架构</h2>
+<p>在推荐场景中，我们需要思考和解决下面这些问题：</p>
+<ol>
+<li>如何处理数据形成特征</li>
+<li>如何高效的、稳定的进行模型训练</li>
+<li>如何将训练好的模型快速用于线上推理</li>
+<li>如何支持模型在线优化</li>
+<li>如何快速的实验新的特征及模型</li>
+</ol>
+<p>从整体上来看，推荐系统架构将是一个离线、近在线、在线处理相结合的一个复杂系统。完全在线处理推荐系统中的所有问题是一种理想情况，其成本将非常高昂，即便大型互联网公司也未必能做到。一个相对完善的推荐系统解决方案都会组合利用这三种模式各自的优势来解决问题。</p>
+<p>一般的机器学习任务都会包含数据和模型两部分，推荐系统也不例外。从数据层面看，推荐系统的数据可以来自三个方面：1. 用户数据，比如年龄、性别等；2. 物品（或广告）数据，比如广告文案、图像、视频等；3. 场景数据，比如广告位、当前时间、是否节假日等。于是，我们可以得到这样的推荐系统逻辑架构：</p>
+<p><img data-src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/logic-architecture.png" alt="推荐系统逻辑架构" /></p>
+<p>对于这些数据，如果按照实时性维度来看，可以分为离线数据、近实时数据、实时数据。正好就可以用不同实时性的数据处理工具进行处理。</p>
+<p>从模型层面看，简单的处理方式就是离线模型训练配合在线模型定期更新。如果模型训练时间比较长，可能只能实现按天进行更新。如果模型可以有一定的迁移能力，那么就有可能按小时进行模型离线迁移学习，实现按小时进行模型更新。如果工程能力比较强，能同时实现模型在线训练和服务，那么模型的更新周期就能缩短到分钟级别。模型更新的时效性通常对推荐的效果有很大的影响。</p>
+<p>一般而言，当前主流的推荐系统会在设计上将整个推荐过程分成这样几个主要的步骤：召回 -&gt; 排序 -&gt; 再排序。召回层主要目标是快速缩小推荐范围，一般会利用业务规则、高效的算法或简单的模型实现。而排序层则对筛选出来的小规模数据进行CTR预估和排序。再排序层则会充分考虑推荐结果的多样性、流行度、新鲜度等指标，对排序好的结果进行最终的调整。</p>
+<p>有了以上这些分析，我们可以得到一张常见的推荐系统的架构图：</p>
+<p><img data-src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/recommendation-system-architecture.png" alt="推荐系统架构" /></p>
+<h2 id="推荐系统技术演进"><a class="markdownIt-Anchor" href="#推荐系统技术演进"></a> 推荐系统技术演进</h2>
+<p>在推荐系统中，模型发挥作用最明显的一步就是排序层，同时排序层也是整个推荐系统中最重要的一步。所以，大多数的研究都是针对排序层的研究，这里提到的技术演进也主要是指排序层模型的技术演进。</p>
+<p>2010年之前，业界主流的推荐系统一般都是基于协同过滤或简单的逻辑回归（<code>LR</code>）模型实现，也有的系统会基于某些业务特征进行推荐，比如标签、地域、热度等。这些模型利用数据的能力有限，需要大量的领域专家设计特征，准确率也不高。</p>
+<p>从2010到2015年间，随着移动互联网的高速发展，基于传统模型进行了大量的改进。出现了因子分解机（<code>FM</code>）、梯度提升树（<code>GBDT</code>，<code>Facebook</code>的主要模型）等基于协同过滤的改进模型。也出现了<code>FTRL</code>（<code>Google</code>的主要模型）、混合逻辑回归（<code>MLR</code>，阿里的主要模型）等基于LR模型的改进。</p>
+<p>2015年之后，随着深度学习在计算机视觉领域和自然语言处理领域的成功应用，推荐领域的研究方向也快速转向了以深度学习为主。由于深度模型更少的依赖人工特征工程，并能更有效的利用数据和发现数据中的模式，这些模型得到了非常快速的迭代演进和工程应用。当前常见用于各大互联网公司的模型，比如<code>Google</code>提出的<code>Wide&amp;Deep</code>模型，微软提出的<code>Deep Crossing</code>模型，阿里提出的引入注意力的<code>DIN</code>模型及可以进行时序建模的<code>DIEN</code>模型，基于深度学习的协同过滤模型<code>NeuralCF</code>等等。可以看到，深度推荐模型的设计思路开阔，方向多样，呈现出百花齐放的状态。</p>
+<p>简单总结一下可以得到下图：</p>
+<p><img data-src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/model-evolving.png" alt="推荐模型发展" /></p>
+<p>后续文章中，我将会陆续挑选一些主流的模型进行分析和实践。</p>
+<h2 id="一些重要的问题"><a class="markdownIt-Anchor" href="#一些重要的问题"></a> 一些重要的问题</h2>
+<p>除了模型之外，推荐系统中还有一些比较重要的问题。这里简要分析一下。</p>
+<h3 id="特征处理"><a class="markdownIt-Anchor" href="#特征处理"></a> 特征处理</h3>
+<p>机器学习领域有一个基本的认知，那就是“数据和特征决定了机器学习的上限，模型和算法只是在逼近这个上限”。所以，好的特征是非常关键的一步。在优化模型的时候，如果陷入了一个瓶颈，回过头来从数据层面进行分析可能会有意想不到的效果。常常需要对数据和模型进行综合优化才能实现较大的性能提升。</p>
+<p>为了将特征接入模型，需要对数据进行一定的处理，转化为模型需要的格式。对于一般的类别特征，常见的特征处理办法是进行<code>OneHot</code>编码。对于多类别的特征，比如近期观看的电影列表这类，进行<code>MultiHot</code>编码可以实现类似<code>OneHot</code>的效果。（这两类数据处理方式可以参考我的<a href="/2020/01/21/spark-performance-tuning-on-billions-of-data/">另一篇文章</a>。）对于一些统计特征，比如平均每月在产品中的花费等，则可以直接将数值特征输入模型。</p>
+<p>除了这些基本的数值型或类别型数据，由于深度学习的快速进步，对于文本、图片、视频等数据现在也有了更多的处理办法。比如对于文本特征，可以用数据挖掘常用的<code>TF-IDF</code>进行特征处理，也可以用深度学习模型，如<code>Word2Vec</code>、<code>Transformer</code>等模型将数据编码为稠密的特征向量。对于图片和视频，同样也可以采用深度学习模型提取特征向量。这些数值化之后的特征就可以作为模型输入了。除了应用基本的深度学习模型，在推荐领域，还发展出了<code>Item2Vec</code> <code>Graph Embedding</code>等抽取特征的模型。虽然这些特征的处理过程代价较高，但是它给我们带来了大量新的应用数据的可能。</p>
+<h3 id="效果评估"><a class="markdownIt-Anchor" href="#效果评估"></a> 效果评估</h3>
+<p>推荐问题，其本质是一个二分类机器学习问题，因为只需要预测用户会不会点击某个物品即可。为了支持排序，模型需要输出一个物品被点击的概率。对于这样的问题，一般的评估指标是模型的准确率（Accuracy）。但是在推荐领域，我们不能使用简单的准确率来评估模型效果。</p>
+<p>推荐领域的数据集一般是非常不均衡的。对于应用给我们推荐的物品，大概计算一下点击过的次数就能意识到这个问题。有可能推荐的物品中有99%是没有被点击过的。这就带来了训练数据集庞大而非常不均衡的情况。在这样的情况下，如果采用准确率来评估，只要模型对所有数据预测为负就可能得到99%的准确率。但是此时的模型几乎没有任何用处。</p>
+<p>在推荐领域，常用的模型评估指标是<code>AUC</code>，即 Area Under Curve 。是什么曲线下面的面积呢？在推荐领域这里的曲线一般是指<code>ROC</code>曲线，<code>ROC</code>曲线是以<code>FPR</code>（False Positive Rate，假阳率，错误的判定为正例的概率）为横轴，以<code>TPR</code>（True Positive Rate，真阳率，正确的判定为正例的概率）为纵轴的一条曲线。由于在<code>AUC</code>评估指标中使用了百分比为基础数据，它的结果与样本是否均衡无关。</p>
+<p>除了模型指标之外，还可以考虑的一个问题是如何尽可能利用实时的数据进行效果评估。一个常用的方式是进行<code>A/B</code>测试，通过将用户进行随机分组并对不同的分组应用不同的模型，然后评估不同模型的效果。除此之外，微软在2013年提出了<code>InterLeaving</code>的方式进行在线的效果评估。<code>InterLeaving</code>通过在同一推荐位上交替展示不同模型的推荐来对比不同模型的效果。有了这些实时的模型评估手段，我们可以更有信心的进行模型选择，甚至可以让模型选择自动化的进行。</p>
+<h3 id="冷启动"><a class="markdownIt-Anchor" href="#冷启动"></a> 冷启动</h3>
+<p>推荐领域的一个重要的问题是冷启动问题。当一个新用户进入的时候，没有历史数据，如何进行推荐呢？当新物品加入的时候，如何进行推荐呢？当系统刚开始搭建起来，应用刚进入市场，如何进行推荐呢？</p>
+<p>通常可以有两类方法解决冷启动问题。一是充分利用业务进行推荐，比如新用户加入的时候可以推荐热门榜单、最新榜单等条目。二是尽可能的挖掘信息，充分利用已有数据进行推荐。比如当新用户进入的时候，我们往往可以获取到用户注册时的基本信息，如人口学特征等，然后我们可以根据这些信息查找相似的用户，利用这些相似用户的信息进行推荐。当新物品加入的时候，也可以采用类似的方式。引导用户输入更多信息是一种有效的挖掘信息的方式，比如在产品设计上可以在新用户加入时引导其选择兴趣爱好，在音乐、新闻等内容应用上经常能见到此类功能设计。从第三方平台获取数据也不失为一种手段，当前有不少的统计分析平台，可以获取用户的一些统计特征，这些数据也可以作为推荐系统冷启动的数据来源。</p>
+<h3 id="探索与利用"><a class="markdownIt-Anchor" href="#探索与利用"></a> 探索与利用</h3>
+<p>一些做的不够完善的推荐系统常常在一段时间之后陷入推荐内容过于同质化的问题。比如系统发现用户喜欢汽车，就频繁推送汽车相关的物品。同质化严重将导致用户对推荐的内容逐渐失去兴趣。</p>
+<p>这里的问题其实就是多度利用了历史数据带来的问题。推荐系统除了做好数据利用，还需要考虑如何探索用户的新需求新兴趣，同时也需要考虑长尾物品或长尾物品的推荐。在推荐系统的再排序过程可以根据业务具体情况加入一些合理的条目。比如经典的<code>ξ-greedy</code>探索策略，以一定的递减的概率随机加入一些推荐条目。也可以在模型层面来考虑解决这个问题，比如可以有针对性的添加模型参数随机扰动机制，引入了强化学习思想的<code>DRN</code>模型可以作为此类方案的一个典型代表。</p>
+<h2 id="一个简单的示例"><a class="markdownIt-Anchor" href="#一个简单的示例"></a> 一个简单的示例</h2>
+<p>实现一个完善的推荐系统是一个复杂而巨大的工程，但是，在理论和工具都非常丰富的现在，要搭建一个可用的推荐系统<code>MVP</code>其实并不难。下文将以一个简单的示例作为结尾。</p>
+<p>协同过滤是常见的推荐系统算法，其基本思路是根据相似性进行推荐。例如，基于用户的协同过滤算法会推荐跟目标用户有相似爱好的其他用户所喜欢的物品。下面我们将在<a href="https://grouplens.org/datasets/movielens/"><code>MovieLens</code></a>数据集上面进行实验，尝试实现基于用户的协同过滤推荐系统。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">normalize</span>(<span class="params">vec_a: np.ndarray, vec_b: np.ndarray</span>):</span><br><span class="line">    vec_a_avg = vec_a.<span class="built_in">sum</span>() / (vec_a &gt; <span class="number">0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    vec_b_avg = vec_b.<span class="built_in">sum</span>() / (vec_b &gt; <span class="number">0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    vec_a_intersect = vec_a * (vec_b &gt; <span class="number">0</span>)</span><br><span class="line">    vec_a_intersect[vec_a_intersect &gt; <span class="number">0</span>] = vec_a_intersect[vec_a_intersect &gt; <span class="number">0</span>] - vec_a_avg</span><br><span class="line">    vec_b_intersect = vec_b * (vec_a &gt; <span class="number">0</span>)</span><br><span class="line">    vec_b_intersect[vec_b_intersect &gt; <span class="number">0</span>] = vec_b_intersect[vec_b_intersect &gt; <span class="number">0</span>] - vec_b_avg</span><br><span class="line">    <span class="keyword">return</span> vec_a_intersect, vec_b_intersect</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cos_sim</span>(<span class="params">vec_a, vec_b</span>):</span><br><span class="line">    <span class="keyword">return</span> np.dot(vec_a, vec_b) / (np.linalg.norm(vec_a) * np.linalg.norm(vec_b))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    ratings = pd.read_csv(<span class="string">&#x27;data/movielens/ml-latest-small/ratings.csv&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    movies = <span class="built_in">dict</span>([(movie_id, idx) <span class="keyword">for</span> (idx, movie_id) <span class="keyword">in</span> <span class="built_in">enumerate</span>(ratings[<span class="string">&#x27;movieId&#x27;</span>].unique())])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;movies(&#123;&#125;): &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(movies), <span class="built_in">list</span>(movies.items())[:<span class="number">10</span>]))</span><br><span class="line"></span><br><span class="line">    user_rating_vectors = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> user_id <span class="keyword">in</span> ratings[<span class="string">&#x27;userId&#x27;</span>].unique():</span><br><span class="line">        user_rating_vector = np.zeros(<span class="built_in">len</span>(movies))</span><br><span class="line">        user_ratings = ratings[ratings[<span class="string">&#x27;userId&#x27;</span>] == user_id]</span><br><span class="line">        <span class="keyword">for</span> (_, rating) <span class="keyword">in</span> user_ratings.iterrows():</span><br><span class="line">            user_rating_vector[movies[rating[<span class="string">&#x27;movieId&#x27;</span>]]] = rating[<span class="string">&#x27;rating&#x27;</span>]</span><br><span class="line">        user_rating_vectors[user_id] = user_rating_vector</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;user_rating_vectors(&#123;&#125;): &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(user_rating_vectors), <span class="built_in">list</span>(user_rating_vectors.items())[:<span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line">    target_user_id = <span class="number">610</span></span><br><span class="line"></span><br><span class="line">    target_user_rating_vector = user_rating_vectors[target_user_id]</span><br><span class="line">    user_sim = [(user_id, cos_sim(*normalize(target_user_rating_vector, rating_vector)))</span><br><span class="line">                <span class="keyword">for</span> (user_id, rating_vector) <span class="keyword">in</span> user_rating_vectors.items()</span><br><span class="line">                <span class="keyword">if</span> user_id != target_user_id]</span><br><span class="line">    user_sim = <span class="built_in">sorted</span>(user_sim, key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    similar_user = user_sim[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;similar_user: &#123;&#125;, user_sim: &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(similar_user, user_sim[:<span class="number">10</span>]))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;target_user_rating_vector: &#123;&#125;\nsimilar_user_rating_vector: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">list</span>(target_user_rating_vector), <span class="built_in">list</span>(user_rating_vectors[similar_user])))</span><br><span class="line"></span><br><span class="line">    similar_user_ratings = ratings[ratings[<span class="string">&#x27;userId&#x27;</span>] == similar_user]</span><br><span class="line">    similar_user_ratings = similar_user_ratings.sort_values(by=<span class="string">&#x27;rating&#x27;</span>, ascending=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;recommended movies:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(similar_user_ratings.head(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+<p>到这里大家应该了解了一些基本的推荐系统知识，后续文章将挑选几个模型进行介绍并实践。敬请期待！</p>
+]]></content>
+      <categories>
+        <category>machine-learning</category>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>ctr</tag>
+        <tag>深度学习</tag>
+        <tag>广告点击预测</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习平台架构实践--微服务</title>
     <url>/2020/05/22/architecture-designing-practise-for-ml-platform/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>一个项目越复杂，架构的作用就越显得重要。这就跟收拾家里面的东西一样，如果我们只有为数不多的几件物品，即便我们随意摆放，也不会妨碍我们找到想要的东西。但是随着购置的物品越来越多，如果不设置一套摆放规则，那么想找到东西就可能会花费大量的时间，效率低下。在我看来，架构就像这样一套摆放东西的规则。规则设置得好，屋子里面的东西将摆放得井井有条，我们的生活不仅将更高效也将更舒适顺心。</p>
@@ -4693,84 +4771,6 @@ TDD可以辅助理解并应用SOLID原则进行程序设计。一句话总结TDD
         <tag>机器学习平台</tag>
         <tag>架构设计</tag>
         <tag>微服务</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CTR技术解读 -- 概览</title>
-    <url>/2020/04/12/an-apprehensible-way-to-describe-ctr--introduction/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>作为机器学习的一个细分领域，CTR预估一直以来都是研究的一大热点。之所以成为研究的热点，是因为推荐领域巨大的商业价值。无论是我们每天通信用的微信QQ，还是我们每天搜索用的Google百度，或者是娱乐用的抖音斗鱼，广告在这些产品的收入中都占据着非常重要的组成部分，广告收入的背后是广告推荐引擎在发挥作用。除了广告，我们网上购物时的物品推荐，看新闻时的新闻推荐，听音乐时的音乐推荐等等，这些都是推荐引擎发挥作用的地方。在这些地方，推荐引擎都产生了巨大的价值。</p>
-<p>对于如此重要的一个领域，我们做机器学习的小伙伴多多少少都需要了解一下。下面我将结合一个项目上的实际案例，来分享一下整个CTR的研究和应用情况。我将尝试尽可能用通俗易懂的语言，使得只要有一些基本的机器学习知识就能理解文章内容。文章将从应用角度出发，重点关注基本原理及工程实现而弱化更偏理论的公式推导等。</p>
-<p>本系列文章将分为以下几个部分：</p>
-<ul>
-<li>概览：背景，研究的问题，技术架构及演进，一个小的例子</li>
-<li>传统模型：协同过滤、LR模型及其应用</li>
-<li>Embedding、深度学习模型及其应用</li>
-<li>FM与DeepFM</li>
-<li>DCN及其他深度模型</li>
-<li>基于LSTM的模型：DIN、DIEN及DSIN</li>
-<li>多任务模型</li>
-</ul>
-<span id="more"></span>
-<h2 id="ctr"><a class="markdownIt-Anchor" href="#ctr"></a> CTR</h2>
-<p>CTR的全称是Click-Through Rate，即点击率。这里的点击当然就是指点击推荐的内容，如视频、音乐、新闻、广告等。</p>
-<p>如何进行推荐呢？从结果来看，我们希望算法能输出一个推荐内容的列表，这个列表按照一定的规则（比如用户感兴趣的程度、最大化盈利）进行排序。为了计算这个列表，用户点击某个内容的概率将是一个重要的输入。所以，CTR预估成为了推荐领域的最重要的部分之一。事实上，CTR预估的准确程度很大程度上影响着推荐结果的好坏。</p>
-<h2 id="主流推荐系统架构"><a class="markdownIt-Anchor" href="#主流推荐系统架构"></a> 主流推荐系统架构</h2>
-<p>在推荐场景中，我们需要思考和解决下面这些问题：</p>
-<ol>
-<li>如何处理数据形成特征</li>
-<li>如何高效的、稳定的进行模型训练</li>
-<li>如何将训练好的模型快速用于线上推理</li>
-<li>如何支持模型在线优化</li>
-<li>如何快速的实验新的特征及模型</li>
-</ol>
-<p>从整体上来看，推荐系统架构将是一个离线、近在线、在线处理相结合的一个复杂系统。完全在线处理推荐系统中的所有问题是一种理想情况，其成本将非常高昂，即便大型互联网公司也未必能做到。一个相对完善的推荐系统解决方案都会组合利用这三种模式各自的优势来解决问题。</p>
-<p>一般的机器学习任务都会包含数据和模型两部分，推荐系统也不例外。从数据层面看，推荐系统的数据可以来自三个方面：1. 用户数据，比如年龄、性别等；2. 物品（或广告）数据，比如广告文案、图像、视频等；3. 场景数据，比如广告位、当前时间、是否节假日等。于是，我们可以得到这样的推荐系统逻辑架构：</p>
-<p><img data-src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/logic-architecture.png" alt="推荐系统逻辑架构" /></p>
-<p>对于这些数据，如果按照实时性维度来看，可以分为离线数据、近实时数据、实时数据。正好就可以用不同实时性的数据处理工具进行处理。</p>
-<p>从模型层面看，简单的处理方式就是离线模型训练配合在线模型定期更新。如果模型训练时间比较长，可能只能实现按天进行更新。如果模型可以有一定的迁移能力，那么就有可能按小时进行模型离线迁移学习，实现按小时进行模型更新。如果工程能力比较强，能同时实现模型在线训练和服务，那么模型的更新周期就能缩短到分钟级别。模型更新的时效性通常对推荐的效果有很大的影响。</p>
-<p>一般而言，当前主流的推荐系统会在设计上将整个推荐过程分成这样几个主要的步骤：召回 -&gt; 排序 -&gt; 再排序。召回层主要目标是快速缩小推荐范围，一般会利用业务规则、高效的算法或简单的模型实现。而排序层则对筛选出来的小规模数据进行CTR预估和排序。再排序层则会充分考虑推荐结果的多样性、流行度、新鲜度等指标，对排序好的结果进行最终的调整。</p>
-<p>有了以上这些分析，我们可以得到一张常见的推荐系统的架构图：</p>
-<p><img data-src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/recommendation-system-architecture.png" alt="推荐系统架构" /></p>
-<h2 id="推荐系统技术演进"><a class="markdownIt-Anchor" href="#推荐系统技术演进"></a> 推荐系统技术演进</h2>
-<p>在推荐系统中，模型发挥作用最明显的一步就是排序层，同时排序层也是整个推荐系统中最重要的一步。所以，大多数的研究都是针对排序层的研究，这里提到的技术演进也主要是指排序层模型的技术演进。</p>
-<p>2010年之前，业界主流的推荐系统一般都是基于协同过滤或简单的逻辑回归（<code>LR</code>）模型实现，也有的系统会基于某些业务特征进行推荐，比如标签、地域、热度等。这些模型利用数据的能力有限，需要大量的领域专家设计特征，准确率也不高。</p>
-<p>从2010到2015年间，随着移动互联网的高速发展，基于传统模型进行了大量的改进。出现了因子分解机（<code>FM</code>）、梯度提升树（<code>GBDT</code>，<code>Facebook</code>的主要模型）等基于协同过滤的改进模型。也出现了<code>FTRL</code>（<code>Google</code>的主要模型）、混合逻辑回归（<code>MLR</code>，阿里的主要模型）等基于LR模型的改进。</p>
-<p>2015年之后，随着深度学习在计算机视觉领域和自然语言处理领域的成功应用，推荐领域的研究方向也快速转向了以深度学习为主。由于深度模型更少的依赖人工特征工程，并能更有效的利用数据和发现数据中的模式，这些模型得到了非常快速的迭代演进和工程应用。当前常见用于各大互联网公司的模型，比如<code>Google</code>提出的<code>Wide&amp;Deep</code>模型，微软提出的<code>Deep Crossing</code>模型，阿里提出的引入注意力的<code>DIN</code>模型及可以进行时序建模的<code>DIEN</code>模型，基于深度学习的协同过滤模型<code>NeuralCF</code>等等。可以看到，深度推荐模型的设计思路开阔，方向多样，呈现出百花齐放的状态。</p>
-<p>简单总结一下可以得到下图：</p>
-<p><img data-src="/attaches/2020/2020-04-12-an-apprehensible-way-to-describe-ctr--introduction/model-evolving.png" alt="推荐模型发展" /></p>
-<p>后续文章中，我将会陆续挑选一些主流的模型进行分析和实践。</p>
-<h2 id="一些重要的问题"><a class="markdownIt-Anchor" href="#一些重要的问题"></a> 一些重要的问题</h2>
-<p>除了模型之外，推荐系统中还有一些比较重要的问题。这里简要分析一下。</p>
-<h3 id="特征处理"><a class="markdownIt-Anchor" href="#特征处理"></a> 特征处理</h3>
-<p>机器学习领域有一个基本的认知，那就是“数据和特征决定了机器学习的上限，模型和算法只是在逼近这个上限”。所以，好的特征是非常关键的一步。在优化模型的时候，如果陷入了一个瓶颈，回过头来从数据层面进行分析可能会有意想不到的效果。常常需要对数据和模型进行综合优化才能实现较大的性能提升。</p>
-<p>为了将特征接入模型，需要对数据进行一定的处理，转化为模型需要的格式。对于一般的类别特征，常见的特征处理办法是进行<code>OneHot</code>编码。对于多类别的特征，比如近期观看的电影列表这类，进行<code>MultiHot</code>编码可以实现类似<code>OneHot</code>的效果。（这两类数据处理方式可以参考我的<a href="/2020/01/21/spark-performance-tuning-on-billions-of-data/">另一篇文章</a>。）对于一些统计特征，比如平均每月在产品中的花费等，则可以直接将数值特征输入模型。</p>
-<p>除了这些基本的数值型或类别型数据，由于深度学习的快速进步，对于文本、图片、视频等数据现在也有了更多的处理办法。比如对于文本特征，可以用数据挖掘常用的<code>TF-IDF</code>进行特征处理，也可以用深度学习模型，如<code>Word2Vec</code>、<code>Transformer</code>等模型将数据编码为稠密的特征向量。对于图片和视频，同样也可以采用深度学习模型提取特征向量。这些数值化之后的特征就可以作为模型输入了。除了应用基本的深度学习模型，在推荐领域，还发展出了<code>Item2Vec</code> <code>Graph Embedding</code>等抽取特征的模型。虽然这些特征的处理过程代价较高，但是它给我们带来了大量新的应用数据的可能。</p>
-<h3 id="效果评估"><a class="markdownIt-Anchor" href="#效果评估"></a> 效果评估</h3>
-<p>推荐问题，其本质是一个二分类机器学习问题，因为只需要预测用户会不会点击某个物品即可。为了支持排序，模型需要输出一个物品被点击的概率。对于这样的问题，一般的评估指标是模型的准确率（Accuracy）。但是在推荐领域，我们不能使用简单的准确率来评估模型效果。</p>
-<p>推荐领域的数据集一般是非常不均衡的。对于应用给我们推荐的物品，大概计算一下点击过的次数就能意识到这个问题。有可能推荐的物品中有99%是没有被点击过的。这就带来了训练数据集庞大而非常不均衡的情况。在这样的情况下，如果采用准确率来评估，只要模型对所有数据预测为负就可能得到99%的准确率。但是此时的模型几乎没有任何用处。</p>
-<p>在推荐领域，常用的模型评估指标是<code>AUC</code>，即 Area Under Curve 。是什么曲线下面的面积呢？在推荐领域这里的曲线一般是指<code>ROC</code>曲线，<code>ROC</code>曲线是以<code>FPR</code>（False Positive Rate，假阳率，错误的判定为正例的概率）为横轴，以<code>TPR</code>（True Positive Rate，真阳率，正确的判定为正例的概率）为纵轴的一条曲线。由于在<code>AUC</code>评估指标中使用了百分比为基础数据，它的结果与样本是否均衡无关。</p>
-<p>除了模型指标之外，还可以考虑的一个问题是如何尽可能利用实时的数据进行效果评估。一个常用的方式是进行<code>A/B</code>测试，通过将用户进行随机分组并对不同的分组应用不同的模型，然后评估不同模型的效果。除此之外，微软在2013年提出了<code>InterLeaving</code>的方式进行在线的效果评估。<code>InterLeaving</code>通过在同一推荐位上交替展示不同模型的推荐来对比不同模型的效果。有了这些实时的模型评估手段，我们可以更有信心的进行模型选择，甚至可以让模型选择自动化的进行。</p>
-<h3 id="冷启动"><a class="markdownIt-Anchor" href="#冷启动"></a> 冷启动</h3>
-<p>推荐领域的一个重要的问题是冷启动问题。当一个新用户进入的时候，没有历史数据，如何进行推荐呢？当新物品加入的时候，如何进行推荐呢？当系统刚开始搭建起来，应用刚进入市场，如何进行推荐呢？</p>
-<p>通常可以有两类方法解决冷启动问题。一是充分利用业务进行推荐，比如新用户加入的时候可以推荐热门榜单、最新榜单等条目。二是尽可能的挖掘信息，充分利用已有数据进行推荐。比如当新用户进入的时候，我们往往可以获取到用户注册时的基本信息，如人口学特征等，然后我们可以根据这些信息查找相似的用户，利用这些相似用户的信息进行推荐。当新物品加入的时候，也可以采用类似的方式。引导用户输入更多信息是一种有效的挖掘信息的方式，比如在产品设计上可以在新用户加入时引导其选择兴趣爱好，在音乐、新闻等内容应用上经常能见到此类功能设计。从第三方平台获取数据也不失为一种手段，当前有不少的统计分析平台，可以获取用户的一些统计特征，这些数据也可以作为推荐系统冷启动的数据来源。</p>
-<h3 id="探索与利用"><a class="markdownIt-Anchor" href="#探索与利用"></a> 探索与利用</h3>
-<p>一些做的不够完善的推荐系统常常在一段时间之后陷入推荐内容过于同质化的问题。比如系统发现用户喜欢汽车，就频繁推送汽车相关的物品。同质化严重将导致用户对推荐的内容逐渐失去兴趣。</p>
-<p>这里的问题其实就是多度利用了历史数据带来的问题。推荐系统除了做好数据利用，还需要考虑如何探索用户的新需求新兴趣，同时也需要考虑长尾物品或长尾物品的推荐。在推荐系统的再排序过程可以根据业务具体情况加入一些合理的条目。比如经典的<code>ξ-greedy</code>探索策略，以一定的递减的概率随机加入一些推荐条目。也可以在模型层面来考虑解决这个问题，比如可以有针对性的添加模型参数随机扰动机制，引入了强化学习思想的<code>DRN</code>模型可以作为此类方案的一个典型代表。</p>
-<h2 id="一个简单的示例"><a class="markdownIt-Anchor" href="#一个简单的示例"></a> 一个简单的示例</h2>
-<p>实现一个完善的推荐系统是一个复杂而巨大的工程，但是，在理论和工具都非常丰富的现在，要搭建一个可用的推荐系统<code>MVP</code>其实并不难。下文将以一个简单的示例作为结尾。</p>
-<p>协同过滤是常见的推荐系统算法，其基本思路是根据相似性进行推荐。例如，基于用户的协同过滤算法会推荐跟目标用户有相似爱好的其他用户所喜欢的物品。下面我们将在<a href="https://grouplens.org/datasets/movielens/"><code>MovieLens</code></a>数据集上面进行实验，尝试实现基于用户的协同过滤推荐系统。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">normalize</span>(<span class="params">vec_a: np.ndarray, vec_b: np.ndarray</span>):</span><br><span class="line">    vec_a_avg = vec_a.<span class="built_in">sum</span>() / (vec_a &gt; <span class="number">0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    vec_b_avg = vec_b.<span class="built_in">sum</span>() / (vec_b &gt; <span class="number">0</span>).<span class="built_in">sum</span>()</span><br><span class="line">    vec_a_intersect = vec_a * (vec_b &gt; <span class="number">0</span>)</span><br><span class="line">    vec_a_intersect[vec_a_intersect &gt; <span class="number">0</span>] = vec_a_intersect[vec_a_intersect &gt; <span class="number">0</span>] - vec_a_avg</span><br><span class="line">    vec_b_intersect = vec_b * (vec_a &gt; <span class="number">0</span>)</span><br><span class="line">    vec_b_intersect[vec_b_intersect &gt; <span class="number">0</span>] = vec_b_intersect[vec_b_intersect &gt; <span class="number">0</span>] - vec_b_avg</span><br><span class="line">    <span class="keyword">return</span> vec_a_intersect, vec_b_intersect</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cos_sim</span>(<span class="params">vec_a, vec_b</span>):</span><br><span class="line">    <span class="keyword">return</span> np.dot(vec_a, vec_b) / (np.linalg.norm(vec_a) * np.linalg.norm(vec_b))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    ratings = pd.read_csv(<span class="string">&#x27;data/movielens/ml-latest-small/ratings.csv&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    movies = <span class="built_in">dict</span>([(movie_id, idx) <span class="keyword">for</span> (idx, movie_id) <span class="keyword">in</span> <span class="built_in">enumerate</span>(ratings[<span class="string">&#x27;movieId&#x27;</span>].unique())])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;movies(&#123;&#125;): &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(movies), <span class="built_in">list</span>(movies.items())[:<span class="number">10</span>]))</span><br><span class="line"></span><br><span class="line">    user_rating_vectors = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> user_id <span class="keyword">in</span> ratings[<span class="string">&#x27;userId&#x27;</span>].unique():</span><br><span class="line">        user_rating_vector = np.zeros(<span class="built_in">len</span>(movies))</span><br><span class="line">        user_ratings = ratings[ratings[<span class="string">&#x27;userId&#x27;</span>] == user_id]</span><br><span class="line">        <span class="keyword">for</span> (_, rating) <span class="keyword">in</span> user_ratings.iterrows():</span><br><span class="line">            user_rating_vector[movies[rating[<span class="string">&#x27;movieId&#x27;</span>]]] = rating[<span class="string">&#x27;rating&#x27;</span>]</span><br><span class="line">        user_rating_vectors[user_id] = user_rating_vector</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;user_rating_vectors(&#123;&#125;): &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(user_rating_vectors), <span class="built_in">list</span>(user_rating_vectors.items())[:<span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line">    target_user_id = <span class="number">610</span></span><br><span class="line"></span><br><span class="line">    target_user_rating_vector = user_rating_vectors[target_user_id]</span><br><span class="line">    user_sim = [(user_id, cos_sim(*normalize(target_user_rating_vector, rating_vector)))</span><br><span class="line">                <span class="keyword">for</span> (user_id, rating_vector) <span class="keyword">in</span> user_rating_vectors.items()</span><br><span class="line">                <span class="keyword">if</span> user_id != target_user_id]</span><br><span class="line">    user_sim = <span class="built_in">sorted</span>(user_sim, key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    similar_user = user_sim[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;similar_user: &#123;&#125;, user_sim: &#123;&#125;...&#x27;</span>.<span class="built_in">format</span>(similar_user, user_sim[:<span class="number">10</span>]))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;target_user_rating_vector: &#123;&#125;\nsimilar_user_rating_vector: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">list</span>(target_user_rating_vector), <span class="built_in">list</span>(user_rating_vectors[similar_user])))</span><br><span class="line"></span><br><span class="line">    similar_user_ratings = ratings[ratings[<span class="string">&#x27;userId&#x27;</span>] == similar_user]</span><br><span class="line">    similar_user_ratings = similar_user_ratings.sort_values(by=<span class="string">&#x27;rating&#x27;</span>, ascending=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;recommended movies:&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(similar_user_ratings.head(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
-<p>到这里大家应该了解了一些基本的推荐系统知识，后续文章将挑选几个模型进行介绍并实践。敬请期待！</p>
-]]></content>
-      <categories>
-        <category>machine-learning</category>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-        <tag>ctr</tag>
-        <tag>深度学习</tag>
-        <tag>广告点击预测</tag>
       </tags>
   </entry>
   <entry>
@@ -9294,6 +9294,137 @@ So that list variables could not be used in SQL statements, since we cannot simp
       </tags>
   </entry>
   <entry>
+    <title>每日一思</title>
+    <url>/2024/07/03/daily-thoughts/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-07-喂饭"><a class="markdownIt-Anchor" href="#2024-07-07-喂饭"></a> 2024-07-07: 喂饭</h2>
+<p>家里小孩快两岁半了，自己吃饭还吃不好，主要靠姥姥喂。</p>
+<p>我在椅子上坐着，姥姥端着饭跟在小孩后面。</p>
+<p>姥姥装满一大勺饭喂过去，小孩张着大口，一口吃了下去。我说：“耶，这一大口吃的好。”</p>
+<p>姥姥一边喂，一边跟我说道，“看，饭都冰冷了。每次都得饭冰冷了才肯吃。”</p>
+<p>停了一下，用勺子翻了翻碗里的饭，又说道，“现在开始想吃肉了，要把肉末混在饭里面才肯吃。只有菜，就不吃，吐出来。嚼两口，说没味道。每次还要把肉放在上面，露出来，给他看到，才吃得好。”</p>
+<p>我笑了笑。这才发现，姥姥已经是喂饭的专家了。</p>
+<h2 id="2024-07-05-动机转移"><a class="markdownIt-Anchor" href="#2024-07-05-动机转移"></a> 2024-07-05: 动机转移</h2>
+<p>当我工作到很晚，为了解决一个疑难问题时，我不认为这是在加班，而其实这是我在提升自己。</p>
+<p>当我跑步累到时候完全不想动时，我不认为这是在挑战自己的体力，而其实我是在用跑步刺激自己思考昨天没有解决的问题。</p>
+<p>当我持续在读书时，我不认为是想要学到多少新知识，而是想找一个智者对话，了解一些思考问题的全新的角度。</p>
+<p>当我坚持写下这一行行文字时，我不认为这是在与自己较劲，而是希望借此机会回顾一下今天，让它在转瞬即逝的生命里留下一点点痕迹。</p>
+<p>你行为的意义在于你如何看待你的行为。在心理学中，这被称为“动机转移”。那么，你想如何转移你的动机？</p>
+<h2 id="2024-07-04-和平"><a class="markdownIt-Anchor" href="#2024-07-04-和平"></a> 2024-07-04: 和平</h2>
+<p>1 月 20 日，老李在公司上班，接到公司的全体会议邀请。会议时间在中午，公司领导层用了一小时提醒说，当前形势严峻，可能要裁员。</p>
+<p>2 月 15 日，老李在公司上班，接到公司的全体会议邀请。会议时间提前了一点，在上午快下班的时候。公司领导层用半小时公布了裁员计划，10%。</p>
+<p>4 月 10 日，老李在公司上班，接到公司的全体会议邀请。会议时间在早上 9 点到 9 点半，这个点，老李还在与客户的会上。 事后，老李从参与会议的同事嘴里了解到，公司发现财务状态不见起色，可能需要继续裁员。</p>
+<p>5 月 5 日，公司发布组织架构调整计划，目标是更加面向市场，提高盈利能力。</p>
+<p>6 月 10 日，公司发布进一步组织架构精简的计划。</p>
+<p>在世界的那边，俄乌战争在继续，中东的硝烟似乎越来越浓。</p>
+<h2 id="2024-07-03-意义"><a class="markdownIt-Anchor" href="#2024-07-03-意义"></a> 2024-07-03: 意义</h2>
+<p>威尔一直坚持跑步，持续了很长时间。盯着满满一屏幕的打卡记录，心里非常满意。</p>
+<p>然而，坚持是不容易的，某一天，一个声音在脑中响起，跑步还是挺累的，歇一歇吧。威尔把这个念头告诉他的朋友。朋友反问威尔：“威尔，你想想，你是想要怎样的生活？你想去当健身教练吗？”</p>
+<p>威尔愣住了，他确实没有兴趣当健身教练。那坚持跑步是为了什么呢？身体健康？不跑步似乎也不怎么损害健康。</p>
+<p>威尔停止了坚持很久的跑步。生活进入舒适循环。他在闲暇时可以无忧无虑躺在沙发上刷手机几个小时。</p>
+<p>然而，一段时间之后，威尔发现以前自己的状态没了。肌肉变松弛了，思维似乎也没那么敏捷了。</p>
+<p>威尔发现不对。坚持的意义是什么？可能是让自己一直保持一种让自己满意的状态。</p>
+<p>威尔又开始了。</p>
+]]></content>
+      <categories>
+        <category>每日一思</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>每日一思</title>
+    <url>/2024/07/08/daily-thoughts/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-13-做事"><a class="markdownIt-Anchor" href="#2024-07-13-做事"></a> 2024-07-13: 做事</h2>
+<p>小 A 在实现一个需求的时候，发现接口文档中的设计不太合理，返回的数据结构不是平台标准的结构。</p>
+<p>如果完全按照文档完成，则需要引入没必要的定制，徒增了复杂性。于是，小 A 按照平台标准结构进行实现。</p>
+<p>需求实现完成之后，小 A 在预定时间之前，提前将接口调用方式发送给下游。</p>
+<p>下游在集成的时候，发现与文档对不上，提出质疑。小 A 与下游沟通，坚持采用平台标准的结构。</p>
+<p>小 A 强调说，之前的文档只是一个设计文档，而不是最终的接口文档。最终的接口文档必须是双方根据实际情况进行实现，双方协调，集成之后，才最终确定的。</p>
+<p>朱熹说，大凡做事底人，多是先其大纲，其他节目可因则因。</p>
+<h2 id="2024-07-12-数据开发的反直觉性字段重命名"><a class="markdownIt-Anchor" href="#2024-07-12-数据开发的反直觉性字段重命名"></a> 2024-07-12: 数据开发的反直觉性：字段重命名</h2>
+<p>小 A 觉得从上游数据源接入的数据字段命名不太合理，于是根据自己的理解将字段名重新映射为了一个新的名字。</p>
+<p>数据 etl 基于这个新名字开发完了。</p>
+<p>客户想要验证这个 etl 的正确性，于是从源系统中提取出明细数据让小 A 进行核对。</p>
+<p>小 A 拿到数据之后，也自己提取了一份明细数据。两边一对比，小 A 就后悔了，因为客户提的明细数据的字段名全部是源系统的字段名，而小 A 则使用的是映射之后的名字。小 A 不得不重新做一次映射。</p>
+<p>小 A 发现数据对不上，于是找到上游系统提数的人沟通。小 A 把自己的实现口径展示给对方看，对方看后，问道：“这个字段是什么？对应源系统的什么字段？”于是，小 A 又不得不去解释字段与原字段的对应关系。</p>
+<p>小 A 感叹：这字段名映射，真不值！</p>
+<h2 id="2024-07-10-团队会议"><a class="markdownIt-Anchor" href="#2024-07-10-团队会议"></a> 2024-07-10: 团队会议</h2>
+<p>早上项目团队站立会议。由于团队分散在各地，会议在线上进行。由团队成员轮流组织，今天轮到一位小伙伴，他在团队中已经工作了几个月了。</p>
+<p>打开项目看板，他开始组织大家更新自己的工作。</p>
+<p>站会按照角色及人员的顺序进行。点击人员列表，他开始找人。</p>
+<p>“A 来更新一下吧”，他说道。等了一会，没人回应。会议室陷入了安静。“A 下项目了”，终于有人接着补充道。</p>
+<p>鼠标移动到 B 旁边，停下来，犹豫着要不要往前。时间过去了约有 10 秒钟，终于跳过了 B。B 是一个非当前角色的人。接着，他找到了正确的人，会议继续。</p>
+<h2 id="2024-07-09-简单架构"><a class="markdownIt-Anchor" href="#2024-07-09-简单架构"></a> 2024-07-09: 简单架构</h2>
+<p>有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表</p>
+<p>问题：中间过程太多，流程太长，涉及技术组件也多；为保证上述流程可稳定工作，还需要额外的 iceberg 表小文件优化程序；iceberg 表中的数据没有使用，无必要且存在浪费</p>
+<p>优化：直接使用一个 spark 程序消费 kafka 数据写入 hive 表。</p>
+<h2 id="2024-07-08-堵车"><a class="markdownIt-Anchor" href="#2024-07-08-堵车"></a> 2024-07-08: 堵车</h2>
+<p>早上 8 点 10 分，还是按照以往的时间出门。昨晚下了雨，路上湿漉漉的。</p>
+<p>拐过一个路口，来到了另一条路，通过这条路可以上主路。</p>
+<p>刚一进这条路就发现已经堵得水泄不通了。车子只能慢慢蠕行，每次挪动不到一个车位的距离，挪动之后就得停下来等。</p>
+<p>经过无数次挪动之后，看到了一点进度，到了一家吃串串的餐饮店。我感觉不太对，虽然以前这条路也堵，但是今天也太离谱了。以往三分钟的路今天竟然走了十五分钟！</p>
+<p>没办法，到这里也只能硬着头皮继续往前挪了。经历了差不多半小时，终于才上了主路。</p>
+<p>上主路的路口，有一个交警正在指挥交通。</p>
+]]></content>
+      <categories>
+        <category>每日一思</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>每日一思</title>
+    <url>/2024/07/15/daily-thoughts/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-17-烦恼"><a class="markdownIt-Anchor" href="#2024-07-17-烦恼"></a> 2024-07-17: 烦恼</h2>
+<p>周末，躺在沙发上看电视剧。时间过得飞快，一晃三个小时过去了。看电视当时的满足感随着节目的结束一起结束。</p>
+<p>还有一件事情迟迟没有决定。电视剧转移了注意力，可以让人短暂地将它抛诸脑后。但是事情一直存在，短暂的回避之后，它又冒了出来。开始后悔，自责。</p>
+<p>人的烦恼常常在于不能决定，反复纠结，迟迟没有行动。</p>
+<p>做 A，没有照顾到 B。做 B，担心 C。做 C，又担心 D。似乎没有完美的方案。</p>
+<p>那么，还要不要行动？如何行动？</p>
+<h2 id="2024-07-15-晚餐"><a class="markdownIt-Anchor" href="#2024-07-15-晚餐"></a> 2024-07-15: 晚餐</h2>
+<p>晚上，去吃饭。</p>
+<p>走进餐厅，服务员将我们引导到了预先订好的包间。包间内，沿墙一圈贴着气球，有一个位置，上方贴着“happy birthday”字样气球。</p>
+<p>一家人落座。她看看位置，对着我说，“来，你坐这里，气球正下方。”</p>
+<p>刚一落座，蛋糕已送到，一个身穿蓝色制服送餐装的小姑娘提着蛋糕和一个方盒子进来。她打开蛋糕盒，点上蜡烛。接着打开方盒子，原来里面是音响和话筒。拿出话筒，她开始主持吹蜡烛吃蛋糕的仪式。</p>
+<p>生日快乐的音乐响起，房间里面弥漫着温馨的空气。</p>
+<p>还有唱歌的节目，欢快的声音响起。接着是跳舞，小姑娘示意大家一起来。平常几乎不参与这些活动的她，走过去，跟着小姑娘的手势和舞步动起来。她的动作偶尔慢半拍，但总能快速跟上小姑娘的节奏。</p>
+<p>接着，有人提着一捧花送过来，红黄相间的玫瑰里面穿插着一些红色的纸牌。仔细一看原来是彩票。将彩票分给大家一起刮，这里有三十，这里有二十，这里还有三十，最后竟然刮出了 100 块钱。</p>
+<p>大家开始吃饭，快吃完的时候，她说，还有一个礼物。递给我一个红色的盒子。我小心翼翼打开，里面有什么东西快速弹了出来。我赶紧关上盒子，结果还是有不少东西洒了出来。仔细一看，周围都是红红的百元纸币。</p>
+<p>我还记得一件事。晚饭刚开始的时候，她转头向小孩说，“晚上要跟爸爸怎么说？”两岁半的小孩子，咧着嘴，歪着头，说，“爸爸生日快乐！”</p>
+]]></content>
+      <categories>
+        <category>每日一思</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>每日一思</title>
+    <url>/2024/07/25/daily-thoughts/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-25-t恤衫"><a class="markdownIt-Anchor" href="#2024-07-25-t恤衫"></a> 2024-07-25: T恤衫</h2>
+<p>打开衣柜，在叠起来的一摞 T 恤衫里面翻找，一件自己买的，一件公司文化衫，又一件公司文化衫，还有一件公司文化衫。</p>
+<p>穿什么呢？抽出一件背过来叠起的黑色 T 恤，打开一看，是公司文化衫。这一件应该有三年以上了，前面印的 disruptive thinking 及机器人图案已经开裂并快要掉落下来了。</p>
+<p>旧了。算了，换一件吧，我把它放了回去。正准备开始继续找，又犹豫了，还是这件吧，不知道还能穿几回！</p>
+<p>穿上这件文化衫准备出门，在门口的镜子面前停了一下，衣服上面的图案的色彩还是鲜艳的。</p>
+]]></content>
+      <categories>
+        <category>每日一思</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>每日一思</title>
+    <url>/2024/07/31/daily-thoughts/</url>
+    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-31-最后一天"><a class="markdownIt-Anchor" href="#2024-07-31-最后一天"></a> 2024-07-31: 最后一天</h2>
+<p>团队早会，轮到他更新昨日的工作内容。</p>
+<p>如往常一样，他保持着端正的坐姿，双手放在桌子下面。转头面向电视会议屏幕，身体往前倾。</p>
+<p>“嘿嘿嘿”，他短暂地停了约有 0.5 秒钟，咧着嘴，“嘿嘿嘿”。</p>
+<p>“我昨天没什么更新，在整理交接的文档。”他停了约有 1 秒钟，“但我这边也没有人可以交接。”</p>
+<p>“我这边今天最后一天了，以后的测试就靠大家自己了。”</p>
+<p>会议室很安静，一点声音也没有。一秒，两秒。</p>
+<p>主持人终于切换到下一个人。</p>
+<p>明天，他的座位就空了，每次早上一到办公室的时候都能见到的身影从明天开始就见不到了。</p>
+<p>明天，他的座位就空了，经常下班还能瞥见到的忙碌的身影从明天开始就见不到了。</p>
+<p>以后，非工作时间的会议也总是能保持准时参加的身影也见不到了。</p>
+]]></content>
+      <categories>
+        <category>每日一思</category>
+      </categories>
+  </entry>
+  <entry>
     <title>敏捷数据工程实践--以ETL为单位的CI和CD</title>
     <url>/2023/01/10/ade-ci-cd-per-etl/</url>
     <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>前几天，我在跟一位做进口贸易的朋友聊天，发现一个很有意思的事情。</p>
@@ -10545,7 +10676,13 @@ from: https://markmap.js.org/repl
 <p>团队早会，轮到他更新昨日的工作内容。</p>
 <p>如往常一样，他保持着端正的坐姿，双手放在桌子下面。转头面向电视会议屏幕，身体往前倾。</p>
 <p>“嘿嘿嘿”，他短暂地停了约有 0.5 秒钟，咧着嘴，“嘿嘿嘿”。</p>
-<p>“我昨天没什么更新，在整理交接的文档。”他停了约有 1 秒钟，“但我这边也没有人可以交接 …</p>
+<p>“我昨天没什么更新，在整理交接的文档。”他停了约有 1 秒钟，“但我这边也没有人可以交接。”</p>
+<p>“我这边今天最后一天了，以后的测试就靠大家自己了。”</p>
+<p>会议室很安静，一点声音也没有。一秒，两秒。</p>
+<p>主持人终于切换到下一个人。</p>
+<p>明天，他的座位就空了，每次早上一到办公室的时候都能见到的身影从明天开始就见不到了。</p>
+<p>明天，他的座位就空了，经常下班还能瞥见到的忙碌的身影从明天开始就见不到了。</p>
+<p>以后，非工作时间的会议也总是能保持准时参加的身影也见不到了。</p>
 ]]></content>
       <categories>
         <category>每日一思</category>
@@ -11369,137 +11506,6 @@ from: https://markmap.js.org/repl
 <p>电梯里，他睁着大眼睛，抬起头，目不转睛地望着旁边的阿姨，一直望着阿姨，一直望着阿姨。我们都看着他，忍不住笑。他突然开始朝着阿姨笑，没有发出声音。阿姨也看向他，看他望了很久，也开始对他笑，“小朋友真可爱！”</p>
 <p>电梯里，几位叔叔阿姨一起同行。电梯门开了，叔叔出电梯了。“叔叔拜拜，叔叔拜拜！”他对着电梯门大声说。电梯门又开了。“阿姨拜拜，阿姨拜拜！”电梯里面进来一个人，阿姨没有下电梯。姥姥说，“阿姨还没到。”</p>
 <p>电梯门开了，我们到了。我们走出电梯。“叔叔拜拜，阿姨拜拜，爷爷奶奶拜拜！”</p>
-]]></content>
-      <categories>
-        <category>每日一思</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>每日一思</title>
-    <url>/2024/07/03/daily-thoughts/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-07-喂饭"><a class="markdownIt-Anchor" href="#2024-07-07-喂饭"></a> 2024-07-07: 喂饭</h2>
-<p>家里小孩快两岁半了，自己吃饭还吃不好，主要靠姥姥喂。</p>
-<p>我在椅子上坐着，姥姥端着饭跟在小孩后面。</p>
-<p>姥姥装满一大勺饭喂过去，小孩张着大口，一口吃了下去。我说：“耶，这一大口吃的好。”</p>
-<p>姥姥一边喂，一边跟我说道，“看，饭都冰冷了。每次都得饭冰冷了才肯吃。”</p>
-<p>停了一下，用勺子翻了翻碗里的饭，又说道，“现在开始想吃肉了，要把肉末混在饭里面才肯吃。只有菜，就不吃，吐出来。嚼两口，说没味道。每次还要把肉放在上面，露出来，给他看到，才吃得好。”</p>
-<p>我笑了笑。这才发现，姥姥已经是喂饭的专家了。</p>
-<h2 id="2024-07-05-动机转移"><a class="markdownIt-Anchor" href="#2024-07-05-动机转移"></a> 2024-07-05: 动机转移</h2>
-<p>当我工作到很晚，为了解决一个疑难问题时，我不认为这是在加班，而其实这是我在提升自己。</p>
-<p>当我跑步累到时候完全不想动时，我不认为这是在挑战自己的体力，而其实我是在用跑步刺激自己思考昨天没有解决的问题。</p>
-<p>当我持续在读书时，我不认为是想要学到多少新知识，而是想找一个智者对话，了解一些思考问题的全新的角度。</p>
-<p>当我坚持写下这一行行文字时，我不认为这是在与自己较劲，而是希望借此机会回顾一下今天，让它在转瞬即逝的生命里留下一点点痕迹。</p>
-<p>你行为的意义在于你如何看待你的行为。在心理学中，这被称为“动机转移”。那么，你想如何转移你的动机？</p>
-<h2 id="2024-07-04-和平"><a class="markdownIt-Anchor" href="#2024-07-04-和平"></a> 2024-07-04: 和平</h2>
-<p>1 月 20 日，老李在公司上班，接到公司的全体会议邀请。会议时间在中午，公司领导层用了一小时提醒说，当前形势严峻，可能要裁员。</p>
-<p>2 月 15 日，老李在公司上班，接到公司的全体会议邀请。会议时间提前了一点，在上午快下班的时候。公司领导层用半小时公布了裁员计划，10%。</p>
-<p>4 月 10 日，老李在公司上班，接到公司的全体会议邀请。会议时间在早上 9 点到 9 点半，这个点，老李还在与客户的会上。 事后，老李从参与会议的同事嘴里了解到，公司发现财务状态不见起色，可能需要继续裁员。</p>
-<p>5 月 5 日，公司发布组织架构调整计划，目标是更加面向市场，提高盈利能力。</p>
-<p>6 月 10 日，公司发布进一步组织架构精简的计划。</p>
-<p>在世界的那边，俄乌战争在继续，中东的硝烟似乎越来越浓。</p>
-<h2 id="2024-07-03-意义"><a class="markdownIt-Anchor" href="#2024-07-03-意义"></a> 2024-07-03: 意义</h2>
-<p>威尔一直坚持跑步，持续了很长时间。盯着满满一屏幕的打卡记录，心里非常满意。</p>
-<p>然而，坚持是不容易的，某一天，一个声音在脑中响起，跑步还是挺累的，歇一歇吧。威尔把这个念头告诉他的朋友。朋友反问威尔：“威尔，你想想，你是想要怎样的生活？你想去当健身教练吗？”</p>
-<p>威尔愣住了，他确实没有兴趣当健身教练。那坚持跑步是为了什么呢？身体健康？不跑步似乎也不怎么损害健康。</p>
-<p>威尔停止了坚持很久的跑步。生活进入舒适循环。他在闲暇时可以无忧无虑躺在沙发上刷手机几个小时。</p>
-<p>然而，一段时间之后，威尔发现以前自己的状态没了。肌肉变松弛了，思维似乎也没那么敏捷了。</p>
-<p>威尔发现不对。坚持的意义是什么？可能是让自己一直保持一种让自己满意的状态。</p>
-<p>威尔又开始了。</p>
-]]></content>
-      <categories>
-        <category>每日一思</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>每日一思</title>
-    <url>/2024/07/08/daily-thoughts/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-13-做事"><a class="markdownIt-Anchor" href="#2024-07-13-做事"></a> 2024-07-13: 做事</h2>
-<p>小 A 在实现一个需求的时候，发现接口文档中的设计不太合理，返回的数据结构不是平台标准的结构。</p>
-<p>如果完全按照文档完成，则需要引入没必要的定制，徒增了复杂性。于是，小 A 按照平台标准结构进行实现。</p>
-<p>需求实现完成之后，小 A 在预定时间之前，提前将接口调用方式发送给下游。</p>
-<p>下游在集成的时候，发现与文档对不上，提出质疑。小 A 与下游沟通，坚持采用平台标准的结构。</p>
-<p>小 A 强调说，之前的文档只是一个设计文档，而不是最终的接口文档。最终的接口文档必须是双方根据实际情况进行实现，双方协调，集成之后，才最终确定的。</p>
-<p>朱熹说，大凡做事底人，多是先其大纲，其他节目可因则因。</p>
-<h2 id="2024-07-12-数据开发的反直觉性字段重命名"><a class="markdownIt-Anchor" href="#2024-07-12-数据开发的反直觉性字段重命名"></a> 2024-07-12: 数据开发的反直觉性：字段重命名</h2>
-<p>小 A 觉得从上游数据源接入的数据字段命名不太合理，于是根据自己的理解将字段名重新映射为了一个新的名字。</p>
-<p>数据 etl 基于这个新名字开发完了。</p>
-<p>客户想要验证这个 etl 的正确性，于是从源系统中提取出明细数据让小 A 进行核对。</p>
-<p>小 A 拿到数据之后，也自己提取了一份明细数据。两边一对比，小 A 就后悔了，因为客户提的明细数据的字段名全部是源系统的字段名，而小 A 则使用的是映射之后的名字。小 A 不得不重新做一次映射。</p>
-<p>小 A 发现数据对不上，于是找到上游系统提数的人沟通。小 A 把自己的实现口径展示给对方看，对方看后，问道：“这个字段是什么？对应源系统的什么字段？”于是，小 A 又不得不去解释字段与原字段的对应关系。</p>
-<p>小 A 感叹：这字段名映射，真不值！</p>
-<h2 id="2024-07-10-团队会议"><a class="markdownIt-Anchor" href="#2024-07-10-团队会议"></a> 2024-07-10: 团队会议</h2>
-<p>早上项目团队站立会议。由于团队分散在各地，会议在线上进行。由团队成员轮流组织，今天轮到一位小伙伴，他在团队中已经工作了几个月了。</p>
-<p>打开项目看板，他开始组织大家更新自己的工作。</p>
-<p>站会按照角色及人员的顺序进行。点击人员列表，他开始找人。</p>
-<p>“A 来更新一下吧”，他说道。等了一会，没人回应。会议室陷入了安静。“A 下项目了”，终于有人接着补充道。</p>
-<p>鼠标移动到 B 旁边，停下来，犹豫着要不要往前。时间过去了约有 10 秒钟，终于跳过了 B。B 是一个非当前角色的人。接着，他找到了正确的人，会议继续。</p>
-<h2 id="2024-07-09-简单架构"><a class="markdownIt-Anchor" href="#2024-07-09-简单架构"></a> 2024-07-09: 简单架构</h2>
-<p>有一个项目，其数据接入流程为：上游发送数据到 kafka -&gt; 下游 flink 程序将 kafka 消息转换为标准的 debezium 格式 -&gt; 另一个 flink 程序将数据写入到大数据平台以 iceberg 格式进行存储 -&gt; 另一个 spark 批处理程序定时将 iceberg 中的数据增量写入到 hive 表</p>
-<p>问题：中间过程太多，流程太长，涉及技术组件也多；为保证上述流程可稳定工作，还需要额外的 iceberg 表小文件优化程序；iceberg 表中的数据没有使用，无必要且存在浪费</p>
-<p>优化：直接使用一个 spark 程序消费 kafka 数据写入 hive 表。</p>
-<h2 id="2024-07-08-堵车"><a class="markdownIt-Anchor" href="#2024-07-08-堵车"></a> 2024-07-08: 堵车</h2>
-<p>早上 8 点 10 分，还是按照以往的时间出门。昨晚下了雨，路上湿漉漉的。</p>
-<p>拐过一个路口，来到了另一条路，通过这条路可以上主路。</p>
-<p>刚一进这条路就发现已经堵得水泄不通了。车子只能慢慢蠕行，每次挪动不到一个车位的距离，挪动之后就得停下来等。</p>
-<p>经过无数次挪动之后，看到了一点进度，到了一家吃串串的餐饮店。我感觉不太对，虽然以前这条路也堵，但是今天也太离谱了。以往三分钟的路今天竟然走了十五分钟！</p>
-<p>没办法，到这里也只能硬着头皮继续往前挪了。经历了差不多半小时，终于才上了主路。</p>
-<p>上主路的路口，有一个交警正在指挥交通。</p>
-]]></content>
-      <categories>
-        <category>每日一思</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>每日一思</title>
-    <url>/2024/07/15/daily-thoughts/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-17-烦恼"><a class="markdownIt-Anchor" href="#2024-07-17-烦恼"></a> 2024-07-17: 烦恼</h2>
-<p>周末，躺在沙发上看电视剧。时间过得飞快，一晃三个小时过去了。看电视当时的满足感随着节目的结束一起结束。</p>
-<p>还有一件事情迟迟没有决定。电视剧转移了注意力，可以让人短暂地将它抛诸脑后。但是事情一直存在，短暂的回避之后，它又冒了出来。开始后悔，自责。</p>
-<p>人的烦恼常常在于不能决定，反复纠结，迟迟没有行动。</p>
-<p>做 A，没有照顾到 B。做 B，担心 C。做 C，又担心 D。似乎没有完美的方案。</p>
-<p>那么，还要不要行动？如何行动？</p>
-<h2 id="2024-07-15-晚餐"><a class="markdownIt-Anchor" href="#2024-07-15-晚餐"></a> 2024-07-15: 晚餐</h2>
-<p>晚上，去吃饭。</p>
-<p>走进餐厅，服务员将我们引导到了预先订好的包间。包间内，沿墙一圈贴着气球，有一个位置，上方贴着“happy birthday”字样气球。</p>
-<p>一家人落座。她看看位置，对着我说，“来，你坐这里，气球正下方。”</p>
-<p>刚一落座，蛋糕已送到，一个身穿蓝色制服送餐装的小姑娘提着蛋糕和一个方盒子进来。她打开蛋糕盒，点上蜡烛。接着打开方盒子，原来里面是音响和话筒。拿出话筒，她开始主持吹蜡烛吃蛋糕的仪式。</p>
-<p>生日快乐的音乐响起，房间里面弥漫着温馨的空气。</p>
-<p>还有唱歌的节目，欢快的声音响起。接着是跳舞，小姑娘示意大家一起来。平常几乎不参与这些活动的她，走过去，跟着小姑娘的手势和舞步动起来。她的动作偶尔慢半拍，但总能快速跟上小姑娘的节奏。</p>
-<p>接着，有人提着一捧花送过来，红黄相间的玫瑰里面穿插着一些红色的纸牌。仔细一看原来是彩票。将彩票分给大家一起刮，这里有三十，这里有二十，这里还有三十，最后竟然刮出了 100 块钱。</p>
-<p>大家开始吃饭，快吃完的时候，她说，还有一个礼物。递给我一个红色的盒子。我小心翼翼打开，里面有什么东西快速弹了出来。我赶紧关上盒子，结果还是有不少东西洒了出来。仔细一看，周围都是红红的百元纸币。</p>
-<p>我还记得一件事。晚饭刚开始的时候，她转头向小孩说，“晚上要跟爸爸怎么说？”两岁半的小孩子，咧着嘴，歪着头，说，“爸爸生日快乐！”</p>
-]]></content>
-      <categories>
-        <category>每日一思</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>每日一思</title>
-    <url>/2024/07/25/daily-thoughts/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-25-t恤衫"><a class="markdownIt-Anchor" href="#2024-07-25-t恤衫"></a> 2024-07-25: T恤衫</h2>
-<p>打开衣柜，在叠起来的一摞 T 恤衫里面翻找，一件自己买的，一件公司文化衫，又一件公司文化衫，还有一件公司文化衫。</p>
-<p>穿什么呢？抽出一件背过来叠起的黑色 T 恤，打开一看，是公司文化衫。这一件应该有三年以上了，前面印的 disruptive thinking 及机器人图案已经开裂并快要掉落下来了。</p>
-<p>旧了。算了，换一件吧，我把它放了回去。正准备开始继续找，又犹豫了，还是这件吧，不知道还能穿几回！</p>
-<p>穿上这件文化衫准备出门，在门口的镜子面前停了一下，衣服上面的图案的色彩还是鲜艳的。</p>
-]]></content>
-      <categories>
-        <category>每日一思</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>每日一思</title>
-    <url>/2024/07/31/daily-thoughts/</url>
-    <content><![CDATA[<link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><h2 id="2024-07-31-最后一天"><a class="markdownIt-Anchor" href="#2024-07-31-最后一天"></a> 2024-07-31: 最后一天</h2>
-<p>团队早会，轮到他更新昨日的工作内容。</p>
-<p>如往常一样，他保持着端正的坐姿，双手放在桌子下面。转头面向电视会议屏幕，身体往前倾。</p>
-<p>“嘿嘿嘿”，他短暂地停了约有 0.5 秒钟，咧着嘴，“嘿嘿嘿”。</p>
-<p>“我昨天没什么更新，在整理交接的文档。”他停了约有 1 秒钟，“但我这边也没有人可以交接。”</p>
-<p>“我这边今天最后一天了，以后的测试就靠大家自己了。”</p>
-<p>会议室很安静，一点声音也没有。一秒，两秒。</p>
-<p>主持人终于切换到下一个人。</p>
-<p>明天，他的座位就空了，每次早上一到办公室的时候都能见到的身影从明天开始就见不到了。</p>
-<p>明天，他的座位就空了，经常下班还能瞥见到的忙碌的身影从明天开始就见不到了。</p>
-<p>以后，非工作时间的会议也总是能保持准时参加的身影也见不到了。</p>
 ]]></content>
       <categories>
         <category>每日一思</category>
