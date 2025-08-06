@@ -156,7 +156,7 @@
   </li>
         <li class="menu-item menu-item-技术与架构">
 
-    <a href="/arch_tech/" rel="section"><i class="fa fa-warehouse fa-fw"></i>技术与架构<span class="badge">19</span></a>
+    <a href="/arch_tech/" rel="section"><i class="fa fa-warehouse fa-fw"></i>技术与架构<span class="badge">20</span></a>
 
   </li>
         <li class="menu-item menu-item-每日一思">
@@ -185,12 +185,12 @@
       </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">141</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">142</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">54</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">56</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
@@ -249,6 +249,143 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2024/11/23/externality-and-software-design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.png">
+      <meta itemprop="name" content="Bright LGM">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Bright LGM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/23/externality-and-software-design/" class="post-title-link" itemprop="url">外部性与程序设计</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-23 20:00:00" itemprop="dateCreated datePublished" datetime="2024-11-23T20:00:00+08:00">2024-11-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-08-06 17:24:46" itemprop="dateModified" datetime="2025-08-06T17:24:46+08:00">2025-08-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/%E6%9E%B6%E6%9E%84/development/" itemprop="url" rel="index"><span itemprop="name">development</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/11/23/externality-and-software-design/" class="post-meta-item leancloud_visitors" data-flag-title="外部性与程序设计" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" type="text&#x2F;css" href="/attaches/assets/katex/katex.min.css"><p>经济学里面有一个名为“外部性“的概念。外部性是指一个人或企业的行为对其他人或企业产生的影响。</p>
+<p>外部性可以是正的，也可以是负的。比如，一个企业的生产活动可能会产生污染，这就是一种负的外部性，对周围的环境和居民造成了伤害。相反，一个企业的生产活动也可能带来正面的外部性，比如提高周围地区的就业机会或改善周围地区的基础设施。</p>
+<h2 id="外部性对于组织职责划分的启示"><a class="markdownIt-Anchor" href="#外部性对于组织职责划分的启示"></a> 外部性对于组织职责划分的启示</h2>
+<p>利用这个概念，我们可以用来分析组织的职责划分。</p>
+<p>什么样的职责应该由下级组织负责？我们说，当某一件事没有产生外部性或产生了正的外部性，那么下级组织应该负责。此时如果上级组织非得介入，则反而会增加下级组织的沟通成本，降低效率。因为上级组织往往由于掌握不了足够的细节，而要求下级组织频繁的汇报信息。</p>
+<p>但是，当某一件事产生了负的外部性，那么上级组织应该负责。此时，下级组织往往没有驱动力去解决这个问题，因为这会增加下级组织的成本，但是却不会增加下级组织的收益。</p>
+<p>举个例子。比如，企业在生产过程中赚到了钱，顺便改善了周边的经济环境，创造了正的外部性，很高兴。但是对于产生污染这样的负外部性，企业就不太会在意，且没有驱动力去解决，因为这会增加企业的成本。这时，作为上级组织的政府就应该介入，协调企业和周围居民的矛盾，并负责督促企业处理污染，避免对周围环境和居民造成伤害。</p>
+<h2 id="外部性对于程序设计的启示"><a class="markdownIt-Anchor" href="#外部性对于程序设计的启示"></a> 外部性对于程序设计的启示</h2>
+<p>在了解了外部性及其应用之后，我发现它对程序设计也有很大的启发。</p>
+<h3 id="无外部性或负外部性与高内聚"><a class="markdownIt-Anchor" href="#无外部性或负外部性与高内聚"></a> 无外部性或负外部性与高内聚</h3>
+<p>其一是在类或模块的职责划分上。如果一个类或模块的行为不会对其他类或模块产生影响，那这个行为就应该让这个类或模块自己处理。我们常常说的内聚性就是这个道理。如果一个类可以基于自己管理的数据独立完成某个功能，那么这个功能就应该由这个类自己实现，而不是由调用它的类来插手。</p>
+<p>当我们看到在某一个类的方法中直接修改另一个对象的内部状态时，就应该警惕，因为维护这个状态可能是另一个对象自己的职责。越俎代庖很可能破坏了另一个对象的内聚性，并增加了系统的耦合度。</p>
+<p>而当一个类或者一个模块的行为对其他类或者模块产生了影响，就产生了外部性。</p>
+<p>如果这种外部性是正的，那么我们可以说这个函数或者模块是“无害的”，无需处理，并应极力鼓励。比如，某一个类优化了内部的算法，使得整个系统的性能提高了，这就是一种正的外部性。我们应该经常鼓励这样的优化。</p>
+<p>但是，如果这种外部性是负的，那么我们就需要特别警惕，并考虑如何处理这种负外部性。这样的负外部性常常隐藏较深难以发现。</p>
+<h3 id="负外部性与上层协调"><a class="markdownIt-Anchor" href="#负外部性与上层协调"></a> 负外部性与上层协调</h3>
+<p>举一个大家经常碰到的例子。在基于数据库的后端程序开发中，我们常常需要从数据库中读取数据构建领域对象。JPA 可以帮我们自动完成这个过程。但是，如果我们不注意，JPA 可能会产生一种负的外部性，即 N+1 问题。</p>
+<p>N+1 问题是指，当我们从数据库中读取一个领域对象时，JPA 会自动为这个领域对象的每一个关联对象发送一个额外的查询。如果这个领域对象有 N 个关联对象，那么就会发送 N+1 个查询。这将导致性能问题。</p>
+<p>JPA 默认在非所有者端默认使用一种叫做“惰性加载”的模式来处理关联对象。惰性加载是指，当我们从数据库中读取一个领域对象时，不会立即查询关联对象，而是等到我们真正需要使用关联对象时，再发送查询。大多时候，这种模式是有效的，因为我们可能并不需要使用所有的关联对象。但是，如果我们需要使用所有的关联对象，那么就会产生 N+1 问题。</p>
+<p>这种负外部性很难在领域对象内部自己解决，因为它不知道调用者何时会访问到哪些关联对象。</p>
+<p>为了解决这个问题，我们可以在对应的 repository 中显示地定义一个方法，用于一次性加载所有关联对象（或通过参数指定需要加载哪些关联对象）。这样，我们就可以在需要的时候，在调用方（上级组织）显式地加载所有关联对象。在实现时，我们可以使用 JPA 的 fetch join 特性，在查询领域对象时，同时查询关联对象。这样，就可以避免 N+1 问题。</p>
+<p>下面是一个示例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Date orderDate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@OneToMany(mappedBy = &quot;order&quot;, fetch = FetchType.LAZY)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;OrderItem&gt; items;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderItem</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String productName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ManyToOne(fetch = FetchType.LAZY)</span></span><br><span class="line">    <span class="meta">@JoinColumn(name = &quot;order_id&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Order order;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderRepository</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PersistenceContext</span></span><br><span class="line">    <span class="keyword">private</span> EntityManager entityManager;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Optional&lt;Order&gt; <span class="title function_">findOrderByIDWithItems</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        TypedQuery&lt;Order&gt; query = entityManager.createQuery(</span><br><span class="line">                <span class="string">&quot;SELECT o FROM Order o LEFT JOIN FETCH o.items WHERE o.id = :id&quot;</span>,</span><br><span class="line">                Order.class)</span><br><span class="line">                .setParameter(<span class="string">&quot;id&quot;</span>, id);</span><br><span class="line"></span><br><span class="line">        List&lt;Order&gt; resultList = query.getResultList();</span><br><span class="line">        <span class="keyword">return</span> resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(<span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码 <code>findOrderByIDWithItems</code> 被设计为供上层调用，其实现过程中：</p>
+<ul>
+<li><code>SELECT o FROM Order o</code>: 指定了我们要查询的主实体是 <code>Order</code>，并将其别名命名为 <code>o</code>。</li>
+<li><code>LEFT JOIN FETCH o.items</code>: 这是 <code>fetch join</code> 的关键部分。这里我们执行了一次 左连接 (LEFT JOIN) 来包括所有订单。这意味着当你遍历结果列表中的每个订单并访问其 <code>items</code> 集合时，不会触发额外的数据库查询，因为所有必要的数据都已经在初始查询中被加载了。<br />
+在发现 N+1 问题时，如果我们想在领域对象内部解决这个问题就很困难。此时应该改变思路，通过提供接口让上层组织中显式地调用，这个问题就迎刃而解了。</li>
+</ul>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>外部性这一经济学概念在软件设计中也有鲜活的体现。通过识别和分析系统中的外部性，我们有以下启示：</p>
+<ul>
+<li>无外部性或正外部性：类或者模块的行为对其他部分没有影响（无外部性）或产生积极影响（正外部性），则其职责应尽量内聚，由自己处理，并鼓励正外部性优化。</li>
+<li>负外部性：行为对其他部分产生了负面影响，需要通过上层组织进行协调、解决。通过显式地提供清晰的接口，上层组织就可以灵活处理问题。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1254,116 +1391,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://brightliao.com/2019/08/08/domain-concept-in-your-code/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.png">
-      <meta itemprop="name" content="Bright LGM">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Bright LGM's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/08/08/domain-concept-in-your-code/" class="post-title-link" itemprop="url">代码中的领域</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-08 20:00:00" itemprop="dateCreated datePublished" datetime="2019-08-08T20:00:00+08:00">2019-08-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-06-19 22:36:45" itemprop="dateModified" datetime="2023-06-19T22:36:45+08:00">2023-06-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/" itemprop="url" rel="index"><span itemprop="name">敏捷</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%8F%E6%8D%B7/%E6%9E%B6%E6%9E%84/ddd/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2019/08/08/domain-concept-in-your-code/" class="post-meta-item leancloud_visitors" data-flag-title="代码中的领域" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span><br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>12 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>随着微服务和DDD的兴起，领域这个词逐渐成为了一个大家每天讨论中的高频词。对于经验稍欠缺的同学们，刚接触领域这个词，总会感觉有点神秘。到底什么算是一个领域呢？我们经常在谈论领域模型、领域服务、领域事件、领域边界等等，如果对领域概念没有一个清晰的认识，在接受这些相关概念上想必也会遇到阻碍。本文将结合我个人的理解以及一些实践经验来谈谈对这个概念的理解，希望能帮助大家更好的认识领域，进而更好的理解和运用相关的概念，最终更好的指导软件开发实践。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/08/08/domain-concept-in-your-code/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1435,14 +1462,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">142</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-count">56</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1543,12 +1570,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">645k</span>
+    <span title="站点总字数">648k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">17:54</span>
+    <span title="站点阅读时长">17:59</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -1679,7 +1706,7 @@
 <script src="/js/schemes/pisces.js"></script>
 
 
-<script src="/js/next-boot.js?45.js"></script>
+<script src="/js/next-boot.js?46.js"></script>
 
 <script src="/js/bookmark.js"></script>
 
